@@ -4,13 +4,13 @@ import { analyze, defaultParams } from '../src/biomech.js';
 
 // 排名用畫面顯示的 s（主動活化加被動份額）；超載門檻只用未截斷的 a。
 // 文獻趨勢見 docs/references.md；同一肌肉的不同動作峰值不等於跨肌肉 EMG 百分比。
-// 臀橋獨立於臀推驗收：接觸反力近似使臀橋腰背群高於臀大肌，待姿勢／反力任務修正。
+// 臀橋已修正為肩線貼地支撐與地板連續反力模型，臀大肌為第一位（高於腰背伸肌）。
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
   'smith-squat': { top2: ['vasti'] }, 'leg-press': { top2: ['vasti'] },
   deadlift: { top3: ['erec', 'hams', 'gmax'] }, 'deficit-dl': { top3: ['erec', 'hams', 'gmax'] },
   'block-pull': { top3: ['erec', 'hams', 'gmax'] }, sumo: { top3: ['erec', 'hams', 'gmax'] },
-  'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top3: ['gmax'] },
+  'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top2: ['gmax'] },
   bench: { top3: ['pecs'] }, 'incline-bench': { top3: ['pecs'] }, 'cg-bench': { top3: ['trilat'] },
   'floor-press': { top3: ['pecs'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top3: ['adelt'] },
   pulldown: { first: ['lat'] }, 'pulldown-sup': { first: ['lat'] },

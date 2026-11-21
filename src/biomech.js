@@ -11,7 +11,9 @@ export const BODY = {
 };
 const MF = { foot: 0.0145, shank: 0.0465, thigh: 0.1, upper: 0.028, fore: 0.022 };
 MF.trunk = 1 - 2 * (MF.foot + MF.shank + MF.thigh + MF.upper + MF.fore);
-export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row: 0.7, ohp: 0.5, goodmorning: 0.45, curl: 0.35, shrug: 1.2, uprow: 0.35, hipthrust: 1.3,
+// 負重比例（× 體重）：臀推 1.70、臀橋 1.83 依 Kennedy et al. 2024（PMID 35586943，5RM 143.6／154.3 kg，體重 84.3 kg）
+// 與 Contreras et al. 2015（PMID 26214739，10RM 臀推／背蹲＝87.4／53.2 kg ≈ 1.64×）設定。
+export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row: 0.7, ohp: 0.5, goodmorning: 0.45, curl: 0.35, shrug: 1.2, uprow: 0.35, hipthrust: 1.7, glutebridge: 1.83,
   // 器械：槓／配重片／滑輪配重（× 體重）
   smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9 };
 // 凸輪的阻力曲線選項（腿伸機、腿彎舉）
@@ -540,9 +542,16 @@ function armChainBent(pose, S, B, pole, [epsDeg, Lh], hpref) {
 // [手腕背伸角（度）, 腕→槓距離（m）]
 export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [105, 0.05] };
 function squatPose(P, e) {
+  const low = P.barPos === 'low', front = P.barPos === 'front';
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
-  const thS = rad(4 + (lerp(40, 16, P.dom) - 4) * e), gam = rad(lerp(70, 118, P.depth)) * e;
+  // 槓位與站距改變下肢運動學策略：
+  // - 低槓：小腿較直立、髖往後坐、軀幹前傾與髖／腰椎伸展力矩增加（Glassbrook et al. 2017, PMID 28570490）
+  // - 前蹲：膝更前移、軀幹更直立，同負重下髖伸力矩小於背蹲、膝伸力矩較大（Yavuz et al. 2015, PMID 25630691；Krzyszkowski & Kipp 2020, PMID 32544021）
+  // - 寬站距：小腿較窄站距更直立約 5–9°（Escamilla et al. 2001, PMID 11404665）；預設站距 0.3 時不偏移
+  const domShift = (low ? 0.14 : front ? -0.22 : 0) + 0.35 * (P.stance - 0.3);
+  const domEff = clamp(P.dom + domShift, 0, 1);
+  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e), gam = rad(lerp(70, 118, P.depth)) * e;
   const A = [w, BODY.ankleH, -0.07];
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
   for (let i = 0; i < 4; i++) {
@@ -553,30 +562,32 @@ function squatPose(P, e) {
     Ls = Math.sqrt(Math.max(0.01, BODY.Ls ** 2 - (Kx - w) ** 2));
     Lt = Math.sqrt(Math.max(0.01, BODY.Lt ** 2 - (Kx - BODY.hipHalf) ** 2));
   }
-  const low = P.barPos === 'low', front = P.barPos === 'front';
   // ob：槓在軀幹後方的距離（負值 = 前方，前槓放在三角肌前束上）
   const Lb = front ? 0.5 : low ? 0.45 : 0.53, ob = front ? -0.11 : low ? 0.085 : 0.05, handX = front ? 0.23 : low ? 0.3 : 0.34;
   const Pc = [0, Hy, Hz];
+  const girdle = { ret: rad(15), elev: 0 };
+  const dl = shoulderLocal(girdle);
   const build = (phi) => {
     const u = [0, Math.cos(phi), Math.sin(phi)];
     const tf = trunkFrame(Pc, u);
     const bar = add(add(Pc, mul(u, Lb)), mul(tf.f, -ob));
-    return { tf, bar };
+    const S = toWorld(tf, dl);
+    // 握點 = 槓中心（手掌與手指在 rig.js 依槓的位置擺放）
+    // 手腕往後折（背伸），手肘才會落在合理位置：高槓手肘朝下後方、低槓上臂往後下約 45°（世界座標，不隨軀幹前傾翹起）、前槓手肘在前略低於肩（手掌朝上托槓）
+    const B = [handX, bar[1], bar[2]];
+    const arm = { R: {} };
+    if (front) armChainBent(arm, S, B, norm([0.45, -0.05, 1]), SQ_WRIST.front, norm(add(tf.u, mul(tf.f, -0.4))));
+    else if (low) armChainBent(arm, S, B, norm([0.6, -1, -1]), SQ_WRIST.low, [0, 1, 0]);
+    else armChainBent(arm, S, B, norm(add(mul(tf.f, -1), [0, -1, 0])), SQ_WRIST.high, [0, 1, 0]);
+    return { tf, bar, arm };
   };
   const pose = { R: {}, warn: [], ok: true };
   pose.R.hip = [BODY.hipHalf, Hy, Hz]; pose.R.knee = K; pose.R.ankle = A;
+  // 以實際三維手臂質心計算系統重心（避免前蹲前伸手肘在忽略手臂位置時使壓力中心前移約 1.2 cm、高估髖伸力矩）
   const comz = (phi) => {
-    const { tf, bar } = build(phi);
-    const W = BAR_RATIO.squat;
-    // 腿部 + 軀幹 + 槓（雙側）；手臂近似併入軀幹
-    let m = W, z = W * bar[2];
-    const tr = add(tf.Pc, mul(tf.u, 0.3));
-    const mt = MF.trunk + 2 * (MF.upper + MF.fore);
-    m += mt; z += mt * tr[2];
-    const th = lerpV(pose.R.hip, K, 0.433), sh = lerpV(K, A, 0.433);
-    m += 2 * MF.thigh + 2 * MF.shank + 2 * MF.foot;
-    z += 2 * MF.thigh * th[2] + 2 * MF.shank * sh[2] + 2 * MF.foot * (A[2] + 0.06);
-    return z / m;
+    const { tf, bar, arm } = build(phi);
+    const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u };
+    return systemComZ(pz, bar, BAR_RATIO.squat);
   };
   let phi;
   if (comz(0) >= 0) phi = 0;
@@ -586,22 +597,15 @@ function squatPose(P, e) {
     for (let i = 0; i < 32; i++) { const mid = (lo + hi) / 2; if (comz(mid) < 0) lo = mid; else hi = mid; }
     phi = (lo + hi) / 2;
   }
-  const { tf, bar } = build(phi);
+  const { tf, bar, arm } = build(phi);
   Object.assign(pose, tf);
   pose.phi = phi;
   legChain(pose, A, toe, pose.R.hip);
   pose.R.knee = K; // 以平面解的膝位置為準
-  pose.girdle = { ret: rad(15), elev: 0 };
-  const S = toWorld(tf, shoulderLocal(pose.girdle));
-  // 握點 = 槓中心（手掌與手指在 rig.js 依槓的位置擺放）
-  // 手腕往後折（背伸），手肘才會落在合理位置：高槓手肘朝下後方、低槓上臂往後下約 45°（世界座標，不隨軀幹前傾翹起）、前槓手肘在前略低於肩（手掌朝上托槓）
-  const B = [handX, bar[1], bar[2]];
-  if (front) {
-    // 前架式：手肘往前抬高（上臂接近水平）、掌心朝上（旋後）用手指在槓下方托住
-    armChainBent(pose, S, B, norm([0.45, -0.05, 1]), SQ_WRIST.front, norm(add(tf.u, mul(tf.f, -0.4))));
-    pose.supinated = true;
-  } else if (low) armChainBent(pose, S, B, norm([0.6, -1, -1]), SQ_WRIST.low, [0, 1, 0]);
-  else armChainBent(pose, S, B, norm(add(mul(tf.f, -1), [0, -1, 0])), SQ_WRIST.high, [0, 1, 0]);
+  pose.girdle = girdle;
+  Object.assign(pose.R, arm.R);
+  pose.armPole = arm.armPole;
+  if (front) pose.supinated = true;
   pose.bar = bar;
   if (deg(phi) > 62) pose.warn.push('軀幹前傾很大');
   else if (front && deg(phi) > 45) pose.warn.push('前蹲軀幹前傾 ' + Math.round(deg(phi)) + '°，槓容易從肩上滑落');
@@ -1115,11 +1119,13 @@ function benchPose(P, e) {
 }
 
 // ---------- 臀推／臀橋：上背靠在支撐上（第二個接觸點）----------
-// 上背接觸點：骨盆中心沿軀幹 0.38 m（肩胛骨下角）、背面離軀幹軸 9 cm
-const HT = { sc: 0.38, tb: 0.09, bench: 0.42, w: 0.16 };
+// 臥推椅：支點在肩胛骨下角（0.38 m）；地板臀橋：肩膀貼地（0.50 m），避免肩與頭穿入地板
+// 地板接觸區段：上胸椎自然後凸（肩線至肩胛下緣約 0.16 m）加上背部軟組織／地墊厚度（0.04 m）
+const HT = { sc: 0.38, scFloor: 0.50, floorFlat: 0.16, floorPad: 0.04, tb: 0.09, bench: 0.42, w: 0.16 };
 function hipThrustPose(P, e) {
   const floor = P.surface === 'floor';
   const hb = floor ? 0 : HT.bench;
+  const sc = floor ? HT.scFloor : HT.sc;
   const C = [0, hb, 0];
   const w = HT.w, tau = rad(10);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
@@ -1130,7 +1136,7 @@ function hipThrustPose(P, e) {
   const frame = (psi) => {
     const u = [0, Math.sin(psi), -Math.cos(psi)];
     const tf0 = trunkFrame([0, 0, 0], u);
-    const Pc = add(sub(C, mul(u, HT.sc)), mul(tf0.f, HT.tb));
+    const Pc = add(sub(C, mul(u, sc)), mul(tf0.f, HT.tb));
     return trunkFrame(Pc, u);
   };
   // 頂點：大腿相對軀幹伸展 lockout、膝屈曲 kneeTop，腳踩到地面 → 解出 psi
@@ -1148,7 +1154,11 @@ function hipThrustPose(P, e) {
   // 臀部最低點（骨盆後下緣）不能低於地面；標準槓片半徑 0.225 m，槓中心不能低於 0.225 m
   const PLATE_R = 0.225;
   const buttY = (psi) => { const tf = frame(psi); return add(add(tf.Pc, mul(tf.f, -0.1)), mul(tf.u, -0.06))[1]; };
-  const barYOf = (psi) => { const tf = frame(psi); return add(add(tf.Pc, mul(tf.f, 0.16)), mul(tf.u, -0.03))[1]; };
+  const barYOf = (psi) => {
+    const tf = frame(psi);
+    const bd = psi < 0 ? [0, 1, 0] : tf.f;
+    return add(add(tf.Pc, mul(bd, 0.16)), mul(tf.u, -0.04))[1];
+  };
   let psiBot = psiTop + rad(lerp(25, 55, P.depth));
   let hitFloor = false, hitPlates = false;
   if (buttY(psiBot) < 0.03) { psiBot = bisect((psi) => 0.03 - buttY(psi), psiTop, psiBot); hitFloor = true; }
@@ -1162,19 +1172,31 @@ function hipThrustPose(P, e) {
   Object.assign(pose, tf);
   pose.phi = psi;
   const hip = [BODY.hipHalf, tf.Pc[1], tf.Pc[2]];
-  const leg = ik2(hip, A, BODY.Lt, BODY.Ls, [0, 1, 0.4]);
+  // 修正膝關節極向量：不讓 legChain 的水平 toe 覆蓋 leg.mid（先前會導致臀橋底部膝蓋內扣越過中線）
+  const leg = ik2(hip, A, BODY.Lt, BODY.Ls, [0.06, 1, 0.4]);
   if (!leg.ok) { pose.ok = false; pose.conflict = '腳的位置太遠，腿伸直也碰不到'; }
   legChain(pose, A, toe, hip);
+  pose.R.knee = leg.mid;
   pose.girdle = { ret: rad(10), elev: rad(-4) };
   const S = toWorld(tf, shoulderLocal(pose.girdle));
-  // 槓壓在髖前方（骨盆前緣、髖屈褶處），手扶著槓
-  const front = add(add(tf.Pc, mul(tf.f, 0.115)), mul(tf.u, -0.03));
+  // 槓壓在髖前方褶皺處（骨盆前緣／大腿根部）；psi < 0（臀橋骨盆高於肩）時由雙手扶住維持在髖前，不往腹部滑落
+  const barDir = psi < 0 ? [0, 1, 0] : tf.f;
+  const front = add(add(tf.Pc, mul(barDir, 0.115)), mul(tf.u, -0.04));
   pose.barPt = front;
-  pose.bar = add(front, mul(tf.f, 0.045));
+  pose.bar = add(front, mul(barDir, 0.045));
   armChain(pose, S, [0.3, pose.bar[1], pose.bar[2]], norm(add([1, 0, 0], mul(tf.f, -0.6))));
-  pose.barW = BAR_RATIO.hipthrust;
-  pose.contact = { p: add(C, [0.12, 0, 0]), n: floor ? [0, 1, 0] : tf.f };
-  if (!floor) pose.boxes = [{ c: [0, hb / 2, -0.24], s: [0.42, hb, 0.5] }];
+  pose.barW = floor ? BAR_RATIO.glutebridge : BAR_RATIO.hipthrust;
+  if (floor) {
+    // 地板臀橋：上背從肩線延伸至胸椎離地邊緣（sLift）平貼地板，隨骨盆放低接觸邊緣平滑移向腰椎（L5）
+    const sTh = sc - HT.floorFlat;
+    const sLift = clamp(sTh - HT.floorPad / Math.max(0.01, -Math.sin(psi)), 0.05, sTh);
+    const L5z = add(tf.Pc, mul(tf.u, 0.05))[2];
+    const cLiftZ = Math.min(L5z, add(add(tf.Pc, mul(tf.u, sLift)), mul(tf.f, -HT.tb))[2]);
+    pose.contact = { p: [0.12, 0, cLiftZ], n: [0, 1, 0], floorSpan: [C[2], cLiftZ] };
+  } else {
+    pose.contact = { p: add(C, [0.12, 0, 0]), n: tf.f };
+    pose.boxes = [{ c: [0, hb / 2, -0.24], s: [0.42, hb, 0.5] }];
+  }
   // 臀橋：軀幹往頭端下斜，頭要點頭才能貼地（約讓頭回到水平再多收下巴 10°）
   if (floor) pose.neckFlex = Math.max(0, -psi) + rad(10);
   if (hitPlates && e > 0.9) pose.warn.push('槓片碰到地面，行程已到底');
@@ -1196,6 +1218,19 @@ function twoContactReactions(pose, P, W, out) {
   // 腳跟：壓力中心最遠在踝關節後方 2 cm（腳跟著地面的中心）；前腳掌：腳尖往回 5 cm
   const cz = lerp(R.ankle[2] - 0.02, R.toe[2] - 0.05, P.push ?? 0.3);
   const cop = [R.ankle[0], fy, cz];
+  if (pose.contact.floorSpan) {
+    // 地板臀橋為連續平面支撐：貼於地板之上背與雙臂重力由接觸區段正下方地板直接承載，其餘橋式反力集中於離地前緣
+    const [zMin, zMax] = pose.contact.floorSpan;
+    let uFy = 0, uMz = 0;
+    for (const f of out) {
+      if (f.region === 'trunk' || f.region === 'upper' || f.region === 'fore') {
+        uFy += f.F[1]; uMz += f.p[2] * f.F[1];
+      }
+    }
+    if (uFy < -1e-6) {
+      out.push({ p: [0.12, fy, clamp(uMz / uFy, zMin, zMax)], F: [0, -uFy, 0], region: 'trunk' });
+    }
+  }
   let Fy = 0, Fz = 0, M = 0; // M：繞 x 軸、對壓力中心的力矩
   for (const f of out) {
     Fy += f.F[1]; Fz += f.F[2];
