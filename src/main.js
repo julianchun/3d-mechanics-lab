@@ -2,11 +2,13 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
-  LIFTS, JOINT_NAMES, MODEL_VERSION, MUSCLES, MUSCLE_BY_ID, defaultParams, analyze, peakAnalysis, validate, liftMuscles,
+  LIFTS, JOINT_NAMES, MODEL_VERSION, MUSCLES, MUSCLE_BY_ID, MACHINES, pulleyDivisor,
+  defaultParams, analyze, peakAnalysis, validate, liftMuscles,
 } from './biomech.js';
 import { Rig, heatColor, diffColor, lengthColor, loadBones } from './rig.js';
 import { CATALOG, CATEGORIES, EQUIPMENT, MUSCLE_SHORT, matchEntry } from './catalog.js';
 import { sampleCurve, buildCurve } from './curve.js';
+import { getSourceInfo } from './sources.js';
 
 const $ = (s) => document.querySelector(s);
 const el = (tag, attrs = {}, ...kids) => {
@@ -37,6 +39,7 @@ const state = {
   selJoint: 'all',
   tab: 'adjust',
   view: 'oblique',
+  sourcesOpen: false,
   baseline: prefs.baseline || {}, // lift -> preset id（無 = 內建預設）
   ab: { A: null, B: null, side: false, showing: 'A' },
 };
@@ -361,10 +364,47 @@ function fmtVal(p, v) {
   if (p.mech === 'B') return Math.round(v * 100) + '%';
   if (p.mech === 'C') return v === 0 ? '中立' : (v < 0 ? p.left.replace('偏', '') : p.right.replace('偏', '')) + ' ' + Math.round(Math.abs(v) * 100) + '%';
   if (p.fmt === 'cm') return Math.round(v * 100) + ' cm';
+  if (p.fmt === 'dec2') return Number(v).toFixed(2);
   if (p.unit) return v + p.unit;
   if (p.key === 'grip') return v.toFixed(2) + '×';
   if (p.key === 'dom') return v < 0.4 ? p.left : v > 0.6 ? p.right : '均衡';
   return Math.round(v * 100) + '%';
+}
+
+const CAM_HINTS = {
+  legext: {
+    human: '中段點依 Marginson & Eston (2001) 等之等長測量內插（峰值於膝屈 60°–80°，近伸直端大幅下降）；0° 與 115° 為外插。',
+    comm_desc: '端點比例依 Folland & Morris (2008) 商用機極值（100°→80° +2.5%、60°→20° −20.5%），中間點為插值假設。',
+    comm_asc: '端點比例依 Folland & Morris (2008) 商用機極值（100°→80° +22.2%、60°→20° +37.6%），中間點為插值假設。',
+    flat: '全程維持固定相對力矩（0.90），作為等力矩基準。',
+    gravity: '無凸輪槓桿＋配重，阻力隨小腿水平分量變化（接近伸直端最大）。',
+  },
+  legcurl: {
+    human: '趨勢與範圍依 Kulig (1984)、Onishi (2002)、Beyer (2019)，逐點為取中值（拉長端 15°–30° 最重、深屈端較輕）；已知限制：坐姿與俯臥目前共用同一表。',
+    comm_asc: '示意用上升型凸輪（假設，非實測；Folland & Morris 2008 只量腿伸機），設定彎曲收縮端（90° 附近）阻力較高。',
+    flat: '全程維持固定相對力矩（0.90），作為等力矩基準。',
+    gravity: '無凸輪槓桿＋配重，阻力隨小腿水平分量變化。',
+  },
+};
+
+function paramHint(p, v) {
+  if (p.key === 'pulleyRatio') {
+    const M = MACHINES[state.lift];
+    if (!M?.stackKg) return null;
+    const div = pulleyDivisor(v);
+    const handKg = +(M.stackKg / div).toFixed(1);
+    return `示範配重片 ${M.stackKg} kg（${v} 滑輪比）→ 手上實際拉力 ${handKg} kg`;
+  }
+  if (p.key === 'cam') return CAM_HINTS[state.lift]?.[v] || null;
+  if (p.key === 'friction') {
+    return '預設 0 為準靜態參考；設定 μ 時代表向心階段的上限（sinθ + μcosθ），離心時為 sinθ − μcosθ。';
+  }
+  if (p.key === 'railAngle') {
+    if (v === '7') return '參考 Hammer Strength 7° 傾斜軌道（面對斜軌站立，起立時槓微往後帶）。';
+    if (v === '-7') return '背對 7° 斜軌站立，下蹲時槓往身體後方移動。';
+    return '0° 垂直滑軌（力量訓練／健力房常見規格）。';
+  }
+  return null;
 }
 
 function setParam(p, raw, input) {
@@ -387,13 +427,15 @@ function paramControl(p) {
   const params = P();
   const v = params[p.key];
   const valEl = el('span', { class: 'v' }, fmtVal(p, v));
+  const hint = paramHint(p, v);
   if (p.type === 'select') {
     return el('div', { class: 'ctl' },
       el('div', { class: 'hd' }, el('span', {}, p.label)),
       el('div', { class: 'row' }, p.options.map(([k, n]) => el('button', {
         class: 'chip sm' + (v === k ? ' on' : ''),
         onclick: () => { if (setParam(p, k)) { renderPanel(); if (p.key === 'surface') setView(state.view); } },
-      }, n))));
+      }, n))),
+      hint ? el('div', { class: 'param-hint' }, hint) : null);
   }
   const input = el('input', { type: 'range', min: p.min, max: p.max, step: p.step, value: v });
   input.addEventListener('input', () => { if (setParam(p, input.value, input)) valEl.textContent = fmtVal(p, P()[p.key]); });
@@ -401,10 +443,41 @@ function paramControl(p) {
   return el('div', { class: 'ctl' },
     el('div', { class: 'hd' }, el('span', {}, p.label), valEl),
     input,
-    el('div', { class: 'ends' }, el('span', {}, p.left), el('span', {}, p.right)));
+    el('div', { class: 'ends' }, el('span', {}, p.left), el('span', {}, p.right)),
+    hint ? el('div', { class: 'param-hint' }, hint) : null);
 }
 
 const MECH = { A: '姿勢／軌跡（看得到）', B: '等長用力（看不到，力矩改變）', C: '協同肌偏好（看不到，總力矩不變）' };
+
+function sourcesBlock() {
+  const entry = matchEntry(state.lift, P());
+  const info = getSourceInfo(state.lift, entry?.id);
+  const details = el('details', { class: 'sources-box', open: state.sourcesOpen || false },
+    el('summary', {},
+      el('span', { class: 'src-title' }, '假設與參考來源'),
+      el('span', { class: `src-badge src-${info.badge.kind}` }, info.badge.text)),
+    el('div', { class: 'src-body' },
+      el('div', { class: 'src-hd' }, '模型假設'),
+      el('ul', { class: 'src-list' }, info.assumptions.map((txt) => el('li', {}, txt))),
+      el('div', { class: 'src-hd' }, '與文獻趨勢比對'),
+      info.trends.length
+        ? info.trends.map((t) => el('div', { class: 'src-trend' },
+          el('div', { class: 'src-trend-top' },
+            el('span', { class: 'src-pill ' + (t.pass ? 'pass' : 'fail') }, t.pass ? '一致' : '不一致'),
+            el('span', { class: 'src-ev' }, t.evidenceLabel)),
+          el('div', { class: 'src-trend-cmp' }, t.compare),
+          el('div', { class: 'src-trend-meta' }, `預期：${t.expected}｜模型：${t.model}`),
+          el('div', { class: 'src-trend-meta' }, `依據：${t.ref}`)))
+        : el('p', { class: 'src-empty' }, info.trendNote || '尚無自動化趨勢比對項目。'),
+      el('div', { class: 'src-hd' }, '參考文獻與資料來源'),
+      info.refs.length
+        ? el('ol', { class: 'src-refs' }, info.refs.map((r) => el('li', {},
+          `${r.authors}${r.year ? ` (${r.year})` : ''}. ${r.title}${/[?!？]$/.test(r.title) ? ' ' : '. '}${r.venue}`,
+          r.url ? el('a', { class: 'src-link', href: r.url, target: '_blank', rel: 'noopener noreferrer' }, `${r.tag || '連結'} ↗`) : null)))
+        : el('p', { class: 'src-empty' }, '尚無已查證之直接研究文獻。')));
+  details.addEventListener('toggle', () => { state.sourcesOpen = details.open; });
+  return details;
+}
 
 function renderAdjust(box) {
   const L = LIFTS[state.lift];
@@ -423,6 +496,7 @@ function renderAdjust(box) {
   box.append(el('div', { class: 'note' }, el('b', {}, '內建健美式標準：'), L.standardNote));
   box.append(el('div', { class: 'row', style: 'margin-top:10px' },
     el('button', { class: 'chip sm', onclick: () => { state.params[state.lift] = defaultParams(state.lift); renderPanel(); } }, '回到內建預設')));
+  box.append(sourcesBlock());
 }
 
 let dataBox = null;
@@ -452,6 +526,7 @@ function curveSection() {
 function renderData(box) {
   dataBox = el('div');
   box.append(dataBox);
+  box.append(sourcesBlock());
   updateData(true);
 }
 

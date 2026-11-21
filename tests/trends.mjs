@@ -1,12 +1,16 @@
 // 文獻趨勢自動檢查：比對 src/biomech.js 的模型輸出方向是否與 docs/references.md 文獻一致
-// 執行方式：npm run test:trends（或 node tests/trends.mjs）
+// 執行方式：
+//   npm run test:trends          → 印出完整 42 項檢查報告
+//   node tests/trends.mjs --write-status → 重新產生靜態狀態檔 src/trend-status.json
+//   node tests/trends.mjs --check        → 重新計算並比對 src/trend-status.json，過時或不一致即失敗
 // 注意：本腳本僅作趨勢報告，不修改力學模型；若模型與文獻不一致，印出 FAIL 供後續調校參考。
 // 證據分級（evidence）：
 //   'direct'    — 文獻直接量測相同比較與對應指標（肌電、肌肉體積或關節力矩／角度）
 //   'indirect'  — 文獻相關但非直接（如由肌電推關節力矩、單一收縮期顯著、研討會摘要或模型合併肌群）
 //   'inference' — 解剖或幾何推論（無直接實測文獻支持，或文獻顯示無顯著差異）
 
-import { analyze, peakAnalysis, defaultParams } from '../src/biomech.js';
+import fs from 'node:fs';
+import { MODEL_VERSION, analyze, peakAnalysis, defaultParams } from '../src/biomech.js';
 
 const P = (lift, overrides = {}) => ({ ...defaultParams(lift), ...overrides });
 
@@ -43,10 +47,11 @@ const EVIDENCE_LABEL = {
   inference: '解剖／幾何推論',
 };
 
-// 每一項檢查回傳 { labelA, valA, labelB, valB, unit, pass }
+// 每一項檢查回傳 { labelA, valA, labelB, valB, unit, pass }；ids 為對應的清單項目 ID
 const CHECKS = [
   // ---------- 1. 45° 腿推機：腳位高低 ----------
   {
+    ids: ['leg-press'],
     exercise: '45° 腿推機',
     compare: '腳踩高 (footHigh=0.8) vs 腳踩低 (footHigh=0.2) — 臀大肌活化',
     ref: 'Da Silva 2008 (PMID 18545207, n=14，高腳位臀大肌 EMG 顯著高於低腳位)',
@@ -59,6 +64,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['leg-press'],
     exercise: '45° 腿推機',
     compare: '腳踩高 (footHigh=0.8) vs 腳踩低 (footHigh=0.2) — 髖伸力矩',
     ref: 'Da Silva 2008 (PMID 18545207, n=14，實測臀大肌 EMG 較高，推論髖伸力矩較高)',
@@ -71,6 +77,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['leg-press'],
     exercise: '45° 腿推機',
     compare: '腳踩低 (footHigh=0.2) vs 腳踩高 (footHigh=0.8) — 膝伸力矩',
     ref: 'Da Silva 2008 (PMID 18545207, n=14，實測低腳位股四頭肌 EMG 較高，推論膝伸力矩較高)',
@@ -85,6 +92,7 @@ const CHECKS = [
 
   // ---------- 2. 深蹲 vs 45° 腿推機 ----------
   {
+    ids: ['squat-high', 'leg-press'],
     exercise: '深蹲 vs 45° 腿推機',
     compare: '高槓深蹲 vs 45° 腿推機 — 膕繩肌活化',
     ref: 'Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)',
@@ -99,6 +107,7 @@ const CHECKS = [
 
   // ---------- 3. 自由深蹲 vs 史密斯深蹲 ----------
   {
+    ids: ['squat-high', 'smith-squat'],
     exercise: '自由深蹲 vs 史密斯深蹲',
     compare: '高槓深蹲 vs 史密斯深蹲 — 膕繩肌活化',
     ref: 'Schwanbeck 2009 (PMID 19855308, n=6, 股二頭肌 +26%)',
@@ -111,6 +120,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['squat-high', 'smith-squat'],
     exercise: '自由深蹲 vs 史密斯深蹲',
     compare: '高槓深蹲 vs 史密斯深蹲 — 股四頭肌活化',
     ref: 'Schwanbeck 2009 (PMID 19855308, n=6, 股內側肌 +49%)',
@@ -125,6 +135,7 @@ const CHECKS = [
 
   // ---------- 4. 深蹲：低槓 vs 高槓 ----------
   {
+    ids: ['squat-low', 'squat-high'],
     exercise: '深蹲（低槓 vs 高槓）',
     compare: '低槓 vs 高槓 — 髖伸力矩',
     ref: 'Glassbrook 2017 (PMID 28570490); Murawa 2020 (PMID 32551198)',
@@ -137,6 +148,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['squat-low', 'squat-high'],
     exercise: '深蹲（低槓 vs 高槓）',
     compare: '低槓 vs 高槓 — 腰椎伸展力矩（豎脊肌需求）',
     ref: 'Glassbrook 2017 (PMID 28570490，綜述軀幹前傾與豎脊肌活化較高，推論腰椎力矩較高)',
@@ -149,6 +161,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['squat-high', 'squat-low'],
     exercise: '深蹲（高槓 vs 低槓）',
     compare: '高槓 vs 低槓 — 股四頭肌活化',
     ref: 'Glassbrook 2017 (PMID 28570490)',
@@ -163,6 +176,7 @@ const CHECKS = [
 
   // ---------- 5. 前蹲 vs 高槓背蹲 ----------
   {
+    ids: ['front-squat', 'squat-high'],
     exercise: '前蹲 vs 高槓深蹲',
     compare: '前蹲 vs 高槓 — 最低點軀幹前傾角',
     ref: 'Yavuz 2015 (PMID 25630691, n=12，背蹲軀幹前傾角顯著大於前蹲)',
@@ -175,6 +189,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['front-squat', 'squat-high'],
     exercise: '前蹲 vs 高槓深蹲',
     compare: '前蹲 vs 高槓 — 髖伸力矩',
     ref: 'Krzyszkowski & Kipp 2020 (PMID 32544021, n=11，同等絕對負重 60%/80% FS-1RM 下背蹲峰值髖伸力矩顯著大於前蹲)',
@@ -189,6 +204,7 @@ const CHECKS = [
 
   // ---------- 6. 深蹲深度 ----------
   {
+    ids: ['squat-high'],
     exercise: '深蹲深度',
     compare: '全蹲 (depth=0.9) vs 淺蹲 (depth=0.1) — 臀大肌負荷 s',
     ref: 'Kubo 2019 (PMID 31230110，實測 MRI 體積 +6.7% vs +2.2%); Bryanton 2012 (PMID 22797000，髖 RME)',
@@ -201,6 +217,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['squat-high'],
     exercise: '深蹲深度',
     compare: '全蹲 (depth=0.9) vs 淺蹲 (depth=0.1) — 內收大肌負荷 s',
     ref: 'Kubo 2019 (PMID 31230110，實測 MRI 體積 +6.2% vs +2.7%，對照模型負荷指標 s)',
@@ -214,13 +231,17 @@ const CHECKS = [
   },
 
   // ---------- 7. 深蹲站距 ----------
-  // 模型限制（不硬調）：寬站距（外八 35°）股骨矢狀面投影縮短，降低矢狀面髖伸力矩；
-  // 文獻中寬站距臀大肌 EMG 較高與髖外旋／上束外展需求有關，但本模型缺少髖外旋自由度、
-  // 臀大肌以單一合併肌表示且外展力臂為 -0.0051 m（無上束外展力臂），且額狀面 GRF 預設通過髖關節。
+  // 模型限制（不硬調）：
+  // 1. 與 Escamilla et al. 2001 (PMID 11404665) 的兩點矛盾：雖然站距偏移已讓寬站距小腿較窄站距直立 6.7°（符合文獻 5–9°），
+  //    但同一研究指出寬／窄站距「軀幹角度無顯著差異」且寬站距「髖伸力矩較高」（382–628 vs 275–577 N·m）；
+  //    本模型在固定腳掌中段 cop.z=0 且膝對齊腳尖（外八 35°）下，股骨矢狀面投影縮短約 33%，導致寬站距軀幹反而更直立約 16°（31.8° vs 47.9°）、矢狀面髖伸力矩不升反降（底部 125.6 vs 188.5 N·m）。
+  // 2. 肌群／自由度限制：文獻中寬站距臀大肌 EMG 較高亦涉及髖外旋與臀大肌上束外展需求，但本模型缺少髖外旋自由度、
+  //    臀大肌以單一合併肌表示且外展力臂為 -0.0051 m（無上束外展力臂），且額狀面 GRF 預設通過髖關節。
   {
+    ids: ['squat-high'],
     exercise: '深蹲站距',
     compare: '寬站距 (stance=0.9) vs 窄站距 (stance=0.1) — 臀大肌活化',
-    ref: 'Paoli 2009 (PMID 19130646, n=6；僅臀大肌於 0% 與 70% 1RM 最寬站距顯著較高，30% 1RM 不顯著)｜模型限制：缺髖外旋自由度與臀大肌上束外展力臂',
+    ref: 'Paoli 2009 (PMID 19130646, n=6；僅 0%/70% 1RM 顯著)｜模型限制：寬站距受股骨矢狀投影縮短影響，軀幹反少傾約 16° 且髖力矩下降（與 Escamilla 2001 PMID 11404665 矛盾），另缺髖外旋與臀大肌上束外展力臂',
     evidence: 'direct',
     expected: '寬站距 > 窄站距',
     run() {
@@ -232,6 +253,7 @@ const CHECKS = [
 
   // ---------- 8. 相撲硬舉 vs 傳統硬舉 ----------
   {
+    ids: ['sumo', 'deadlift'],
     exercise: '相撲 vs 傳統硬舉',
     compare: '相撲 vs 傳統 — 股四頭肌活化',
     ref: 'Escamilla 2002 (PMID 11932579)',
@@ -244,6 +266,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['sumo', 'deadlift'],
     exercise: '相撲 vs 傳統硬舉',
     compare: '相撲 vs 傳統 — 腰椎伸展力矩',
     ref: 'Cholewicki 1991 (PMID 1758295, -10%); Escamilla 2000 (PMID 10912892)',
@@ -258,6 +281,7 @@ const CHECKS = [
 
   // ---------- 9. 赤字硬舉 vs 墊高硬舉 ----------
   {
+    ids: ['deficit-dl', 'block-pull'],
     exercise: '赤字 vs 墊高硬舉',
     compare: '赤字 (start=-5) vs 墊高 (start=+10) — 股四頭肌活化',
     ref: 'Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)',
@@ -270,6 +294,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['deficit-dl', 'block-pull'],
     exercise: '赤字 vs 墊高硬舉',
     compare: '赤字 (start=-5) vs 墊高 (start=+10) — 臀大肌活化',
     ref: 'Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)',
@@ -282,6 +307,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['deficit-dl', 'block-pull'],
     exercise: '赤字 vs 墊高硬舉',
     compare: '赤字 (start=-5) vs 墊高 (start=+10) — 膕繩肌活化',
     ref: 'Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)',
@@ -296,6 +322,7 @@ const CHECKS = [
 
   // ---------- 10. 早安體前屈膝彎曲 ----------
   {
+    ids: ['good-morning'],
     exercise: '早安體前屈',
     compare: '近直腿 (kneeBend=5°) vs 屈膝 (kneeBend=35°) — 膕繩肌最大長度 l',
     ref: '幾何推論（雙關節膕繩肌跨膝後側；註：Vigotsky 2015 PMID 25653899 n=15 操弄變因為負重而非膝角）',
@@ -310,6 +337,7 @@ const CHECKS = [
 
   // ---------- 11. 臀推 vs 深蹲 ----------
   {
+    ids: ['hip-thrust', 'squat-high'],
     exercise: '臀推 vs 深蹲',
     compare: '臀推 vs 高槓深蹲 — 臀大肌活化',
     ref: 'Contreras 2015 (PMID 26214739, n=13, 69.5/86.8% vs 29.4/45.4% MVIC)',
@@ -324,6 +352,7 @@ const CHECKS = [
 
   // ---------- 12. 臀推腳位 ----------
   {
+    ids: ['hip-thrust'],
     exercise: '臀推腳位',
     compare: '腳放遠 (kneeTop=70°) vs 腳放近 (kneeTop=120°) — 膕繩肌活化',
     ref: 'Collazo García 2020 (DOI 10.1519/JSC.0000000000002859)',
@@ -338,6 +367,7 @@ const CHECKS = [
 
   // ---------- 13. 臀推 vs 槓鈴臀橋 ----------
   {
+    ids: ['hip-thrust', 'glute-bridge'],
     exercise: '臀推 vs 槓鈴臀橋',
     compare: '臀推 vs 槓鈴臀橋 — 股四頭肌活化',
     ref: 'Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)',
@@ -349,10 +379,11 @@ const CHECKS = [
       return { labelA: '臀推', valA: a, labelB: '臀橋', valB: b, unit: 'a', pass: a > b };
     },
   },
-  // 模型限制（不硬調）：已採用 Kennedy 2024 實測 5RM 負重比例（臀橋 1.83 vs 臀推 1.70 × 體重）與地板連續支撐；
+  // 模型限制（不硬調）：已採用參考 Kennedy 2024（ResearchGate／同團隊 5RM 1.83 vs 1.71× 體重，未能自付費全文核對）之負重比（1.83 vs 1.70×）與地板連續支撐；
   // 但臀橋頂點（髖伸 0°＋屈膝 129°）膕繩肌處於主動不足（診斷值 lRigid≈0.01），現行 Lmt 代理仍保留 fl≈0.91，
   // 使膕繩肌分走約三成髖伸需求，加上臀橋行程較短且臀大肌於 0° 力臂較大（0.075 vs 底部 0.059 m），致峰值低於臀推。
   {
+    ids: ['glute-bridge', 'hip-thrust'],
     exercise: '臀橋 vs 臀推',
     compare: '槓鈴臀橋 vs 臀推 — 臀大肌活化',
     ref: 'Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)｜模型限制：Lmt 長度代理未反映臀橋膕繩肌主動不足',
@@ -367,6 +398,7 @@ const CHECKS = [
 
   // ---------- 14. 臥推：上斜 vs 平板 ----------
   {
+    ids: ['incline-bench', 'bench'],
     exercise: '上斜 vs 平板臥推',
     compare: '上斜 30° vs 平板 0° — 上胸 (pecc) 活化',
     ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093)',
@@ -379,6 +411,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['incline-bench', 'bench'],
     exercise: '上斜 vs 平板臥推',
     compare: '上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化',
     ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
@@ -391,6 +424,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['bench', 'incline-bench'],
     exercise: '平板 vs 上斜臥推',
     compare: '平板 0° vs 上斜 30° — 中下胸 (pecs) 活化',
     ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
@@ -405,6 +439,7 @@ const CHECKS = [
 
   // ---------- 15. 臥推握距：窄握 vs 寬握 ----------
   {
+    ids: ['cg-bench', 'bench'],
     exercise: '窄握 vs 平板臥推',
     compare: '窄握 (grip=0.9, flare=35) vs 標準 (grip=1.6, flare=52) — 三頭肌活化',
     ref: 'Lehman 2005 (PMID 16095407)',
@@ -417,6 +452,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['cg-bench', 'bench'],
     exercise: '窄握 vs 平板臥推',
     compare: '標準 (grip=1.6, flare=52) vs 窄握 (grip=0.9, flare=35) — 中下胸活化',
     ref: 'Lehman 2005 (PMID 16095407)',
@@ -431,6 +467,7 @@ const CHECKS = [
 
   // ---------- 16. 滑輪下拉：正握 vs 反握 ----------
   {
+    ids: ['pulldown', 'pulldown-sup'],
     exercise: '滑輪下拉（清單預設）',
     compare: '正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化',
     ref: 'Lusk 2010 (PMID 20543740, n=12)',
@@ -443,6 +480,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['pulldown', 'pulldown-sup'],
     exercise: '滑輪下拉（同握距）',
     compare: '同握距 (grip=1.4) 正握 vs 反握 — 背闊肌活化',
     ref: 'Lusk 2010 (PMID 20543740, n=12, 握法主效應)',
@@ -457,6 +495,7 @@ const CHECKS = [
 
   // ---------- 17. 坐姿滑輪划船：寬握／高外展 vs 窄握／低外展 ----------
   {
+    ids: ['cable-row-wide', 'cable-row'],
     exercise: '坐姿滑輪划船',
     compare: '寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化',
     ref: 'de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)',
@@ -469,6 +508,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['cable-row', 'cable-row-wide'],
     exercise: '坐姿滑輪划船',
     compare: '窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化',
     ref: 'Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)',
@@ -483,6 +523,7 @@ const CHECKS = [
 
   // ---------- 18. 槓鈴划船 vs 坐姿滑輪划船 ----------
   {
+    ids: ['row', 'cable-row'],
     exercise: '槓鈴划船 vs 坐姿滑輪划船',
     compare: '站姿槓鈴划船 vs 坐姿滑輪划船 — 腰椎伸展力矩',
     ref: 'Fenwick 2009 (PMID 19197209, n=7); Saeterbakken 2015 (PMID 26134664)',
@@ -497,6 +538,7 @@ const CHECKS = [
 
   // ---------- 19. 直立划船握距 ----------
   {
+    ids: ['uprow'],
     exercise: '直立划船',
     compare: '寬握 (grip=1.5) vs 窄握 (grip=0.7) — 側／中三角肌活化',
     ref: 'McAllister 2013 (PMID 22362088, n=16；側三角 LD 向心 50/100 vs 200% BAB 與離心全部比較皆顯著，強證據)',
@@ -509,6 +551,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['uprow'],
     exercise: '直立划船',
     compare: '寬握 (grip=1.5) vs 窄握 (grip=0.7) — 上斜方肌活化',
     ref: 'McAllister 2013 (PMID 22362088, n=16；上斜方 UT 僅離心期達顯著，向心期不顯著，中度證據)',
@@ -521,6 +564,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['uprow'],
     exercise: '直立划船',
     compare: '窄握 (grip=0.7) vs 寬握 (grip=1.5) — 肱二頭肌活化',
     ref: 'McAllister 2013 (PMID 22362088, n=16；僅離心期 50% vs 200% BAB 顯著，向心期不顯著，弱／條件式證據)',
@@ -535,6 +579,7 @@ const CHECKS = [
 
   // ---------- 20. 坐姿 vs 俯臥腿彎舉 ----------
   {
+    ids: ['leg-curl', 'lying-leg-curl'],
     exercise: '腿彎舉（坐姿 vs 俯臥）',
     compare: '坐姿 vs 俯臥 — 膕繩肌最大正規化長度 l',
     ref: 'Maeo 2021 (PMID 33009197, n=20，實測坐姿肌肥大 +14% vs +9%，歸因於髖屈拉長雙關節膕繩肌)',
@@ -549,6 +594,7 @@ const CHECKS = [
 
   // ---------- 21. 腿伸機 vs 深蹲：峰值角度位置 ----------
   {
+    ids: ['leg-ext'],
     exercise: '腿伸機（無凸輪槓桿）',
     compare: '接近伸直端 (e=0.1) vs 彎曲端 (e=0.9) — 膝伸力矩',
     ref: 'Escamilla 1998 (PMID 9565938，開放鏈股四頭肌 EMG 峰值在近伸直端；力矩對應槓桿幾何)',
@@ -561,6 +607,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['squat-high'],
     exercise: '深蹲（膝伸峰值位置）',
     compare: '深屈端 (e=1.0) vs 淺屈端 (e=0.2) — 膝伸力矩',
     ref: 'Escamilla 1998 (PMID 9565938); Escamilla 2001 (PMID 11194098)',
@@ -575,6 +622,7 @@ const CHECKS = [
 
   // ---------- 22. 槓鈴彎舉：反握 vs 正握（反手彎舉） ----------
   {
+    ids: ['curl', 'reverse-curl'],
     exercise: '槓鈴彎舉（握法）',
     compare: '反握 (sup) vs 反手正握 (pro) — 肱二頭肌活化',
     ref: '解剖推論（前臂旋前時二頭肌屈肘效率下降；非文獻結果，Kleiber 2015 PMID 26300781 顯示二頭肌 EMG 在各握法間無顯著差異）',
@@ -587,6 +635,7 @@ const CHECKS = [
     },
   },
   {
+    ids: ['reverse-curl', 'curl'],
     exercise: '槓鈴彎舉（握法）',
     compare: '反手正握 (pro) vs 反握 (sup) — 肱肌／肱橈肌活化',
     ref: 'Kleiber 2015 (PMID 26300781, n=16，實測肱橈肌旋前貢獻顯著較高；註：模型 brach 為肱肌＋肱橈肌合併)',
@@ -600,6 +649,10 @@ const CHECKS = [
   },
 ];
 
+const writeStatus = process.argv.includes('--write-status');
+const checkStatus = process.argv.includes('--check');
+const quiet = writeStatus || checkStatus;
+
 let passed = 0;
 let failed = 0;
 const stats = {
@@ -607,13 +660,17 @@ const stats = {
   indirect: { total: 0, pass: 0, fail: 0 },
   inference: { total: 0, pass: 0, fail: 0 },
 };
+const byId = {};
 
-console.log('=== 生物力學模型 vs 文獻趨勢檢查 ===\n');
+if (!quiet) console.log('=== 生物力學模型 vs 文獻趨勢檢查 ===\n');
 
 for (let i = 0; i < CHECKS.length; i++) {
   const c = CHECKS[i];
   if (!stats[c.evidence]) {
     throw new Error(`Check #${i + 1} 缺少有效的 evidence 欄位：${c.evidence}`);
+  }
+  if (!Array.isArray(c.ids) || c.ids.length === 0) {
+    throw new Error(`Check #${i + 1} 缺少有效的 ids 欄位`);
   }
   const r = c.run();
   const status = r.pass ? 'PASS' : 'FAIL';
@@ -626,17 +683,66 @@ for (let i = 0; i < CHECKS.length; i++) {
   }
   stats[c.evidence].total++;
   const fmt = (v) => (r.unit === 'N·m' || r.unit === '°' ? v.toFixed(1) : v.toFixed(3));
-  console.log(`[${String(i + 1).padStart(2, '0')}] ${status} | [${c.evidence}] ${c.exercise}`);
-  console.log(`     比較：${c.compare}`);
-  console.log(`     依據：${c.ref}（${EVIDENCE_LABEL[c.evidence]}）`);
-  console.log(`     預期：${c.expected}`);
-  console.log(`     模型：${r.labelA} = ${fmt(r.valA)} ${r.unit} vs ${r.labelB} = ${fmt(r.valB)} ${r.unit}`);
+  const modelText = `${r.labelA} = ${fmt(r.valA)} ${r.unit} vs ${r.labelB} = ${fmt(r.valB)} ${r.unit}`;
+  if (!quiet) {
+    console.log(`[${String(i + 1).padStart(2, '0')}] ${status} | [${c.evidence}] ${c.exercise}`);
+    console.log(`     比較：${c.compare}`);
+    console.log(`     依據：${c.ref}（${EVIDENCE_LABEL[c.evidence]}）`);
+    console.log(`     預期：${c.expected}`);
+    console.log(`     模型：${modelText}`);
+  }
+
+  const item = {
+    index: i + 1,
+    pass: r.pass,
+    evidence: c.evidence,
+    evidenceLabel: EVIDENCE_LABEL[c.evidence],
+    exercise: c.exercise,
+    compare: c.compare,
+    expected: c.expected,
+    ref: c.ref,
+    model: modelText,
+  };
+  for (const id of c.ids) {
+    if (!byId[id]) byId[id] = [];
+    byId[id].push(item);
+  }
 }
 
-console.log('\n=== 總計 ===');
-console.log(`全部共 ${CHECKS.length} 項：PASS ${passed} 項，FAIL ${failed} 項（一致率 ${((passed / CHECKS.length) * 100).toFixed(1)}%）`);
-for (const key of ['direct', 'indirect', 'inference']) {
-  const s = stats[key];
-  const pct = s.total > 0 ? ((s.pass / s.total) * 100).toFixed(1) : '0.0';
-  console.log(`  - ${key.padEnd(9)}（${EVIDENCE_LABEL[key]}）：共 ${String(s.total).padStart(2)} 項｜PASS ${String(s.pass).padStart(2)}，FAIL ${String(s.fail).padStart(2)}（${pct}%）`);
+if (!quiet) {
+  console.log('\n=== 總計 ===');
+  console.log(`全部共 ${CHECKS.length} 項：PASS ${passed} 項，FAIL ${failed} 項（一致率 ${((passed / CHECKS.length) * 100).toFixed(1)}%）`);
+  for (const key of ['direct', 'indirect', 'inference']) {
+    const s = stats[key];
+    const pct = s.total > 0 ? ((s.pass / s.total) * 100).toFixed(1) : '0.0';
+    console.log(`  - ${key.padEnd(9)}（${EVIDENCE_LABEL[key]}）：共 ${String(s.total).padStart(2)} 項｜PASS ${String(s.pass).padStart(2)}，FAIL ${String(s.fail).padStart(2)}（${pct}%）`);
+  }
+}
+
+const outPath = new URL('../src/trend-status.json', import.meta.url);
+const payload = {
+  modelVersion: MODEL_VERSION,
+  summary: { total: CHECKS.length, pass: passed, fail: failed, byEvidence: stats },
+  byId,
+};
+const serialized = JSON.stringify(payload, null, 2) + '\n';
+
+if (writeStatus) {
+  fs.writeFileSync(outPath, serialized, 'utf8');
+  console.log(`已寫入靜態比對結果：src/trend-status.json（modelVersion=${MODEL_VERSION}，${passed}/${CHECKS.length} PASS）`);
+}
+
+if (checkStatus) {
+  let existing = null;
+  try {
+    existing = fs.readFileSync(outPath, 'utf8');
+  } catch {
+    console.error('trend-status.json 檢查失敗：檔案不存在，請執行 npm run trends:json 產生。');
+    process.exit(1);
+  }
+  if (existing !== serialized) {
+    console.error('trend-status.json 檢查失敗：內容與目前模型結果不一致（或過時），請執行 npm run trends:json 更新。');
+    process.exit(1);
+  }
+  console.log(`trend-status.json PASS（modelVersion=${MODEL_VERSION}，${passed}/${CHECKS.length} PASS）`);
 }

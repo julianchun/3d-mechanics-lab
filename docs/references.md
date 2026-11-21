@@ -53,10 +53,12 @@
 - **可靠研究來源**
   1. Escamilla RF, Fleisig GS, Zheng N, Barrentine SW, Wilk KE, Andrews JR. (1998). *Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises.* Med Sci Sports Exerc, 30(4):556–569. [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)
   2. Escamilla RF. (2001). *Knee biomechanics of the dynamic squat exercise.* Med Sci Sports Exerc, 33(1):127–141. [PubMed 11194098](https://pubmed.ncbi.nlm.nih.gov/11194098/) / [DOI](https://doi.org/10.1097/00005768-200101000-00020)
-  3. Escamilla RF, Fleisig GS, Zheng N, Lander JE, Barrentine SW, Andrews JR, Bergemann BW, Moorman CT 3rd. (2001). *Effects of technique variations on knee biomechanics during the squat and leg press.* Med Sci Sports Exerc, 33(9):1552–1566. [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)
-  4. Paoli A, Marcolin G, Petrone N. (2009). *The effect of stance width on the electromyographical activity of eight superficial thigh muscles during back squat with different bar loads.* J Strength Cond Res, 23(1):246–250. [PubMed 19130646](https://pubmed.ncbi.nlm.nih.gov/19130646/) / [DOI](https://doi.org/10.1519/jsc.0b013e3181876811)
-  5. Bryanton MA, Kennedy MD, Carey JP, Chiu LZ. (2012). *Effect of squat depth and barbell load on relative muscular effort in squatting.* J Strength Cond Res, 26(10):2820–2828. [PubMed 22797000](https://pubmed.ncbi.nlm.nih.gov/22797000/) / [DOI](https://doi.org/10.1519/JSC.0b013e31826791a7)
-  6. Kubo K, Ikebukuro T, Yata H. (2019). *Effects of squat training with different depths on lower limb muscle volumes.* Eur J Appl Physiol, 119(9):1933–1942. [PubMed 31230110](https://pubmed.ncbi.nlm.nih.gov/31230110/) / [DOI](https://doi.org/10.1007/s00421-019-04181-y)
+  3. Escamilla RF, Fleisig GS, Lowry TM, Barrentine SW, Andrews JR. (2001). *A three-dimensional biomechanical analysis of the squat during varying stance widths.* Med Sci Sports Exerc, 33(6):984–998. [PubMed 11404665](https://pubmed.ncbi.nlm.nih.gov/11404665/)
+  4. Escamilla RF, Fleisig GS, Zheng N, Lander JE, Barrentine SW, Andrews JR, Bergemann BW, Moorman CT 3rd. (2001). *Effects of technique variations on knee biomechanics during the squat and leg press.* Med Sci Sports Exerc, 33(9):1552–1566. [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)
+  5. Paoli A, Marcolin G, Petrone N. (2009). *The effect of stance width on the electromyographical activity of eight superficial thigh muscles during back squat with different bar loads.* J Strength Cond Res, 23(1):246–250. [PubMed 19130646](https://pubmed.ncbi.nlm.nih.gov/19130646/) / [DOI](https://doi.org/10.1519/jsc.0b013e3181876811)
+  6. Bryanton MA, Kennedy MD, Carey JP, Chiu LZ. (2012). *Effect of squat depth and barbell load on relative muscular effort in squatting.* J Strength Cond Res, 26(10):2820–2828. [PubMed 22797000](https://pubmed.ncbi.nlm.nih.gov/22797000/) / [DOI](https://doi.org/10.1519/JSC.0b013e31826791a7)
+  7. Kubo K, Ikebukuro T, Yata H. (2019). *Effects of squat training with different depths on lower limb muscle volumes.* Eur J Appl Physiol, 119(9):1933–1942. [PubMed 31230110](https://pubmed.ncbi.nlm.nih.gov/31230110/) / [DOI](https://doi.org/10.1007/s00421-019-04181-y)
+  8. Illmeier G, Rechberger JS. (2023). *The limitations of anterior knee displacement during different barbell squat techniques: A comprehensive review.* J Clin Med, 12(8):2955. [PubMed 37109294](https://pubmed.ncbi.nlm.nih.gov/37109294/) / [DOI](https://doi.org/10.3390/jcm12082955)
 - **可比較量化結果**
   - **關節力與峰值位置**（Escamilla 1998, n=10 有經驗男性；Escamilla 2001 綜述）：閉鏈深蹲時，股四頭肌 EMG、髕股關節壓迫力與脛股關節壓迫力隨膝屈曲增加而遞增，於**接近最大膝屈曲（最低點）達到峰值**；深蹲產生之膕繩肌共同活化約為腿推機與腿伸機的 **2 倍**。
   - **深度對肌肥大之影響**（Kubo 2019, 10 週訓練 MRI 體積變化）：全蹲組（FST）與半蹲組（HST）之股四頭肌（不含股直肌）增幅相近（FST +4.9% vs HST +4.6%），膕繩肌與股直肌兩組皆無顯著增加；但**臀大肌（FST +6.7% vs HST +2.2%）與內收肌群（FST +6.2% vs HST +2.7%）在全蹲組顯著較高**。
@@ -74,6 +76,8 @@
   1. Glassbrook DJ, Helms ER, Brown SR, Storey AG. (2017). *A review of the biomechanical differences between the high-bar and low-bar back-squat.* J Strength Cond Res, 31(9):2618–2634. [PubMed 28570490](https://pubmed.ncbi.nlm.nih.gov/28570490/) / [DOI](https://doi.org/10.1519/JSC.0000000000002007)
   2. Glassbrook DJ, Brown SR, Helms ER, Duncan S, Storey AG. (2019). *The high-bar and low-bar back-squats: A biomechanical analysis.* J Strength Cond Res, 33(Suppl 1):S1–S18. [DOI](https://doi.org/10.1519/JSC.0000000000001836)
   3. Murawa M, Fryzowicz A, Kabacinski J, Jurga J, Gorwa J, Galli M, Zago M. (2020). *Muscle activation varies between high-bar and low-bar back squat.* PeerJ, 8:e9256. [PubMed 32551198](https://pubmed.ncbi.nlm.nih.gov/32551198/) / [DOI](https://doi.org/10.7717/peerj.9256)
+  4. van den Tillaar R, Knutli TR, Larsen S. (2020). *The effects of barbell placement on kinematics and muscle activation around the sticking region in squats.* Front Sports Act Living, 2:604177. [PubMed 33345183](https://pubmed.ncbi.nlm.nih.gov/33345183/) / [DOI](https://doi.org/10.3389/fspor.2020.604177)
+  5. Illmeier G, Rechberger JS. (2023). *The limitations of anterior knee displacement during different barbell squat techniques: A comprehensive review.* J Clin Med, 12(8):2955. [PubMed 37109294](https://pubmed.ncbi.nlm.nih.gov/37109294/) / [DOI](https://doi.org/10.3390/jcm12082955)
 - **可比較量化結果**
   - Glassbrook et al. (2017) 系統綜述指出：低槓將槓鈴下移至三角肌後束，為維持重心在腳掌中段，造成**較大的軀幹前傾與髖屈曲**、較小的膝屈曲與踝背屈，進而增加髖關節力臂、減少膝關節力臂；後側鏈肌群（**臀大肌、豎脊肌、內收肌**）活動高於高槓，高槓則有較高之股四頭肌活動。兩者垂直地面反作用力差異有限。
   - Murawa et al. (2020) 比較有經驗健力選手於 60%、65%、70% 1RM 執行高槓與低槓深蹲：離心期低槓於後側鏈與受測肌群呈現顯著較高肌電活動。
@@ -87,6 +91,8 @@
   1. Gullett JC, Tillman MD, Gutierrez GM, Chow JW. (2009). *A biomechanical comparison of back and front squats in healthy trained individuals.* J Strength Cond Res, 23(1):284–292. [PubMed 19002072](https://pubmed.ncbi.nlm.nih.gov/19002072/) / [DOI](https://doi.org/10.1519/JSC.0b013e31818546bb)
   2. Yavuz HU, Erdağ D, Amca AM, Aritan S. (2015). *Kinematic and EMG activities during front and back squat variations in maximum loads.* J Sports Sci, 33(10):1058–1066. [PubMed 25630691](https://pubmed.ncbi.nlm.nih.gov/25630691/) / [DOI](https://doi.org/10.1080/02640414.2014.984240)
   3. Krzyszkowski J, Kipp K. (2020). *Load-dependent mechanical demands of the lower extremity during the back and front squat.* J Sports Sci, 38(17):2005–2012. [PubMed 32544021](https://pubmed.ncbi.nlm.nih.gov/32544021/) / [DOI](https://doi.org/10.1080/02640414.2020.1766738)
+  4. Russell PJ, Phillips SJ. (1989). *A preliminary comparison of front and back squat exercises.* Res Q Exerc Sport, 60(3):201–208. [PubMed 2489844](https://pubmed.ncbi.nlm.nih.gov/2489844/)
+  5. Illmeier G, Rechberger JS. (2023). *The limitations of anterior knee displacement during different barbell squat techniques: A comprehensive review.* J Clin Med, 12(8):2955. [PubMed 37109294](https://pubmed.ncbi.nlm.nih.gov/37109294/) / [DOI](https://doi.org/10.3390/jcm12082955)
 - **可比較量化結果**
   - Gullett et al. (2009, n=15 有訓練經驗健康成人，交叉設計，採各自相對 1RM 百分比負荷)：
     - 背蹲產生**顯著較高的脛股關節壓迫力與膝伸肌力矩**（部分因背蹲絕對 1RM 較重）；膝剪力小且兩者無差異。
@@ -220,7 +226,7 @@
     - **槓鈴臀推（BHT）**在**股外側肌**的峰值與平均 EMG 則**顯著高於槓鈴臀橋（BGB）**（因行程與小腿角度差異）。
 - **可檢驗趨勢**
   - 臀推股四頭肌（`vasti`）活化 > 槓鈴臀橋（Kennedy 2024, n=10）。
-  - 槓鈴臀橋臀大肌活化 ≥ 臀推（Kennedy 2024, n=10；註：此為同相對負荷 1RM 比例比較，本模型兩者使用相同 `BAR_RATIO.hipthrust`，可藉此檢驗模型幾何與負荷假設）。
+  - 槓鈴臀橋臀大肌活化 ≥ 臀推（Kennedy 2024, n=10；本模型依 Contreras 2015 作者摘錄與 Kennedy 2024 ResearchGate 摘要設為 `BAR_RATIO.hipthrust = 1.7`、`BAR_RATIO.glutebridge = 1.83`〔註：兩篇負重公斤數皆未能從期刊付費全文核對〕，可藉此檢驗模型幾何、地板支撐與肌肉長度假設）。
 
 ---
 
