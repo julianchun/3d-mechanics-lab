@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#f7f5f1" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" />
+  <title>3D 動作力學教學（原型）</title>
+</head>
+<body>
+  <div id="app">
+    <header id="top">
+      <button id="liftBtn" aria-haspopup="dialog"><span id="liftName"></span><span class="caret">▾</span></button>
+      <button id="infoBtn" class="icon" aria-label="說明">ⓘ</button>
+    </header>
+    <section id="stage">
+      <canvas id="c"></canvas>
+      <div id="labels"></div>
+      <div id="badges">
+        <span class="badge phys">關節力矩：物理計算</span>
+        <span class="badge est">肌肉分配：模型估計</span>
+      </div>
+      <div id="views"></div>
+      <div id="legend"></div>
+      <div id="toast" hidden></div>
+      <div id="warns"></div>
+    </section>
+    <section id="play">
+      <button id="playBtn" class="icon">❚❚</button>
+      <input id="scrub" type="range" min="0" max="1" step="0.001" value="0" />
+      <button id="topBtn" class="chip sm">頂點</button>
+      <button id="botBtn" class="chip sm">最低點</button>
+      <button id="speedBtn" class="chip sm">1×</button>
+    </section>
+    <nav id="tabs"></nav>
+    <section id="panel"></section>
+  </div>
+  <dialog id="picker" class="sheet">
+    <div class="sheethd">
+      <input id="pickerSearch" type="search" placeholder="搜尋動作、肌群、器材（例：前蹲、RDL、背闊）" />
+      <button id="pickerClose" class="icon" aria-label="關閉">✕</button>
+    </div>
+    <div id="pickerEquip" class="row"></div>
+    <div id="pickerBody" tabindex="-1" autofocus></div>
+  </dialog>
+  <dialog id="info">
+    <h3>關於這個原型</h3>
+    <p>教練設定動作，即時看到力線、關節負擔與肌肉受力熱力圖。</p>
+    <ul>
+      <li><b>關節力矩</b>：剛體連桿＋準靜態平衡，屬於物理計算。</li>
+      <li><b>肌肉分配</b>：最小化活化平方和的最佳化，屬於模型估計。</li>
+      <li><b>感受度</b>＝（主動＋被動張力）÷ 該肌肉最大能力，畫面中最高者設為 100%。</li>
+      <li>模型不涵蓋：代謝累積的灼熱感、疲勞、延遲性痠痛、個人神經控制能力。</li>
+      <li>這是教學工具，不是傷害診斷。</li>
+    </ul>
+    <p class="muted">骨骼模型：BodyParts3D, © The Database Center for Life Science, licensed under CC Attribution 4.0 International（已簡化並重新擺位）。肌肉為簡化幾何。資料只存在本機瀏覽器。模型版本 <span id="ver"></span>。</p>
+    <form method="dialog"><button class="chip">關閉</button></form>
+  </dialog>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
