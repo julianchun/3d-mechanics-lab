@@ -1,4 +1,4 @@
-"""從固定版本的 OpenSim 模型重算肌力、纖維長與簡化髖路徑力臂。
+"""從固定版本 OpenSim 模型重算肌力、纖維／肌腱參數與簡化髖路徑力臂。
 
 執行：python3 tools/muscle_params.py
 僅用標準函式庫；不會將上游的大型模型檔寫進專案。
@@ -63,10 +63,13 @@ def group_values(models, key):
     forces = [float(el.findtext("max_isometric_force")) for el in els]
     lengths = [float(el.findtext("optimal_fiber_length")) for el in els]
     tendons = [float(el.findtext("tendon_slack_length")) for el in els]
+    pennations = [float(el.findtext("pennation_angle_at_optimal")) for el in els]
     force = sum(forces)
     return (force,
             sum(f * l for f, l in zip(forces, lengths)) / force,
-            sum(f * (l + t) for f, l, t in zip(forces, lengths, tendons)) / force)
+            sum(f * (l + t) for f, l, t in zip(forces, lengths, tendons)) / force,
+            sum(f * t for f, t in zip(forces, tendons)) / force,
+            sum(f * a for f, a in zip(forces, pennations)) / force)
 
 
 # Rajagopal 右髖中心，取自 hip_r/pelvis_offset translation；髖屈曲軸是 Z。
@@ -107,10 +110,10 @@ def hip_arm(models, key, angle, axis):
 if __name__ == "__main__":
     models = read_models()
     for key in GROUPS:
-        force, length, total_length = group_values(models, key)
+        force, length, total_length, tendon, pennation = group_values(models, key)
         extras = ""
         if key in ("gmax", "addmag", "addl", "ilio"):
             extras += " hipExt@0/45/90=" + "/".join(f"{hip_arm(models, key, math.radians(deg), 'flex'):.4f}" for deg in (0, 45, 90))
         if key in ("gmax", "gmed", "addmag", "addl"):
             extras += f" hipAbd@0={hip_arm(models, key, 0, 'abd'):.4f}"
-        print(f"{key:10s} F={force:.1f} Lf={length:.4f} Lmt={total_length:.4f}{extras}")
+        print(f"{key:10s} F={force:.1f} Lf={length:.4f} Lmt={total_length:.4f} Lt={tendon:.4f} alpha={pennation:.4f}{extras}")
