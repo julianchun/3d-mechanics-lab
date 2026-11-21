@@ -373,15 +373,15 @@ function fmtVal(p, v) {
 
 const CAM_HINTS = {
   legext: {
-    human: '依 Marginson & Eston (2001)、Folland & Morris (2008) 人體膝伸角度－力矩表內插（峰值於膝屈 60°–80°，近伸直端大幅下降）。',
-    comm_desc: '依 Folland & Morris (2008) 實測商用凸輪下界（60°→20° 僅降約 20%，伸直端相對人體能力偏吃力）。',
-    comm_asc: '依 Folland & Morris (2008) 實測商用凸輪上界（60°→20° 反而上升約 38%）。',
+    human: '中段點依 Marginson & Eston (2001) 等之等長測量內插（峰值於膝屈 60°–80°，近伸直端大幅下降）；0° 與 115° 為外插。',
+    comm_desc: '端點比例依 Folland & Morris (2008) 商用機極值（100°→80° +2.5%、60°→20° −20.5%），中間點為插值假設。',
+    comm_asc: '端點比例依 Folland & Morris (2008) 商用機極值（100°→80° +22.2%、60°→20° +37.6%），中間點為插值假設。',
     flat: '全程維持固定相對力矩（0.90），作為等力矩基準。',
     gravity: '無凸輪槓桿＋配重，阻力隨小腿水平分量變化（接近伸直端最大）。',
   },
   legcurl: {
-    human: '依 Kulig (1984)、Onishi (2002)、Beyer (2019) 人體膝屈遞減趨勢內插（拉長端 15°–30° 最重、深屈端較輕）。',
-    comm_asc: '依商用凸輪偏離特徵設定：彎曲收縮端（90° 附近）阻力較高。',
+    human: '趨勢與範圍依 Kulig (1984)、Onishi (2002)、Beyer (2019)，逐點為取中值（拉長端 15°–30° 最重、深屈端較輕）；已知限制：坐姿與俯臥目前共用同一表。',
+    comm_asc: '示意用上升型凸輪（假設，非實測；Folland & Morris 2008 只量腿伸機），設定彎曲收縮端（90° 附近）阻力較高。',
     flat: '全程維持固定相對力矩（0.90），作為等力矩基準。',
     gravity: '無凸輪槓桿＋配重，阻力隨小腿水平分量變化。',
   },
@@ -396,6 +396,9 @@ function paramHint(p, v) {
     return `示範配重片 ${M.stackKg} kg（${v} 滑輪比）→ 手上實際拉力 ${handKg} kg`;
   }
   if (p.key === 'cam') return CAM_HINTS[state.lift]?.[v] || null;
+  if (p.key === 'friction') {
+    return '預設 0 為準靜態參考；設定 μ 時代表向心階段的上限（sinθ + μcosθ），離心時為 sinθ − μcosθ。';
+  }
   if (p.key === 'railAngle') {
     if (v === '7') return '參考 Hammer Strength 7° 傾斜軌道（面對斜軌站立，起立時槓微往後帶）。';
     if (v === '-7') return '背對 7° 斜軌站立，下蹲時槓往身體後方移動。';
@@ -424,8 +427,8 @@ function paramControl(p) {
   const params = P();
   const v = params[p.key];
   const valEl = el('span', { class: 'v' }, fmtVal(p, v));
+  const hint = paramHint(p, v);
   if (p.type === 'select') {
-    const hint = paramHint(p, v);
     return el('div', { class: 'ctl' },
       el('div', { class: 'hd' }, el('span', {}, p.label)),
       el('div', { class: 'row' }, p.options.map(([k, n]) => el('button', {
@@ -440,7 +443,8 @@ function paramControl(p) {
   return el('div', { class: 'ctl' },
     el('div', { class: 'hd' }, el('span', {}, p.label), valEl),
     input,
-    el('div', { class: 'ends' }, el('span', {}, p.left), el('span', {}, p.right)));
+    el('div', { class: 'ends' }, el('span', {}, p.left), el('span', {}, p.right)),
+    hint ? el('div', { class: 'param-hint' }, hint) : null);
 }
 
 const MECH = { A: '姿勢／軌跡（看得到）', B: '等長用力（看不到，力矩改變）', C: '協同肌偏好（看不到，總力矩不變）' };

@@ -28,12 +28,7 @@ export const MACHINES = {
     railZ0: 0,                       // 假設：滑軌於參考高度處之 Z 座標（m）
     railRefY: 1.4,                   // 假設：斜軌參考高度（約站姿扛槓高度，使「腳在槓前方」定義一致）
     railMu: 0,                       // 假設：忽略線性軸承滑軌摩擦
-    startingResistanceKg: {          // docs/machine-data.md §2.1：商用機空槓起始阻力參考（kg）
-      inclined7: 13.6,               //   Hammer Strength 7° 傾斜款 30 lb（13.6 kg，Life Fitness 官方規格）
-      counterbalanced: 9.0,          //   有配重平衡商用款估計 15–25 lb（6.8–11.3 kg）
-      vertical: 18.0,                //   無配重垂直軌道款估計 35–45 lb（16–20.4 kg）
-    },
-    barRatio: 0.9,                   // 假設：示範總負重＝0.9× 體重（含空槓起始阻力）
+    barRatio: 0.9,                   // 假設：示範總負重＝0.9× 體重
     railHalfSpan: 0.7,               // 假設：左右滑軌半寬（m）
     railHeight: 2.2,                 // 假設：機架高度（m）
   },
@@ -42,7 +37,7 @@ export const MACHINES = {
     sledKgDefault: 45,               // 假設：docs/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
     sledKgRange: [20, 65],           // 假設：輕型至重型商用滑台重量範圍（kg）
     platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加預設 45 kg 滑台 ＝ 總重 180 kg ＝ 2.4× 體重）
-    railMuDefault: 0.05,             // 假設：docs/machine-data.md §1.1 導軌動態摩擦估計 0.05–0.15（向心取 sinθ+μcosθ；可設 0）
+    railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
     railMuRange: [0, 0.15],          // 假設：docs/machine-data.md §1.1
     seatDegDefault: 50,              // 假設：docs/machine-data.md §1.1 椅背離垂直估計 45°–65°
     seatDegRange: [35, 65],          // 假設：docs/machine-data.md §1.1
@@ -74,19 +69,18 @@ export const MACHINES = {
   legext: {
     barRatio: 1.2,                   // 假設：示範配重片＝1.2× 體重
     camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
-    camDefault: 'comm_desc',         // docs/machine-data.md §4.3(A)：Folland & Morris (2008) 實測商用凸輪微降型
+    camDefault: 'comm_desc',         // docs/machine-data.md §4.3(A)：商用凸輪微降型（端點比例依 Folland & Morris 2008 極值，中間點為插值假設）
     seatY: 0.55,                     // 假設：座椅骨盆高度（m）
     backReclineDeg: 15,              // 假設：椅背後傾角（°）
     padOffset: 0.05,                 // 假設：小腿滾輪墊接觸偏移（m）
     // 膝屈角度（°；0°=完全伸直）→ 相對阻力力矩表（線性內插）
     cams: {
-      // docs/machine-data.md §4.1：Marginson & Eston (2001, PMID 11695509)、Knapik (1983, PMID 6856681)、Folland & Morris (2008, PMID 17885926)
-      // 100°→80° 上升 +40%（0.714→1.00），60°→20° 下降 ~-60%（0.94→0.35）；0° 與 115° 為端點延伸假設
+      // 中段點依 Marginson & Eston (2001, PMID 11695509；等長測量) 與 Knapik (1983, PMID 6856681)、Folland & Morris (2008, PMID 17885926)；0° 與 115° 為外插
       human: [[0, 0.25], [20, 0.35], [40, 0.64], [60, 0.94], [80, 1.0], [90, 0.88], [100, 0.71], [115, 0.58]],
-      // docs/machine-data.md §4.3(A)：Folland & Morris (2008, PMID 17885926) 實測 8 台商用腿伸機上界（100°→80° +22.2%、60°→20° +37.6%）
-      comm_asc: [[0, 1.25], [20, 1.2], [40, 1.03], [60, 0.87], [80, 0.79], [100, 0.65], [115, 0.6]],
-      // docs/machine-data.md §4.3(A)：Folland & Morris (2008, PMID 17885926) 實測 8 台商用腿伸機下界（100°→80° +2.5%、60°→20° -20.5%）
-      comm_desc: [[0, 0.72], [20, 0.8], [40, 0.9], [60, 1.0], [80, 1.0], [100, 0.98], [115, 0.95]],
+      // 端點比例依 Folland & Morris (2008, PMID 17885926) 8 台商用腿伸機極值（100°→80° +22.2%、60°→20° +37.6%），中間點與 0°／115° 為插值／外插假設
+      comm_asc: [[0, 1.25], [20, 1.204], [40, 1.04], [60, 0.875], [80, 0.7943], [100, 0.65], [115, 0.6]],
+      // 端點比例依 Folland & Morris (2008, PMID 17885926) 8 台商用腿伸機極值（100°→80° +2.5%、60°→20° −20.5%），中間點與 0°／115° 為插值／外插假設
+      comm_desc: [[0, 0.71], [20, 0.795], [40, 0.9], [60, 1.0], [80, 0.984], [100, 0.96], [115, 0.93]],
       // 假設／等力矩基準：全程常數 0.90（貼近 Folland & Morris 2008 所述商用偏平坦平均）
       flat: [[0, 0.9], [115, 0.9]],
       // 無凸輪（槓桿＋配重）：依小腿水平分量物理計算，不用查表
@@ -103,10 +97,10 @@ export const MACHINES = {
     padOffset: 0.05,                 // 假設：小腿滾輪墊接觸偏移（m）
     // 膝屈角度（°；0°=完全伸直）→ 相對阻力力矩表（線性內插）
     cams: {
-      // docs/machine-data.md §4.2：Kulig (1984, PMID 6376139)、Knapik (1983, PMID 6856681)、Onishi (2002, PMID 12223173)、Beyer (2019, PMID 31681497)
-      // 峰值在 15°–30°（拉長端），45°–60°（70%–85%）與 75°–90°（45%–65%）依文獻遞減趨勢與範圍估計取中值
+      // 趨勢與範圍依 Kulig (1984, PMID 6376139)、Knapik (1983, PMID 6856681)、Onishi (2002, PMID 12223173)、Beyer (2019, PMID 31681497)，逐點為取中值
+      // 已知限制：文獻指出膝屈曲線依坐姿／俯臥（髖角）而異，目前兩種姿勢共用同一表
       human: [[0, 0.95], [15, 1.0], [30, 1.0], [45, 0.85], [60, 0.73], [75, 0.62], [90, 0.55], [115, 0.45]],
-      // 假設：依 Folland & Morris (2008) 商用凸輪在收縮端相對人體過重之偏離特徵設定
+      // 示意用上升型凸輪（假設，非實測；Folland & Morris 2008 只量腿伸機，未量腿彎舉）
       comm_asc: [[0, 0.65], [30, 0.75], [60, 0.92], [90, 1.12], [115, 1.2]],
       // 假設／等力矩基準：全程常數 0.90
       flat: [[0, 0.9], [115, 0.9]],
@@ -132,14 +126,14 @@ export const pulleyDivisor = (r) => (r === '2:1' ? 2 : 1);
 // 凸輪阻力曲線選項（依 docs/machine-data.md §4 資料驅動）
 export const CAMS_LEGEXT = [
   ['human', '貼合人體力量曲線（倒 U 型）'],
-  ['comm_desc', '實測商用凸輪：伸直端微降'],
-  ['comm_asc', '實測商用凸輪：伸直端漸增'],
+  ['comm_desc', '商用凸輪：伸直端微降'],
+  ['comm_asc', '商用凸輪：伸直端漸增'],
   ['flat', '凸輪：全程平均'],
   ['gravity', '無凸輪（槓桿＋配重）'],
 ];
 export const CAMS_LEGCURL = [
   ['human', '貼合人體力量曲線（拉長端重）'],
-  ['comm_asc', '商用凸輪：彎曲端較重'],
+  ['comm_asc', '示意用上升型凸輪（假設）'],
   ['flat', '凸輪：全程平均'],
   ['gravity', '無凸輪（槓桿＋配重）'],
 ];
@@ -396,7 +390,7 @@ export const LIFTS = {
       { key: 'depth', label: '下放深度（最低點膝角度）', left: '75°', right: '125°', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'knee', mech: 'A' },
       { key: 'seat', label: '椅背角度（離垂直）', left: '35°（較直立）', right: '65°（較躺）', min: MACHINES.legpress.seatDegRange[0], max: MACHINES.legpress.seatDegRange[1], step: 1, def: MACHINES.legpress.seatDegDefault, joint: 'equip', mech: 'A', unit: '°' },
       { key: 'sledKg', label: '空滑台重量（假設）', left: '20 kg（輕型）', right: '65 kg（重型）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
-      { key: 'friction', label: '導軌摩擦 μ（假設・向心）', left: '0（無摩擦）', right: '0.15', min: MACHINES.legpress.railMuRange[0], max: MACHINES.legpress.railMuRange[1], step: 0.01, def: MACHINES.legpress.railMuDefault, joint: 'equip', mech: 'A', fmt: 'dec2' },
+      { key: 'friction', label: '導軌摩擦 μ（假設・向心上限）', left: '0（準靜態參考）', right: '0.15', min: MACHINES.legpress.railMuRange[0], max: MACHINES.legpress.railMuRange[1], step: 0.01, def: MACHINES.legpress.railMuDefault, joint: 'equip', mech: 'A', fmt: 'dec2' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },
     ],
@@ -467,7 +461,7 @@ export const LIFTS = {
       { key: 'depth', label: '起點彎曲角度', left: '70°', right: '115°', min: 0, max: 1, step: 0.01, def: 0.45, joint: 'knee', mech: 'A' },
       { key: 'padPos', label: '墊子位置', left: '小腿中段', right: '腳踝上方', min: 0, max: 1, step: 0.01, def: 0.8, joint: 'equip', mech: 'A' },
     ],
-    standardNote: '膝關節對準機器轉軸、墊子在腳踝上方，從約 90° 伸到接近伸直；實測商用凸輪多偏平緩，伸直端相對人體能力較吃力。',
+    standardNote: '膝關節對準機器轉軸、墊子在腳踝上方，從約 90° 伸到接近伸直；商用凸輪多偏平緩，伸直端相對人體能力較吃力。',
   },
   legcurl: {
     name: '腿彎舉機', topLabel: '彎到底', bottomLabel: '伸直',
@@ -1518,7 +1512,7 @@ function legPressPose(P, e) {
   const sledKg = P.sledKg ?? M.sledKgDefault;
   const mu = P.friction ?? M.railMuDefault;
   pose.barW = M.platesRatio + sledKg / BODY.mass;
-  // 腳底壓力中心沿踏板：腳跟 ↔ 前腳掌；滑台沿 45° 軌道方向出力（向心有效阻力＝重量 × (sin 45° + μ cos 45°)）
+  // 腳底壓力中心沿踏板：腳跟 ↔ 前腳掌；滑台沿 45° 軌道方向出力（預設 μ = 0 為準靜態參考；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ）
   pose.push = { p: add(Q, mul(t, lerp(-0.03, 0.14, P.push))), d, region: 'foot', k: Math.sin(a) + mu * Math.cos(a) };
   pose.armJoints = ['hip', 'knee', 'ankle'];
   // 椅背與座墊、底座機架、兩側握把、45° 雙導軌與滑台（導軌直接穿過滑台軸套）
