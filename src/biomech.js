@@ -122,7 +122,7 @@ export const LIFTS = {
   },
   ohp: {
     name: '站姿肩推', topLabel: '鎖死', bottomLabel: '鎖骨',
-    viewCenter: [0, 1.15, 0], viewScale: 1.2,
+    viewCenter: [0, 1.12, 0], viewScale: 1.32,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev']],
     pose: ohpPose, loads: handBarLoads,
     moving: ['shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev'],
@@ -173,7 +173,7 @@ export const LIFTS = {
   },
   curl: {
     name: '槓鈴彎舉', topLabel: '頂點', bottomLabel: '手臂伸直',
-    viewCenter: [0, 1.0, 0.1], viewScale: 0.9,
+    viewCenter: [0, 0.88, 0.05], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev']],
     pose: curlPose, loads: handBarLoads,
     moving: ['elbExt'],
@@ -191,7 +191,7 @@ export const LIFTS = {
   },
   shrug: {
     name: '槓鈴聳肩', topLabel: '聳到頂', bottomLabel: '放下',
-    viewCenter: [0, 1.1, 0], viewScale: 0.9,
+    viewCenter: [0, 0.88, 0], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev']],
     pose: shrugPose, loads: handBarLoads,
     moving: ['scElev', 'scRet'],
@@ -207,7 +207,7 @@ export const LIFTS = {
   },
   uprow: {
     name: '直立划船', topLabel: '頂點', bottomLabel: '手臂伸直',
-    viewCenter: [0, 1.1, 0], viewScale: 0.9,
+    viewCenter: [0, 0.88, 0], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev']],
     pose: uprowPose, loads: handBarLoads,
     moving: ['shAbd', 'scElev', 'elbExt'],
@@ -257,7 +257,7 @@ export const LIFTS = {
   },
   legpress: {
     name: '45° 腿推機', topLabel: '腿伸直', bottomLabel: '最低點',
-    viewCenter: [0, 0.6, 0.35], viewScale: 1.1,
+    viewCenter: [0, 0.78, 0.25], viewScale: 1.18,
     seated: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF'],
     pose: legPressPose, loads: pushLoads,
     moving: ['hipExt', 'kneeExt'],
@@ -309,7 +309,7 @@ export const LIFTS = {
   },
   pushdown: {
     name: '滑輪三頭下壓', topLabel: '伸直', bottomLabel: '手肘彎曲',
-    viewCenter: [0, 1.1, 0.1], viewScale: 0.95,
+    viewCenter: [0, 0.92, 0.18], viewScale: 1.15,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev'],
     pose: pushdownPose, loads: cableLoads,
     moving: ['elbExt'],
@@ -494,7 +494,7 @@ function armChainBent(pose, S, B, pole, [epsDeg, Lh], hpref) {
 }
 
 // [手腕背伸角（度）, 腕→槓距離（m）]
-export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [110, 0.05] };
+export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [105, 0.05] };
 function squatPose(P, e) {
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
@@ -511,7 +511,7 @@ function squatPose(P, e) {
   }
   const low = P.barPos === 'low', front = P.barPos === 'front';
   // ob：槓在軀幹後方的距離（負值 = 前方，前槓放在三角肌前束上）
-  const Lb = front ? 0.5 : low ? 0.45 : 0.53, ob = front ? -0.11 : low ? 0.085 : 0.05, handX = front ? 0.26 : low ? 0.3 : 0.34;
+  const Lb = front ? 0.5 : low ? 0.45 : 0.53, ob = front ? -0.11 : low ? 0.085 : 0.05, handX = front ? 0.23 : low ? 0.3 : 0.34;
   const Pc = [0, Hy, Hz];
   const build = (phi) => {
     const u = [0, Math.cos(phi), Math.sin(phi)];
@@ -552,8 +552,11 @@ function squatPose(P, e) {
   // 握點 = 槓中心（手掌與手指在 rig.js 依槓的位置擺放）
   // 手腕往後折（背伸），手肘才會落在合理位置：高槓手肘朝下後方、低槓上臂往後下約 45°（世界座標，不隨軀幹前傾翹起）、前槓手肘在前略低於肩（手掌朝上托槓）
   const B = [handX, bar[1], bar[2]];
-  if (front) armChainBent(pose, S, B, norm(add(add(tf.f, mul(tf.u, -0.3)), [0.2, 0, 0])), SQ_WRIST.front, norm(sub(tf.u, tf.f)));
-  else if (low) armChainBent(pose, S, B, norm([0.6, -1, -1]), SQ_WRIST.low, [0, 1, 0]);
+  if (front) {
+    // 前架式：手肘往前抬高（上臂接近水平）、掌心朝上（旋後）用手指在槓下方托住
+    armChainBent(pose, S, B, norm([0.45, -0.05, 1]), SQ_WRIST.front, norm(add(tf.u, mul(tf.f, -0.4))));
+    pose.supinated = true;
+  } else if (low) armChainBent(pose, S, B, norm([0.6, -1, -1]), SQ_WRIST.low, [0, 1, 0]);
   else armChainBent(pose, S, B, norm(add(mul(tf.f, -1), [0, -1, 0])), SQ_WRIST.high, [0, 1, 0]);
   pose.bar = bar;
   if (deg(phi) > 62) pose.warn.push('軀幹前傾很大');
@@ -925,7 +928,8 @@ function shrugPose(P, e) {
   const girdle = { ret: rad(lerp(-6, lerp(-4, 20, P.ret), t)), elev: rad(lerp(-10, lerp(10, 30, P.height), t)) };
   const pose = standingHands(P, {
     kap: rad(6), lean: rad(P.lean), girdle, barW: BAR_RATIO.shrug,
-    pole: (tf) => norm(add(mul(tf.f, -1), [0.2, 0, 0])),
+    // 肘部略朝外後方（同硬舉），讓前臂旋前落在自然範圍內、手指確實包覆槓身
+    pole: (tf) => norm(add(mul(tf.f, -1), [0.55, -0.1, 0])),
     barAt: (tf, S, hip, knee) => ({ bar: hangBar(tf, S, hip, knee, gx) }),
   });
   if (P.lean > 20) pose.warn.push('軀幹前傾 ' + Math.round(P.lean) + '°：上提方向偏向後收，中斜方參與增加');
@@ -1097,11 +1101,17 @@ function hipThrustPose(P, e) {
   const psiTop = bisect((psi) => BODY.ankleH - topAnkle(psi)[1], rad(-50), rad(50));
   const A = topAnkle(psiTop);
   A[1] = BODY.ankleH;
-  // 臀部最低點（骨盆後下緣）不能低於地面
+  // 臀部最低點（骨盆後下緣）不能低於地面；標準槓片半徑 0.225 m，槓中心不能低於 0.225 m
+  const PLATE_R = 0.225;
   const buttY = (psi) => { const tf = frame(psi); return add(add(tf.Pc, mul(tf.f, -0.1)), mul(tf.u, -0.06))[1]; };
+  const barYOf = (psi) => { const tf = frame(psi); return add(add(tf.Pc, mul(tf.f, 0.16)), mul(tf.u, -0.03))[1]; };
   let psiBot = psiTop + rad(lerp(25, 55, P.depth));
-  let hitFloor = false;
+  let hitFloor = false, hitPlates = false;
   if (buttY(psiBot) < 0.03) { psiBot = bisect((psi) => 0.03 - buttY(psi), psiTop, psiBot); hitFloor = true; }
+  if (barYOf(psiBot) < PLATE_R) {
+    psiBot = barYOf(psiTop) <= PLATE_R ? psiTop : bisect((psi) => PLATE_R - barYOf(psi), psiTop, psiBot);
+    hitPlates = true;
+  }
   const psi = lerp(psiTop, psiBot, e);
   const tf = frame(psi);
   const pose = { R: {}, warn: [], ok: true };
@@ -1123,7 +1133,8 @@ function hipThrustPose(P, e) {
   if (!floor) pose.boxes = [{ c: [0, hb / 2, -0.24], s: [0.42, hb, 0.5] }];
   // 臀橋：軀幹往頭端下斜，頭要點頭才能貼地（約讓頭回到水平再多收下巴 10°）
   if (floor) pose.neckFlex = Math.max(0, -psi) + rad(10);
-  if (hitFloor && !floor && e > 0.9) pose.warn.push('臀部碰到地面，行程已到底');
+  if (hitPlates && e > 0.9) pose.warn.push('槓片碰到地面，行程已到底');
+  else if (hitFloor && !floor && e > 0.9) pose.warn.push('臀部碰到地面，行程已到底');
   return pose;
 }
 
@@ -1196,7 +1207,8 @@ function cableLoads(pose, P, W, out) {
   }
   F[0] += clamp(-ab / (bb || 1), -0.5 * T, 0.5 * T);
   out.push({ p: pose.R.hand, F, region: 'fore', ext: true });
-  pose.forceLine = { p: pose.R.hand, d };
+  // 視覺力線畫在鋼索線上（x = 0，通過握把中心）；力臂分析只看矢狀面 yz，與手位置一致
+  pose.forceLine = { p: pose.bar, d };
 }
 // 機器沿固定方向推回來（胸推機、腿推機）：pose.push = { p, d, region, k }
 function pushLoads(pose, P, W, out) {
@@ -1258,8 +1270,15 @@ function smithPose(P, e) {
   pose.barW = BAR_RATIO.smith;
   pose.barOnBack = true;
   pose.contact = { p: [BODY.hipHalf * 0.5, r.bar[1], r.bar[2]], n: [0, 0, 1], mu: 0, bilateral: true, rail: true };
-  pose.barStyle = { len: 1.5 };
-  pose.boxes = [-1, 1].map((sx) => box([sx * 0.8, 1.1, railZ], [0.05, 2.2, 0.05], 0, 'glass'));
+  // 標準槓穿過兩側垂直滑軌（x = ±0.70），外側掛標準槓片（x = ±0.78、±0.84）
+  pose.boxes = [
+    ...[-1, 1].flatMap((sx) => [
+      box([sx * 0.7, 1.1, railZ], [0.045, 2.2, 0.045], 0, 'glass'),
+      box([sx * 0.7, r.bar[1], railZ], [0.075, 0.14, 0.075], 0, 'frame'), // 滑套軸承
+      box([sx * 0.7, 0.025, railZ], [0.09, 0.05, 0.75], 0, 'frame'), // 底座腳
+    ]),
+    box([0, 2.2, railZ], [1.46, 0.055, 0.055], 0, 'glass'), // 頂部橫樑
+  ];
   const shin = deg(th);
   if (shin < -12) pose.warn.push('小腿往後傾 ' + Math.round(-shin) + '°：腳放得很前面，膝關節剪力方向改變');
   return pose;
@@ -1291,18 +1310,56 @@ function legPressPose(P, e) {
   pose.R.heel = add(Q, mul(t, -0.06)); pose.R.toe = add(Q, mul(t, 0.19));
   pose.girdle = { ret: rad(5), elev: rad(-3) };
   const S = toWorld(tf, shoulderLocal(pose.girdle));
-  restHands(pose, S, [0.27, hip[1] + 0.02, hip[2] + 0.12]);
+  const gripPt = [0.29, hip[1] - 0.02, hip[2] + 0.12];
+  restHands(pose, S, gripPt);
+  pose.R.grip = gripPt;
   pose.bar = [0, hip[1], hip[2]];
   pose.barStyle = 'none';
   pose.barW = BAR_RATIO.legpress;
   // 腳底壓力中心沿踏板：腳跟 ↔ 前腳掌；滑台只能沿軌道方向出力（重量 × sin 45°）
   pose.push = { p: add(Q, mul(t, lerp(-0.03, 0.14, P.push))), d, region: 'foot', k: Math.sin(a) };
   pose.armJoints = ['hip', 'knee', 'ankle'];
+  // 椅背與座墊、底座機架、兩側握把、45° 雙導軌與滑台（導軌直接穿過滑台軸套）
+  const backC = add(add(tf.Pc, mul(u, 0.34)), mul(tf.f, -0.13));
+  const seatTopY = LP.hipY - 0.08;
+  const plateC = add([0, Q[1], Q[2]], mul(d, 0.024));
+  // 導軌中心線：與滑台（踏板中段後方）同軸，從接近地面一路斜上 45° 到前立柱頂端
+  const sledCenterT = dot(add([0, hip[1], hip[2]], mul(t, 0.09)), t);
+  const railLineAt = (sd) => add(mul(d, sd), mul(t, sledCenterT));
+  const sMin = (0.07 - sledCenterT * t[1]) / d[1];
+  const sMax = Math.max(sMin + 1.85, dot(plateC, d) + 0.45);
+  const railMid = railLineAt((sMin + sMax) / 2);
+  const railLen = sMax - sMin;
+  const frontTop = railLineAt(sMax - 0.1);
+  const sledS = dot(plateC, d) + 0.12;
+  const sledRailPt = railLineAt(sledS);
+  // 椅背支撐立柱：頂端貼齊斜板背面下緣，不穿透椅背
+  const bpZ = backC[2] - 0.05;
+  const bpH = Math.max(0.08, backC[1] + (-0.035 - (bpZ - 0.045 - backC[2]) * tf.f[2]) / Math.max(0.25, tf.f[1]));
   pose.boxes = [
-    box([0, LP.hipY - 0.12, 0.04], [0.5, 0.08, 0.42]),
-    boxAlong(add(add(tf.Pc, mul(u, 0.38)), mul(tf.f, -0.13)), u, [0.5, 0.75, 0.07]),
-    boxAlong(add([0, Q[1], Q[2]], mul(d, 0.02)), d, [0.75, 0.04, 0.6], 'frame'),
-    boxAlong(add(add([0, Q[1], Q[2]], mul(d, 0.2)), mul(t, -0.05)), d, [0.85, 0.3, 0.5], 'glass'),
+    // 座墊與椅背（下緣相接）
+    box([0, seatTopY - 0.04, 0.04], [0.46, 0.08, 0.42]),
+    boxAlong(backC, u, [0.46, 0.78, 0.07]),
+    // 座椅與機台底座支架（落地）
+    box([0, (seatTopY - 0.08) / 2, 0.04], [0.28, seatTopY - 0.08, 0.28], 0, 'frame'),
+    box([0, bpH / 2, bpZ], [0.14, bpH, 0.09], 0, 'frame'),
+    box([0, 0.025, (bpZ + frontTop[2]) / 2], [0.88, 0.05, Math.abs(frontTop[2] - bpZ) + 0.2], 0, 'frame'),
+    // 兩側握把＋支架（手握在橫桿上）
+    ...[-1, 1].flatMap((sx) => [
+      box([sx * 0.29, gripPt[1], gripPt[2]], [0.12, 0.032, 0.032], 0, 'frame'),
+      box([sx * 0.25, (gripPt[1] + 0.05) / 2, gripPt[2]], [0.03, gripPt[1] - 0.05, 0.03], 0, 'frame'),
+    ]),
+    // 45° 雙側導軌、前立柱與滑台軸套（精準套在導軌上）
+    ...[-1, 1].flatMap((sx) => [
+      boxAlong([sx * 0.41, railMid[1], railMid[2]], d, [0.045, railLen, 0.045], 'glass'),
+      box([sx * 0.41, frontTop[1] / 2, frontTop[2]], [0.055, frontTop[1], 0.055], 0, 'glass'),
+      boxAlong([sx * 0.41, sledRailPt[1], sledRailPt[2]], d, [0.075, 0.32, 0.075], 'frame'), // 滑台軸套
+      boxAlong([sx * 0.36, (plateC[1] + sledRailPt[1]) / 2, (plateC[2] + sledRailPt[2]) / 2], d, [0.04, 0.14, 0.06], 'frame'), // 踏板→軸套連桿
+    ]),
+    box([0, frontTop[1], frontTop[2]], [0.86, 0.055, 0.055], 0, 'glass'),
+    // 踏板（近面留 6 mm 淨空，避免腳趾穿入）與滑台橫樑
+    boxAlong(plateC, d, [0.74, 0.036, 0.56], 'frame'),
+    boxAlong(sledRailPt, d, [0.84, 0.06, 0.08], 'frame'),
   ];
   return pose;
 }
@@ -1343,10 +1400,22 @@ function pulldownPose(P, e) {
   pose.supinated = P.supin === 'sup';
   pose.pulley = [0, 2.35, top[2]];
   pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
-  // 人面向配重塔坐：塔在膝蓋前方，大腿壓墊固定在塔上，鋼索從頭上的滑輪往前接到配重
+  // 人面向配重塔坐：塔在膝蓋前方，座墊與壓腿墊皆經支架連到底座與塔
   const towerZ = 0.8;
-  pose.boxes = [box([0, 0.4, 0.02], [0.42, 0.08, 0.42]), box([0, 0.66, 0.34], [0.5, 0.08, 0.12]),
-    box([0, 0.66, (0.34 + towerZ) / 2], [0.06, 0.04, towerZ - 0.34], 0, 'frame'), box([0, 1.2, towerZ], [0.14, 2.4, 0.14], 0, 'glass')];
+  const boomZ = (top[2] + towerZ) / 2;
+  pose.boxes = [
+    box([0, 0.4, 0.02], [0.42, 0.08, 0.42]), // 座墊
+    box([0, 0.66, 0.34], [0.5, 0.08, 0.12]), // 大腿壓墊
+    // 底座、座椅支柱、壓腿墊支撐（垂直落地＋橫桿接到塔）
+    box([0, 0.025, 0.4], [0.1, 0.05, 1.05], 0, 'frame'),
+    box([0, 0.025, 0.02], [0.52, 0.05, 0.08], 0, 'frame'),
+    box([0, 0.025, towerZ], [0.52, 0.05, 0.12], 0, 'frame'),
+    box([0, 0.205, 0.02], [0.09, 0.31, 0.09], 0, 'frame'),
+    box([0, 0.34, 0.34], [0.05, 0.58, 0.05], 0, 'frame'), // 壓腿墊立柱（位於雙腿之間）
+    box([0, 0.66, (0.34 + towerZ) / 2], [0.06, 0.05, towerZ - 0.34], 0, 'frame'), // 水平連桿接到塔
+    box([0, 1.2, towerZ], [0.16, 2.4, 0.16], 0, 'glass'), // 配重塔
+    box([0, 2.38, boomZ], [0.08, 0.07, Math.abs(towerZ - top[2]) + 0.16], 0, 'glass'), // 頂部滑輪懸臂
+  ];
   pose.cables = [[pose.bar, pose.pulley], [pose.pulley, [0, 2.35, towerZ]]];
   if (P.lean > 30) pose.warn.push('後仰 ' + Math.round(P.lean) + '°：拉的方向接近划船，下背參與增加');
   return pose;
@@ -1387,14 +1456,29 @@ function cableRowPose(P, e) {
   pose.barW = BAR_RATIO.cablerow;
   pose.barStyle = { len: v ? 0.2 : 0.75 };
   pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
-  pose.boxes = [box([0, 0.38, 0.05], [0.4, 0.1, 0.6]), boxAlong([0, 0.3, 0.84], [0, 0, 1], [0.6, 0.04, 0.4], 'frame'), box([0, 0.4, 1.06], [0.3, 0.8, 0.1], 0, 'glass')];
+  // 座墊落地支架；腳踏板分左右兩片，中央留 16 cm 通道讓鋼索無阻礙通過
+  pose.boxes = [
+    box([0, 0.38, 0.05], [0.4, 0.1, 0.6]), // 座墊
+    box([0, 0.025, 0.43], [0.12, 0.05, 1.32], 0, 'frame'), // 地面長底座
+    box([0, 0.025, -0.15], [0.48, 0.05, 0.08], 0, 'frame'),
+    box([0, 0.025, 1.06], [0.48, 0.05, 0.1], 0, 'frame'),
+    box([0, 0.19, -0.12], [0.09, 0.28, 0.09], 0, 'frame'), // 座椅後腳
+    box([0, 0.19, 0.24], [0.09, 0.28, 0.09], 0, 'frame'), // 座椅前腳
+    ...[-1, 1].flatMap((sx) => [
+      boxAlong([sx * 0.18, 0.32, 0.84], [0, 0, 1], [0.2, 0.04, 0.36], 'frame'), // 左右腳踏板
+      box([sx * 0.18, 0.1, 0.86], [0.05, 0.15, 0.05], 0, 'frame'), // 踏板支撐腳
+    ]),
+    box([0, 0.075, 0.86], [0.4, 0.05, 0.06], 0, 'frame'), // 踏板橫樑（在鋼索下方）
+    box([0, 0.42, 1.01], [0.08, 0.09, 0.09], 0, 'frame'), // 低滑輪座
+    box([0, 0.45, 1.08], [0.28, 0.9, 0.12], 0, 'glass'), // 滑輪塔
+  ];
   pose.cables = [[pose.bar, pose.pulley]];
   if (deg(lean) < -15) pose.warn.push('收尾後仰 ' + Math.round(-deg(lean)) + '°：用身體甩，下背負擔增加');
   return pose;
 }
 
 // ---------- 滑輪三頭下壓（站姿）----------
-const PD_PULLEY_Z = 0.45;
+const PD_PULLEY_Z = 0.58;
 function pushdownPose(P, e) {
   const gx = 0.12; // e = 0 伸直、1 手肘彎曲
   const as = rad(P.elbFwd), ef = rad(lerp(8, P.topFlex, e));
@@ -1416,12 +1500,19 @@ function pushdownPose(P, e) {
   const extra = bisect((x) => rad(3) - make(x).shinTilt, 0, rad(40), 16);
   const pose = make(extra);
   if (deg(extra) > 8) pose.warn.push('滑輪把手往上推：軀幹要再前傾約 ' + Math.round(deg(extra)) + '° 才站得穩（實務上常用前後腳站）');
+  // 調整前臂視覺參考軸讓正握旋前角落在自然範圍內，五指包覆直槓
+  pose.armPole = norm(add(sub(pose.R.elbow, pose.R.shoulder), [0.35, 0, -0.1]));
   pose.barAxial = false;
   pose.barW = BAR_RATIO.pushdown;
   pose.barStyle = { len: 0.45 };
   pose.pulley = [0, 2.1, PD_PULLEY_Z];
   pose.armJoints = ['shoulder', 'elbow'];
-  pose.boxes = [box([0, 1.05, PD_PULLEY_Z + 0.1], [0.14, 2.1, 0.14], 0, 'glass')];
+  const colZ = PD_PULLEY_Z + 0.18;
+  pose.boxes = [
+    box([0, 1.07, colZ], [0.16, 2.14, 0.16], 0, 'glass'), // 滑輪柱
+    box([0, 2.12, (PD_PULLEY_Z + colZ) / 2], [0.08, 0.06, colZ - PD_PULLEY_Z + 0.08], 0, 'glass'), // 滑輪懸臂
+    box([0, 0.025, colZ], [0.46, 0.05, 0.36], 0, 'frame'), // 底座
+  ];
   pose.cables = [[pose.bar, pose.pulley]];
   if (P.elbFwd > 20) pose.warn.push('手肘往前 ' + Math.round(P.elbFwd) + '°：肩關節伸展（背闊肌）開始參與');
   return pose;
@@ -1457,8 +1548,10 @@ function kneeMachinePose(P, e, mode) {
   pose.R.heel = add(A, mul(pose.toeDir, -0.06)); pose.R.toe = add(A, mul(pose.toeDir, 0.19));
   pose.girdle = { ret: rad(5), elev: rad(-3) };
   const S = toWorld(tf, shoulderLocal(pose.girdle));
-  if (lying) armChain(pose, S, [0.25, tf.Pc[1] - 0.08, tf.SC[2] + 0.28], norm([0.5, 0.3, -1]));
-  else restHands(pose, S, [0.27, hip[1] + 0.02, hip[2] + 0.1]);
+  const gripPt = lying ? [0.27, 0.35, 0.72] : [0.28, 0.48, 0.15];
+  if (lying) armChain(pose, S, gripPt, norm([0.8, -0.4, -0.5]));
+  else restHands(pose, S, gripPt);
+  pose.R.grip = gripPt;
   pose.bar = [0, hip[1], hip[2]];
   pose.barStyle = 'none';
   pose.barW = mode === 'ext' ? BAR_RATIO.legext : BAR_RATIO.legcurl;
@@ -1472,11 +1565,54 @@ function kneeMachinePose(P, e, mode) {
   const p = add(add(knee, mul(sd, arm)), mul(push, -0.05));
   pose.pad = { p, dir: push, arm, tau, region: 'shank' };
   pose.armJoints = ['knee'];
-  const padC = add([0, p[1], p[2]], mul(push, -0.035));
-  pose.boxes = lying
-    ? [box([0, 0.5, 0.15], [0.42, 0.12, 1.1]), box([0, padC[1], padC[2]], [0.5, 0.07, 0.07], 0, 'frame'), boxAlong(lerpV([0.3, knee[1], knee[2]], [0.3, padC[1], padC[2]], 0.5), sd, [0.04, arm, 0.04], 'frame')]
-    : [box([0, 0.43, 0.2], [0.45, 0.1, 0.5]), boxAlong(add(add(tf.Pc, mul(tf.u, 0.35)), mul(tf.f, -0.13)), tf.u, [0.45, 0.65, 0.07]),
-      box([0, padC[1], padC[2]], [0.5, 0.07, 0.07], 0, 'frame'), boxAlong(lerpV([0.3, knee[1], knee[2]], [0.3, padC[1], padC[2]], 0.5), sd, [0.04, arm, 0.04], 'frame')];
+  // 視覺滾輪墊：伸直時與脛骨前側保持淨空；槓桿臂放在腿外側（遠側 x = -0.27）且精準連接轉軸與滾輪墊
+  const padOff = mode === 'ext' ? -0.055 : -0.04;
+  const padC = add([0, p[1], p[2]], mul(push, padOff));
+  const armX = -0.27;
+  const pivPt = [armX, knee[1], knee[2]];
+  const padEnd = [armX, padC[1], padC[2]];
+  const leverVec = sub(padEnd, pivPt);
+  const leverBox = boxAlong(lerpV(pivPt, padEnd, 0.5), norm(leverVec), [0.04, len(leverVec), 0.04], 'frame');
+  const rollerBox = boxAlong([-0.02, padC[1], padC[2]], sd, [0.54, 0.075, 0.075], 'frame');
+  const pivPost = box([armX, knee[1] / 2, knee[2]], [0.05, knee[1], 0.05], 0, 'frame');
+  if (lying) {
+    pose.boxes = [
+      box([0, 0.5, 0.15], [0.42, 0.12, 1.1]), // 臥墊
+      // 底座與前後支架（落地）
+      box([0, 0.025, 0.15], [0.62, 0.05, 1.18], 0, 'frame'),
+      box([0, 0.245, -0.28], [0.34, 0.39, 0.07], 0, 'frame'),
+      box([0, 0.245, 0.62], [0.34, 0.39, 0.07], 0, 'frame'),
+      // 前端兩側握把＋支架
+      ...[-1, 1].flatMap((sx) => [
+        box([sx * 0.27, gripPt[1], gripPt[2]], [0.12, 0.03, 0.03], 0, 'frame'),
+        box([sx * 0.22, gripPt[1], (0.62 + gripPt[2]) / 2], [0.03, 0.03, gripPt[2] - 0.62 + 0.04], 0, 'frame'),
+      ]),
+      pivPost, leverBox, rollerBox,
+    ];
+  } else {
+    const backC = add(add(tf.Pc, mul(tf.u, 0.31)), mul(tf.f, -0.13));
+    const backPostTop = add(add(tf.Pc, mul(tf.u, 0.25)), mul(tf.f, -0.175));
+    pose.boxes = [
+      box([0, 0.43, 0.2], [0.45, 0.1, 0.5]), // 座墊
+      boxAlong(backC, tf.u, [0.45, 0.72, 0.07]), // 椅背（下緣接座墊）
+      // 底座、座椅與椅背支柱（落地，底座薄片不碰腳尖）
+      box([0, 0.015, 0.12], [0.62, 0.03, 0.84], 0, 'frame'),
+      box([0, 0.205, 0.2], [0.14, 0.35, 0.24], 0, 'frame'),
+      box([0, backPostTop[1] / 2, backPostTop[2]], [0.1, backPostTop[1], 0.07], 0, 'frame'),
+      // 兩側握把＋支架（手握在上面）
+      ...[-1, 1].flatMap((sx) => [
+        box([sx * 0.28, gripPt[1], gripPt[2]], [0.11, 0.03, 0.03], 0, 'frame'),
+        box([sx * 0.24, (gripPt[1] + 0.38) / 2, gripPt[2]], [0.03, gripPt[1] - 0.38 + 0.04, 0.03], 0, 'frame'),
+      ]),
+      // 坐姿腿彎舉：大腿上方固定壓墊＋遠側支撐桿
+      ...(mode === 'curl' ? [
+        box([0, 0.69, 0.28], [0.48, 0.08, 0.1]),
+        box([armX, 0.56, 0.28], [0.04, 0.28, 0.04], 0, 'frame'),
+        box([armX, 0.42, (0.28 + knee[2]) / 2], [0.04, 0.04, Math.abs(knee[2] - 0.28) + 0.04], 0, 'frame'),
+      ] : []),
+      pivPost, leverBox, rollerBox,
+    ];
+  }
   return pose;
 }
 function legExtPose(P, e) { return kneeMachinePose(P, e, 'ext'); }
@@ -1485,8 +1621,16 @@ function legCurlPose(P, e) { return kneeMachinePose(P, e, 'curl'); }
 // ---------- 坐姿胸推機 ----------
 // 用臥推的手臂幾何（軀幹座標內相同），整個身體轉 90° 成坐姿；機器沿推的方向推回來
 function chestPressPose(P, e) {
-  const bp = benchPose({ ...P, incline: 0, surface: 'bench', bend: 0, dom: 0.5 }, e);
+  const bP = { ...P, incline: 0, surface: 'bench', bend: 0, dom: 0.5 };
   const r = (v) => [v[0], -v[2], v[1]]; // 繞 x 轉 90°：躺 → 坐
+  // 器械底部有機械止擋：手肘不往後穿透椅背前緣
+  const CP_BACK_FRONT_Z = -0.085; // 椅背前緣（肩關節後方約 8.5 cm）
+  const elbZ = (t) => {
+    const b = benchPose(bP, t);
+    return r(b.R.elbow)[2] + (0 - r(b.Pc)[2]);
+  };
+  const eStop = elbZ(1) >= CP_BACK_FRONT_Z ? 1 : bisect((t) => CP_BACK_FRONT_Z - elbZ(t), 0, 1, 20);
+  const bp = benchPose(bP, e * eStop);
   const T = sub([0, 0.55, 0], r(bp.Pc));
   const pt = (v) => add(r(v), T);
   const pose = { R: {}, warn: bp.warn.map((w) => w.replace('前臂偏離垂直', '前臂偏離推的方向')), ok: bp.ok, conflict: bp.conflict };
@@ -1499,10 +1643,31 @@ function chestPressPose(P, e) {
   legChain(pose, [0.15, BODY.ankleH, 0.5], [0, 0, 1], [BODY.hipHalf, pose.Pc[1], pose.Pc[2]]);
   pose.R.knee = ik2(pose.R.hip, pose.R.ankle, BODY.Lt, BODY.Ls, [0, 1, 0.3]).mid;
   pose.barW = BAR_RATIO.chestpress;
-  pose.barStyle = { len: 0.4 * P.grip + 0.2 };
+  const armX = 0.2 * P.grip + 0.08;
+  pose.barStyle = { len: 2 * armX + 0.04 };
   pose.push = { p: pose.R.hand, d: pose.f, region: 'fore' };
   pose.armJoints = ['shoulder', 'elbow'];
-  pose.boxes = [box([0, 0.43, 0.1], [0.45, 0.1, 0.42]), boxAlong(add(add(pose.Pc, mul(pose.u, 0.38)), mul(pose.f, -0.15)), pose.u, [0.45, 0.8, 0.07])];
+  // 座椅、椅背（相接落地）、後方機架轉軸與兩側機械臂連到握把
+  const backC = add(add(pose.Pc, mul(pose.u, 0.34)), mul(pose.f, -0.155));
+  const colZ = -0.36;
+  const pivY = 1.72, pivZ = -0.18;
+  const barY = pose.bar[1], barZ = pose.bar[2];
+  const armVec = [0, barY - pivY, barZ - pivZ];
+  const armMid = [0, (pivY + barY) / 2, (pivZ + barZ) / 2];
+  pose.boxes = [
+    box([0, 0.43, 0.1], [0.44, 0.1, 0.44]), // 座墊
+    boxAlong(backC, pose.u, [0.34, 0.84, 0.07]), // 椅背（寬 34 cm，下緣接座墊）
+    // 底座與座椅／椅背支架（落地）
+    box([0, 0.025, -0.08], [0.56, 0.05, 0.72], 0, 'frame'),
+    box([0, 0.215, 0.1], [0.12, 0.33, 0.18], 0, 'frame'),
+    box([0, 0.36, -0.18], [0.1, 0.68, 0.07], 0, 'frame'),
+    // 後方立柱＋上方轉軸懸臂（半透明不擋側面視線）
+    box([0, 0.9, colZ], [0.14, 1.8, 0.14], 0, 'glass'),
+    box([0, pivY + 0.04, (colZ + pivZ) / 2], [0.1, 0.07, pivZ - colZ + 0.1], 0, 'glass'),
+    box([0, pivY, pivZ], [2 * armX + 0.08, 0.06, 0.06], 0, 'frame'), // 頂部轉軸橫桿
+    // 兩側機械臂：從上方轉軸連到握把兩端
+    ...[-1, 1].map((sx) => boxAlong([sx * armX, armMid[1], armMid[2]], norm(armVec), [0.04, len(armVec), 0.04], 'frame')),
+  ];
   return pose;
 }
 

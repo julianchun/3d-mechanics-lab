@@ -75,7 +75,7 @@ const GLASS = new THREE.MeshStandardMaterial({ color: 0x60646c, transparent: tru
 const UNIT = new THREE.BoxGeometry(1, 1, 1);
 function makeBench() {
   const g = new THREE.Group();
-  g.userData = { back: new THREE.Mesh(UNIT, PAD), seat: new THREE.Mesh(UNIT, PAD), post: new THREE.Mesh(UNIT, FRAME), leg: new THREE.Mesh(UNIT, FRAME) };
+  g.userData = { back: new THREE.Mesh(UNIT, PAD), seat: new THREE.Mesh(UNIT, PAD), post: new THREE.Mesh(UNIT, FRAME), leg: new THREE.Mesh(UNIT, FRAME), base: new THREE.Mesh(UNIT, FRAME) };
   g.add(...Object.values(g.userData));
   scene.add(g);
   return g;
@@ -85,7 +85,7 @@ function updateBench(g, pose) {
   const b = pose.bench;
   g.visible = !!b;
   if (!b) return;
-  const { back, seat, post, leg } = g.userData;
+  const { back, seat, post, leg, base } = g.userData;
   // 椅背上緣貼著背部（骨盆中心往背側 5 cm），沿軀幹從臀下 10 cm 延伸到頭部
   const top = vadd(b.Pc, b.f, -0.05);
   const c = vadd(vadd(top, b.f, -0.03), b.u, 0.29);
@@ -97,9 +97,17 @@ function updateBench(g, pose) {
   seat.position.set(0, hinge[1] - 0.03, hinge[2] + seatLen / 2);
   seat.scale.set(0.3, 0.06, seatLen);
   const sy = hinge[1] - 0.06;
-  leg.position.set(0, sy / 2, hinge[2] + seatLen / 2); leg.scale.set(0.2, sy, Math.max(0.1, seatLen - 0.1));
-  const py = c[1] - 0.06;
-  post.position.set(0, py / 2, c[2]); post.scale.set(0.12, py, 0.12);
+  const legZ = hinge[2] + seatLen / 2;
+  leg.position.set(0, sy / 2, legZ); leg.scale.set(0.14, sy, Math.max(0.1, seatLen - 0.14));
+  // 椅背立柱：頂端貼齊斜板下緣最低點（靠近座墊側邊緣），避免上斜時立柱插入椅背
+  const postD = 0.08;
+  const postZ = c[2] - 0.02;
+  const zFront = postZ + postD / 2;
+  const py = Math.max(0.05, c[1] + (-0.03 - (zFront - c[2]) * b.f[2]) / Math.max(0.25, b.f[1]));
+  post.position.set(0, py / 2, postZ); post.scale.set(0.1, py, postD);
+  // 地面連桿：把前腳與椅背立柱接在一起
+  const zMin = Math.min(postZ - postD / 2, legZ - 0.07), zMax = Math.max(postZ + postD / 2, legZ + Math.max(0.1, seatLen - 0.14) / 2);
+  base.position.set(0, 0.02, (zMin + zMax) / 2); base.scale.set(0.18, 0.04, zMax - zMin);
 }
 const benchGroup = makeBench();
 // 硬舉用的墊高台（赤字）與墊塊（墊高拉）
@@ -672,13 +680,22 @@ function project(p, offX = 0) {
   const r = canvas.getBoundingClientRect();
   return [(v.x * 0.5 + 0.5) * r.width, (-v.y * 0.5 + 0.5) * r.height, v.z < 1];
 }
+// 標籤名稱：去括號後若會撞名（例如胸大肌中下胸與上胸），保留完整名稱
+const LABEL_NAME = (() => {
+  const cnt = {};
+  for (const m of MUSCLES) { const k = m.name.replace(/（.*）/, ''); cnt[k] = (cnt[k] || 0) + 1; }
+  return Object.fromEntries(MUSCLES.map((m) => {
+    const k = m.name.replace(/（.*）/, '');
+    return [m.id, cnt[k] > 1 ? m.name : k];
+  }));
+})();
 function drawLabels(res, aLines, vA, maxV, set, offA, B) {
   let i = 0;
   const placed = [];
   const put = (p, text, cls, off = 0) => {
     const [x, y, vis] = project(p, off);
     if (!vis) return;
-    if (placed.some(([px, py]) => Math.abs(px - x) < 70 && Math.abs(py - y) < 16)) return;
+    if (placed.some(([px, py]) => Math.abs(px - x) < 88 && Math.abs(py - y) < 24)) return;
     placed.push([x, y]);
     let d = lblPool[i];
     if (!d) { d = el('div', { class: 'lbl' }); lblBox.append(d); lblPool.push(d); }
@@ -704,7 +721,7 @@ function drawLabels(res, aLines, vA, maxV, set, offA, B) {
         const mesh = rigA.muscles[id][0];
         const dir = new THREE.Vector3(0, 1, 0).applyQuaternion(mesh.quaternion).multiplyScalar(mesh.scale.y / 2);
         const p = mesh.position.clone().add(dir);
-        put([p.x, p.y, p.z], `${MUSCLE_BY_ID[id].name.replace(/（.*）/, '')} ${Math.round(((vA[id] || 0) / maxV) * 100)}%`, 'mus', offA);
+        put([p.x, p.y, p.z], `${LABEL_NAME[id]} ${Math.round(((vA[id] || 0) / maxV) * 100)}%`, 'mus', offA);
       }
     }
     if (B) {
