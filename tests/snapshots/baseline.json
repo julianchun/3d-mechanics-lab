@@ -527,22 +527,22 @@
  },
  "leg-press@0": {
   "dem": {
-   "hipExt": 49.3998,
-   "hipAbd": -2.1216,
-   "kneeExt": -15.9873,
-   "ankPF": 18.8696
+   "hipExt": 53.13,
+   "hipAbd": -2.3991,
+   "kneeExt": -17.1104,
+   "ankPF": 19.7905
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.1376,
-   "gmax": 0.125,
+   "hams": 0.1554,
+   "gmax": 0.1367,
    "gmed": 0,
-   "addmag": 0.1171,
-   "addl": 0.0053,
+   "addmag": 0.1291,
+   "addl": 0.0065,
    "ilio": 0,
-   "gas": 0.1016,
-   "sol": 0.0459,
+   "gas": 0.1129,
+   "sol": 0.0441,
    "ta": 0
   },
   "warn": [],
@@ -550,22 +550,22 @@
  },
  "leg-press@0.25": {
   "dem": {
-   "hipExt": 53.6905,
-   "hipAbd": -2.1537,
-   "kneeExt": 35.1139,
-   "ankPF": 18.8696
+   "hipExt": 57.4207,
+   "hipAbd": -2.4312,
+   "kneeExt": 36.4803,
+   "ankPF": 19.7905
   },
   "mus": {
-   "vasti": 0.1736,
+   "vasti": 0.1803,
    "rf": 0,
-   "hams": 0.0873,
-   "gmax": 0.1664,
+   "hams": 0.0971,
+   "gmax": 0.1814,
    "gmed": 0,
-   "addmag": 0.1456,
+   "addmag": 0.1615,
    "addl": 0,
    "ilio": 0,
-   "gas": 0.0278,
-   "sol": 0.0906,
+   "gas": 0.0293,
+   "sol": 0.0949,
    "ta": 0
   },
   "warn": [],
@@ -573,22 +573,22 @@
  },
  "leg-press@0.5": {
   "dem": {
-   "hipExt": 58.9501,
-   "hipAbd": -2.188,
-   "kneeExt": 83.0988,
-   "ankPF": 18.8696
+   "hipExt": 62.6803,
+   "hipAbd": -2.4655,
+   "kneeExt": 86.8169,
+   "ankPF": 19.7905
   },
   "mus": {
-   "vasti": 0.3462,
+   "vasti": 0.3615,
    "rf": 0,
-   "hams": 0.0887,
-   "gmax": 0.195,
+   "hams": 0.0991,
+   "gmax": 0.2105,
    "gmed": 0,
-   "addmag": 0.1511,
+   "addmag": 0.1685,
    "addl": 0,
    "ilio": 0,
-   "gas": 0.0124,
-   "sol": 0.105,
+   "gas": 0.0131,
+   "sol": 0.11,
    "ta": 0
   },
   "warn": [],
@@ -596,22 +596,22 @@
  },
  "leg-press@0.75": {
   "dem": {
-   "hipExt": 65.0202,
-   "hipAbd": -2.2342,
-   "kneeExt": 126.0745,
-   "ankPF": 18.8696
+   "hipExt": 68.7504,
+   "hipAbd": -2.5117,
+   "kneeExt": 131.9129,
+   "ankPF": 19.7905
   },
   "mus": {
-   "vasti": 0.5267,
-   "rf": 0.0024,
-   "hams": 0.0888,
-   "gmax": 0.2216,
-   "gmed": 0.0035,
-   "addmag": 0.1592,
+   "vasti": 0.5512,
+   "rf": 0,
+   "hams": 0.0995,
+   "gmax": 0.2401,
+   "gmed": 0.0011,
+   "addmag": 0.1744,
    "addl": 0,
    "ilio": 0,
    "gas": 0,
-   "sol": 0.1185,
+   "sol": 0.1248,
    "ta": 0
   },
   "warn": [],
@@ -619,22 +619,22 @@
  },
  "leg-press@1": {
   "dem": {
-   "hipExt": 71.7392,
-   "hipAbd": -2.3134,
-   "kneeExt": 162.304,
-   "ankPF": 18.8696
+   "hipExt": 75.4695,
+   "hipAbd": -2.5909,
+   "kneeExt": 169.9447,
+   "ankPF": 19.7905
   },
   "mus": {
-   "vasti": 0.7318,
-   "rf": 0.0304,
-   "hams": 0.0836,
-   "gmax": 0.2489,
-   "gmed": 0.0113,
-   "addmag": 0.1714,
+   "vasti": 0.7669,
+   "rf": 0.0281,
+   "hams": 0.095,
+   "gmax": 0.2692,
+   "gmed": 0.0086,
+   "addmag": 0.1877,
    "addl": 0,
    "ilio": 0,
    "gas": 0,
-   "sol": 0.0727,
+   "sol": 0.0803,
    "ta": 0
   },
   "warn": [],
@@ -3132,19 +3132,19 @@
  },
  "cable-row@0": {
   "dem": {
-   "trunkExt": 157.5595,
+   "trunkExt": 156.9844,
    "shFlex": 8.0898,
-   "shHAdd": -0.015,
-   "shAbd": -1.4854,
-   "elbExt": -0.4895,
-   "scRet": 43.571,
-   "scElev": 18.6035
+   "shHAdd": -0.0129,
+   "shAbd": -1.4861,
+   "elbExt": -0.4879,
+   "scRet": 43.3823,
+   "scElev": 18.5392
   },
   "mus": {
-   "erec": 0.6437,
+   "erec": 0.6414,
    "ra": 0.06,
    "pecs": 0,
-   "pecc": 0.3793,
+   "pecc": 0.3794,
    "adelt": 0.2925,
    "pdelt": 0,
    "lat": 0,
@@ -3154,12 +3154,12 @@
    "brach": 0,
    "tmaj": 0.1433,
    "corb": 0.3081,
-   "infra": 0.1696,
+   "infra": 0.1695,
    "subsc": 0,
    "mdelt": 0,
-   "midtrap": 0.5411,
-   "uptrap": 0.3696,
-   "lowtrap": 0.1533,
+   "midtrap": 0.5387,
+   "uptrap": 0.3684,
+   "lowtrap": 0.1525,
    "serr": 0
   },
   "warn": [],
@@ -3167,33 +3167,33 @@
  },
  "cable-row@0.25": {
   "dem": {
-   "trunkExt": 118.1665,
-   "shFlex": -21.6346,
-   "shHAdd": 1.2792,
-   "shAbd": 4.2888,
-   "elbExt": -33.5257,
-   "scRet": 39.6201,
-   "scElev": 22.9779
+   "trunkExt": 117.7217,
+   "shFlex": -21.5162,
+   "shHAdd": 1.2745,
+   "shAbd": 4.2641,
+   "elbExt": -33.3897,
+   "scRet": 39.4475,
+   "scElev": 22.8958
   },
   "mus": {
-   "erec": 0.4861,
+   "erec": 0.4843,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.2335,
-   "lat": 0.306,
+   "pdelt": 0.2323,
+   "lat": 0.3044,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.4638,
-   "brach": 0.7715,
+   "bic": 0.462,
+   "brach": 0.7683,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.0726,
-   "mdelt": 0.2795,
-   "midtrap": 0.4095,
-   "uptrap": 0.6557,
+   "subsc": 0.0723,
+   "mdelt": 0.2779,
+   "midtrap": 0.4077,
+   "uptrap": 0.6529,
    "lowtrap": 0,
    "serr": 0
   },
@@ -3202,139 +3202,139 @@
  },
  "cable-row@0.5": {
   "dem": {
-   "trunkExt": 93.2616,
-   "shFlex": -35.007,
-   "shHAdd": 3.7088,
-   "shAbd": 6.6694,
-   "elbExt": -37.9312,
-   "scRet": 32.5219,
-   "scElev": 25.7796
+   "trunkExt": 92.8873,
+   "shFlex": -34.838,
+   "shHAdd": 3.6927,
+   "shAbd": 6.6352,
+   "elbExt": -37.7758,
+   "scRet": 32.3791,
+   "scElev": 25.6851
   },
   "mus": {
-   "erec": 0.3865,
+   "erec": 0.385,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.3527,
-   "lat": 0.4761,
+   "pdelt": 0.3511,
+   "lat": 0.4738,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.5172,
-   "brach": 0.8997,
+   "bic": 0.5151,
+   "brach": 0.896,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.1326,
-   "mdelt": 0.4336,
-   "midtrap": 0.3046,
-   "uptrap": 0.8309,
+   "subsc": 0.132,
+   "mdelt": 0.4314,
+   "midtrap": 0.3033,
+   "uptrap": 0.8274,
    "lowtrap": 0,
-   "serr": 0.0536
+   "serr": 0.0534
   },
   "warn": [],
   "ok": true
  },
  "cable-row@0.75": {
   "dem": {
-   "trunkExt": 75.1531,
-   "shFlex": -40.1167,
-   "shHAdd": 5.0076,
-   "shAbd": 7.3848,
-   "elbExt": -40.3277,
-   "scRet": 25.3244,
-   "scElev": 27.0808
+   "trunkExt": 74.8215,
+   "shFlex": -39.9317,
+   "shHAdd": 4.9853,
+   "shAbd": 7.349,
+   "elbExt": -40.1616,
+   "scRet": 25.2118,
+   "scElev": 26.9801
   },
   "mus": {
-   "erec": 0.3141,
+   "erec": 0.3127,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.395,
-   "lat": 0.5725,
+   "pdelt": 0.3932,
+   "lat": 0.5699,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.5965,
-   "brach": 0.9877,
+   "bic": 0.5941,
+   "brach": 0.9836,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.1851,
-   "mdelt": 0.4826,
-   "midtrap": 0.2577,
-   "uptrap": 0.89,
+   "subsc": 0.1842,
+   "mdelt": 0.4803,
+   "midtrap": 0.2565,
+   "uptrap": 0.8863,
    "lowtrap": 0,
-   "serr": 0.1171
+   "serr": 0.1167
   },
   "warn": [],
   "ok": true
  },
  "cable-row@1": {
   "dem": {
-   "trunkExt": 61.4956,
-   "shFlex": -39.3785,
-   "shHAdd": 4.7733,
-   "shAbd": 7.1504,
-   "elbExt": -43.471,
-   "scRet": 18.9036,
-   "scElev": 26.8867
+   "trunkExt": 61.1889,
+   "shFlex": -39.2019,
+   "shHAdd": 4.752,
+   "shAbd": 7.1176,
+   "elbExt": -43.2909,
+   "scRet": 18.818,
+   "scElev": 26.786
   },
   "mus": {
-   "erec": 0.2594,
+   "erec": 0.2582,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.3858,
-   "lat": 0.6185,
+   "pdelt": 0.3841,
+   "lat": 0.6158,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.7294,
-   "brach": 1.0939,
+   "bic": 0.7264,
+   "brach": 1.0893,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.2146,
-   "mdelt": 0.4589,
-   "midtrap": 0.1986,
-   "uptrap": 0.8874,
+   "subsc": 0.2136,
+   "mdelt": 0.4568,
+   "midtrap": 0.1977,
+   "uptrap": 0.8838,
    "lowtrap": 0,
-   "serr": 0.141
+   "serr": 0.1405
   },
   "warn": [],
   "ok": true
  },
  "cable-row-wide@0": {
   "dem": {
-   "trunkExt": 157.5664,
+   "trunkExt": 156.9913,
    "shFlex": 8.0967,
-   "shHAdd": -2.9774,
-   "shAbd": 3.0798,
-   "elbExt": -0.3441,
-   "scRet": 47.3933,
-   "scElev": 23.6056
+   "shHAdd": -2.9668,
+   "shAbd": 3.0762,
+   "elbExt": -0.3428,
+   "scRet": 47.1922,
+   "scElev": 23.5365
   },
   "mus": {
-   "erec": 0.6437,
+   "erec": 0.6414,
    "ra": 0.06,
    "pecs": 0,
-   "pecc": 0.1309,
-   "adelt": 0.3838,
-   "pdelt": 0.048,
+   "pecc": 0.131,
+   "adelt": 0.3836,
+   "pdelt": 0.0479,
    "lat": 0,
    "trilong": 0,
    "trilat": 0.0931,
-   "bic": 0.1396,
+   "bic": 0.1395,
    "brach": 0,
    "tmaj": 0,
    "corb": 0.1154,
-   "infra": 0.3949,
+   "infra": 0.3945,
    "subsc": 0,
-   "mdelt": 0.0407,
-   "midtrap": 0.5825,
-   "uptrap": 0.4402,
-   "lowtrap": 0.154,
+   "mdelt": 0.0406,
+   "midtrap": 0.58,
+   "uptrap": 0.4389,
+   "lowtrap": 0.1531,
    "serr": 0
   },
   "warn": [],
@@ -3342,34 +3342,34 @@
  },
  "cable-row-wide@0.25": {
   "dem": {
-   "trunkExt": 118.5473,
-   "shFlex": -21.2368,
-   "shHAdd": -19.7884,
-   "shAbd": 6.8835,
-   "elbExt": -29.3735,
-   "scRet": 63.8331,
-   "scElev": 25.5056
+   "trunkExt": 118.1019,
+   "shFlex": -21.1191,
+   "shHAdd": -19.7037,
+   "shAbd": 6.8715,
+   "elbExt": -29.2501,
+   "scRet": 63.5572,
+   "scElev": 25.4364
   },
   "mus": {
-   "erec": 0.4876,
+   "erec": 0.4858,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.4104,
-   "lat": 0.2669,
+   "pdelt": 0.4089,
+   "lat": 0.2653,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.2812,
-   "brach": 0.7704,
+   "bic": 0.28,
+   "brach": 0.7671,
    "tmaj": 0,
    "corb": 0,
-   "infra": 0.208,
+   "infra": 0.2075,
    "subsc": 0,
-   "mdelt": 0.4122,
-   "midtrap": 0.7145,
-   "uptrap": 0.6772,
-   "lowtrap": 0.1257,
+   "mdelt": 0.4105,
+   "midtrap": 0.7114,
+   "uptrap": 0.6745,
+   "lowtrap": 0.1251,
    "serr": 0
   },
   "warn": [],
@@ -3377,34 +3377,34 @@
  },
  "cable-row-wide@0.5": {
   "dem": {
-   "trunkExt": 93.695,
-   "shFlex": -34.5465,
-   "shHAdd": -26.6463,
-   "shAbd": 9.9188,
-   "elbExt": -31.6853,
-   "scRet": 68.1458,
-   "scElev": 28.509
+   "trunkExt": 93.32,
+   "shFlex": -34.3784,
+   "shHAdd": -26.5298,
+   "shAbd": 9.896,
+   "elbExt": -31.5523,
+   "scRet": 67.847,
+   "scElev": 28.4282
   },
   "mus": {
-   "erec": 0.3882,
+   "erec": 0.3867,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.6095,
-   "lat": 0.3962,
+   "pdelt": 0.607,
+   "lat": 0.3942,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.2823,
-   "brach": 0.8621,
+   "bic": 0.2811,
+   "brach": 0.8585,
    "tmaj": 0,
    "corb": 0,
-   "infra": 0.2794,
+   "infra": 0.2783,
    "subsc": 0,
-   "mdelt": 0.687,
-   "midtrap": 0.7281,
-   "uptrap": 0.8498,
-   "lowtrap": 0.0761,
+   "mdelt": 0.6842,
+   "midtrap": 0.7249,
+   "uptrap": 0.8465,
+   "lowtrap": 0.0756,
    "serr": 0
   },
   "warn": [],
@@ -3412,34 +3412,34 @@
  },
  "cable-row-wide@0.75": {
   "dem": {
-   "trunkExt": 75.4988,
-   "shFlex": -39.746,
-   "shHAdd": -31.1337,
-   "shAbd": 13.3276,
-   "elbExt": -30.3362,
-   "scRet": 68.7993,
-   "scElev": 32.0382
+   "trunkExt": 75.1666,
+   "shFlex": -39.5616,
+   "shHAdd": -30.9953,
+   "shAbd": 13.2912,
+   "elbExt": -30.2095,
+   "scRet": 68.4936,
+   "scElev": 31.9413
   },
   "mus": {
-   "erec": 0.3154,
+   "erec": 0.3141,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.668,
-   "lat": 0.4876,
+   "pdelt": 0.6653,
+   "lat": 0.4853,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.2672,
-   "brach": 0.8695,
+   "bic": 0.2661,
+   "brach": 0.8659,
    "tmaj": 0,
    "corb": 0,
-   "infra": 0.3083,
+   "infra": 0.307,
    "subsc": 0,
-   "mdelt": 0.9233,
-   "midtrap": 0.7432,
-   "uptrap": 0.9796,
-   "lowtrap": 0.0601,
+   "mdelt": 0.9196,
+   "midtrap": 0.7398,
+   "uptrap": 0.9758,
+   "lowtrap": 0.0596,
    "serr": 0
   },
   "warn": [],
@@ -3447,34 +3447,34 @@
  },
  "cable-row-wide@1": {
   "dem": {
-   "trunkExt": 61.6457,
-   "shFlex": -39.2284,
-   "shHAdd": -34.2899,
-   "shAbd": 16.7226,
-   "elbExt": -28.6525,
-   "scRet": 67.6139,
-   "scElev": 34.9292
+   "trunkExt": 61.339,
+   "shFlex": -39.0518,
+   "shHAdd": -34.1354,
+   "shAbd": 16.6718,
+   "elbExt": -28.5331,
+   "scRet": 67.3096,
+   "scElev": 34.8173
   },
   "mus": {
-   "erec": 0.26,
+   "erec": 0.2588,
    "ra": 0.06,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.8998,
-   "lat": 0.6277,
+   "pdelt": 0.8967,
+   "lat": 0.6252,
    "trilong": 0,
    "trilat": 0,
-   "bic": 0.2882,
-   "brach": 0.8356,
+   "bic": 0.287,
+   "brach": 0.8322,
    "tmaj": 0,
    "corb": 0,
-   "infra": 0.766,
+   "infra": 0.7633,
    "subsc": 0,
-   "mdelt": 1.1056,
-   "midtrap": 0.7717,
-   "uptrap": 1.1295,
-   "lowtrap": 0.0712,
+   "mdelt": 1.1016,
+   "midtrap": 0.7681,
+   "uptrap": 1.1255,
+   "lowtrap": 0.0705,
    "serr": 0
   },
   "warn": [],
@@ -4082,11 +4082,11 @@
  },
  "leg-ext@0": {
   "dem": {
-   "kneeExt": 129.2229
+   "kneeExt": 109.6225
   },
   "mus": {
-   "vasti": 0.5287,
-   "rf": 0.0744,
+   "vasti": 0.4497,
+   "rf": 0.0633,
    "hams": 0,
    "gas": 0
   },
@@ -4095,11 +4095,11 @@
  },
  "leg-ext@0.25": {
   "dem": {
-   "kneeExt": 128.3157
+   "kneeExt": 120.742
   },
   "mus": {
-   "vasti": 0.4807,
-   "rf": 0.0707,
+   "vasti": 0.4525,
+   "rf": 0.0665,
    "hams": 0,
    "gas": 0
   },
@@ -4108,11 +4108,11 @@
  },
  "leg-ext@0.5": {
   "dem": {
-   "kneeExt": 126.2458
+   "kneeExt": 132.2882
   },
   "mus": {
-   "vasti": 0.4568,
-   "rf": 0.0709,
+   "vasti": 0.4786,
+   "rf": 0.0743,
    "hams": 0,
    "gas": 0
   },
@@ -4121,11 +4121,11 @@
  },
  "leg-ext@0.75": {
   "dem": {
-   "kneeExt": 123.2771
+   "kneeExt": 136.5206
   },
   "mus": {
-   "vasti": 0.4551,
-   "rf": 0.0755,
+   "vasti": 0.504,
+   "rf": 0.0837,
    "hams": 0,
    "gas": 0
   },
@@ -4134,11 +4134,11 @@
  },
  "leg-ext@1": {
   "dem": {
-   "kneeExt": 119.7878
+   "kneeExt": 131.6738
   },
   "mus": {
-   "vasti": 0.4748,
-   "rf": 0.0851,
+   "vasti": 0.522,
+   "rf": 0.0936,
    "hams": 0,
    "gas": 0
   },
@@ -4147,380 +4147,380 @@
  },
  "leg-curl@0": {
   "dem": {
-   "kneeExt": -44.4953
+   "kneeExt": -26.6165
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.5378,
-   "gas": 0.3439
+   "hams": 0.3226,
+   "gas": 0.2063
   },
   "warn": [],
   "ok": true
  },
  "leg-curl@0.25": {
   "dem": {
-   "kneeExt": -40.8837
+   "kneeExt": -28.2983
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.4738,
-   "gas": 0.3407
+   "hams": 0.3279,
+   "gas": 0.2358
   },
   "warn": [],
   "ok": true
  },
  "leg-curl@0.5": {
   "dem": {
-   "kneeExt": -37.7847
+   "kneeExt": -33.2157
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.4278,
-   "gas": 0.3426
+   "hams": 0.376,
+   "gas": 0.3011
   },
   "warn": [],
   "ok": true
  },
  "leg-curl@0.75": {
   "dem": {
-   "kneeExt": -35.6147
+   "kneeExt": -40.581
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.3946,
-   "gas": 0.3484
+   "hams": 0.4507,
+   "gas": 0.3978
   },
   "warn": [],
   "ok": true
  },
  "leg-curl@1": {
   "dem": {
-   "kneeExt": -34.6654
+   "kneeExt": -38.4729
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.3749,
-   "gas": 0.3604
+   "hams": 0.4185,
+   "gas": 0.4024
   },
   "warn": [],
   "ok": true
  },
  "lying-leg-curl@0": {
   "dem": {
-   "kneeExt": -45.4004
+   "kneeExt": -27.5217
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.615,
-   "gas": 0.5265
+   "hams": 0.3808,
+   "gas": 0.326
   },
   "warn": [],
   "ok": true
  },
  "lying-leg-curl@0.25": {
   "dem": {
-   "kneeExt": -48.9701
+   "kneeExt": -36.3846
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.5914,
-   "gas": 0.4961
+   "hams": 0.4399,
+   "gas": 0.369
   },
   "warn": [],
   "ok": true
  },
  "lying-leg-curl@0.5": {
   "dem": {
-   "kneeExt": -51.9654
+   "kneeExt": -47.3964
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.591,
-   "gas": 0.4811
+   "hams": 0.539,
+   "gas": 0.4388
   },
   "warn": [],
   "ok": true
  },
  "lying-leg-curl@0.75": {
   "dem": {
-   "kneeExt": -53.9837
+   "kneeExt": -58.95
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.5958,
-   "gas": 0.466
+   "hams": 0.6506,
+   "gas": 0.5089
   },
   "warn": [],
   "ok": true
  },
  "lying-leg-curl@1": {
   "dem": {
-   "kneeExt": -54.7538
+   "kneeExt": -58.5613
   },
   "mus": {
    "vasti": 0,
    "rf": 0,
-   "hams": 0.6015,
-   "gas": 0.4483
+   "hams": 0.6433,
+   "gas": 0.4795
   },
   "warn": [],
   "ok": true
  },
  "pushdown@0": {
   "dem": {
-   "hipExt": -11.0413,
-   "hipAbd": 2.7151,
-   "kneeExt": 9.6685,
-   "ankPF": 2.4291,
-   "trunkExt": -13.0505,
-   "shFlex": -31.2566,
-   "shHAdd": 2.4064,
-   "shAbd": -0.4067,
-   "elbExt": 12.4512,
-   "scRet": 3.9981,
-   "scElev": -7.427
+   "hipExt": -11.3504,
+   "hipAbd": 2.7146,
+   "kneeExt": 9.799,
+   "ankPF": 2.3679,
+   "trunkExt": -13.375,
+   "shFlex": -31.7976,
+   "shHAdd": 2.4461,
+   "shAbd": -0.4013,
+   "elbExt": 12.6666,
+   "scRet": 4.066,
+   "scElev": -7.5729
   },
   "mus": {
    "vasti": 0.0211,
-   "rf": 0.1088,
+   "rf": 0.1117,
    "hams": 0,
    "gmax": 0,
-   "gmed": 0.0401,
+   "gmed": 0.0405,
    "addmag": 0,
-   "addl": 0.0157,
-   "ilio": 0.136,
-   "gas": 0.004,
-   "sol": 0.0119,
+   "addl": 0.0165,
+   "ilio": 0.1398,
+   "gas": 0.0039,
+   "sol": 0.0117,
    "ta": 0,
    "erec": 0,
-   "ra": 0.233,
+   "ra": 0.2388,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.1273,
-   "lat": 0.3411,
-   "trilong": 0.2673,
-   "trilat": 0.2799,
+   "pdelt": 0.1296,
+   "lat": 0.3471,
+   "trilong": 0.2715,
+   "trilat": 0.2838,
    "bic": 0,
    "brach": 0,
    "tmaj": 0.0155,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.088,
-   "mdelt": 0.1194,
-   "midtrap": 0.0466,
-   "uptrap": 0.1853,
+   "subsc": 0.0895,
+   "mdelt": 0.1218,
+   "midtrap": 0.0474,
+   "uptrap": 0.1883,
    "lowtrap": 0,
-   "serr": 0.0367
+   "serr": 0.0373
   },
   "warn": [],
   "ok": true
  },
  "pushdown@0.25": {
   "dem": {
-   "hipExt": -14.6217,
-   "hipAbd": 2.7399,
-   "kneeExt": 11.6049,
-   "ankPF": 2.6833,
-   "trunkExt": -16.6647,
-   "shFlex": -32.9716,
-   "shHAdd": 2.601,
-   "shAbd": 0.2978,
-   "elbExt": 22.2834,
-   "scRet": 2.2736,
-   "scElev": -7.4689
+   "hipExt": -14.96,
+   "hipAbd": 2.7403,
+   "kneeExt": 11.7515,
+   "ankPF": 2.6292,
+   "trunkExt": -17.0171,
+   "shFlex": -33.4886,
+   "shHAdd": 2.6388,
+   "shAbd": 0.3101,
+   "elbExt": 22.6247,
+   "scRet": 2.3103,
+   "scElev": -7.6274
   },
   "mus": {
    "vasti": 0.023,
-   "rf": 0.143,
+   "rf": 0.1462,
    "hams": 0,
    "gmax": 0,
-   "gmed": 0.0452,
+   "gmed": 0.0456,
    "addmag": 0,
-   "addl": 0.0248,
-   "ilio": 0.1798,
-   "gas": 0.0042,
-   "sol": 0.0131,
+   "addl": 0.0257,
+   "ilio": 0.1839,
+   "gas": 0.0041,
+   "sol": 0.0128,
    "ta": 0,
    "erec": 0,
-   "ra": 0.2976,
+   "ra": 0.3039,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.1346,
-   "lat": 0.343,
-   "trilong": 0.3258,
-   "trilat": 0.3944,
+   "pdelt": 0.1367,
+   "lat": 0.3485,
+   "trilong": 0.3307,
+   "trilat": 0.4004,
    "bic": 0,
    "brach": 0,
-   "tmaj": 0.0021,
+   "tmaj": 0.0019,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.0918,
-   "mdelt": 0.1392,
-   "midtrap": 0.0344,
-   "uptrap": 0.1799,
+   "subsc": 0.0932,
+   "mdelt": 0.1416,
+   "midtrap": 0.0349,
+   "uptrap": 0.1822,
    "lowtrap": 0,
-   "serr": 0.0478
+   "serr": 0.0484
   },
   "warn": [],
   "ok": true
  },
  "pushdown@0.5": {
   "dem": {
-   "hipExt": -16.0574,
-   "hipAbd": 2.7779,
-   "kneeExt": 12.3828,
-   "ankPF": 3.0379,
-   "trunkExt": -18.2406,
-   "shFlex": -33.3103,
-   "shHAdd": 2.3994,
-   "shAbd": 1.341,
-   "elbExt": 25.9849,
-   "scRet": 0.9925,
-   "scElev": -6.8804
+   "hipExt": -16.4161,
+   "hipAbd": 2.7801,
+   "kneeExt": 12.5415,
+   "ankPF": 2.9917,
+   "trunkExt": -18.6109,
+   "shFlex": -33.7822,
+   "shHAdd": 2.4306,
+   "shAbd": 1.3642,
+   "elbExt": 26.362,
+   "scRet": 0.9977,
+   "scElev": -7.0404
   },
   "mus": {
    "vasti": 0.0241,
-   "rf": 0.1558,
+   "rf": 0.1592,
    "hams": 0,
    "gmax": 0,
-   "gmed": 0.0474,
+   "gmed": 0.0479,
    "addmag": 0,
-   "addl": 0.0282,
-   "ilio": 0.1974,
-   "gas": 0.0049,
-   "sol": 0.0146,
+   "addl": 0.0291,
+   "ilio": 0.2018,
+   "gas": 0.0047,
+   "sol": 0.0144,
    "ta": 0,
    "erec": 0,
-   "ra": 0.3257,
+   "ra": 0.3323,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.1471,
-   "lat": 0.3352,
-   "trilong": 0.3526,
-   "trilat": 0.4386,
+   "pdelt": 0.1492,
+   "lat": 0.34,
+   "trilong": 0.3575,
+   "trilat": 0.4451,
    "bic": 0,
    "brach": 0,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.0847,
-   "mdelt": 0.178,
-   "midtrap": 0.0255,
-   "uptrap": 0.1775,
+   "subsc": 0.0858,
+   "mdelt": 0.1808,
+   "midtrap": 0.0257,
+   "uptrap": 0.1791,
    "lowtrap": 0,
-   "serr": 0.0566
+   "serr": 0.0572
   },
   "warn": [],
   "ok": true
  },
  "pushdown@0.75": {
   "dem": {
-   "hipExt": -13.2616,
-   "hipAbd": 2.7741,
-   "kneeExt": 10.9502,
-   "ankPF": 3.2233,
-   "trunkExt": -15.9899,
-   "shFlex": -32.1125,
-   "shHAdd": 1.7776,
-   "shAbd": 2.3953,
-   "elbExt": 27.5815,
-   "scRet": 0.3107,
-   "scElev": -6.087
+   "hipExt": -13.549,
+   "hipAbd": 2.7774,
+   "kneeExt": 11.0723,
+   "ankPF": 3.182,
+   "trunkExt": -16.2982,
+   "shFlex": -32.5008,
+   "shHAdd": 1.7976,
+   "shAbd": 2.4249,
+   "elbExt": 27.9807,
+   "scRet": 0.2772,
+   "scElev": -6.2484
   },
   "mus": {
    "vasti": 0.0237,
-   "rf": 0.1266,
+   "rf": 0.1292,
    "hams": 0,
    "gmax": 0,
-   "gmed": 0.0434,
+   "gmed": 0.0438,
    "addmag": 0,
-   "addl": 0.0205,
-   "ilio": 0.1635,
-   "gas": 0.0054,
-   "sol": 0.0153,
+   "addl": 0.0213,
+   "ilio": 0.167,
+   "gas": 0.0053,
+   "sol": 0.0152,
    "ta": 0,
    "erec": 0,
-   "ra": 0.2855,
+   "ra": 0.291,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.1547,
-   "lat": 0.3126,
-   "trilong": 0.3645,
-   "trilat": 0.4622,
+   "pdelt": 0.1563,
+   "lat": 0.3163,
+   "trilong": 0.3692,
+   "trilat": 0.4691,
    "bic": 0,
    "brach": 0,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.0636,
-   "mdelt": 0.2135,
-   "midtrap": 0.0199,
-   "uptrap": 0.168,
+   "subsc": 0.0643,
+   "mdelt": 0.2161,
+   "midtrap": 0.0197,
+   "uptrap": 0.1687,
    "lowtrap": 0,
-   "serr": 0.0584
+   "serr": 0.0589
   },
   "warn": [],
   "ok": true
  },
  "pushdown@1": {
   "dem": {
-   "hipExt": -14.7592,
-   "hipAbd": 2.7451,
-   "kneeExt": 11.6995,
-   "ankPF": 2.7487,
-   "trunkExt": -16.7805,
-   "shFlex": -32.5141,
-   "shHAdd": 0.7942,
-   "shAbd": 3.838,
-   "elbExt": 23.2319,
-   "scRet": 3.3256,
-   "scElev": -3.8968
+   "hipExt": -15.0585,
+   "hipAbd": 2.7453,
+   "kneeExt": 11.8257,
+   "ankPF": 2.6899,
+   "trunkExt": -17.0931,
+   "shFlex": -33.0075,
+   "shHAdd": 0.8052,
+   "shAbd": 3.8974,
+   "elbExt": 23.5316,
+   "scRet": 3.3969,
+   "scElev": -4.0008
   },
   "mus": {
    "vasti": 0.0232,
-   "rf": 0.1443,
+   "rf": 0.1471,
    "hams": 0,
    "gmax": 0,
-   "gmed": 0.0454,
+   "gmed": 0.0458,
    "addmag": 0,
-   "addl": 0.0251,
-   "ilio": 0.1815,
-   "gas": 0.0043,
-   "sol": 0.0133,
+   "addl": 0.0259,
+   "ilio": 0.1851,
+   "gas": 0.0042,
+   "sol": 0.0131,
    "ta": 0,
    "erec": 0,
-   "ra": 0.2997,
+   "ra": 0.3052,
    "pecs": 0,
    "pecc": 0,
    "adelt": 0,
-   "pdelt": 0.1828,
-   "lat": 0.3172,
-   "trilong": 0.3512,
-   "trilat": 0.3824,
+   "pdelt": 0.1856,
+   "lat": 0.3222,
+   "trilong": 0.356,
+   "trilat": 0.3872,
    "bic": 0,
    "brach": 0,
    "tmaj": 0,
    "corb": 0,
    "infra": 0,
-   "subsc": 0.0309,
-   "mdelt": 0.2738,
-   "midtrap": 0.0448,
-   "uptrap": 0.211,
+   "subsc": 0.0313,
+   "mdelt": 0.2781,
+   "midtrap": 0.0455,
+   "uptrap": 0.2137,
    "lowtrap": 0,
-   "serr": 0.0511
+   "serr": 0.0515
   },
   "warn": [],
   "ok": true

@@ -6,6 +6,7 @@
 //   'indirect'  — 文獻相關但非直接（如由肌電推關節力矩、單一收縮期顯著、研討會摘要或模型合併肌群）
 //   'inference' — 解剖或幾何推論（無直接實測文獻支持，或文獻顯示無顯著差異）
 
+import fs from 'node:fs';
 import { analyze, peakAnalysis, defaultParams } from '../src/biomech.js';
 
 const P = (lift, overrides = {}) => ({ ...defaultParams(lift), ...overrides });
@@ -594,6 +595,56 @@ const CHECKS = [
   },
 ];
 
+// 每一項檢查對應的清單 ID（順序與 CHECKS 一致，供匯出靜態狀態檔 src/trend-status.json）
+const CHECK_IDS = [
+  ['leg-press'],                   // 01
+  ['leg-press'],                   // 02
+  ['leg-press'],                   // 03
+  ['squat-high', 'leg-press'],     // 04
+  ['squat-high', 'smith-squat'],   // 05
+  ['squat-high', 'smith-squat'],   // 06
+  ['squat-low', 'squat-high'],     // 07
+  ['squat-low', 'squat-high'],     // 08
+  ['squat-high', 'squat-low'],     // 09
+  ['front-squat', 'squat-high'],   // 10
+  ['front-squat', 'squat-high'],   // 11
+  ['squat-high'],                  // 12
+  ['squat-high'],                  // 13
+  ['squat-high'],                  // 14
+  ['sumo', 'deadlift'],            // 15
+  ['sumo', 'deadlift'],            // 16
+  ['deficit-dl', 'block-pull'],    // 17
+  ['deficit-dl', 'block-pull'],    // 18
+  ['deficit-dl', 'block-pull'],    // 19
+  ['good-morning'],                // 20
+  ['hip-thrust', 'squat-high'],    // 21
+  ['hip-thrust'],                  // 22
+  ['hip-thrust', 'glute-bridge'],  // 23
+  ['glute-bridge', 'hip-thrust'],  // 24
+  ['incline-bench', 'bench'],      // 25
+  ['incline-bench', 'bench'],      // 26
+  ['bench', 'incline-bench'],      // 27
+  ['cg-bench', 'bench'],           // 28
+  ['cg-bench', 'bench'],           // 29
+  ['pulldown', 'pulldown-sup'],    // 30
+  ['pulldown', 'pulldown-sup'],    // 31
+  ['cable-row-wide', 'cable-row'], // 32
+  ['cable-row', 'cable-row-wide'], // 33
+  ['row', 'cable-row'],            // 34
+  ['uprow'],                       // 35
+  ['uprow'],                       // 36
+  ['uprow'],                       // 37
+  ['leg-curl', 'lying-leg-curl'],  // 38
+  ['leg-ext'],                     // 39
+  ['squat-high'],                  // 40
+  ['curl', 'reverse-curl'],        // 41
+  ['reverse-curl', 'curl'],        // 42
+];
+
+if (CHECK_IDS.length !== CHECKS.length) {
+  throw new Error(`CHECK_IDS 長度 (${CHECK_IDS.length}) 與 CHECKS (${CHECKS.length}) 不符`);
+}
+
 let passed = 0;
 let failed = 0;
 const stats = {
@@ -601,6 +652,7 @@ const stats = {
   indirect: { total: 0, pass: 0, fail: 0 },
   inference: { total: 0, pass: 0, fail: 0 },
 };
+const byId = {};
 
 console.log('=== 生物力學模型 vs 文獻趨勢檢查 ===\n');
 
@@ -620,11 +672,28 @@ for (let i = 0; i < CHECKS.length; i++) {
   }
   stats[c.evidence].total++;
   const fmt = (v) => (r.unit === 'N·m' || r.unit === '°' ? v.toFixed(1) : v.toFixed(3));
+  const modelText = `${r.labelA} = ${fmt(r.valA)} ${r.unit} vs ${r.labelB} = ${fmt(r.valB)} ${r.unit}`;
   console.log(`[${String(i + 1).padStart(2, '0')}] ${status} | [${c.evidence}] ${c.exercise}`);
   console.log(`     比較：${c.compare}`);
   console.log(`     依據：${c.ref}（${EVIDENCE_LABEL[c.evidence]}）`);
   console.log(`     預期：${c.expected}`);
-  console.log(`     模型：${r.labelA} = ${fmt(r.valA)} ${r.unit} vs ${r.labelB} = ${fmt(r.valB)} ${r.unit}`);
+  console.log(`     模型：${modelText}`);
+
+  const item = {
+    index: i + 1,
+    pass: r.pass,
+    evidence: c.evidence,
+    evidenceLabel: EVIDENCE_LABEL[c.evidence],
+    exercise: c.exercise,
+    compare: c.compare,
+    expected: c.expected,
+    ref: c.ref,
+    model: modelText,
+  };
+  for (const id of CHECK_IDS[i]) {
+    if (!byId[id]) byId[id] = [];
+    byId[id].push(item);
+  }
 }
 
 console.log('\n=== 總計 ===');
@@ -633,4 +702,14 @@ for (const key of ['direct', 'indirect', 'inference']) {
   const s = stats[key];
   const pct = s.total > 0 ? ((s.pass / s.total) * 100).toFixed(1) : '0.0';
   console.log(`  - ${key.padEnd(9)}（${EVIDENCE_LABEL[key]}）：共 ${String(s.total).padStart(2)} 項｜PASS ${String(s.pass).padStart(2)}，FAIL ${String(s.fail).padStart(2)}（${pct}%）`);
+}
+
+if (process.argv.includes('--write-status')) {
+  const outPath = new URL('../src/trend-status.json', import.meta.url);
+  const payload = {
+    summary: { total: CHECKS.length, pass: passed, fail: failed, byEvidence: stats },
+    byId,
+  };
+  fs.writeFileSync(outPath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
+  console.log(`\n已寫入靜態比對結果：src/trend-status.json`);
 }

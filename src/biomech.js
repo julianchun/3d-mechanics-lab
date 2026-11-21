@@ -12,10 +12,138 @@ export const BODY = {
 const MF = { foot: 0.0145, shank: 0.0465, thigh: 0.1, upper: 0.028, fore: 0.022 };
 MF.trunk = 1 - 2 * (MF.foot + MF.shank + MF.thigh + MF.upper + MF.fore);
 export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row: 0.7, ohp: 0.5, goodmorning: 0.45, curl: 0.35, shrug: 1.2, uprow: 0.35, hipthrust: 1.3,
-  // 器械：槓／配重片／滑輪配重（× 體重）
+  // 器械示範負重基準（× 體重；細部設定集中在下方 MACHINES）
   smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9 };
-// 凸輪的阻力曲線選項（腿伸機、腿彎舉）
-export const CAMS = [['gravity', '槓桿＋配重（無凸輪）'], ['flat', '凸輪：全程平均'], ['asc', '凸輪：收縮端較重'], ['desc', '凸輪：拉長端較重']];
+
+// ---------- 器械規格與參數設定 ----------
+// 每個數值均標註 docs/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
+export const MACHINES = {
+  smith: {
+    railDegDefault: '0',             // docs/machine-data.md §2.1：垂直軌道商用款 0°
+    railDegOptions: [
+      ['0', '0°（垂直軌道）'],       // docs/machine-data.md §2.1：力量訓練／健力房常見 0°
+      ['7', '7°（往上微後傾）'],     // docs/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
+      ['-7', '-7°（反向站位）'],     // docs/machine-data.md §2.2：背向／面向使用時斜軌方向相反
+    ],
+    railZ0: 0,                       // 假設：滑軌於參考高度處之 Z 座標（m）
+    railRefY: 1.4,                   // 假設：斜軌參考高度（約站姿扛槓高度，使「腳在槓前方」定義一致）
+    railMu: 0,                       // 假設：忽略線性軸承滑軌摩擦
+    startingResistanceKg: {          // docs/machine-data.md §2.1：商用機空槓起始阻力參考（kg）
+      inclined7: 13.6,               //   Hammer Strength 7° 傾斜款 30 lb（13.6 kg，Life Fitness 官方規格）
+      counterbalanced: 9.0,          //   有配重平衡商用款估計 15–25 lb（6.8–11.3 kg）
+      vertical: 18.0,                //   無配重垂直軌道款估計 35–45 lb（16–20.4 kg）
+    },
+    barRatio: 0.9,                   // 假設：示範總負重＝0.9× 體重（含空槓起始阻力）
+    railHalfSpan: 0.7,               // 假設：左右滑軌半寬（m）
+    railHeight: 2.2,                 // 假設：機架高度（m）
+  },
+  legpress: {
+    railDeg: 45,                     // docs/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
+    sledKgDefault: 45,               // 假設：docs/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
+    sledKgRange: [20, 65],           // 假設：輕型至重型商用滑台重量範圍（kg）
+    platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加預設 45 kg 滑台 ＝ 總重 180 kg ＝ 2.4× 體重）
+    railMuDefault: 0.05,             // 假設：docs/machine-data.md §1.1 導軌動態摩擦估計 0.05–0.15（向心取 sinθ+μcosθ；可設 0）
+    railMuRange: [0, 0.15],          // 假設：docs/machine-data.md §1.1
+    seatDegDefault: 50,              // 假設：docs/machine-data.md §1.1 椅背離垂直估計 45°–65°
+    seatDegRange: [35, 65],          // 假設：docs/machine-data.md §1.1
+    hipY: 0.42,                      // 假設：座椅骨盆高度（m）
+  },
+  pulldown: {
+    pulleyRatioDefault: '1:1',       // docs/machine-data.md §3.1：專用滑輪下拉機 1:1（Hammer Strength / Life Fitness / Technogym 商用規格）
+    stackKg: 45,                     // 假設：示範配重片＝45 kg（1:1 實感 45 kg ≈ 0.6× 體重；2:1 實感 22.5 kg）
+    pulleyY: 2.35,                   // docs/machine-data.md §3.1：商用機總高 216–244 cm（Hammer Strength HDU-DPR 244 cm / HS-PD 226 cm / Technogym 228 cm）
+    towerZ: 0.8,                     // 假設：配重塔距骨盆水平距離（m）
+    seatY: 0.47,                     // 假設：座墊高度（m）
+    barLen: 1.25,                    // 假設：下拉長桿寬度（m）
+  },
+  cablerow: {
+    pulleyRatioDefault: '1:1',       // docs/machine-data.md §3.1：專用坐姿低拉划船機 1:1（Life Fitness PWR Play / Optima / Axiom / Technogym 規格）
+    stackKg: 56,                     // 假設：示範配重片＝56 kg（1:1 實感 56 kg ≈ 0.75× 體重；2:1 實感 28 kg）
+    pulleyY: 0.42,                   // docs/machine-data.md §3.1：低滑輪出繩口典型估算 35–45 cm（與坐墊同高或略低）
+    pulleyZ: 1.0,                    // 假設：低滑輪距骨盆水平距離（m）
+    seatY: 0.47,                     // 假設：座墊高度（m）
+    barLen: { v: 0.2, wide: 0.75 },  // 假設：V 把與寬握桿寬度（m）
+  },
+  pushdown: {
+    pulleyRatioDefault: '2:1',       // docs/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
+    stackKg: 38,                     // 假設：示範配重片＝38 kg（2:1 實感 19 kg ≈ 0.25× 體重；1:1 實感 38 kg）
+    pulleyY: 2.1,                    // docs/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
+    pulleyZ: 0.58,                   // 假設：站位距滑輪水平距離（m）
+    barLen: 0.45,                    // 假設：短直桿寬度（m）
+  },
+  legext: {
+    barRatio: 1.2,                   // 假設：示範配重片＝1.2× 體重
+    camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
+    camDefault: 'comm_desc',         // docs/machine-data.md §4.3(A)：Folland & Morris (2008) 實測商用凸輪微降型
+    seatY: 0.55,                     // 假設：座椅骨盆高度（m）
+    backReclineDeg: 15,              // 假設：椅背後傾角（°）
+    padOffset: 0.05,                 // 假設：小腿滾輪墊接觸偏移（m）
+    // 膝屈角度（°；0°=完全伸直）→ 相對阻力力矩表（線性內插）
+    cams: {
+      // docs/machine-data.md §4.1：Marginson & Eston (2001, PMID 11695509)、Knapik (1983, PMID 6856681)、Folland & Morris (2008, PMID 17885926)
+      // 100°→80° 上升 +40%（0.714→1.00），60°→20° 下降 ~-60%（0.94→0.35）；0° 與 115° 為端點延伸假設
+      human: [[0, 0.25], [20, 0.35], [40, 0.64], [60, 0.94], [80, 1.0], [90, 0.88], [100, 0.71], [115, 0.58]],
+      // docs/machine-data.md §4.3(A)：Folland & Morris (2008, PMID 17885926) 實測 8 台商用腿伸機上界（100°→80° +22.2%、60°→20° +37.6%）
+      comm_asc: [[0, 1.25], [20, 1.2], [40, 1.03], [60, 0.87], [80, 0.79], [100, 0.65], [115, 0.6]],
+      // docs/machine-data.md §4.3(A)：Folland & Morris (2008, PMID 17885926) 實測 8 台商用腿伸機下界（100°→80° +2.5%、60°→20° -20.5%）
+      comm_desc: [[0, 0.72], [20, 0.8], [40, 0.9], [60, 1.0], [80, 1.0], [100, 0.98], [115, 0.95]],
+      // 假設／等力矩基準：全程常數 0.90（貼近 Folland & Morris 2008 所述商用偏平坦平均）
+      flat: [[0, 0.9], [115, 0.9]],
+      // 無凸輪（槓桿＋配重）：依小腿水平分量物理計算，不用查表
+      gravity: null,
+    },
+  },
+  legcurl: {
+    barRatio: 0.45,                  // 假設：示範配重片＝0.45× 體重
+    camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
+    camDefault: 'human',             // docs/machine-data.md §4.2：人體膝屈遞減曲線
+    seatedHipY: 0.55,                // 假設：坐姿骨盆高度（m）
+    seatedBackReclineDeg: 15,        // 假設：坐姿椅背後傾角（°）
+    lyingHipY: 0.62,                 // 假設：俯臥骨盆高度（m）
+    padOffset: 0.05,                 // 假設：小腿滾輪墊接觸偏移（m）
+    // 膝屈角度（°；0°=完全伸直）→ 相對阻力力矩表（線性內插）
+    cams: {
+      // docs/machine-data.md §4.2：Kulig (1984, PMID 6376139)、Knapik (1983, PMID 6856681)、Onishi (2002, PMID 12223173)、Beyer (2019, PMID 31681497)
+      // 峰值在 15°–30°（拉長端），45°–60°（70%–85%）與 75°–90°（45%–65%）依文獻遞減趨勢與範圍估計取中值
+      human: [[0, 0.95], [15, 1.0], [30, 1.0], [45, 0.85], [60, 0.73], [75, 0.62], [90, 0.55], [115, 0.45]],
+      // 假設：依 Folland & Morris (2008) 商用凸輪在收縮端相對人體過重之偏離特徵設定
+      comm_asc: [[0, 0.65], [30, 0.75], [60, 0.92], [90, 1.12], [115, 1.2]],
+      // 假設／等力矩基準：全程常數 0.90
+      flat: [[0, 0.9], [115, 0.9]],
+      // 無凸輪（槓桿＋配重）：依小腿水平分量物理計算
+      gravity: null,
+    },
+  },
+  chestpress: {
+    barRatio: 0.9,                   // 假設：示範配重＝0.9× 體重
+    pathDefault: 'linear',           // docs/machine-data.md §5.1：固定直線軌跡胸推機
+    convergeRatio: 0.72,             // 假設：內聚弧線推直時手距縮為起始寬度 72%（對應 §5.1 Hammer Strength / Life Fitness 內聚概念）
+    seatY: 0.55,                     // 假設：座墊骨盆高度（m）
+    backFrontZ: -0.085,              // 假設：椅背前緣止擋（肩關節後方 8.5 cm）
+    pivotY: 1.72,                    // 假設：上方轉軸高度（m）
+    pivotZ: -0.18,                   // 假設：上方轉軸前後位置（m）
+    colZ: -0.36,                     // 假設：後方立柱前後位置（m）
+  },
+};
+
+export const PULLEY_RATIOS = [['1:1', '1:1（直拉）'], ['2:1', '2:1（減半）']];
+export const pulleyDivisor = (r) => (r === '2:1' ? 2 : 1);
+
+// 凸輪阻力曲線選項（依 docs/machine-data.md §4 資料驅動）
+export const CAMS_LEGEXT = [
+  ['human', '貼合人體力量曲線（倒 U 型）'],
+  ['comm_desc', '實測商用凸輪：伸直端微降'],
+  ['comm_asc', '實測商用凸輪：伸直端漸增'],
+  ['flat', '凸輪：全程平均'],
+  ['gravity', '無凸輪（槓桿＋配重）'],
+];
+export const CAMS_LEGCURL = [
+  ['human', '貼合人體力量曲線（拉長端重）'],
+  ['comm_asc', '商用凸輪：彎曲端較重'],
+  ['flat', '凸輪：全程平均'],
+  ['gravity', '無凸輪（槓桿＋配重）'],
+];
+export const CAMS = CAMS_LEGEXT;
 
 
 // ---------- 向量 ----------
@@ -245,6 +373,7 @@ export const LIFTS = {
     pose: smithPose, loads: barOnTrunkLoads, reactions: twoContactReactions,
     moving: ['hipExt', 'kneeExt'],
     params: [
+      { key: 'railAngle', label: '滑軌角度', type: 'select', options: MACHINES.smith.railDegOptions, def: MACHINES.smith.railDegDefault, joint: 'equip', mech: 'A' },
       { key: 'feetFwd', label: '腳在槓前方', left: '0（同自由深蹲）', right: '30 cm', min: 0, max: 0.3, step: 0.01, def: 0.12, joint: 'ankle', mech: 'A', fmt: 'cm' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'torso', label: '最低點軀幹前傾', left: '0°（直立）', right: '45°', min: 0, max: 45, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
@@ -253,7 +382,7 @@ export const LIFTS = {
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },
     ],
-    standardNote: '腳放在槓前方約 10～15 cm、軀幹比自由深蹲直立、蹲到大腿約平行；滑軌承擔前後平衡，重心不必在腳掌正上方。',
+    standardNote: '腳放在槓前方約 10～15 cm、軀幹比自由深蹲直立、蹲到大腿約平行；滑軌承擔前後平衡，傾斜 7° 款（如 Hammer Strength）面向斜軌站立時起立軌跡微向後。',
   },
   legpress: {
     name: '45° 腿推機', topLabel: '腿伸直', bottomLabel: '最低點',
@@ -265,11 +394,13 @@ export const LIFTS = {
       { key: 'footHigh', label: '腳踩踏板的位置', left: '低（偏股四頭）', right: '高（偏臀／膕繩）', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'ankle', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'ankle', mech: 'A' },
       { key: 'depth', label: '下放深度（最低點膝角度）', left: '75°', right: '125°', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'knee', mech: 'A' },
-      { key: 'seat', label: '椅背角度（離垂直）', left: '35°（較直立）', right: '65°（較躺）', min: 35, max: 65, step: 1, def: 50, joint: 'equip', mech: 'A', unit: '°' },
+      { key: 'seat', label: '椅背角度（離垂直）', left: '35°（較直立）', right: '65°（較躺）', min: MACHINES.legpress.seatDegRange[0], max: MACHINES.legpress.seatDegRange[1], step: 1, def: MACHINES.legpress.seatDegDefault, joint: 'equip', mech: 'A', unit: '°' },
+      { key: 'sledKg', label: '空滑台重量（假設）', left: '20 kg（輕型）', right: '65 kg（重型）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'friction', label: '導軌摩擦 μ（假設・向心）', left: '0（無摩擦）', right: '0.15', min: MACHINES.legpress.railMuRange[0], max: MACHINES.legpress.railMuRange[1], step: 0.01, def: MACHINES.legpress.railMuDefault, joint: 'equip', mech: 'A', fmt: 'dec2' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },
     ],
-    standardNote: '腳踩踏板中間、與髖同寬，下放到膝約 90°、臀部不離開椅墊，用整個腳掌推。',
+    standardNote: '45° 軌道、腳踩踏板中間、與髖同寬，下放到膝約 90°、臀部不離開椅墊，用整個腳掌推。',
   },
   pulldown: {
     name: '滑輪下拉', topLabel: '手臂伸直', bottomLabel: '拉到胸前',
@@ -279,6 +410,7 @@ export const LIFTS = {
     moving: ['shFlex', 'shAbd', 'elbExt', 'scRet', 'scElev'],
     adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.supin === 'sup' ? 1.6 : 0.6; },
     params: [
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.pulldown.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'grip', label: '握距（× 肩峰寬）', left: '1.0', right: '2.2', min: 1, max: 2.2, step: 0.01, def: 1.7, joint: 'hand', mech: 'A' },
       { key: 'supin', label: '握法', type: 'select', options: [['pro', '正握'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
       { key: 'lean', label: '軀幹後仰', left: '0°', right: '40°', min: 0, max: 40, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
@@ -287,7 +419,7 @@ export const LIFTS = {
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefLB', label: '拉的偏好', left: '偏背闊肌', right: '偏手臂（二頭／肱肌）', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['lat'], ['bic', 'brach']] },
     ],
-    standardNote: '握距約 1.5～1.8 倍肩寬、軀幹微後仰 10～20°、拉到上胸，底部肩胛下壓後收，頂點讓肩胛上提伸展。',
+    standardNote: '握距約 1.5～1.8 倍肩寬、軀幹微後仰 10～20°、拉到上胸，底部肩胛下壓後收，頂點讓肩胛上提伸展；專用下拉機多為 1:1 滑輪比。',
   },
   cablerow: {
     name: '坐姿滑輪划船', topLabel: '手臂伸直', bottomLabel: '觸身',
@@ -297,6 +429,7 @@ export const LIFTS = {
     moving: ['shFlex', 'shHAdd', 'shAbd', 'elbExt', 'scRet', 'scElev'],
     adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.grip === 'v' ? 1.0 : 0.6; },
     params: [
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.cablerow.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'grip', label: '握把', type: 'select', options: [['v', 'V 把（窄、對握）'], ['wide', '寬握桿（正握）']], def: 'v', joint: 'hand', mech: 'A' },
       { key: 'leanStart', label: '起點軀幹前傾', left: '0°', right: '40°', min: 0, max: 40, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
       { key: 'leanEnd', label: '終點軀幹角度', left: '後仰 25°', right: '前傾 10°', min: -25, max: 10, step: 1, def: -5, joint: 'lumbar', mech: 'A', unit: '°' },
@@ -305,7 +438,7 @@ export const LIFTS = {
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefLP', label: '肩伸肌偏好', left: '偏背闊肌', right: '偏三角肌後束', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['lat'], ['pdelt']] },
     ],
-    standardNote: '膝微彎、腳踩穩，起點肩胛前伸、軀幹微前傾，拉到肚臍上方、肩胛後收，軀幹回到直立或微後仰，不用身體甩。',
+    standardNote: '膝微彎、腳踩穩，起點肩胛前伸、軀幹微前傾，拉到肚臍上方、肩胛後收，軀幹回到直立或微後仰，不用身體甩；專用低拉機多為 1:1 滑輪比。',
   },
   pushdown: {
     name: '滑輪三頭下壓', topLabel: '伸直', bottomLabel: '手肘彎曲',
@@ -314,13 +447,14 @@ export const LIFTS = {
     pose: pushdownPose, loads: cableLoads,
     moving: ['elbExt'],
     params: [
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.pushdown.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'topFlex', label: '起點手肘角度', left: '80°', right: '130°', min: 80, max: 130, step: 1, def: 100, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'elbFwd', label: '手肘位置', left: '-10°（往後）', right: '30°（往前）', min: -10, max: 30, step: 1, def: 5, joint: 'shoulder', mech: 'A', unit: '°' },
       { key: 'lean', label: '軀幹前傾', left: '0°', right: '30°', min: 0, max: 30, step: 1, def: 10, joint: 'lumbar', mech: 'A', unit: '°' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefTri', label: '三頭偏好', left: '偏外側／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
     ],
-    standardNote: '站在滑輪前、軀幹微前傾，上臂貼身不動，從手肘約 90～100° 壓到完全伸直。',
+    standardNote: '站在滑輪前、軀幹微前傾，上臂貼身不動，從手肘約 90～100° 壓到完全伸直；多功能滑輪柱多為 2:1 滑輪比（實感為配重片一半）。',
   },
   legext: {
     name: '腿伸機', topLabel: '伸直', bottomLabel: '彎曲',
@@ -329,11 +463,11 @@ export const LIFTS = {
     pose: legExtPose, loads: padLoads,
     moving: ['kneeExt'],
     params: [
-      { key: 'cam', label: '阻力曲線', type: 'select', options: CAMS, def: 'flat', joint: 'equip', mech: 'A' },
+      { key: 'cam', label: '阻力曲線（角度內插）', type: 'select', options: CAMS_LEGEXT, def: MACHINES.legext.camDefault, joint: 'equip', mech: 'A' },
       { key: 'depth', label: '起點彎曲角度', left: '70°', right: '115°', min: 0, max: 1, step: 0.01, def: 0.45, joint: 'knee', mech: 'A' },
       { key: 'padPos', label: '墊子位置', left: '小腿中段', right: '腳踝上方', min: 0, max: 1, step: 0.01, def: 0.8, joint: 'equip', mech: 'A' },
     ],
-    standardNote: '膝關節對準機器轉軸、墊子在腳踝上方，從約 90° 伸到接近伸直，頂點停一下。',
+    standardNote: '膝關節對準機器轉軸、墊子在腳踝上方，從約 90° 伸到接近伸直；實測商用凸輪多偏平緩，伸直端相對人體能力較吃力。',
   },
   legcurl: {
     name: '腿彎舉機', topLabel: '彎到底', bottomLabel: '伸直',
@@ -343,11 +477,11 @@ export const LIFTS = {
     moving: ['kneeExt'],
     params: [
       { key: 'posture', label: '姿勢', type: 'select', options: [['seated', '坐姿'], ['lying', '俯臥']], def: 'seated', joint: 'hip', mech: 'A' },
-      { key: 'cam', label: '阻力曲線', type: 'select', options: CAMS, def: 'flat', joint: 'equip', mech: 'A' },
+      { key: 'cam', label: '阻力曲線（角度內插）', type: 'select', options: CAMS_LEGCURL, def: MACHINES.legcurl.camDefault, joint: 'equip', mech: 'A' },
       { key: 'depth', label: '頂點彎曲角度', left: '70°', right: '115°', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'knee', mech: 'A' },
       { key: 'padPos', label: '墊子位置', left: '小腿中段', right: '腳踝上方', min: 0, max: 1, step: 0.01, def: 0.8, joint: 'equip', mech: 'A' },
     ],
-    standardNote: '膝關節對準機器轉軸、墊子在跟腱上方；坐姿時髖屈曲讓膕繩肌處於拉長位置，俯臥時較短。',
+    standardNote: '膝關節對準機器轉軸、墊子在跟腱上方；坐姿時髖屈曲讓膕繩肌處於拉長位置，俯臥時較短；人體膝屈力量呈遞減曲線（拉長端較強）。',
   },
   chestpress: {
     name: '坐姿胸推機', topLabel: '推直', bottomLabel: '最靠近胸口',
@@ -356,13 +490,14 @@ export const LIFTS = {
     pose: chestPressPose, loads: pushLoads,
     moving: ['shFlex', 'shHAdd', 'elbExt'],
     params: [
+      { key: 'path', label: '握把軌跡', type: 'select', options: [['linear', '直線軌跡'], ['converging', '內聚弧線（頂點收攏）']], def: MACHINES.chestpress.pathDefault, joint: 'equip', mech: 'A' },
       { key: 'grip', label: '握把寬度（× 肩峰寬）', left: '0.8', right: '2.0', min: 0.8, max: 2, step: 0.01, def: 1.5, joint: 'hand', mech: 'A' },
       { key: 'flare', label: '手肘外開角度', left: '30°', right: '90°', min: 30, max: 90, step: 1, def: 55, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'touch', label: '握把高度', left: '上胸', right: '下胸', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'bar', mech: 'A' },
       { key: 'scap', label: '肩胛後收', left: '前伸', right: '完全後收', min: 0, max: 1, step: 0.01, def: 0.7, joint: 'shoulder', mech: 'A' },
       { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
     ],
-    standardNote: '椅子調到握把與胸中段同高、肩胛後收貼椅背、手肘外開約 45～60°，推到手臂接近伸直。',
+    standardNote: '椅子調到握把與胸中段同高、肩胛後收貼椅背、手肘外開約 45～60°，推到手臂接近伸直；內聚弧線推直時雙手向中線收攏。',
   },
 };
 export const JOINT_NAMES = { equip: '器材', scap: '肩胛', hip: '髖', knee: '膝', ankle: '踝', lumbar: '下背', shoulder: '肩', elbow: '肘', hand: '握距', bar: '槓' };
@@ -1223,12 +1358,21 @@ function padLoads(pose, P, W, out) {
   out.push({ p, F: mul(dir, (tau * W) / arm), region });
   pose.forceLine = { p, d: dir };
 }
-// 凸輪的阻力曲線：x = 0（拉長端）→ 1（收縮端）；gravity：槓桿掛配重、沒有凸輪（力矩 ∝ 槓桿的水平分量）
-function camFactor(cam, x, horiz) {
+// 凸輪阻力曲線內插：以膝屈角度（°；0°＝伸直）查表內插相對阻力力矩
+function interpTable(table, x) {
+  if (x <= table[0][0]) return table[0][1];
+  for (let i = 1; i < table.length; i++) {
+    const [x0, y0] = table[i - 1], [x1, y1] = table[i];
+    if (x <= x1) return y0 + ((x - x0) / (x1 - x0)) * (y1 - y0);
+  }
+  return table[table.length - 1][1];
+}
+function camFactor(mode, cam, kfDeg, horiz) {
   if (cam === 'gravity') return horiz;
-  if (cam === 'asc') return lerp(0.6, 1.2, x);
-  if (cam === 'desc') return lerp(1.2, 0.6, x);
-  return 0.9;
+  const M = mode === 'ext' ? MACHINES.legext : MACHINES.legcurl;
+  const alias = cam === 'asc' ? 'comm_asc' : cam === 'desc' ? (mode === 'ext' ? 'comm_desc' : 'human') : cam;
+  const table = M.cams[alias] || M.cams.flat;
+  return interpTable(table, kfDeg);
 }
 const box = (c, s, rx = 0, mat = 'pad') => ({ c, s, rx, mat });
 // 沿方向 d（矢狀面）的長方體：局部 y 軸轉到 d
@@ -1239,12 +1383,18 @@ function restHands(pose, S, H) {
 }
 
 // ---------- 史密斯深蹲 ----------
-// 槓在垂直滑軌上：槓的前後位置固定，重心不必在腳掌正上方；多出來的前後力由滑軌承受
+// 槓在滑軌上（0° 垂直或 ±7° 傾斜）：槓受滑軌約束，重心不必在腳掌正上方；滑軌承受垂直於軌道的法向反作用力
 function smithPose(P, e) {
+  const M = MACHINES.smith;
   const w = 0.16, tau = rad(10);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
-  const railZ = 0;
-  const A = [w, BODY.ankleH, railZ - 0.07 + P.feetFwd];
+  const railDeg = Number(P.railAngle ?? M.railDegDefault) || 0;
+  const a = rad(railDeg);
+  // 正角度（+7°）：滑軌往上往後傾（dir = [0, cos a, -sin a]）；法向量 n = [0, sin a, cos a]
+  const railDir = [0, Math.cos(a), -Math.sin(a)];
+  const railN = [0, Math.sin(a), Math.cos(a)];
+  const railZAt = (y) => M.railZ0 - (y - M.railRefY) * Math.tan(a);
+  const A = [w, BODY.ankleH, M.railZ0 - 0.07 + P.feetFwd];
   const kap = rad(lerp(4, lerp(70, 125, P.depth), e));
   const phi = rad(lerp(3, P.torso, e));
   const u = [0, Math.cos(phi), Math.sin(phi)];
@@ -1255,10 +1405,10 @@ function smithPose(P, e) {
     const tf = trunkFrame([0, hip[1], hip[2]], u);
     return { knee, hip, tf, bar: add(add(tf.Pc, mul(u, Lb)), mul(tf.f, -ob)) };
   };
-  const th = bisect((t) => build(t).bar[2] - railZ, rad(-45), rad(60));
+  const th = bisect((t) => { const b = build(t).bar; return b[2] - railZAt(b[1]); }, rad(-45), rad(60));
   const r = build(th);
   const pose = { R: {}, warn: [], ok: true };
-  if (Math.abs(r.bar[2] - railZ) > 0.01) { pose.ok = false; pose.conflict = '這個軀幹角度和腳的位置，槓無法停在滑軌上'; }
+  if (Math.abs(r.bar[2] - railZAt(r.bar[1])) > 0.01) { pose.ok = false; pose.conflict = '這個軀幹角度和腳的位置，槓無法停在滑軌上'; }
   Object.assign(pose, r.tf);
   pose.phi = phi;
   legChain(pose, A, toe, r.hip);
@@ -1267,17 +1417,20 @@ function smithPose(P, e) {
   const S = toWorld(r.tf, shoulderLocal(pose.girdle));
   armChainBent(pose, S, [0.34, r.bar[1], r.bar[2]], norm(add(mul(r.tf.f, -1), [0, -1, 0])), SQ_WRIST.high, [0, 1, 0]);
   pose.bar = r.bar;
-  pose.barW = BAR_RATIO.smith;
+  pose.barW = M.barRatio;
   pose.barOnBack = true;
-  pose.contact = { p: [BODY.hipHalf * 0.5, r.bar[1], r.bar[2]], n: [0, 0, 1], mu: 0, bilateral: true, rail: true };
-  // 標準槓穿過兩側垂直滑軌（x = ±0.70），外側掛標準槓片（x = ±0.78、±0.84）
+  pose.contact = { p: [BODY.hipHalf * 0.5, r.bar[1], r.bar[2]], n: railN, mu: M.railMu, bilateral: true, rail: true };
+  // 標準槓穿過兩側滑軌（x = ±0.70），外側掛標準槓片（x = ±0.78、±0.84）
+  const zBot = railZAt(0.025), zTop = railZAt(M.railHeight);
+  const yMid = (0.025 + M.railHeight) / 2, zMid = (zBot + zTop) / 2;
+  const railLen = (M.railHeight - 0.025) / Math.cos(a);
   pose.boxes = [
     ...[-1, 1].flatMap((sx) => [
-      box([sx * 0.7, 1.1, railZ], [0.045, 2.2, 0.045], 0, 'glass'),
-      box([sx * 0.7, r.bar[1], railZ], [0.075, 0.14, 0.075], 0, 'frame'), // 滑套軸承
-      box([sx * 0.7, 0.025, railZ], [0.09, 0.05, 0.75], 0, 'frame'), // 底座腳
+      boxAlong([sx * M.railHalfSpan, yMid, zMid], railDir, [0.045, railLen, 0.045], 'glass'),
+      boxAlong([sx * M.railHalfSpan, r.bar[1], r.bar[2]], railDir, [0.075, 0.14, 0.075], 'frame'), // 滑套軸承
+      box([sx * M.railHalfSpan, 0.025, zBot], [0.09, 0.05, 0.75], 0, 'frame'), // 底座腳
     ]),
-    box([0, 2.2, railZ], [1.46, 0.055, 0.055], 0, 'glass'), // 頂部橫樑
+    box([0, M.railHeight, zTop], [2 * M.railHalfSpan + 0.06, 0.055, 0.055], 0, 'glass'), // 頂部橫樑
   ];
   const shin = deg(th);
   if (shin < -12) pose.warn.push('小腿往後傾 ' + Math.round(-shin) + '°：腳放得很前面，膝關節剪力方向改變');
@@ -1285,13 +1438,13 @@ function smithPose(P, e) {
 }
 
 // ---------- 45° 腿推機 ----------
-const LP = { a: rad(45), hipY: 0.42 };
 function legPressPose(P, e) {
-  const a = LP.a, d = [0, Math.sin(a), Math.cos(a)], t = [0, Math.cos(a), -Math.sin(a)];
+  const M = MACHINES.legpress;
+  const a = rad(M.railDeg), d = [0, Math.sin(a), Math.cos(a)], t = [0, Math.cos(a), -Math.sin(a)];
   const recl = rad(P.seat);
   const u = [0, Math.cos(recl), -Math.sin(recl)];
-  const tf = trunkFrame([0, LP.hipY, 0], u);
-  const hip = [BODY.hipHalf, LP.hipY, 0];
+  const tf = trunkFrame([0, M.hipY, 0], u);
+  const hip = [BODY.hipHalf, M.hipY, 0];
   const w = lerp(0.12, 0.3, P.stance);
   const off = lerp(-0.06, 0.24, P.footHigh);
   const at = (s) => { const Q = add(add([w, hip[1], hip[2]], mul(d, s)), mul(t, off)); return { Q, A: sub(Q, mul(d, BODY.ankleH)) }; };
@@ -1315,13 +1468,15 @@ function legPressPose(P, e) {
   pose.R.grip = gripPt;
   pose.bar = [0, hip[1], hip[2]];
   pose.barStyle = 'none';
-  pose.barW = BAR_RATIO.legpress;
-  // 腳底壓力中心沿踏板：腳跟 ↔ 前腳掌；滑台只能沿軌道方向出力（重量 × sin 45°）
-  pose.push = { p: add(Q, mul(t, lerp(-0.03, 0.14, P.push))), d, region: 'foot', k: Math.sin(a) };
+  const sledKg = P.sledKg ?? M.sledKgDefault;
+  const mu = P.friction ?? M.railMuDefault;
+  pose.barW = M.platesRatio + sledKg / BODY.mass;
+  // 腳底壓力中心沿踏板：腳跟 ↔ 前腳掌；滑台沿 45° 軌道方向出力（向心有效阻力＝重量 × (sin 45° + μ cos 45°)）
+  pose.push = { p: add(Q, mul(t, lerp(-0.03, 0.14, P.push))), d, region: 'foot', k: Math.sin(a) + mu * Math.cos(a) };
   pose.armJoints = ['hip', 'knee', 'ankle'];
   // 椅背與座墊、底座機架、兩側握把、45° 雙導軌與滑台（導軌直接穿過滑台軸套）
   const backC = add(add(tf.Pc, mul(u, 0.34)), mul(tf.f, -0.13));
-  const seatTopY = LP.hipY - 0.08;
+  const seatTopY = M.hipY - 0.08;
   const plateC = add([0, Q[1], Q[2]], mul(d, 0.024));
   // 導軌中心線：與滑台（踏板中段後方）同軸，從接近地面一路斜上 45° 到前立柱頂端
   const sledCenterT = dot(add([0, hip[1], hip[2]], mul(t, 0.09)), t);
@@ -1378,8 +1533,9 @@ function seatedBase(lean, seatY = 0.47, ankleZ = 0.5) {
 
 // ---------- 滑輪下拉 ----------
 function pulldownPose(P, e) {
+  const M = MACHINES.pulldown;
   const lean = -rad(P.lean);
-  const pose = seatedBase(lean);
+  const pose = seatedBase(lean, M.seatY);
   const tf = pose;
   pose.girdle = { ret: rad(lerp(-5, lerp(0, 20, P.scap), e)), elev: rad(lerp(18, lerp(2, -10, P.scap), e)) };
   const S = toWorld(tf, shoulderLocal(pose.girdle));
@@ -1395,13 +1551,14 @@ function pulldownPose(P, e) {
   const ok = armChain(pose, S, bar, pole);
   if (!ok && e > 0.15) { pose.ok = false; pose.conflict = '手臂長度無法把槓拉到這個位置'; }
   pose.bar = [0, bar[1], bar[2]];
-  pose.barW = BAR_RATIO.pulldown;
-  pose.barStyle = { len: 1.25 };
+  const div = pulleyDivisor(P.pulleyRatio ?? M.pulleyRatioDefault);
+  pose.barW = M.stackKg / (div * BODY.mass);
+  pose.barStyle = { len: M.barLen };
   pose.supinated = P.supin === 'sup';
-  pose.pulley = [0, 2.35, top[2]];
+  pose.pulley = [0, M.pulleyY, top[2]];
   pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
   // 人面向配重塔坐：塔在膝蓋前方，座墊與壓腿墊皆經支架連到底座與塔
-  const towerZ = 0.8;
+  const towerZ = M.towerZ;
   const boomZ = (top[2] + towerZ) / 2;
   pose.boxes = [
     box([0, 0.4, 0.02], [0.42, 0.08, 0.42]), // 座墊
@@ -1414,17 +1571,18 @@ function pulldownPose(P, e) {
     box([0, 0.34, 0.34], [0.05, 0.58, 0.05], 0, 'frame'), // 壓腿墊立柱（位於雙腿之間）
     box([0, 0.66, (0.34 + towerZ) / 2], [0.06, 0.05, towerZ - 0.34], 0, 'frame'), // 水平連桿接到塔
     box([0, 1.2, towerZ], [0.16, 2.4, 0.16], 0, 'glass'), // 配重塔
-    box([0, 2.38, boomZ], [0.08, 0.07, Math.abs(towerZ - top[2]) + 0.16], 0, 'glass'), // 頂部滑輪懸臂
+    box([0, M.pulleyY + 0.03, boomZ], [0.08, 0.07, Math.abs(towerZ - top[2]) + 0.16], 0, 'glass'), // 頂部滑輪懸臂
   ];
-  pose.cables = [[pose.bar, pose.pulley], [pose.pulley, [0, 2.35, towerZ]]];
+  pose.cables = [[pose.bar, pose.pulley], [pose.pulley, [0, M.pulleyY, towerZ]]];
   if (P.lean > 30) pose.warn.push('後仰 ' + Math.round(P.lean) + '°：拉的方向接近划船，下背參與增加');
   return pose;
 }
 
 // ---------- 坐姿滑輪划船 ----------
 function cableRowPose(P, e) {
+  const M = MACHINES.cablerow;
   const lean = rad(lerp(P.leanStart, P.leanEnd, e));
-  const seatY = 0.47;
+  const seatY = M.seatY;
   const u = [0, Math.cos(lean), Math.sin(lean)];
   const tf = trunkFrame([0, seatY, 0], u);
   const pose = { R: {}, warn: [], ok: true };
@@ -1439,7 +1597,7 @@ function cableRowPose(P, e) {
   pose.girdle = { ret: rad(lerp(-18, lerp(0, 25, P.scap), e)), elev: rad(lerp(4, -4, e)) };
   const S = toWorld(tf, shoulderLocal(pose.girdle));
   const v = P.grip === 'v', gx = v ? 0.07 : 0.3;
-  pose.pulley = [0, 0.42, 1.0];
+  pose.pulley = [0, M.pulleyY, M.pulleyZ];
   const Rl = 0.997 * (BODY.Lu + BODY.Lf);
   // 起點：手臂伸直、朝滑輪方向；終點：握把碰到腹部
   const dirP = norm([0, pose.pulley[1] - S[1], pose.pulley[2] - S[2]]);
@@ -1453,8 +1611,9 @@ function cableRowPose(P, e) {
   const ok = armChain(pose, S, bar, pole);
   if (!ok && e > 0.3) { pose.ok = false; pose.conflict = '手臂長度無法把握把拉到這個位置'; }
   pose.bar = [0, bar[1], bar[2]];
-  pose.barW = BAR_RATIO.cablerow;
-  pose.barStyle = { len: v ? 0.2 : 0.75 };
+  const div = pulleyDivisor(P.pulleyRatio ?? M.pulleyRatioDefault);
+  pose.barW = M.stackKg / (div * BODY.mass);
+  pose.barStyle = { len: v ? M.barLen.v : M.barLen.wide };
   pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
   // 座墊落地支架；腳踏板分左右兩片，中央留 16 cm 通道讓鋼索無阻礙通過
   pose.boxes = [
@@ -1469,8 +1628,8 @@ function cableRowPose(P, e) {
       box([sx * 0.18, 0.1, 0.86], [0.05, 0.15, 0.05], 0, 'frame'), // 踏板支撐腳
     ]),
     box([0, 0.075, 0.86], [0.4, 0.05, 0.06], 0, 'frame'), // 踏板橫樑（在鋼索下方）
-    box([0, 0.42, 1.01], [0.08, 0.09, 0.09], 0, 'frame'), // 低滑輪座
-    box([0, 0.45, 1.08], [0.28, 0.9, 0.12], 0, 'glass'), // 滑輪塔
+    box([0, M.pulleyY, M.pulleyZ + 0.01], [0.08, 0.09, 0.09], 0, 'frame'), // 低滑輪座
+    box([0, 0.45, M.pulleyZ + 0.08], [0.28, 0.9, 0.12], 0, 'glass'), // 滑輪塔
   ];
   pose.cables = [[pose.bar, pose.pulley]];
   if (deg(lean) < -15) pose.warn.push('收尾後仰 ' + Math.round(-deg(lean)) + '°：用身體甩，下背負擔增加');
@@ -1478,15 +1637,17 @@ function cableRowPose(P, e) {
 }
 
 // ---------- 滑輪三頭下壓（站姿）----------
-const PD_PULLEY_Z = 0.58;
 function pushdownPose(P, e) {
+  const M = MACHINES.pushdown;
+  const div = pulleyDivisor(P.pulleyRatio ?? M.pulleyRatioDefault);
+  const effBarW = M.stackKg / (div * BODY.mass);
   const gx = 0.12; // e = 0 伸直、1 手肘彎曲
   const as = rad(P.elbFwd), ef = rad(lerp(8, P.topFlex, e));
   // 滑輪把手往上推：重心要往前移才站得穩。真人是髖往後、軀幹再前傾（不是整個人從腳踝往前倒）：
   // 找出需要多前傾 extra，讓小腿維持接近垂直（前傾約 3°）
   const make = (extra) => standingHands(P, {
     kap: rad(8), lean: rad(P.lean) + extra, girdle: { ret: rad(0), elev: rad(-6) }, barW: 0, copZ: -0.05, // 滑輪往上推手：壓力中心落在腳跟那一側，重心才不必前移太多
-    ext: (r) => mul(norm(sub([0, 2.1, PD_PULLEY_Z], [0, r.bar[1], r.bar[2]])), BAR_RATIO.pushdown),
+    ext: (r) => mul(norm(sub([0, M.pulleyY, M.pulleyZ], [0, r.bar[1], r.bar[2]])), effBarW),
     pole: (tf, r) => sub(r.elbow, r.S),
     barAt: (tf, S) => {
       const ud = add(mul(tf.u, -Math.cos(as)), mul(tf.f, Math.sin(as)));
@@ -1503,14 +1664,14 @@ function pushdownPose(P, e) {
   // 調整前臂視覺參考軸讓正握旋前角落在自然範圍內，五指包覆直槓
   pose.armPole = norm(add(sub(pose.R.elbow, pose.R.shoulder), [0.35, 0, -0.1]));
   pose.barAxial = false;
-  pose.barW = BAR_RATIO.pushdown;
-  pose.barStyle = { len: 0.45 };
-  pose.pulley = [0, 2.1, PD_PULLEY_Z];
+  pose.barW = effBarW;
+  pose.barStyle = { len: M.barLen };
+  pose.pulley = [0, M.pulleyY, M.pulleyZ];
   pose.armJoints = ['shoulder', 'elbow'];
-  const colZ = PD_PULLEY_Z + 0.18;
+  const colZ = M.pulleyZ + 0.18;
   pose.boxes = [
     box([0, 1.07, colZ], [0.16, 2.14, 0.16], 0, 'glass'), // 滑輪柱
-    box([0, 2.12, (PD_PULLEY_Z + colZ) / 2], [0.08, 0.06, colZ - PD_PULLEY_Z + 0.08], 0, 'glass'), // 滑輪懸臂
+    box([0, M.pulleyY + 0.02, (M.pulleyZ + colZ) / 2], [0.08, 0.06, colZ - M.pulleyZ + 0.08], 0, 'glass'), // 滑輪懸臂
     box([0, 0.025, colZ], [0.46, 0.05, 0.36], 0, 'frame'), // 底座
   ];
   pose.cables = [[pose.bar, pose.pulley]];
@@ -1520,15 +1681,18 @@ function pushdownPose(P, e) {
 
 // ---------- 腿伸機／腿彎舉（槓桿＋凸輪）----------
 function kneeMachinePose(P, e, mode) {
+  const M = mode === 'ext' ? MACHINES.legext : MACHINES.legcurl;
   const lying = mode === 'curl' && P.posture === 'lying';
   const pose = { R: {}, warn: [], ok: true };
   let tf, thighDir;
   if (lying) {
     // 俯臥：頭朝 +z、臉朝下，大腿往 -z 水平
-    tf = trunkFrame([0, 0.62, 0], [0, 0, 1]);
+    tf = trunkFrame([0, M.lyingHipY, 0], [0, 0, 1]);
     thighDir = [0, -0.05, -1];
   } else {
-    tf = trunkFrame([0, 0.55, 0], [0, Math.cos(rad(-15)), Math.sin(rad(-15))]);
+    const hipY = mode === 'ext' ? M.seatY : M.seatedHipY;
+    const recl = -rad(mode === 'ext' ? M.backReclineDeg : M.seatedBackReclineDeg);
+    tf = trunkFrame([0, hipY, 0], [0, Math.cos(recl), Math.sin(recl)]);
     thighDir = [0, 0, 1];
   }
   Object.assign(pose, tf);
@@ -1554,15 +1718,15 @@ function kneeMachinePose(P, e, mode) {
   pose.R.grip = gripPt;
   pose.bar = [0, hip[1], hip[2]];
   pose.barStyle = 'none';
-  pose.barW = mode === 'ext' ? BAR_RATIO.legext : BAR_RATIO.legcurl;
+  pose.barW = M.barRatio;
   // 墊子在小腿前（ext）或後（curl），阻力把小腿往彎曲（ext）／伸直（curl）的方向推
   const flexDir = norm(add(mul(thighDir, -Math.sin(kf)), mul(fT, -Math.cos(kf))));
   const arm = lerp(0.6, 0.95, P.padPos) * BODY.Ls;
-  const x = mode === 'ext' ? (kMax - kf) / (kMax - kMin) : (kf - kMin) / (kMax - kMin); // 0 拉長端 → 1 收縮端
   const horiz = Math.hypot(sd[0], sd[2]);
-  const tau = (0.3 * pose.barW * camFactor(P.cam, x, horiz)) / 2; // × 體重（N·m／N）
+  const cf = camFactor(mode, P.cam ?? M.camDefault, deg(kf), horiz);
+  const tau = (M.camArmM * pose.barW * cf) / 2; // × 體重（N·m／N）
   const push = mode === 'ext' ? flexDir : neg(flexDir);
-  const p = add(add(knee, mul(sd, arm)), mul(push, -0.05));
+  const p = add(add(knee, mul(sd, arm)), mul(push, -M.padOffset));
   pose.pad = { p, dir: push, arm, tau, region: 'shank' };
   pose.armJoints = ['knee'];
   // 視覺滾輪墊：伸直時與脛骨前側保持淨空；槓桿臂放在腿外側（遠側 x = -0.27）且精準連接轉軸與滾輪墊
@@ -1619,19 +1783,22 @@ function legExtPose(P, e) { return kneeMachinePose(P, e, 'ext'); }
 function legCurlPose(P, e) { return kneeMachinePose(P, e, 'curl'); }
 
 // ---------- 坐姿胸推機 ----------
-// 用臥推的手臂幾何（軀幹座標內相同），整個身體轉 90° 成坐姿；機器沿推的方向推回來
+// 用臥推的手臂幾何（軀幹座標內相同），整個身體轉 90° 成坐姿；支援直線軌跡與內聚弧線
 function chestPressPose(P, e) {
-  const bP = { ...P, incline: 0, surface: 'bench', bend: 0, dom: 0.5 };
+  const M = MACHINES.chestpress;
+  const conv = (P.path ?? M.pathDefault) === 'converging';
+  const gripAt = (t) => (conv ? P.grip * lerp(M.convergeRatio, 1, t) : P.grip);
+  const bPAt = (t) => ({ ...P, grip: gripAt(t), incline: 0, surface: 'bench', bend: 0, dom: 0.5 });
   const r = (v) => [v[0], -v[2], v[1]]; // 繞 x 轉 90°：躺 → 坐
   // 器械底部有機械止擋：手肘不往後穿透椅背前緣
-  const CP_BACK_FRONT_Z = -0.085; // 椅背前緣（肩關節後方約 8.5 cm）
   const elbZ = (t) => {
-    const b = benchPose(bP, t);
+    const b = benchPose(bPAt(t), t);
     return r(b.R.elbow)[2] + (0 - r(b.Pc)[2]);
   };
-  const eStop = elbZ(1) >= CP_BACK_FRONT_Z ? 1 : bisect((t) => CP_BACK_FRONT_Z - elbZ(t), 0, 1, 20);
-  const bp = benchPose(bP, e * eStop);
-  const T = sub([0, 0.55, 0], r(bp.Pc));
+  const eStop = elbZ(1) >= M.backFrontZ ? 1 : bisect((t) => M.backFrontZ - elbZ(t), 0, 1, 20);
+  const tEff = e * eStop;
+  const bp = benchPose(bPAt(tEff), tEff);
+  const T = sub([0, M.seatY, 0], r(bp.Pc));
   const pt = (v) => add(r(v), T);
   const pose = { R: {}, warn: bp.warn.map((w) => w.replace('前臂偏離垂直', '前臂偏離推的方向')), ok: bp.ok, conflict: bp.conflict };
   for (const k of ['shoulder', 'elbow', 'hand']) pose.R[k] = pt(bp.R[k]);
@@ -1642,15 +1809,22 @@ function chestPressPose(P, e) {
   pose.bar = pt(bp.bar);
   legChain(pose, [0.15, BODY.ankleH, 0.5], [0, 0, 1], [BODY.hipHalf, pose.Pc[1], pose.Pc[2]]);
   pose.R.knee = ik2(pose.R.hip, pose.R.ankle, BODY.Lt, BODY.Ls, [0, 1, 0.3]).mid;
-  pose.barW = BAR_RATIO.chestpress;
-  const armX = 0.2 * P.grip + 0.08;
-  pose.barStyle = { len: 2 * armX + 0.04 };
-  pose.push = { p: pose.R.hand, d: pose.f, region: 'fore' };
+  pose.barW = M.barRatio;
+  const armX = conv ? pose.R.hand[0] + 0.06 : 0.2 * P.grip + 0.08;
+  pose.barStyle = conv ? 'none' : { len: 2 * armX + 0.04 };
+  let pushDir = pose.f;
+  if (conv) {
+    // 內聚弧線：推力沿手部從底部往頂點的內聚方向，使頂點仍保有向內收攏阻力
+    const bp0 = benchPose(bPAt(0), 0), bp1 = benchPose(bPAt(eStop), eStop);
+    const dVec = sub(r(bp0.R.hand), r(bp1.R.hand));
+    pushDir = norm([dVec[0], 0, Math.max(0.05, dVec[2])]);
+  }
+  pose.push = { p: pose.R.hand, d: pushDir, region: 'fore' };
   pose.armJoints = ['shoulder', 'elbow'];
   // 座椅、椅背（相接落地）、後方機架轉軸與兩側機械臂連到握把
   const backC = add(add(pose.Pc, mul(pose.u, 0.34)), mul(pose.f, -0.155));
-  const colZ = -0.36;
-  const pivY = 1.72, pivZ = -0.18;
+  const colZ = M.colZ;
+  const pivY = M.pivotY, pivZ = M.pivotZ;
   const barY = pose.bar[1], barZ = pose.bar[2];
   const armVec = [0, barY - pivY, barZ - pivZ];
   const armMid = [0, (pivY + barY) / 2, (pivZ + barZ) / 2];
@@ -1665,8 +1839,11 @@ function chestPressPose(P, e) {
     box([0, 0.9, colZ], [0.14, 1.8, 0.14], 0, 'glass'),
     box([0, pivY + 0.04, (colZ + pivZ) / 2], [0.1, 0.07, pivZ - colZ + 0.1], 0, 'glass'),
     box([0, pivY, pivZ], [2 * armX + 0.08, 0.06, 0.06], 0, 'frame'), // 頂部轉軸橫桿
-    // 兩側機械臂：從上方轉軸連到握把兩端
-    ...[-1, 1].map((sx) => boxAlong([sx * armX, armMid[1], armMid[2]], norm(armVec), [0.04, len(armVec), 0.04], 'frame')),
+    // 兩側機械臂：從上方轉軸連到握把兩端（內聚模式另繪左右獨立握把）
+    ...[-1, 1].flatMap((sx) => [
+      boxAlong([sx * armX, armMid[1], armMid[2]], norm(armVec), [0.04, len(armVec), 0.04], 'frame'),
+      ...(conv ? [box([sx * (pose.R.hand[0] - 0.01), barY, barZ], [0.14, 0.03, 0.03], 0, 'frame')] : []),
+    ]),
   ];
   return pose;
 }
