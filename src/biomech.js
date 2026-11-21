@@ -1623,12 +1623,13 @@ function legCurlPose(P, e) { return kneeMachinePose(P, e, 'curl'); }
 function chestPressPose(P, e) {
   const bP = { ...P, incline: 0, surface: 'bench', bend: 0, dom: 0.5 };
   const r = (v) => [v[0], -v[2], v[1]]; // 繞 x 轉 90°：躺 → 坐
-  // 器械底部有機械止擋：手肘不往後穿透椅背前緣（z >= -0.085）
+  // 器械底部有機械止擋：手肘不往後穿透椅背前緣
+  const CP_BACK_FRONT_Z = -0.085; // 椅背前緣（肩關節後方約 8.5 cm）
   const elbZ = (t) => {
     const b = benchPose(bP, t);
     return r(b.R.elbow)[2] + (0 - r(b.Pc)[2]);
   };
-  const eStop = elbZ(1) >= -0.085 ? 1 : bisect((t) => -0.085 - elbZ(t), 0, 1, 20);
+  const eStop = elbZ(1) >= CP_BACK_FRONT_Z ? 1 : bisect((t) => CP_BACK_FRONT_Z - elbZ(t), 0, 1, 20);
   const bp = benchPose(bP, e * eStop);
   const T = sub([0, 0.55, 0], r(bp.Pc));
   const pt = (v) => add(r(v), T);
