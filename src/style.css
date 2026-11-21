@@ -110,3 +110,35 @@ dialog li { margin-bottom: 6px; line-height: 1.45; font-size: 14px; }
 .ctable table { border-collapse: collapse; margin-top: 4px; width: 100%; }
 .ctable th, .ctable td { padding: 2px 4px; text-align: right; font-weight: normal; font-variant-numeric: tabular-nums; color: var(--text); }
 .ctable th:first-child { text-align: left; }
+/* 參數補充說明與假設來源區塊 */
+.param-hint { font-size: 12px; color: var(--muted); line-height: 1.45; margin: -4px 0 4px; }
+.sources-box { margin-top: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.sources-box summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; cursor: pointer; font-size: 14px; font-weight: 600; list-style: none; user-select: none; }
+.sources-box summary::-webkit-details-marker { display: none; }
+.sources-box summary .src-title { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.sources-box summary .src-title::before { content: '▸'; color: var(--accent); font-size: 12px; transition: transform .15s; display: inline-block; }
+.sources-box[open] summary .src-title::before { transform: rotate(90deg); }
+.src-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+.src-ok { background: #dcfce7; color: #166534; }
+.src-warn { background: #fef3c7; color: #92400e; }
+.src-fail { background: #fee2e2; color: #991b1b; }
+.src-none { background: #f3f4f6; color: #4b5563; }
+.src-info { background: #e0f2fe; color: #075985; }
+.src-body { border-top: 1px solid var(--line); padding: 10px 12px 12px; font-size: 13px; line-height: 1.5; }
+.src-hd { font-size: 12px; font-weight: 600; color: var(--muted); margin: 12px 0 6px; letter-spacing: .03em; }
+.src-hd:first-child { margin-top: 0; }
+.src-list { margin: 0; padding-left: 18px; }
+.src-list li { margin-bottom: 4px; color: var(--text); }
+.src-trend { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; background: #faf9f6; }
+.src-trend-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 4px; }
+.src-pill { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; }
+.src-pill.pass { background: #dcfce7; color: #166534; }
+.src-pill.fail { background: #fee2e2; color: #991b1b; }
+.src-ev { font-size: 11px; color: var(--muted); }
+.src-trend-cmp { font-size: 13px; font-weight: 500; color: var(--text); }
+.src-trend-meta { font-size: 12px; color: var(--muted); margin-top: 2px; overflow-wrap: anywhere; }
+.src-empty { margin: 0; font-size: 12px; color: var(--muted); }
+.src-refs { margin: 0; padding-left: 18px; }
+.src-refs li { margin-bottom: 7px; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.src-link { display: inline-block; margin-left: 4px; color: var(--cyan); text-decoration: none; font-weight: 600; white-space: nowrap; }
+.src-link:hover { text-decoration: underline; }

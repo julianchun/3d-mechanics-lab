@@ -3,13 +3,15 @@
   "version": "0.6.0",
   "description": "重訓動作的 3D 生物力學教學工具：姿勢、關節力矩、肌肉受力",
   "scripts": {
-    "test": "node tests/validate.mjs && node tests/plausibility.mjs && node tests/regress.mjs",
+    "test": "node tests/validate.mjs && node tests/plausibility.mjs && node tests/regress.mjs && node tests/trends.mjs --check",
     "dev": "vite --host",
+    "prebuild": "node tests/trends.mjs --write-status",
     "build": "vite build",
     "preview": "vite preview --host --port 4173",
     "test:update": "node tests/regress.mjs --update",
     "review": "node tools/review-sheet.mjs",
-    "test:trends": "node tests/trends.mjs"
+    "test:trends": "node tests/trends.mjs",
+    "trends:json": "node tests/trends.mjs --write-status"
   },
   "keywords": [],
   "author": "",
