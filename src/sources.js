@@ -13,13 +13,17 @@ export const COMMON_ASSUMPTIONS = [
 const REFS = {
   escamilla1998: { authors: 'Escamilla RF et al.', year: 1998, title: 'Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises', venue: 'Med Sci Sports Exerc, 30(4):556–569', url: 'https://pubmed.ncbi.nlm.nih.gov/9565938/', tag: 'PubMed 9565938' },
   escamilla2001_sq: { authors: 'Escamilla RF', year: 2001, title: 'Knee biomechanics of the dynamic squat exercise', venue: 'Med Sci Sports Exerc, 33(1):127–141', url: 'https://pubmed.ncbi.nlm.nih.gov/11194098/', tag: 'PubMed 11194098' },
+  escamilla2001_stance: { authors: 'Escamilla RF et al.', year: 2001, title: 'A three-dimensional biomechanical analysis of the squat during varying stance widths', venue: 'Med Sci Sports Exerc, 33(6):984–998', url: 'https://pubmed.ncbi.nlm.nih.gov/11404665/', tag: 'PubMed 11404665' },
   escamilla2001_var: { authors: 'Escamilla RF et al.', year: 2001, title: 'Effects of technique variations on knee biomechanics during the squat and leg press', venue: 'Med Sci Sports Exerc, 33(9):1552–1566', url: 'https://pubmed.ncbi.nlm.nih.gov/11528346/', tag: 'PubMed 11528346' },
   paoli2009: { authors: 'Paoli A, Marcolin G, Petrone N', year: 2009, title: 'The effect of stance width on the electromyographical activity of eight superficial thigh muscles during back squat with different bar loads', venue: 'J Strength Cond Res, 23(1):246–250', url: 'https://pubmed.ncbi.nlm.nih.gov/19130646/', tag: 'PubMed 19130646' },
   bryanton2012: { authors: 'Bryanton MA et al.', year: 2012, title: 'Effect of squat depth and barbell load on relative muscular effort in squatting', venue: 'J Strength Cond Res, 26(10):2820–2828', url: 'https://pubmed.ncbi.nlm.nih.gov/22797000/', tag: 'PubMed 22797000' },
   kubo2019: { authors: 'Kubo K, Ikebukuro T, Yata H', year: 2019, title: 'Effects of squat training with different depths on lower limb muscle volumes', venue: 'Eur J Appl Physiol, 119(9):1933–1942', url: 'https://pubmed.ncbi.nlm.nih.gov/31230110/', tag: 'PubMed 31230110' },
+  illmeier2023: { authors: 'Illmeier G, Rechberger JS', year: 2023, title: 'The limitations of anterior knee displacement during different barbell squat techniques: A comprehensive review', venue: 'J Clin Med, 12(8):2955', url: 'https://pubmed.ncbi.nlm.nih.gov/37109294/', tag: 'PubMed 37109294' },
+  vandentillaar2020: { authors: 'van den Tillaar R, Knutli TR, Larsen S', year: 2020, title: 'The effects of barbell placement on kinematics and muscle activation around the sticking region in squats', venue: 'Front Sports Act Living, 2:604177', url: 'https://pubmed.ncbi.nlm.nih.gov/33345183/', tag: 'PubMed 33345183' },
   glassbrook2017: { authors: 'Glassbrook DJ et al.', year: 2017, title: 'A review of the biomechanical differences between the high-bar and low-bar back-squat', venue: 'J Strength Cond Res, 31(9):2618–2634', url: 'https://pubmed.ncbi.nlm.nih.gov/28570490/', tag: 'PubMed 28570490' },
   glassbrook2019: { authors: 'Glassbrook DJ et al.', year: 2019, title: 'The high-bar and low-bar back-squats: A biomechanical analysis', venue: 'J Strength Cond Res, 33(Suppl 1):S1–S18', url: 'https://doi.org/10.1519/JSC.0000000000001836', tag: 'DOI' },
   murawa2020: { authors: 'Murawa M et al.', year: 2020, title: 'Muscle activation varies between high-bar and low-bar back squat', venue: 'PeerJ, 8:e9256', url: 'https://pubmed.ncbi.nlm.nih.gov/32551198/', tag: 'PubMed 32551198' },
+  russell1989: { authors: 'Russell PJ, Phillips SJ', year: 1989, title: 'A preliminary comparison of front and back squat exercises', venue: 'Res Q Exerc Sport, 60(3):201–208', url: 'https://pubmed.ncbi.nlm.nih.gov/2489844/', tag: 'PubMed 2489844' },
   gullett2009: { authors: 'Gullett JC et al.', year: 2009, title: 'A biomechanical comparison of back and front squats in healthy trained individuals', venue: 'J Strength Cond Res, 23(1):284–292', url: 'https://pubmed.ncbi.nlm.nih.gov/19002072/', tag: 'PubMed 19002072' },
   yavuz2015: { authors: 'Yavuz HU et al.', year: 2015, title: 'Kinematic and EMG activities during front and back squat variations in maximum loads', venue: 'J Sports Sci, 33(10):1058–1066', url: 'https://pubmed.ncbi.nlm.nih.gov/25630691/', tag: 'PubMed 25630691' },
   krzyszkowski2020: { authors: 'Krzyszkowski J, Kipp K', year: 2020, title: 'Load-dependent mechanical demands of the lower extremity during the back and front squat', venue: 'J Sports Sci, 38(17):2005–2012', url: 'https://pubmed.ncbi.nlm.nih.gov/32544021/', tag: 'PubMed 32544021' },
@@ -80,26 +84,27 @@ const REFS = {
 export const SOURCES = {
   'squat-high': {
     assumptions: [
-      '站姿動作：每幀求解軀幹前傾角，使系統總重心（人體＋槓鈴）維持在腳掌中段上方。',
-      '額狀面地面反作用力假設通過髖關節（外推膝蓋參數則額外施加橫向分力）。',
-      '槓重作用於軀幹區段（1.0× 體重為示範負重假設），僅分析下肢與腰椎自由度。',
+      '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
+      '站距小腿角項：寬站距（stance = 0.9）小腿較窄站距（0.1）直立 6.7°（依 Escamilla et al. 2001, PMID 11404665 量測 5–9°）；已知限制：在固定腳掌中段重心下，寬站距股骨矢狀投影縮短使模型軀幹反少傾約 16° 且髖伸力矩下降（與該文獻軀幹無差異、髖力矩較高之結果矛盾），且缺少髖外旋與臀大肌上束外展力臂。',
+      '額狀面地面反作用力假設通過髖關節（外推膝蓋參數則額外施加橫向分力）；槓重 1.0× 體重為示範負重假設，僅分析下肢與腰椎自由度。',
     ],
-    refs: ['escamilla1998', 'escamilla2001_sq', 'escamilla2001_var', 'paoli2009', 'bryanton2012', 'kubo2019'],
+    refs: ['escamilla1998', 'escamilla2001_sq', 'escamilla2001_stance', 'escamilla2001_var', 'paoli2009', 'bryanton2012', 'kubo2019', 'illmeier2023'],
   },
   'squat-low': {
     assumptions: [
-      '低槓位置下移至三角肌後束（較高槓低 8 cm、靠後 3.5 cm），重心平衡自然增加軀幹前傾角。',
-      '站姿重心維持在腳掌中段上方；額狀面地面反作用力假設通過髖關節。',
+      '低槓位置下移至三角肌後束（較高槓低 8 cm、靠後 3.5 cm），另加入下肢策略偏移（domShift = +0.08，依 van den Tillaar 2020、Murawa 2020、Glassbrook 2017、Illmeier & Rechberger 2023 反推，使最低點小腿較高槓直立約 1.9°、軀幹多前傾約 12.3°）。',
+      '站姿總重心（含實際三維手臂位置）維持在腳掌中段上方；站距小腿角項與額狀面地面反作用力假設同高槓深蹲。',
       '槓重為 1.0× 體重示範假設，與高槓同負重下比較力臂差異。',
     ],
-    refs: ['glassbrook2017', 'glassbrook2019', 'murawa2020'],
+    refs: ['glassbrook2017', 'glassbrook2019', 'murawa2020', 'vandentillaar2020', 'illmeier2023', 'escamilla2001_stance'],
   },
   'front-squat': {
     assumptions: [
-      '前槓架在三角肌前束上方（軀幹軸前方 11 cm），為維持重心在腳掌中段上方而使軀幹較直立。',
-      '站姿重心與額狀面反作用力假設同背蹲；槓重採相同 1.0× 體重以比較相同絕對負重下的力矩。',
+      '前槓架在三角肌前束上方（軀幹軸前方 11 cm），另加入下肢策略偏移（domShift = -0.08，依 Illmeier & Rechberger 2023、Yavuz 2015、Russell & Phillips 1989 反推，使最低點軀幹較高槓直立約 15.8°、小腿微多前傾約 1.9°）。',
+      '站姿總重心以實際三維手臂（前架式前伸手肘）位置計入平衡，維持在腳掌中段上方；站距小腿角項與額狀面反作用力假設同背蹲。',
+      '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
     ],
-    refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020'],
+    refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance'],
   },
   'smith-squat': {
     assumptions: [
@@ -162,17 +167,18 @@ export const SOURCES = {
   },
   'hip-thrust': {
     assumptions: [
-      '雙接觸點反作用力（腳底＋臥推椅上背支撐），假設椅墊摩擦係數 μ = 0.5（無出處假設），水平力優先由背部摩擦承擔。',
-      '槓重（1.3× 體重假設）作用於骨盆區段；標準槓片半徑 22.5 cm 限制最低下放深度。',
+      '雙接觸點反作用力（腳底＋臥推椅上背肩胛下角支撐），假設椅墊摩擦係數 μ = 0.5（無出處假設），水平力優先由背部摩擦承擔。',
+      '槓重設為 1.7× 體重（參考 Contreras et al. 2015 之 10RM 臀推／背蹲比 ≈ 1.64×〔非體重倍數〕與 Kennedy et al. 2024 之 5RM 1.71× 體重；註：兩篇負重數字未能從付費全文核對，係見作者公開摘錄／ResearchGate 摘要，採此值以反映臀推負重高於深蹲之實務比例），作用於骨盆區段；標準槓片半徑 22.5 cm 限制最低下放深度。',
     ],
     refs: ['contreras2015', 'krauseneto2020', 'collazogarcia2020', 'kennedy2024'],
   },
   'glute-bridge': {
     assumptions: [
-      '雙接觸點反作用力（腳底＋地板上背支撐），假設地板摩擦係數 μ = 0.5（無出處假設）。',
-      '與臀推採相同示範負重（1.3× 體重），以對比高度與行程差異。',
+      '地板連續平面支撐模型：以肩線貼地（0.50 m）取代臥推椅支點，貼地之上半身與手臂重量由接觸區段正下方地板直接承載，其餘橋式反力集中於離地前緣並以軟最小（0.03 m）平滑過渡至 L5；上胸椎貼地段（floorFlat = 0.16 m）與軟組織／地墊厚度（floorPad = 0.04 m）為解剖估計，地板摩擦係數 μ = 0.5 為無出處假設。',
+      '骨盆高於肩（psi < 0）時由雙手扶穩，使槓維持在髖屈褶皺處而不往腹部滑落。',
+      '槓重設為 1.83× 體重（參考 Kennedy et al. 2024 之 5RM 1.83× 體重；註：負重數字未能從付費全文核對，係見 ResearchGate 摘要與同團隊論文，採此值以反映臀橋短行程可承載較高負荷之實務排序）。',
     ],
-    refs: ['kennedy2024'],
+    refs: ['kennedy2024', 'contreras2015'],
   },
   bench: {
     assumptions: [

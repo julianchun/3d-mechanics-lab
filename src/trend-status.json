@@ -2,18 +2,18 @@
   "modelVersion": "0.6.0",
   "summary": {
     "total": 42,
-    "pass": 36,
-    "fail": 6,
+    "pass": 39,
+    "fail": 3,
     "byEvidence": {
       "direct": {
         "total": 26,
-        "pass": 21,
-        "fail": 5
+        "pass": 23,
+        "fail": 3
       },
       "indirect": {
         "total": 14,
-        "pass": 13,
-        "fail": 1
+        "pass": 14,
+        "fail": 0
       },
       "inference": {
         "total": 2,
@@ -66,7 +66,7 @@
         "compare": "高槓深蹲 vs 45° 腿推機 — 膕繩肌活化",
         "expected": "深蹲 > 腿推機",
         "ref": "Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)",
-        "model": "深蹲 = 0.494 a vs 腿推機 = 0.124 a"
+        "model": "深蹲 = 0.490 a vs 腿推機 = 0.124 a"
       }
     ],
     "squat-high": [
@@ -79,7 +79,7 @@
         "compare": "高槓深蹲 vs 45° 腿推機 — 膕繩肌活化",
         "expected": "深蹲 > 腿推機",
         "ref": "Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)",
-        "model": "深蹲 = 0.494 a vs 腿推機 = 0.124 a"
+        "model": "深蹲 = 0.490 a vs 腿推機 = 0.124 a"
       },
       {
         "index": 5,
@@ -90,7 +90,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 膕繩肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股二頭肌 +26%)",
-        "model": "自由深蹲 = 0.494 a vs 史密斯 = 0.044 a"
+        "model": "自由深蹲 = 0.490 a vs 史密斯 = 0.044 a"
       },
       {
         "index": 6,
@@ -101,7 +101,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 股四頭肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股內側肌 +49%)",
-        "model": "自由深蹲 = 0.722 a vs 史密斯 = 0.627 a"
+        "model": "自由深蹲 = 0.723 a vs 史密斯 = 0.627 a"
       },
       {
         "index": 7,
@@ -112,18 +112,18 @@
         "compare": "低槓 vs 高槓 — 髖伸力矩",
         "expected": "低槓 > 高槓",
         "ref": "Glassbrook 2017 (PMID 28570490); Murawa 2020 (PMID 32551198)",
-        "model": "低槓 = 206.2 N·m vs 高槓 = 203.7 N·m"
+        "model": "低槓 = 209.9 N·m vs 高槓 = 202.5 N·m"
       },
       {
         "index": 8,
-        "pass": false,
+        "pass": true,
         "evidence": "indirect",
         "evidenceLabel": "文獻相關非直接",
         "exercise": "深蹲（低槓 vs 高槓）",
         "compare": "低槓 vs 高槓 — 腰椎伸展力矩（豎脊肌需求）",
         "expected": "低槓 > 高槓",
         "ref": "Glassbrook 2017 (PMID 28570490，綜述軀幹前傾與豎脊肌活化較高，推論腰椎力矩較高)",
-        "model": "低槓 = 178.5 N·m vs 高槓 = 179.2 N·m"
+        "model": "低槓 = 181.8 N·m vs 高槓 = 178.2 N·m"
       },
       {
         "index": 9,
@@ -134,7 +134,7 @@
         "compare": "高槓 vs 低槓 — 股四頭肌活化",
         "expected": "高槓 > 低槓",
         "ref": "Glassbrook 2017 (PMID 28570490)",
-        "model": "高槓 = 0.722 a vs 低槓 = 0.702 a"
+        "model": "高槓 = 0.723 a vs 低槓 = 0.690 a"
       },
       {
         "index": 10,
@@ -145,18 +145,18 @@
         "compare": "前蹲 vs 高槓 — 最低點軀幹前傾角",
         "expected": "前蹲 < 高槓（較直立）",
         "ref": "Yavuz 2015 (PMID 25630691, n=12，背蹲軀幹前傾角顯著大於前蹲)",
-        "model": "前蹲 = 35.7 ° vs 高槓 = 46.8 °"
+        "model": "前蹲 = 30.7 ° vs 高槓 = 46.6 °"
       },
       {
         "index": 11,
-        "pass": false,
+        "pass": true,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "前蹲 vs 高槓深蹲",
         "compare": "前蹲 vs 高槓 — 髖伸力矩",
         "expected": "前蹲 < 高槓",
         "ref": "Krzyszkowski & Kipp 2020 (PMID 32544021, n=11，同等絕對負重 60%/80% FS-1RM 下背蹲峰值髖伸力矩顯著大於前蹲)",
-        "model": "前蹲 = 211.9 N·m vs 高槓 = 203.7 N·m"
+        "model": "前蹲 = 195.6 N·m vs 高槓 = 202.5 N·m"
       },
       {
         "index": 12,
@@ -167,7 +167,7 @@
         "compare": "全蹲 (depth=0.9) vs 淺蹲 (depth=0.1) — 臀大肌負荷 s",
         "expected": "全蹲 > 淺蹲",
         "ref": "Kubo 2019 (PMID 31230110，實測 MRI 體積 +6.7% vs +2.2%); Bryanton 2012 (PMID 22797000，髖 RME)",
-        "model": "全蹲 = 0.787 s vs 淺蹲 = 0.642 s"
+        "model": "全蹲 = 0.783 s vs 淺蹲 = 0.641 s"
       },
       {
         "index": 13,
@@ -178,7 +178,7 @@
         "compare": "全蹲 (depth=0.9) vs 淺蹲 (depth=0.1) — 內收大肌負荷 s",
         "expected": "全蹲 > 淺蹲",
         "ref": "Kubo 2019 (PMID 31230110，實測 MRI 體積 +6.2% vs +2.7%，對照模型負荷指標 s)",
-        "model": "全蹲 = 0.376 s vs 淺蹲 = 0.246 s"
+        "model": "全蹲 = 0.374 s vs 淺蹲 = 0.245 s"
       },
       {
         "index": 14,
@@ -188,19 +188,19 @@
         "exercise": "深蹲站距",
         "compare": "寬站距 (stance=0.9) vs 窄站距 (stance=0.1) — 臀大肌活化",
         "expected": "寬站距 > 窄站距",
-        "ref": "Paoli 2009 (PMID 19130646, n=6；僅臀大肌於 0% 與 70% 1RM 最寬站距顯著較高，30% 1RM 不顯著)",
-        "model": "寬站距 = 0.462 a vs 窄站距 = 0.557 a"
+        "ref": "Paoli 2009 (PMID 19130646, n=6；僅 0%/70% 1RM 顯著)｜模型限制：寬站距受股骨矢狀投影縮短影響，軀幹反少傾約 16° 且髖力矩下降（與 Escamilla 2001 PMID 11404665 矛盾），另缺髖外旋與臀大肌上束外展力臂",
+        "model": "寬站距 = 0.487 a vs 窄站距 = 0.549 a"
       },
       {
         "index": 21,
-        "pass": false,
+        "pass": true,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "臀推 vs 深蹲",
         "compare": "臀推 vs 高槓深蹲 — 臀大肌活化",
         "expected": "臀推 > 深蹲",
         "ref": "Contreras 2015 (PMID 26214739, n=13, 69.5/86.8% vs 29.4/45.4% MVIC)",
-        "model": "臀推 = 0.445 a vs 深蹲 = 0.540 a"
+        "model": "臀推 = 0.557 a vs 深蹲 = 0.539 a"
       },
       {
         "index": 40,
@@ -211,7 +211,7 @@
         "compare": "深屈端 (e=1.0) vs 淺屈端 (e=0.2) — 膝伸力矩",
         "expected": "深屈端 > 淺屈端",
         "ref": "Escamilla 1998 (PMID 9565938); Escamilla 2001 (PMID 11194098)",
-        "model": "深屈端 = 117.0 N·m vs 淺屈端 = 10.9 N·m"
+        "model": "深屈端 = 117.6 N·m vs 淺屈端 = 9.2 N·m"
       }
     ],
     "smith-squat": [
@@ -224,7 +224,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 膕繩肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股二頭肌 +26%)",
-        "model": "自由深蹲 = 0.494 a vs 史密斯 = 0.044 a"
+        "model": "自由深蹲 = 0.490 a vs 史密斯 = 0.044 a"
       },
       {
         "index": 6,
@@ -235,7 +235,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 股四頭肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股內側肌 +49%)",
-        "model": "自由深蹲 = 0.722 a vs 史密斯 = 0.627 a"
+        "model": "自由深蹲 = 0.723 a vs 史密斯 = 0.627 a"
       }
     ],
     "squat-low": [
@@ -248,18 +248,18 @@
         "compare": "低槓 vs 高槓 — 髖伸力矩",
         "expected": "低槓 > 高槓",
         "ref": "Glassbrook 2017 (PMID 28570490); Murawa 2020 (PMID 32551198)",
-        "model": "低槓 = 206.2 N·m vs 高槓 = 203.7 N·m"
+        "model": "低槓 = 209.9 N·m vs 高槓 = 202.5 N·m"
       },
       {
         "index": 8,
-        "pass": false,
+        "pass": true,
         "evidence": "indirect",
         "evidenceLabel": "文獻相關非直接",
         "exercise": "深蹲（低槓 vs 高槓）",
         "compare": "低槓 vs 高槓 — 腰椎伸展力矩（豎脊肌需求）",
         "expected": "低槓 > 高槓",
         "ref": "Glassbrook 2017 (PMID 28570490，綜述軀幹前傾與豎脊肌活化較高，推論腰椎力矩較高)",
-        "model": "低槓 = 178.5 N·m vs 高槓 = 179.2 N·m"
+        "model": "低槓 = 181.8 N·m vs 高槓 = 178.2 N·m"
       },
       {
         "index": 9,
@@ -270,7 +270,7 @@
         "compare": "高槓 vs 低槓 — 股四頭肌活化",
         "expected": "高槓 > 低槓",
         "ref": "Glassbrook 2017 (PMID 28570490)",
-        "model": "高槓 = 0.722 a vs 低槓 = 0.702 a"
+        "model": "高槓 = 0.723 a vs 低槓 = 0.690 a"
       }
     ],
     "front-squat": [
@@ -283,18 +283,18 @@
         "compare": "前蹲 vs 高槓 — 最低點軀幹前傾角",
         "expected": "前蹲 < 高槓（較直立）",
         "ref": "Yavuz 2015 (PMID 25630691, n=12，背蹲軀幹前傾角顯著大於前蹲)",
-        "model": "前蹲 = 35.7 ° vs 高槓 = 46.8 °"
+        "model": "前蹲 = 30.7 ° vs 高槓 = 46.6 °"
       },
       {
         "index": 11,
-        "pass": false,
+        "pass": true,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "前蹲 vs 高槓深蹲",
         "compare": "前蹲 vs 高槓 — 髖伸力矩",
         "expected": "前蹲 < 高槓",
         "ref": "Krzyszkowski & Kipp 2020 (PMID 32544021, n=11，同等絕對負重 60%/80% FS-1RM 下背蹲峰值髖伸力矩顯著大於前蹲)",
-        "model": "前蹲 = 211.9 N·m vs 高槓 = 203.7 N·m"
+        "model": "前蹲 = 195.6 N·m vs 高槓 = 202.5 N·m"
       }
     ],
     "sumo": [
@@ -431,14 +431,14 @@
     "hip-thrust": [
       {
         "index": 21,
-        "pass": false,
+        "pass": true,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "臀推 vs 深蹲",
         "compare": "臀推 vs 高槓深蹲 — 臀大肌活化",
         "expected": "臀推 > 深蹲",
         "ref": "Contreras 2015 (PMID 26214739, n=13, 69.5/86.8% vs 29.4/45.4% MVIC)",
-        "model": "臀推 = 0.445 a vs 深蹲 = 0.540 a"
+        "model": "臀推 = 0.557 a vs 深蹲 = 0.539 a"
       },
       {
         "index": 22,
@@ -449,7 +449,7 @@
         "compare": "腳放遠 (kneeTop=70°) vs 腳放近 (kneeTop=120°) — 膕繩肌活化",
         "expected": "腳放遠 > 腳放近",
         "ref": "Collazo García 2020 (DOI 10.1519/JSC.0000000000002859)",
-        "model": "腳遠 70° = 0.456 a vs 腳近 120° = 0.219 a"
+        "model": "腳遠 70° = 0.573 a vs 腳近 120° = 0.295 a"
       },
       {
         "index": 23,
@@ -460,7 +460,7 @@
         "compare": "臀推 vs 槓鈴臀橋 — 股四頭肌活化",
         "expected": "臀推 > 臀橋",
         "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)",
-        "model": "臀推 = 0.297 a vs 臀橋 = 0.186 a"
+        "model": "臀推 = 0.351 a vs 臀橋 = 0.245 a"
       },
       {
         "index": 24,
@@ -470,8 +470,8 @@
         "exercise": "臀橋 vs 臀推",
         "compare": "槓鈴臀橋 vs 臀推 — 臀大肌活化",
         "expected": "臀橋 > 臀推",
-        "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)",
-        "model": "臀橋 = 0.236 a vs 臀推 = 0.445 a"
+        "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)｜模型限制：Lmt 長度代理未反映臀橋膕繩肌主動不足",
+        "model": "臀橋 = 0.274 a vs 臀推 = 0.557 a"
       }
     ],
     "glute-bridge": [
@@ -484,7 +484,7 @@
         "compare": "臀推 vs 槓鈴臀橋 — 股四頭肌活化",
         "expected": "臀推 > 臀橋",
         "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)",
-        "model": "臀推 = 0.297 a vs 臀橋 = 0.186 a"
+        "model": "臀推 = 0.351 a vs 臀橋 = 0.245 a"
       },
       {
         "index": 24,
@@ -494,8 +494,8 @@
         "exercise": "臀橋 vs 臀推",
         "compare": "槓鈴臀橋 vs 臀推 — 臀大肌活化",
         "expected": "臀橋 > 臀推",
-        "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)",
-        "model": "臀橋 = 0.236 a vs 臀推 = 0.445 a"
+        "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)｜模型限制：Lmt 長度代理未反映臀橋膕繩肌主動不足",
+        "model": "臀橋 = 0.274 a vs 臀推 = 0.557 a"
       }
     ],
     "incline-bench": [
