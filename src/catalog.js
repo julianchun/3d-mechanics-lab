@@ -63,7 +63,7 @@ export const CATALOG = [
 
 // 清單上「主要肌群」用的簡稱；沒列在這裡的（穩定肌、小腿、旋轉肌袖）不顯示
 export const MUSCLE_SHORT = {
-  vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', addmag: '內收大肌', erec: '豎脊肌',
+  vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', addmag: '內收大肌', erec: '腰背伸肌',
   pecs: '胸大肌', pecc: '上胸', adelt: '前三角', mdelt: '中三角', pdelt: '後三角', lat: '背闊肌',
   trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌',
 };

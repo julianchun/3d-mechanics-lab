@@ -375,49 +375,93 @@ export function defaultParams(lift) {
 
 // ---------- 肌肉 ----------
 // arms：各自由度的力臂（m），正值 = 產生該方向力矩
+// F 含依本模型負重與簡化力臂校正的有效能力；Lf 為來源最佳纖維長。
+// Lmt 是現行出力用的位移代理尺度；剛性肌腱估計另列在 FIBER_GEOMETRY。
 // 水平內收力臂隨「上臂離開軀幹長軸的角度」縮小：手臂夾在身側時，繞軀幹長軸轉動變成上臂內旋（由旋轉肌袖平衡），不再是水平內收
 const hadd = (r) => (q) => r * (q.haddW ?? 1);
 // 旋轉肌袖：繞上臂自身長軸轉，投影到軀幹長軸的比例 = |cos(上臂與軀幹長軸夾角)|；手臂外展時棘下肌也是水平外展肌
 const axial = (q) => Math.abs(Math.cos(q.shElev ?? rad(90)));
+// 髖路徑點直線近似：在 0／45／90° 取 ∂肌腱長／∂髖屈角，二次插值；超出路徑可靠區間則固定端點。
+const hipFit = (a, b, c) => (q) => {
+  const x = clamp((q.hipFlex || 0) / rad(45), 0, 2);
+  return a + (b - a) * x + 0.5 * (c - 2 * b + a) * x * (x - 1);
+};
+// 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/muscle-params.md。
+const angleSlope = (base, key, per90) => (q) => base + per90 * clamp((q[key] || 0) / rad(90), -0.5, 1.7);
+// Ackland et al. 2008 Table 1：胸大肌胸骨中束屈曲力臂遠小於鎖骨束，下束可為伸肌。
+// PECM2／3 合群仍須共用一個力臂；下列節點是依原文區域差異的近似，非原文逐角度量測。
+const pecSternalFlex = (q) => {
+  if (q.shFlex < 0) return 0.003 - 0.05 * clamp(q.shFlex / rad(50), -1, 0);
+  const angle = clamp(q.shFlex / rad(45), 0, 3);
+  const arms = [0.003, 0.006, -0.002, -0.005];
+  const i = Math.min(Math.floor(angle), arms.length - 2);
+  return arms[i] + (arms[i + 1] - arms[i]) * (angle - i);
+};
+// Ackland et al. 2008：鎖骨束 2.5° 約 9.6 mm，71° 約 53.7 mm；其餘角度線性插值。
+const pecClavicularFlex = (q) => {
+  const angle = q.shFlex / rad(1);
+  if (angle < 0) return 0.035;
+  if (angle < 70) return 0.0096 + (0.0537 - 0.0096) * angle / 70;
+  return 0.0537 - 0.0137 * clamp((angle - 70) / 50, 0, 1);
+};
 export const MUSCLES = [
-  { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 6000, Lf: 0.2, arms: { kneeExt: 0.045 } },
-  { id: 'rf', name: '股直肌', F: 1100, Lf: 0.2, arms: { kneeExt: 0.04, hipExt: -0.035 } },
-  { id: 'hams', name: '膕繩肌', F: 2000, Lf: 0.22, arms: { hipExt: 0.06, kneeExt: -0.03 } },
-  { id: 'gmax', name: '臀大肌', F: 2600, Lf: 0.28, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: 0.015 } },
-  { id: 'gmed', name: '臀中肌', F: 1700, Lf: 0.15, arms: { hipAbd: 0.05 } },
-  { id: 'addmag', name: '內收大肌', F: 1700, Lf: 0.32, arms: { hipExt: (q) => 0.03 + 0.025 * clamp(q.hipFlex / rad(90), 0, 1.3), hipAbd: -0.035 } },
-  { id: 'addl', name: '內收長／短肌', F: 900, Lf: 0.15, arms: { hipAbd: -0.05, hipExt: -0.015 } },
-  { id: 'ilio', name: '髂腰肌', F: 1300, Lf: 0.18, arms: { hipExt: -0.04 } },
-  { id: 'gas', name: '腓腸肌', F: 2200, Lf: 0.12, arms: { ankPF: 0.05, kneeExt: -0.02 } },
-  { id: 'sol', name: '比目魚肌', F: 3500, Lf: 0.1, arms: { ankPF: 0.05 } },
-  { id: 'ta', name: '脛前肌', F: 900, Lf: 0.1, arms: { ankPF: -0.04 } },
-  { id: 'erec', name: '豎脊肌', F: 5000, Lf: 0.15, arms: { trunkExt: 0.05 } },
-  { id: 'ra', name: '腹直肌', F: 700, Lf: 0.2, arms: { trunkExt: -0.08 } },
-  { id: 'pecs', name: '胸大肌（中下胸）', F: 1800, Lf: 0.35, arms: { shHAdd: hadd(0.07), shFlex: (q) => 0.055 - 0.05 * clamp(q.shFlex / rad(110), 0, 1), scElev: -0.025 } },
-  // 上胸：手臂舉過約 100° 之後屈曲力臂逐漸消失
-  { id: 'pecc', name: '胸大肌（上胸）', F: 700, Lf: 0.3, arms: { shHAdd: hadd(0.04), shFlex: (q) => 0.035 * clamp((rad(150) - q.shFlex) / rad(50), 0, 1) } },
-  { id: 'adelt', name: '三角肌前束', F: 600, Lf: 0.25, arms: { shFlex: 0.035, shHAdd: hadd(0.02), shAbd: 0.012 } },
-  { id: 'pdelt', name: '三角肌後束', F: 500, Lf: 0.2, arms: { shFlex: -0.025, shHAdd: hadd(-0.04), shAbd: 0.012 } },
+  // R 三束原始 F=9594 N 對本模型膝伸軸的理論力矩過高；按單側等長膝伸力矩校正有效能力。
+  { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 5000, Lf: 0.0986, Lmt: 0.3101, arms: { kneeExt: angleSlope(0.045, 'kneeFlex', 0.005) } },
+  { id: 'rf', name: '股直肌', F: 2191.7, Lf: 0.0759, Lmt: 0.5244, arms: { kneeExt: angleSlope(0.04, 'kneeFlex', 0.004), hipExt: -0.035 } },
+  { id: 'hams', name: '膕繩肌', F: 4105.5, Lf: 0.0960, Lmt: 0.4220, arms: { hipExt: angleSlope(0.06, 'hipFlex', -0.01), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
+  // 臀大肌的直線弦在深屈髖時穿過骨盆，90° 以後甚至反轉；保留原先繞行估計，避免用錯誤幾何外插。
+  { id: 'gmax', name: '臀大肌', F: 3337.6, Lf: 0.1569, Lmt: 0.2197, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: -0.0051 } },
+  { id: 'gmed', name: '臀中肌', F: 2729.8, Lf: 0.0730, Lmt: 0.1281, arms: { hipAbd: 0.0430 } },
+  { id: 'addmag', name: '內收大肌', F: 2389.2, Lf: 0.1442, Lmt: 0.2418, arms: { hipExt: hipFit(0.0094, 0.0342, 0.0362), hipAbd: -0.0499 } },
+  { id: 'addl', name: '內收長／短肌', F: 1542.6, Lf: 0.1061, Lmt: 0.1988, arms: { hipAbd: -0.0568, hipExt: hipFit(-0.0410, -0.0233, 0.0148) } },
+  { id: 'ilio', name: '髂腰肌', F: 2447.9, Lf: 0.1126, Lmt: 0.2107, arms: { hipExt: hipFit(-0.0217, -0.0347, -0.0370) } },
+  { id: 'gas', name: '腓腸肌', F: 4690.6, Lf: 0.0536, Lmt: 0.4447, arms: { ankPF: angleSlope(0.05, 'ankleDorsi', 0.005), kneeExt: angleSlope(-0.02, 'kneeFlex', -0.003) } },
+  { id: 'sol', name: '比目魚肌', F: 6194.8, Lf: 0.0440, Lmt: 0.3208, arms: { ankPF: angleSlope(0.05, 'ankleDorsi', 0.005) } },
+  { id: 'ta', name: '脛前肌', F: 1227.5, Lf: 0.0683, Lmt: 0.3088, arms: { ankPF: angleSlope(-0.04, 'ankleDorsi', 0.004) } },
+  // 軀幹單條代表同側所有伸／屈肌的功能群；依最大等長軀幹力矩校正總能力，非單一肌束的 OpenSim F。
+  { id: 'erec', name: '腰背伸肌群', F: 5000, Lf: 0.0808, Lmt: 0.1947, arms: { trunkExt: 0.0465 } },
+  { id: 'ra', name: '腹部屈肌群', F: 1250, Lf: 0.2986, Lmt: 0.3796, arms: { trunkExt: -0.0635 } },
+  { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shHAdd: hadd(0.07), shFlex: pecSternalFlex, scElev: -0.025 } },
+  // 上胸：Ackland 的鎖骨束於約 70° 肩屈時力臂最大。
+  { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shHAdd: hadd(0.04), shFlex: pecClavicularFlex } },
+  { id: 'adelt', name: '三角肌前束', F: 1350, Lf: 0.0976, Lmt: 0.1906, arms: { shFlex: angleSlope(0.035, 'shFlex', 0.008), shHAdd: hadd(0.02), shAbd: 0.012 } },
+  { id: 'pdelt', name: '三角肌後束', F: 201.6, Lf: 0.1367, Lmt: 0.1747, arms: { shFlex: angleSlope(-0.025, 'shFlex', -0.004), shHAdd: hadd(-0.04), shAbd: 0.012 } },
   // 背闊肌從軀幹接到肱骨、跨過肩胛：也是肩帶的主要下壓肌（scElev 負力臂）
-  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.25, opt: ['shHAdd'], arms: { shFlex: (q) => -0.05 * clamp((rad(170) - q.shFlex) / rad(80), 0.15, 1), shAbd: (q) => -0.035 * clamp(q.shAbd / rad(60), 0.2, 1), shHAdd: hadd(-0.02), scElev: -0.04 } },
-  { id: 'trilong', name: '肱三頭肌長頭', F: 1000, Lf: 0.15, arms: { elbExt: 0.02, shFlex: -0.02 } },
-  { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 2000, Lf: 0.12, arms: { elbExt: 0.022 } },
-  { id: 'bic', name: '肱二頭肌', F: 750, Lf: 0.14, arms: { elbExt: -0.03, shFlex: 0.012 } },
-  { id: 'brach', name: '肱肌／肱橈肌', F: 1200, Lf: 0.1, arms: { elbExt: -0.025 } },
+  // 肩伸與肘伸的功能群總能力依單側最大等長力矩交叉檢查；模型肌束 F 不直接等於受試者測得力矩。
+  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, opt: ['shHAdd'], arms: { shFlex: (q) => -0.05 * clamp((rad(170) - q.shFlex) / rad(80), 0.15, 1), shAbd: (q) => -0.035 * clamp(q.shAbd / rad(60), 0.2, 1), shHAdd: hadd(-0.02), scElev: -0.04 } },
+  { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFlex: -0.02 } },
+  { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
+  // 肱二頭肌的肩屈作用在高舉時減弱；固定正力臂會使反握下拉起段錯誤地壓低二頭肌。
+  { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFlex: (q) => 0.012 * clamp((rad(60) - q.shFlex) / rad(60), 0, 1) } },
+  { id: 'brach', name: '肱肌／肱橈肌', F: 1453.4, Lf: 0.1023, Lmt: 0.1709, arms: { elbExt: angleSlope(-0.025, 'elbFlex', -0.006) } },
   // 起點在肩胛骨的肩內收肌：不跨肩胛胸廓，單純提供內收（避免只有背闊肌能內收、牽動整串副作用）
-  { id: 'tmaj', name: '大圓肌', F: 600, Lf: 0.15, arms: { shFlex: -0.025, shAbd: -0.03 } },
-  { id: 'corb', name: '喙肱肌', F: 250, Lf: 0.12, arms: { shFlex: 0.015, shAbd: -0.02 } },
-  { id: 'infra', name: '棘下肌／小圓肌', F: 900, Lf: 0.08, arms: { shHAdd: (q) => -0.025 * Math.max(axial(q), q.haddW ?? 1) } },
-  { id: 'subsc', name: '肩胛下肌', F: 1200, Lf: 0.08, arms: { shHAdd: (q) => 0.025 * axial(q) } },
+  { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: { shFlex: -0.025, shAbd: -0.03 } },
+  { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFlex: 0.015, shAbd: -0.02 } },
+  { id: 'infra', name: '棘下肌／小圓肌', F: 1345.3, Lf: 0.0752, Lmt: 0.1141, arms: { shHAdd: (q) => -0.025 * Math.max(axial(q), q.haddW ?? 1) } },
+  { id: 'subsc', name: '肩胛下肌', F: 1306.9, Lf: 0.0873, Lmt: 0.1203, arms: { shHAdd: (q) => 0.025 * axial(q) } },
   // 以下只在有分析肩外展與肩胛的動作出現（划船、肩推）
-  { id: 'mdelt', name: '三角肌中束', F: 1100, Lf: 0.2, arms: { shAbd: (q) => 0.02 + 0.015 * clamp(q.shAbd / rad(60), 0, 1) } },
+  { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shAbd: (q) => 0.02 + 0.015 * clamp(q.shAbd / rad(60), 0, 1) } },
   // 肩胛：力臂相對胸鎖關節；scRet = 後收、scElev = 上提（含上旋）
   { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: { scRet: 0.07 } },
-  { id: 'uptrap', name: '斜方肌上束', F: 900, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
+  { id: 'uptrap', name: '斜方肌上束', F: 1500, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
   { id: 'lowtrap', name: '斜方肌下束', F: 500, Lf: 0.15, arms: { scElev: -0.035, scRet: 0.05 } },
   { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: { scRet: -0.07, scElev: 0.03 } },
 ];
 export const MUSCLE_BY_ID = Object.fromEntries(MUSCLES.map((m) => [m.id, m]));
+
+// R／U 固定版本 .osim：肌腱鬆弛長 Lt、最佳長度羽狀角 alpha，合群時按來源 F 加權。
+// 供剛性肌腱診斷；來源與重算方式見 tools/muscle_params.py。現有姿勢／路徑基準不足以拿它直接算出力。
+const FIBER_GEOMETRY = {
+  vasti: [0.2114, 0.2678], rf: [0.4485, 0.2170], hams: [0.3260, 0.2275],
+  gmax: [0.0628, 0.3677], gmed: [0.0551, 0.3166], addmag: [0.0977, 0.2204],
+  addl: [0.0927, 0.1284], ilio: [0.0981, 0.2424], gas: [0.3911, 0.1806],
+  sol: [0.2768, 0.3814], ta: [0.2405, 0.1952], pecs: [0.1075, 0.4463],
+  pecc: [0.0028, 0.2967], adelt: [0.0930, 0.3840], pdelt: [0.0380, 0.3142],
+  lat: [0.1473, 0.3781], trilong: [0.1430, 0.2094], trilat: [0.0944, 0.1571],
+  bic: [0.2422, 0], brach: [0.0686, 0], tmaj: [0.0200, 0.2793],
+  corb: [0.0970, 0.4712], infra: [0.0389, 0.3491], subsc: [0.0330, 0.3491],
+  mdelt: [0.1095, 0.2618],
+};
 
 const DOF_REF = { hipExt: rad(-40), hipAbd: 0, kneeExt: rad(-50), ankPF: rad(-10), trunkExt: 0, shFlex: rad(20), shHAdd: rad(20), elbExt: rad(-70), shAbd: rad(20), scRet: 0, scElev: 0 };
 // 只在部分動作分析的自由度：沒分析時，肌肉在這些方向的力臂直接忽略（例如背闊肌在臥推只算屈伸）
@@ -1193,19 +1237,22 @@ function twoContactReactions(pose, P, W, out) {
 // 阻力的種類：自由重量（重力，方向固定）、滑輪（朝向滑輪，大小固定）、導軌（只能沿軌道方向，垂直方向由機器承受）、
 // 槓桿／凸輪（繞機器轉軸的力矩隨角度改變）。坐在器械上的動作，椅墊／靠墊承受身體，不算地面反作用力。
 
-// 滑輪：手上的力 = 配重 × 方向（槓中心 → 滑輪）；ext = 外力（站姿時影響壓力中心與腳底摩擦）
-function cableLoads(pose, P, W, out) {
-  const T = (pose.barW * W) / 2;
-  const d = norm(sub(pose.pulley, [0, pose.bar[1], pose.bar[2]]));
-  const F = mul(d, T);
-  // 雙手握同一根剛體握把：兩手之間可以互推／互拉（左右方向，左右相消），
-  // 取讓肩＋肘關節力矩平方和最小的那個橫向力（上限為拉力的一半）
+// 同一根剛體握把的兩手可沿槓軸互推／互拉；取肩與肘力矩平方和最小的橫向力。
+function minimizeAxialMoment(pose, F, limit) {
   let ab = 0, bb = 0;
   for (const J of [pose.R.shoulder, pose.R.elbow]) {
     const r = sub(pose.R.hand, J), a = cross(r, F), b = cross(r, [1, 0, 0]);
     ab += dot(a, b); bb += dot(b, b);
   }
-  F[0] += clamp(-ab / (bb || 1), -0.5 * T, 0.5 * T);
+  F[0] += clamp(-ab / (bb || 1), -limit, limit);
+}
+
+// 滑輪：手上的力 = 配重 × 方向（槓中心 → 滑輪）；ext = 外力（站姿時影響壓力中心與腳底摩擦）
+function cableLoads(pose, P, W, out) {
+  const T = (pose.barW * W) / 2;
+  const d = norm(sub(pose.pulley, [0, pose.bar[1], pose.bar[2]]));
+  const F = mul(d, T);
+  minimizeAxialMoment(pose, F, 0.5 * T);
   out.push({ p: pose.R.hand, F, region: 'fore', ext: true });
   // 視覺力線畫在鋼索線上（x = 0，通過握把中心）；力臂分析只看矢狀面 yz，與手位置一致
   pose.forceLine = { p: pose.bar, d };
@@ -1711,11 +1758,7 @@ function barInHandsLoads(pose, P, W, out) {
 
 function handBarLoads(pose, P, W, out) {
   const F = [0, -(pose.barW * W) / 2, 0];
-  // 垂手握槓：槓是剛體，兩手之間可以互推／互拉，讓手上的合力在額狀面指向肩膀（三角肌不必撐住手臂外展）
-  if (pose.barAxial) {
-    const R = pose.R, dy = R.shoulder[1] - R.hand[1];
-    if (dy > 0.2) F[0] = clamp((-F[1] * (R.hand[0] - R.shoulder[0])) / dy, -0.3 * -F[1], 0.3 * -F[1]);
-  }
+  if (pose.barAxial) minimizeAxialMoment(pose, F, -F[1] * 0.5);
   out.push({ p: pose.R.hand, F, region: 'fore' });
 }
 
@@ -1887,16 +1930,58 @@ export function analyze(lift, P, e) {
   L.lowerBounds?.(P, lb);
   L.adjust?.(P, pref);
 
+  // 由力臂定義 r(θ) = -∂L/∂θ，對隨角度變化的力臂沿自由度區間積分 ΔL = -∫ r(θ) dθ，
+  // 避免端點力臂劇烈變化時以 r(q)·(q - q_ref) 放大位移與被動張力。
+  const DOF_ANGLE_MAP = {
+    hipExt: ['hipFlex', -1], kneeExt: ['kneeFlex', -1], ankPF: ['ankleDorsi', -1],
+    shFlex: ['shFlex', 1], shAbd: ['shAbd', 1], elbExt: ['elbFlex', -1],
+  };
+  const qSample = { ...q };
+  const integrateArm = (armFn, key, sign, lo, hi) => {
+    const dq = hi - lo;
+    if (!dq) return 0;
+    const N = 8, step = dq / N, prev = qSample[key];
+    let sum = 0;
+    for (let k = 0; k < N; k++) {
+      qSample[key] = sign * (lo + (k + 0.5) * step);
+      sum += armFn(qSample);
+    }
+    qSample[key] = prev;
+    return -(sum / N) * dq;
+  };
+  const dofDisplacement = (arm, d) => {
+    if (!arm) return 0;
+    const q0 = DOF_REF[d] ?? 0, q1 = q.dof[d] ?? q0, dq = q1 - q0;
+    if (!dq) return 0;
+    if (typeof arm !== 'function') return -arm * dq;
+    const mapped = DOF_ANGLE_MAP[d];
+    if (!mapped) return -arm(q) * dq;
+    const [key, sign] = mapped;
+    // 跨越 0° 時拆兩段積分，避免分段力臂在 0° 附近產生數值誤差
+    return (q0 < 0) !== (q1 < 0)
+      ? integrateArm(arm, key, sign, q0, 0) + integrateArm(arm, key, sign, 0, q1)
+      : integrateArm(arm, key, sign, q0, q1);
+  };
+
   const info = muscles.map((m) => {
     const arms = dofs.map((d) => { const a = m.arms[d]; return typeof a === 'function' ? a(q) : a || 0; });
-    let l = 1;
-    dofs.forEach((d, j) => { if (arms[j]) l -= (arms[j] / m.Lf) * (q.dof[d] - DOF_REF[d]); });
+    let displacement = 0;
+    dofs.forEach((d) => { displacement += dofDisplacement(m.arms[d], d); });
     // optDofs：不分析力矩、但關節角度仍影響肌肉長度（例如坐姿腿彎舉時髖屈曲拉長膕繩肌）
-    for (const d of L.optDofs || []) { let r = m.arms[d]; r = typeof r === 'function' ? r(q) : r || 0; if (r) l -= (r / m.Lf) * ((q.dof[d] ?? DOF_REF[d]) - DOF_REF[d]); }
-    const fl = Math.max(0.35, Math.exp(-(((l - 1) / 0.5) ** 2)));
+    for (const d of L.optDofs || []) displacement += dofDisplacement(m.arms[d], d);
+    const geometry = FIBER_GEOMETRY[m.id];
+    // 剛性肌腱：Lmt0=Lt+Lf cos(alpha)，Lf_now≈(Lmt0+ΔLmt-Lt)/cos(alpha)。
+    // 羽狀角暫固定在最佳長度值；此值用於診斷，尚未求解腱伸長與羽狀角隨收縮變化。
+    const rigidFiberLength = geometry
+      ? (geometry[0] + m.Lf * Math.cos(geometry[1]) + displacement - geometry[0]) / (m.Lf * Math.cos(geometry[1]))
+      : null;
+    const legacyLength = 1 + displacement / (m.Lmt || m.Lf);
+    const l = legacyLength;
+    // 採 Thelen2003Muscle 的 Gaussian 形式與 KshapeActive=0.45，輸入仍是現有 Lmt 長度代理，尚非真實纖維長。
+    const fl = Math.exp(-((l - 1) ** 2) / 0.45);
     const pas = l <= 1.15 ? 0 : Math.min(0.8, 0.5 * ((l - 1.15) / 0.45) ** 2);
     const Feff = m.F * fl;
-    return { m, arms, l, pas, A: arms.map((r) => r * Feff), F: m.F };
+    return { m, arms, l, lRigid: rigidFiberLength, pas, A: arms.map((r) => r * Feff), F: m.F };
   });
   const b0 = dofs.map((d, j) => (dem[d] || 0) - info.reduce((s, x) => s + x.pas * x.F * x.arms[j], 0));
   const act = Object.fromEntries(info.map((x) => [x.m.id, 0]));
@@ -1928,7 +2013,7 @@ export function analyze(lift, P, e) {
   const mus = {};
   for (const x of info) {
     const a = Math.max(0, act[x.m.id]);
-    mus[x.m.id] = { a, p: x.pas, s: Math.min(a, 1.5) + x.pas, l: x.l, len: x.l > 1.12 ? '拉長' : x.l < 0.9 ? '縮短' : '中段' };
+    mus[x.m.id] = { a, p: x.pas, s: Math.min(a, 1.5) + x.pas, l: x.l, lRigid: x.lRigid, len: x.l > 1.12 ? '拉長' : x.l < 0.9 ? '縮短' : '中段' };
   }
   // 關節負擔
   const rom = {};
