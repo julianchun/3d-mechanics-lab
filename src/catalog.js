@@ -34,10 +34,10 @@ export const CATALOG = [
   { id: 'hip-thrust', name: '臀推', cat: 'hinge', equip: 'barbell', lift: 'hipthrust', set: { surface: 'bench', kneeTop: 90 }, alias: ['hip thrust', '臀部'] },
   { id: 'glute-bridge', name: '槓鈴臀橋', cat: 'hinge', equip: 'barbell', lift: 'hipthrust', set: { surface: 'floor', kneeTop: 130 }, alias: ['glute bridge', '臀橋'] },
   // 水平推
-  { id: 'bench', name: '臥推（平板）', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.6, flare: 52 }, alias: ['bench', 'bp'] },
-  { id: 'incline-bench', name: '上斜臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 30, grip: 1.6, flare: 52 }, alias: ['incline'] },
-  { id: 'cg-bench', name: '窄握臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 0.9, flare: 35 }, alias: ['close grip', 'cgbp'] },
-  { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45 }, alias: ['floor press'] },
+  { id: 'bench', name: '臥推（平板）', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.6, flare: 52, touch: 0.6 }, alias: ['bench', 'bp'] },
+  { id: 'incline-bench', name: '上斜臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 30, grip: 1.6, flare: 52, touch: 0.6 }, alias: ['incline'] },
+  { id: 'cg-bench', name: '窄握臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.0, flare: 32, touch: 0.75 }, alias: ['close grip', 'cgbp'] },
+  { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', planned: true, alias: ['pec deck', 'fly'] },
   // 垂直推
