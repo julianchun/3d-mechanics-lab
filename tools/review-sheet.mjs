@@ -18,20 +18,22 @@ const ROOT = path.resolve(__dirname, '..');
 const REVIEW_DIR = path.join(ROOT, 'review');
 const IMG_DIR = path.join(REVIEW_DIR, 'img');
 const DEFAULT_PORT = 5191;
-const DEFAULT_CHROMIUM = '/home/ubuntu/.cache/ms-playwright/chromium-1243/chrome-linux-arm64/chrome';
+// 可用 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH 指定瀏覽器；沒指定時用 Playwright 自己安裝的版本
+const DEFAULT_CHROMIUM = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || null;
+// 4173 是 vite preview（正式預覽站），不能拿來截圖：那裡沒有開發用的 window.__mm
+const RESERVED_PORTS = new Set([4173]);
 
-// 載入 Playwright（優先標準路徑，其次 NODE_PATH 與預設暫存安裝位置）
+// 載入 Playwright（標準路徑，其次 NODE_PATH）
 const require = createRequire(import.meta.url);
 function loadPlaywright() {
   const candidates = [
     'playwright',
     ...(process.env.NODE_PATH ? process.env.NODE_PATH.split(path.delimiter).map((d) => path.join(d, 'playwright')) : []),
-    '/tmp/pwcheck/node_modules/playwright',
   ];
   for (const p of candidates) {
     try { return require(p); } catch {}
   }
-  throw new Error('找不到 playwright，請設定 NODE_PATH 或安裝 playwright。');
+  throw new Error('找不到 playwright：請先 `npm install --no-save playwright && npx playwright install chromium`，或用 NODE_PATH 指向已安裝的位置。');
 }
 
 function parseArgs(argv) {
@@ -50,12 +52,19 @@ function parseArgs(argv) {
       throw new Error(`未知參數：${a}`);
     }
   }
+  if (RESERVED_PORTS.has(opts.port)) throw new Error(`port ${opts.port} 保留給正式預覽站，請改用其他 port`);
+  if (opts.url) {
+    const u = new URL(opts.url);
+    if (RESERVED_PORTS.has(Number(u.port))) throw new Error(`${opts.url} 是正式預覽站，請改用開發伺服器`);
+  }
   return opts;
 }
 
-async function waitForServer(url, timeoutMs = 20000) {
+// child：自己啟動的 vite；它提早結束（例如 port 被占用）就立刻失敗，避免截到別的伺服器
+async function waitForServer(url, timeoutMs = 20000, child = null) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
+    if (child && child.exitCode !== null) throw new Error(`vite 沒有啟動成功（exit ${child.exitCode}），port 可能已被占用`);
     try {
       const res = await fetch(url);
       if (res.ok) return;
@@ -372,10 +381,6 @@ async function main() {
   const items = CATALOG.filter((c) => !c.planned);
   fs.mkdirSync(IMG_DIR, { recursive: true });
 
-  // 清除舊圖片，避免已刪除的動作留下孤兒檔案
-  for (const f of fs.readdirSync(IMG_DIR)) {
-    if (f.endsWith('.png')) fs.unlinkSync(path.join(IMG_DIR, f));
-  }
 
   let viteProc = null;
   const targetUrl = opts.url || `http://127.0.0.1:${opts.port}/`;
@@ -392,7 +397,7 @@ async function main() {
     if (!opts.url) {
       console.log(`啟動開發伺服器：npx vite --port ${opts.port} --strictPort`);
       viteProc = startVite(opts.port);
-      await waitForServer(targetUrl);
+      await waitForServer(targetUrl, 20000, viteProc);
     } else {
       console.log(`使用現有伺服器：${targetUrl}`);
     }
@@ -402,9 +407,13 @@ async function main() {
       args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'],
     };
     const customExe = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || DEFAULT_CHROMIUM;
-    if (fs.existsSync(customExe)) launchOpts.executablePath = customExe;
+    if (customExe && fs.existsSync(customExe)) launchOpts.executablePath = customExe;
 
     browser = await chromium.launch(launchOpts);
+    // 伺服器與瀏覽器都就緒後才清除舊圖片（避免失敗時留下空資料夾），並移除已刪除動作的孤兒檔案
+    for (const f of fs.readdirSync(IMG_DIR)) {
+      if (f.endsWith('.png')) fs.unlinkSync(path.join(IMG_DIR, f));
+    }
     // viewport 寬 600、高 1000（#stage 為 50dvh → canvas 約 600×500）
     const context = await browser.newContext({ viewport: { width: 600, height: 1000 }, deviceScaleFactor: 1 });
     const page = await context.newPage();

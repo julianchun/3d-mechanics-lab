@@ -15,6 +15,8 @@ npm run build    # 輸出到 dist/
 npm test         # 驗證所有動作＋回歸比對
 ```
 
+動作總覽截圖（給教練檢查每個動作的姿勢）：`npm run review`，輸出到 `review/index.html`；加 `-- --publish` 會複製到 `dist/review/`（`vite build` 會清掉，建置後要重跑）。需要 Playwright：用 `NODE_PATH` 指向已安裝的 playwright，瀏覽器路徑可用 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 指定。
+
 改動力學模型後請跑 `npm test`。如果數值變化是刻意的，確認後用 `npm run test:update` 更新基準快照，並在提交說明裡寫明原因。
 
 ## 結構
