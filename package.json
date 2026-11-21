@@ -7,7 +7,8 @@
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview --host --port 4173",
-    "test:update": "node tests/regress.mjs --update"
+    "test:update": "node tests/regress.mjs --update",
+    "test:trends": "node tests/trends.mjs"
   },
   "keywords": [],
   "author": "",
