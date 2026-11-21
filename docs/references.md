@@ -60,13 +60,13 @@
 - **可比較量化結果**
   - **關節力與峰值位置**（Escamilla 1998, n=10 有經驗男性；Escamilla 2001 綜述）：閉鏈深蹲時，股四頭肌 EMG、髕股關節壓迫力與脛股關節壓迫力隨膝屈曲增加而遞增，於**接近最大膝屈曲（最低點）達到峰值**；深蹲產生之膕繩肌共同活化約為腿推機與腿伸機的 **2 倍**。
   - **深度對肌肥大之影響**（Kubo 2019, 10 週訓練 MRI 體積變化）：全蹲組（FST）與半蹲組（HST）之股四頭肌（不含股直肌）增幅相近（FST +4.9% vs HST +4.6%），膕繩肌與股直肌兩組皆無顯著增加；但**臀大肌（FST +6.7% vs HST +2.2%）與內收肌群（FST +6.2% vs HST +2.7%）在全蹲組顯著較高**。
-  - **站距對 EMG 之影響**（Paoli 2009, 測試 0%、30%、70% 1RM 與 3 種站距，測 8 條大腿／髖部肌群）：僅**臀大肌**於最寬站距（0% 與 70% 1RM）呈現顯著較高肌電活動。
+  - **站距對 EMG 之影響**（Paoli 2009, n=6 有經驗舉重者，測試 0%、30%、70% 1RM 與 3 種站距，測 8 條大腿／髖部肌群）：**僅臀大肌**於最寬站距呈現顯著較高肌電活動，且差異**僅在 0% 與 70% 1RM 達統計顯著**（30% 1RM 與其餘 7 條肌群均無顯著差異）。
   - **腳尖外轉角度**（Escamilla 2001, n=10）：腳尖朝前 vs 外轉 30° 對肌電與膝關節受力皆無顯著差異。
 - **可檢驗趨勢**
   - 深蹲最低點（深屈）膝伸力矩 > 淺屈處（Escamilla 1998, 2001）。
   - 深蹲膕繩肌活動 > 45° 腿推機，文獻約為 2 倍（Escamilla 1998, n=10）。
   - 全蹲（`depth` 高）臀大肌與內收大肌負荷 > 淺蹲（Kubo 2019；Bryanton 2012）。
-  - 寬站距（`stance` 高）臀大肌活動 > 窄站距（Paoli 2009）。
+  - 寬站距（`stance` 高）臀大肌活動 > 窄站距（Paoli 2009, n=6，僅 0% 與 70% 1RM 顯著）。
 
 ### 2. `squat-low` 深蹲（低槓）
 
@@ -85,14 +85,17 @@
 
 - **可靠研究來源**
   1. Gullett JC, Tillman MD, Gutierrez GM, Chow JW. (2009). *A biomechanical comparison of back and front squats in healthy trained individuals.* J Strength Cond Res, 23(1):284–292. [PubMed 19002072](https://pubmed.ncbi.nlm.nih.gov/19002072/) / [DOI](https://doi.org/10.1519/JSC.0b013e31818546bb)
+  2. Yavuz HU, Erdağ D, Amca AM, Aritan S. (2015). *Kinematic and EMG activities during front and back squat variations in maximum loads.* J Sports Sci, 33(10):1058–1066. [PubMed 25630691](https://pubmed.ncbi.nlm.nih.gov/25630691/) / [DOI](https://doi.org/10.1080/02640414.2014.984240)
+  3. Krzyszkowski J, Kipp K. (2020). *Load-dependent mechanical demands of the lower extremity during the back and front squat.* J Sports Sci, 38(17):2005–2012. [PubMed 32544021](https://pubmed.ncbi.nlm.nih.gov/32544021/) / [DOI](https://doi.org/10.1080/02640414.2020.1766738)
 - **可比較量化結果**
   - Gullett et al. (2009, n=15 有訓練經驗健康成人，交叉設計，採各自相對 1RM 百分比負荷)：
-    - 背蹲產生**顯著較高的膝關節壓迫力與膝伸肌力矩**（部分因背蹲絕對 1RM 較重且身體質心／力臂配置不同）。
-    - 下肢整體 EMG（股直肌、股外側肌、股內側肌、股二頭肌、半腱肌、豎脊肌）在兩者之間**無顯著差異**；向心期 EMG 顯著高於離心期。
-    - 前蹲軀幹明顯較直立（前傾角小於背蹲）。
+    - 背蹲產生**顯著較高的脛股關節壓迫力與膝伸肌力矩**（部分因背蹲絕對 1RM 較重）；膝剪力小且兩者無差異。
+    - 槓位對下肢與豎脊肌整體 EMG **無顯著差異**；向心期 EMG 顯著高於離心期。（註：該摘要僅報告膝關節動力學與肌電，未報告髖力矩或軀幹前傾角。）
+  - Yavuz et al. (2015, n=12，最大負荷比較)：背蹲呈現**顯著較大的軀幹前傾角**（前蹲軀幹較直立），膝關節運動學兩者無顯著差異；前蹲向心與全程之股內側肌 EMG 較高，背蹲向心期半腱肌 EMG 較高。
+  - Krzyszkowski & Kipp (2020, n=11 NCAA Division-I 運動員，以**相同絕對負重** 40%、60%、80% 前蹲 1RM 比較)：**背蹲於 60% 與 80% FS-1RM 產生顯著較高的峰值髖伸淨關節力矩**；前蹲於 80% FS-1RM 產生較高的峰值膝伸淨關節力矩（若依各自 1RM 預測最大負重，背蹲膝伸力矩則略高約 3%）。
 - **可檢驗趨勢**
-  - 前蹲最低點軀幹前傾角 < 高槓背蹲（Gullett 2009）。
-  - 同等槓重下，前蹲髖伸力矩 < 高槓背蹲（因質心與槓位前移、軀幹較直立）。
+  - 前蹲最低點軀幹前傾角 < 高槓背蹲（Yavuz 2015, n=12）。
+  - 同等絕對槓重下，前蹲髖伸力矩 < 高槓背蹲（Krzyszkowski & Kipp 2020, n=11，60% 與 80% FS-1RM）。
 
 ### 4. `smith-squat` 史密斯深蹲
 
@@ -183,19 +186,19 @@
   1. Vigotsky AD, Harper EN, Ryan DR, Contreras B. (2015). *Effects of load on good morning kinematics and EMG activity.* PeerJ, 3:e708. [PubMed 25653899](https://pubmed.ncbi.nlm.nih.gov/25653899/) / [DOI](https://doi.org/10.7717/peerj.708)
   2. McAllister MJ et al. (2014). *Muscle activation during various hamstring exercises.* J Strength Cond Res, 28(6):1573–1580. [PubMed 24149748](https://pubmed.ncbi.nlm.nih.gov/24149748/) / [DOI](https://doi.org/10.1519/JSC.0000000000000302)
 - **可比較量化結果**
-  - Vigotsky et al. (2015, 測試 50% 至 90% 1RM 負荷)：隨負荷增加，膕繩肌與豎脊肌積分 EMG（IEMG）顯著上升；同時膝屈曲角度增加、估計膕繩肌長度縮短，而腰椎與髖屈曲角度保持穩定。
+  - Vigotsky et al. (2015, n=15 有訓練男性，操弄變因為**負重** 50% 至 90% 1RM，而非直接操弄膝彎曲角度)：隨負荷增加，膕繩肌與豎脊肌積分 EMG（IEMG）顯著上升；同時受試者膝屈曲角度自發性增加、估計膕繩肌長度隨之縮短，而腰椎與髖屈曲角度無顯著變化。
   - 槓扛於上背（較高槓位離髖與 L5 力臂長於低槓），因此早安體前屈雖使用較輕重量，但下背與膕繩肌承受高力矩。
 - **可檢驗趨勢**
-  - 早安體前屈膝彎曲越小（`kneeBend = 5°` vs `35°`）→ 膕繩肌估計長度越長（Vigotsky 2015 運動學關係）。
-  - 早安體前屈高槓（`barPos: 'high'`）腰椎伸展力矩 > 低槓（`barPos: 'low'`）（力臂幾何）。
+  - 早安體前屈膝彎曲越小（`kneeBend = 5°` vs `35°`）→ 膕繩肌估計長度越長（**幾何推論**——雙關節膕繩肌跨膝後側；註：Vigotsky 2015 係操弄負重而非直接操弄膝角，僅觀察到負重上升時膝屈曲增加伴隨估計長度縮短）。
+  - 早安體前屈高槓（`barPos: 'high'`）腰椎伸展力矩 > 低槓（`barPos: 'low'`）（幾何推論）。
 
 ### 12. `hip-thrust` 臀推
 
 - **可靠研究來源**
   1. Contreras B, Vigotsky AD, Schoenfeld BJ, Beardsley C, Cronin J. (2015). *A comparison of gluteus maximus, biceps femoris, and vastus lateralis electromyographic activity in the back squat and barbell hip thrust exercises.* J Appl Biomech, 31(6):452–458. [PubMed 26214739](https://pubmed.ncbi.nlm.nih.gov/26214739/) / [DOI](https://doi.org/10.1123/jab.2014-0301)
-  2. Krause Neto W, Soares EG, Vieira TL, Aguiar R, Chola TA, Sampaio VL, Gama EF. (2019). *Gluteus maximus activation during common strength and hypertrophy exercises: A systematic review.* J Sports Sci Med, 19(1):195–203. [PubMed 31824109](https://pubmed.ncbi.nlm.nih.gov/31824109/)
+  2. Krause Neto W, Soares EG, Vieira TL, Aguiar R, Chola TA, Sampaio VL, Gama EF. (2020). *Gluteus maximus activation during common strength and hypertrophy exercises: A systematic review.* J Sports Sci Med, 19(1):195–203. [PubMed 32132843](https://pubmed.ncbi.nlm.nih.gov/32132843/)
   3. Collazo García CL, Rueda J, Suárez Luginick B, Navarro E. (2020). *Differences in the electromyographic activity of lower-body muscles in hip thrust variations.* J Strength Cond Res, 34(9):2449–2455. [DOI](https://doi.org/10.1519/JSC.0000000000002859)
-  4. Kennedy D, Casebolt JB, Farren GL, Fiaud V, Bartlett M, Strong L. (2022/2024). *Electromyographic differences of the gluteus maximus, gluteus medius, biceps femoris, and vastus lateralis between the barbell hip thrust and barbell glute bridge.* Sports Biomech, 23(11):1907–1919. [PubMed 35586943](https://pubmed.ncbi.nlm.nih.gov/35586943/) / [DOI](https://doi.org/10.1080/14763141.2022.2074875)
+  4. Kennedy D, Casebolt JB, Farren GL, Fiaud V, Bartlett M, Strong L. (2024). *Electromyographic differences of the gluteus maximus, gluteus medius, biceps femoris, and vastus lateralis between the barbell hip thrust and barbell glute bridge.* Sports Biomech, 23(12):2935–2949. [PubMed 35586943](https://pubmed.ncbi.nlm.nih.gov/35586943/) / [DOI](https://doi.org/10.1080/14763141.2022.2074875)
 - **可比較量化結果**
   - Contreras et al. (2015, n=13 有訓練女性，估計 10RM)：
     - **上臀大肌平均 EMG**：臀推 **69.5% MVIC** vs 背蹲 **29.4% MVIC**（顯著較高）。
@@ -210,14 +213,14 @@
 ### 13. `glute-bridge` 槓鈴臀橋
 
 - **可靠研究來源**
-  1. Kennedy D et al. (2022/2024). *Electromyographic differences of the gluteus maximus, gluteus medius, biceps femoris, and vastus lateralis between the barbell hip thrust and barbell glute bridge.* Sports Biomech. [PubMed 35586943](https://pubmed.ncbi.nlm.nih.gov/35586943/) / [DOI](https://doi.org/10.1080/14763141.2022.2074875)
+  1. Kennedy D, Casebolt JB, Farren GL, Fiaud V, Bartlett M, Strong L. (2024). *Electromyographic differences of the gluteus maximus, gluteus medius, biceps femoris, and vastus lateralis between the barbell hip thrust and barbell glute bridge.* Sports Biomech, 23(12):2935–2949. [PubMed 35586943](https://pubmed.ncbi.nlm.nih.gov/35586943/) / [DOI](https://doi.org/10.1080/14763141.2022.2074875)
 - **可比較量化結果**
-  - Kennedy et al. (2022, n=10 男性)：
+  - Kennedy et al. (2024, n=10 男性)：
     - **槓鈴臀橋（BGB）**在上下臀大肌的峰值與平均 EMG，以及臀中肌平均 EMG 均**顯著高於槓鈴臀推（BHT）**。
     - **槓鈴臀推（BHT）**在**股外側肌**的峰值與平均 EMG 則**顯著高於槓鈴臀橋（BGB）**（因行程與小腿角度差異）。
 - **可檢驗趨勢**
-  - 臀推股四頭肌（`vasti`）活化 > 槓鈴臀橋（Kennedy 2022, n=10）。
-  - 槓鈴臀橋臀大肌活化 ≥ 臀推（Kennedy 2022, n=10；註：此為同相對負荷 1RM 比例比較，本模型兩者使用相同 `BAR_RATIO.hipthrust`，可藉此檢驗模型幾何與負荷假設）。
+  - 臀推股四頭肌（`vasti`）活化 > 槓鈴臀橋（Kennedy 2024, n=10）。
+  - 槓鈴臀橋臀大肌活化 ≥ 臀推（Kennedy 2024, n=10；註：此為同相對負荷 1RM 比例比較，本模型兩者使用相同 `BAR_RATIO.hipthrust`，可藉此檢驗模型幾何與負荷假設）。
 
 ---
 
@@ -319,11 +322,10 @@
 
 - **可靠研究來源**
   - **直接比較俯身槓鈴正握 vs 反握之期刊全文：未找到**。
-  - **間接參考（前臂旋前／旋後對二頭肌與拉類肌群之影響）**：
-    - Kleiber T, Kunz L, Disselhorst-Klug C. (2015). *Muscular coordination of biceps brachii and brachioradialis in elbow flexion with respect to hand position.* Front Physiol, 6:215. [PubMed 26321946](https://pubmed.ncbi.nlm.nih.gov/26321946/) / [DOI](https://doi.org/10.3389/fphys.2015.00215)
-    - de Abreu Vasconcelos CMW et al. (2023). *Effect of different grip position and shoulder-abduction angle on muscle strength and activation during the seated cable row.* Int J Strength Cond, 3(1). [DOI](https://doi.org/10.47206/ijsc.v3i1.190)
+  - **間接參考（前臂旋前／旋後對屈肘協同肌之影響）**：
+    - Kleiber T, Kunz L, Disselhorst-Klug C. (2015). *Muscular coordination of biceps brachii and brachioradialis in elbow flexion with respect to hand position.* Front Physiol, 6:215. [PubMed 26300781](https://pubmed.ncbi.nlm.nih.gov/26300781/) / [DOI](https://doi.org/10.3389/fphys.2015.00215)（註：該單關節屈肘研究顯示**二頭肌 EMG 在旋前／中立／旋後間無顯著差異**，僅肱橈肌於旋前顯著較高。）
 - **可檢驗趨勢**
-  - 槓鈴划船反握（旋後）之肱二頭肌（`bic`）活化 > 正握（旋前）（由屈肘旋前／旋後力學推論，Kleiber 2015；de Abreu Vasconcelos 2023）。
+  - 目前缺乏直接文獻證明「反握槓鈴划船肱二頭肌 EMG > 正握」；反握較利於肱二頭肌發力屬**解剖推論**（旋前時二頭肌屈肘力臂效率下降），非直接實測文獻結果。
 
 ### 22. `cable-row` 坐姿滑輪划船 & 23. `cable-row-wide` 坐姿滑輪划船（寬握）
 
@@ -333,12 +335,15 @@
   3. Padovan R, Cè E, Longo S, Tornatore G, Trentin C, Esposito F, Coratella G. (2025). *High-density surface electromyography excitation of prime movers in the narrow vs. wide grip seated row exercise.* J Hum Kinet. [DOI](https://doi.org/10.5114/jhk/209550)
 - **可比較量化結果**
   - Lehman et al. (2004)：坐姿划船呈現高「背闊肌／二頭肌」活化比，中斜方肌與菱形肌皆高度活化；刻意強調額外肩胛後收並未顯著再提高中斜方肌峰值 EMG。
-  - de Abreu Vasconcelos et al. (2023) 與 Padovan et al. (2025)：
-    - **窄握／對握（手肘夾緊、低肩外展角）**：產生較高力量輸出並更有效刺激**背闊肌**。
-    - **寬握（正握、手肘外開 60°–90°）**：顯著提升**三角肌後束、中斜方肌與上斜方肌**之肌電活動。
+  - de Abreu Vasconcelos et al. (2023, n=21：11 男 10 女，等長與動態測試)：比較的是**接近 0° 外展之正握（PRO）／反握（SUP）／對握（NEU）**與**肩外展 30°／60°／90°**（研究**未測試 V 把**亦未直接標稱窄 vs 寬握）：
+    - **肩外展角增加（60°、90°）**：**三角肌後束、上斜方肌、中斜方肌**活化上升，但**背闊肌（上下束）與峰值力下降**。
+    - **肩外展角接近 0°（PRO、SUP、NEU）**：**峰值力**與**背闊肌（上下束）**活化較高。
+  - Padovan et al. (2025, n=14 有重訓經驗男性，8RM，HD-sEMG)：直接比較**窄握（narrow-SR）vs 寬握（wide-SR）**坐姿划船：
+    - **窄握**：**背闊肌**在向心與離心期之 EMG 振幅均顯著較高（ES = 1.08）。
+    - **寬握**：**上斜方肌**（向心 ES = 1.35／離心 ES = 2.79）、**中斜方肌**（ES = 1.24／1.44）、**下斜方肌**（ES = 0.90／0.71）、**中／側三角肌**（ES = 1.03／0.58）與**離心期豎脊肌**（ES = 0.65）顯著較高。（註：摘要**未顯示後三角肌振幅較高**，僅報告離心期激發重心偏移。）
 - **可檢驗趨勢**
-  - 寬握坐姿滑輪划船（`grip: 'wide'`）三角肌後束（`pdelt`）與上／中斜方活化 > 窄握 V 把（`grip: 'v'`）（de Abreu Vasconcelos 2023；Padovan 2025）。
-  - 窄握 V 把坐姿滑輪划船背闊肌（`lat`）活化 > 寬握（de Abreu Vasconcelos 2023；Padovan 2025）。
+  - 寬握／高肩外展坐姿滑輪划船（`grip: 'wide'`）三角肌後束（`pdelt`）活化 > 窄握低外展（`grip: 'v'`）（間接來自 de Abreu Vasconcelos 2023 肩外展角 60°–90° > 0° 結果；不歸因於 Padovan 2025）。
+  - 窄握低外展坐姿滑輪划船（`grip: 'v'`）背闊肌（`lat`）活化 > 寬握高外展（`grip: 'wide'`）（Padovan 2025, n=14, ES=1.08；de Abreu Vasconcelos 2023, n=21，低外展角背闊較高）。
 
 ---
 
@@ -349,12 +354,16 @@
 - **可靠研究來源**
   1. McAllister MJ, Schilling BK, Hammond KG, Weiss LW, Farney TM. (2013). *Effect of grip width on electromyographic activity during the upright row.* J Strength Cond Res, 27(1):181–187. [PubMed 22362088](https://pubmed.ncbi.nlm.nih.gov/22362088/) / [DOI](https://doi.org/10.1519/JSC.0b013e31824f23ad)
 - **可比較量化結果**
-  - McAllister et al. (2013, n=16 有重訓經驗男性，以 100% 肩峰寬 1RM 的 85% 測試 **50%、100%、200% 肩峰寬**握距)：
-    - 握距越寬，**三角肌中束、三角肌後束、上斜方肌與中斜方肌**之 EMG 顯著增加。
-    - 握距越寬，**肱二頭肌** EMG 顯著下降。
+  - McAllister et al. (2013, n=16 有重訓經驗男性，以 100% 肩峰寬 1RM 的 85% 測試 **50%、100%、200% 肩峰寬 [BAB]** 握距；量測肌群為**前三角肌 [AD]、側三角肌 [LD]、後三角肌 [PD]、上斜方肌 [UT]、中斜方肌 [MT]、肱二頭肌 [BB]**)：
+    - **側三角肌（LD）**：向心期（50% vs 200%、100% vs 200% BAB）與離心期（所有兩兩比較）均隨握距加寬顯著增加（p < 0.001）。
+    - **後三角肌（PD）**：向心期（50% vs 200%、100% vs 200% BAB）隨握距加寬顯著增加（p < 0.001）。
+    - **前三角肌（AD）**：離心期整體變異數分析達顯著（p = 0.023）。
+    - **上斜方肌（UT）與中斜方肌（MT）**：**僅離心期**達顯著（UT 全部兩兩比較顯著，p < 0.001；MT 於 50% vs 200%、100% vs 200% BAB 顯著，p < 0.001；向心期未達顯著）。
+    - **肱二頭肌（BB）**：隨握距加寬下降，但事後比較**僅離心期 50% vs 200% BAB** 達統計顯著（p = 0.003；向心期未達顯著）。
 - **可檢驗趨勢**
-  - 直立划船寬握（`grip = 1.5`）三角肌中束（`mdelt`）與上斜方肌（`uptrap`）活化 > 窄握（`grip = 0.7`）（McAllister 2013, n=16）。
-  - 直立划船窄握（`grip = 0.7`）肱二頭肌（`bic`）活化 > 寬握（`grip = 1.5`）（McAllister 2013, n=16）。
+  - 直立划船寬握（`grip = 1.5`）側／中三角肌（`mdelt`）活化 > 窄握（`grip = 0.7`）（McAllister 2013, n=16，向心與離心皆顯著，強證據）。
+  - 直立划船寬握（`grip = 1.5`）上斜方肌（`uptrap`）活化 > 窄握（`grip = 0.7`）（McAllister 2013, n=16，**僅離心期顯著**，向心期不顯著）。
+  - 直立划船窄握（`grip = 0.7`）肱二頭肌（`bic`）活化 > 寬握（`grip = 1.5`）（McAllister 2013, n=16，**僅離心期 50% vs 200% BAB 顯著**）。
 
 ### 25. `pulldown` 滑輪下拉 & 26. `pulldown-sup` 反握滑輪下拉
 
@@ -408,26 +417,26 @@
 ### 30. `pushdown` 滑輪三頭下壓
 
 - **可靠研究來源**
-  1. Maeo S, Wu Y, Huang M, Sakurai H, Kusagawa Y, Sugiyama T, Kanehisa H, Isaka T. (2023). *Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position.* Eur J Sport Sci, 23(7):1240–1250. [PubMed 35951743](https://pubmed.ncbi.nlm.nih.gov/35951743/) / [DOI](https://doi.org/10.1080/17461391.2022.2100279)
+  1. Maeo S, Wu Y, Huang M, Sakurai H, Kusagawa Y, Sugiyama T, Kanehisa H, Isaka T. (2023). *Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position.* Eur J Sport Sci, 23(7):1240–1250. [PubMed 35819335](https://pubmed.ncbi.nlm.nih.gov/35819335/) / [DOI](https://doi.org/10.1080/17461391.2022.2100279)
   2. Hussain J, Sundaraj K, Subramaniam ID, Lam CK. (2020). *Muscle fatigue in the three heads of triceps brachii during intensity and speed variations of triceps push-down exercise.* Front Physiol, 11:112. [PubMed 32153422](https://pubmed.ncbi.nlm.nih.gov/32153422/) / [DOI](https://doi.org/10.3389/fphys.2020.00112)
 - **可比較量化結果**
-  - Maeo et al. (2023, 12 週單臂對照 MRI 體積研究)：上臂中立位置（近似三頭下壓）訓練雙關節三頭肌長頭時處於較短長度，其整體三頭肌與長頭肌肥大顯著低於過頭臂舉伸肘位置（過頭伸肘使長頭拉長）。
+  - Maeo et al. (2023, n=21 成人，12 週單手臂內對照設計，70% 1RM、10 下 × 5 組、每週 2 次，MRI 量測肌肉體積)：上臂中立位（近似三頭下壓）訓練雙關節三頭肌長頭時處於較短長度；與中立位相比，過頭伸肘（長頭拉長）在**三頭肌長頭（+28.5% vs +19.6%，1.5 倍）、外側＋內側頭（+14.6% vs +10.5%，1.4 倍）與整體三頭肌（+19.9% vs +13.9%，1.4 倍）**之肌肥大皆顯著較大（儘管過頭位絕對訓練負重低 34%–39%）。
   - Hussain et al. (2020, n=25)：三頭下壓可同步活化三頭肌三頭，且外側頭與內側頭隨負荷與速度變化出現顯著疲勞特徵。
 - **可檢驗趨勢**
-  - 三頭下壓時，手肘前移（`elbFwd` 增加）使肩屈曲角上升，三頭肌長頭（`trilong`）被拉長，且肩伸肌（`lat`）穩定需求改變（Maeo 2023 長度力學）。
+  - 三頭下壓時，手肘前移（`elbFwd` 增加）使肩屈曲角上升，三頭肌長頭（`trilong`）被拉長，且肩伸肌（`lat`）穩定需求改變（Maeo 2023, n=21 長度力學）。
 
 ### 31. `curl` 槓鈴彎舉 & 32. `reverse-curl` 反手彎舉
 
 - **可靠研究來源**
   1. Oliveira AS, Gonçalves M. (2009). *Positioning during resistance elbow flexor exercise affects electromyographic activity, heart rate, and perceived exertion.* J Strength Cond Res, 23(3):854–862. [PubMed 19387393](https://pubmed.ncbi.nlm.nih.gov/19387393/) / [DOI](https://doi.org/10.1519/JSC.0b013e3181a00c25)
-  2. Kleiber T, Kunz L, Disselhorst-Klug C. (2015). *Muscular coordination of biceps brachii and brachioradialis in elbow flexion with respect to hand position.* Front Physiol, 6:215. [PubMed 26321946](https://pubmed.ncbi.nlm.nih.gov/26321946/) / [DOI](https://doi.org/10.3389/fphys.2015.00215)
+  2. Kleiber T, Kunz L, Disselhorst-Klug C. (2015). *Muscular coordination of biceps brachii and brachioradialis in elbow flexion with respect to hand position.* Front Physiol, 6:215. [PubMed 26300781](https://pubmed.ncbi.nlm.nih.gov/26300781/) / [DOI](https://doi.org/10.3389/fphys.2015.00215)
   3. Marcolin G, Panizzolo FA, Petrone N, Moro T, Grigoletto D, Piccolo D, Paoli A. (2018). *Differences in electromyographic activity of biceps brachii and brachioradialis while performing three variants of curl.* PeerJ, 6:e5165. [PubMed 30013836](https://pubmed.ncbi.nlm.nih.gov/30013836/) / [DOI](https://doi.org/10.7717/peerj.5165)
 - **可比較量化結果**
-  - Kleiber et al. (2015, 比較旋後、中立、旋前握法)：前臂**旋前（反手彎舉）**時，肱二頭肌因力臂與解剖繞行處於機械劣勢而活動下降，**肱橈肌（與肱肌）肌電活動顯著增加以代償屈肘力矩**。
+  - Kleiber et al. (2015, n=16 健康受試者，20°/s 單關節屈肘，比較旋後、中立、旋前握法)：**肱二頭肌（biceps brachii）sEMG 活動在三種握法間沒有顯著差異**；僅**肱橈肌（brachioradialis）**於**旋前（正握）**時對屈肘的相對肌電貢獻顯著高於旋後與中立握法（反映二頭肌於旋前處於生物力學劣勢時由肱橈肌代償）。
   - Marcolin et al. (2018)：直槓彎舉與 EZ 曲槓彎舉之二頭肌與肱橈肌向心／離心 EMG 普遍高於啞鈴彎舉。
 - **可檢驗趨勢**
-  - 槓鈴彎舉反握（`supin: 'sup'`）肱二頭肌（`bic`）活化 > 反手彎舉（`supin: 'pro'`）（Kleiber 2015）。
-  - 反手彎舉（`supin: 'pro'`）肱肌／肱橈肌（`brach`）活化 > 槓鈴彎舉（`supin: 'sup'`）（Kleiber 2015）。
+  - 槓鈴彎舉反握（`supin: 'sup'`）肱二頭肌（`bic`）活化 > 反手彎舉（`supin: 'pro'`）：**屬解剖推論**（前臂旋前時二頭肌屈肘效率下降；**非文獻實測結果**，Kleiber 2015 實測顯示二頭肌 EMG 在各握法間無顯著差異）。
+  - 反手彎舉（`supin: 'pro'`）肱肌／肱橈肌（`brach`）活化 > 槓鈴彎舉（`supin: 'sup'`）（Kleiber 2015, n=16；註：文獻實測為肱橈肌，本模型 `brach` 為肱肌＋肱橈肌合併）。
 
 ### 33. `shrug` 槓鈴聳肩
 

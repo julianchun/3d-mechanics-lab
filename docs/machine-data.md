@@ -13,13 +13,13 @@
 | 參數 | 數值／範圍 | 來源與備註 |
 |---|---|---|
 | 滑台軌道傾角 | **45°**（有效重力分量 $\sin 45^\circ \approx 0.7071$） | 標準 45° 掛片腿推機；Escamilla et al. (1998, [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)) 與 Escamilla et al. (2001, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 採用 Body Masters, Inc.（Rayne, LA）設備 |
-| 空滑台重量（Carriage / Sled Weight） | **約 34–57 kg（75–125+ lb）**，視商業廠牌與結構而異 | 商業 45° 腿推機常見空車規格範圍（範圍估計，各廠牌差異大；例如 Hammer Strength Linear Leg Press 等重型商用款空車可達 ~53–60 kg） |
-| 滑台導軌摩擦係數 $\mu$ | 線性培林／滾輪商用機典型動態值約 **0.05–0.15**（視保養與導桿潤滑狀況） | 機械導軌工程範圍估計；**Escamilla 2001 全文內使用之 Body Masters 特定機台實測摩擦係數未查證**（需查原紙本附錄）。注意：摩擦力方向永遠反於運動方向——向心推起時增加阻力 $(mg(\sin\theta + \mu\cos\theta))$，離心下放時減少阻力 $(mg(\sin\theta - \mu\cos\theta))$ |
-| 椅背與座椅夾角 | 常見可調範圍：靠背與水平約 **25°–45°**（即離垂直約 **45°–65°**） | 商用機典型調整範圍；目前模型 `seat` 參數為離垂直 35°–65°（預設 50°），涵蓋商用常見區間 |
-| 腳位與關節角度（Escamilla 2001 & Da Silva 2008） | 高腳位（LPH）：髖屈曲角度較大、膝屈曲相對較小、踝背屈較小 → 臀大肌與膕繩肌活化高；低腳位（LPL）：膝屈曲與踝背屈較大 → 股四頭肌負荷較高 | Escamilla et al. (2001, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/))；Da Silva et al. (2008, [PubMed 18545207](https://pubmed.ncbi.nlm.nih.gov/18545207/))；受試者一般操作於膝屈約 0°–100° |
+| 空滑台重量（Carriage / Sled Weight） | 約 34–57 kg（75–125+ lb）；重型商用款（如 Hammer Strength Linear Leg Press）約 53–60 kg（**無出處的假設**） | **無出處的假設**（未查核單一原廠規格表或同儕審查實測值，僅為常見商用範圍估計；各廠牌結構差異大，實際使用應查該型號手冊） |
+| 滑台導軌摩擦係數 $\mu$ | 線性培林／滾輪動態值約 0.05–0.15（**無出處的假設**） | **無出處的假設**；**Escamilla 2001 全文內使用之 Body Masters 特定機台實測摩擦係數未查證**（需查原紙本附錄）。注意：摩擦力方向永遠反於運動方向——向心推起時增加阻力 $(mg(\sin\theta + \mu\cos\theta))$，離心下放時減少阻力 $(mg(\sin\theta - \mu\cos\theta))$ |
+| 椅背與座椅夾角 | 常見可調範圍：靠背與水平約 25°–45°（即離垂直約 45°–65°）（**無出處的假設**） | **無出處的假設**（未查單一原廠規格書）；目前模型 `seat` 參數為離垂直 35°–65°（預設 50°） |
+| 腳位與肌電／關節變化（Escamilla 2001 與 Da Silva 2008 分別支持） | • **寬站距＋高腳位（WS-LPH）**：膕繩肌 EMG 高於窄站距＋高腳位（NS-LPH）；LPH 與 LPL 之間膝關節受力無顯著差異（Escamilla 2001，**未量臀大肌**）<br>• **高腳位（LPH）vs 低腳位（LPL）**：高腳位之**臀大肌** EMG 顯著高於低腳位；低腳位於高負荷（80% 1RM）下**股四頭肌（股直肌、股外側肌）**高於高腳位（Da Silva 2008） | Escamilla et al. (2001, n=10 男性, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 只支持「寬站距＋高腳位 → 膕繩肌較多」；臀大肌與低腳位股四頭肌差異由 Da Silva et al. (2008, n=14 女性, [PubMed 18545207](https://pubmed.ncbi.nlm.nih.gov/18545207/)) 支持 |
 
 ### 1.2 與現行模型差異（供後續校正參考）
-- 現行 `src/biomech.js` 採 45° 軌道且忽略導軌摩擦（僅算 $\sin 45^\circ$），準靜態下屬合理一階近似；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu \approx 0.05\text{–}0.10$）。
+- 現行 `src/biomech.js` 採 45° 軌道且忽略導軌摩擦（僅算 $\sin 45^\circ$），準靜態下屬合理一階近似；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu$ 數值屬無出處的假設，需以實機測力校正）。
 
 ---
 
@@ -91,13 +91,13 @@
   1. Knapik JJ et al. (1983). [PubMed 6856681](https://pubmed.ncbi.nlm.nih.gov/6856681/)
   2. Kulig K et al. (1984). [PubMed 6376139](https://pubmed.ncbi.nlm.nih.gov/6376139/)
   3. Onishi H, Yagi R, Oyama M, Akasaka K, Ihashi K, Hoshimiya N. (2002). *EMG-angle relationship of the hamstring muscles during maximum knee flexion.* J Electromyogr Kinesiol, 12(5):399–406. [PubMed 12223173](https://pubmed.ncbi.nlm.nih.gov/12223173/) / [DOI](https://doi.org/10.1016/s1050-6411(02)00033-0)
-  4. Mohamed O / 2019 多角度等長研究：*Medial and lateral hamstrings response and force production at varying degrees of knee flexion and tibial rotation in healthy individuals.* Int J Sports Phys Ther, 14(3):376–383 (2019). [PubMed 31263590](https://pubmed.ncbi.nlm.nih.gov/31263590/)
+  4. Beyer EB, Lunden JB, Russell Giveans M. (2019). *Medial and lateral hamstrings response and force production at varying degrees of knee flexion and tibial rotation in healthy individuals.* Int J Sports Phys Ther, 14(3):376–383. [PubMed 31681497](https://pubmed.ncbi.nlm.nih.gov/31681497/) / [DOI](https://doi.org/10.26603/ijspt20190376)
 
 #### 人體膝屈（Hamstrings）角度 → 相對力矩趨勢表
 
 | 膝屈曲角度 | 相對力矩趨勢（% Peak Torque） | 說明 |
 |---|---|---|
-| **15°–30°**（接近伸直、拉長端） | **100%（峰值區間）** | 膕繩肌處於較長肌肉長度且力臂有利，等長／等速屈膝力矩最大（Kulig 1984；Onishi 2002；PMID 31263590） |
+| **15°–30°**（接近伸直、拉長端） | **100%（峰值區間）** | 膕繩肌處於較長肌肉長度且力臂有利，等長／等速屈膝力矩最大（Kulig 1984；Onishi 2002；Beyer 2019） |
 | **45°–60°**（中段） | **中段遞減（約 70%–85%，範圍估計）** | 隨膝屈曲增加、膕繩肌縮短，力矩單調遞減（精確百分比受髖角度——坐姿 vs 俯臥——顯著影響，未查得跨姿態單一標準值） |
 | **75°–90°**（深屈、縮短端） | **顯著最低（約 45%–65%，範圍估計）** | 尤其在**俯臥（髖伸展）**時進入主動不足（active insufficiency），末端力矩掉落更劇烈；**坐姿（髖屈曲 ~90°）**能保留較長肌纖維與較高絕對力矩 |
 
@@ -118,7 +118,7 @@
 #### (B) Nautilus 經典凸輪分析（Harman 1983；Cabell & Zebas 1999）
 - **來源**：
   - Harman EA. (1983). *Resistive torque analysis of 5 Nautilus exercise machines.* Med Sci Sports Exerc, 15(5):113.
-  - Cabell L, Zebas CJ. (1999). *Resistive torque validation of the Nautilus Multi-Biceps machine.* J Strength Cond Res, 13(1):20–23. [PubMed 10626359](https://pubmed.ncbi.nlm.nih.gov/10626359/)
+  - Cabell L, Zebas CJ. (1999). *Resistive torque validation of the Nautilus Multi-Biceps machine.* J Strength Cond Res, 13(1):20–23. [DOI](https://doi.org/10.1519/00124278-199902000-00004)（1999 年 JSCR 尚未收錄於 PubMed）
 - **重點**：Arthur Jones 的 Nautilus 凸輪原始設計理念即為「改變凸輪半徑（力臂）以匹配人體關節強度曲線」（膝伸設計目標為中段高、末端低），但實測（Harman 1983；Folland & Morris 2008）發現早期與商用多數凸輪在行程兩端仍明顯偏離人體真實曲線。
 
 #### (C) VMAC®（Variable Moment Arm Cam）新型可調凸輪驗證（2026）
