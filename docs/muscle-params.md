@@ -75,11 +75,11 @@
 
 ## 長度尺度檢查
 
-現行出力使用 `l=1+ΔLmt/Lmt` 代理長度，其中 `ΔLmt=-Σ r(q)·(q-qref)`。主動力長曲線改為 `fl=exp[-(l-1)²/0.45]`，採 [OpenSim Thelen2003Muscle](https://github.com/opensim-org/opensim-core/blob/main/OpenSim/Actuators/Thelen2003Muscle.cpp) 的 Gaussian 形式與預設 `KshapeActive=0.45`；舊有 `fl≥0.35` 人為下限已移除。**這個輸入仍非肌纖維長度，因此不能稱為完整 Thelen 模型。**
+現行出力使用 `l=1+ΔLmt/Lmt` 代理長度，其中隨角度變化的力臂沿自由度區間數值積分 `ΔLmt=-Σ ∫ r(θ) dθ`（常數力臂等同 `-r·(q-qref)`）。主動力長曲線改為 `fl=exp[-(l-1)²/0.45]`，採 [OpenSim Thelen2003Muscle](https://github.com/opensim-org/opensim-core/blob/main/OpenSim/Actuators/Thelen2003Muscle.cpp) 的 Gaussian 形式與預設 `KshapeActive=0.45`；舊有 `fl≥0.35` 人為下限已移除。**這個輸入仍非肌纖維長度，因此不能稱為完整 Thelen 模型。**
 
 另從 R／U 模型檔取得 `Lt` 與最佳長度羽狀角 `alpha`，實作剛性肌腱診斷值 `lRigid=(Lt+Lf·cos(alpha)+ΔLmt-Lt)/(Lf·cos(alpha))`，由 `analyze().mus[id].lRigid` 提供。剛性肌腱下 `Lt` 在位移計算中相消，但仍用來建立初始肌腱肌肉長度。若直接把此值投入出力，臀橋頂點膕繩肌約 `lRigid=0.01`、腿推最低點脛前肌約 `0.66`，造成多處 `a>1` 與趨勢只剩 31／42；原因是現有 `qref`、簡化力臂、包覆路徑與肌束合併不足以決定真實纖維長度。因此診斷值**沒有**投入力量分配。剛性肌腱長度要成為出力模型，尚需校正各肌束的參考肌腱肌肉長、包覆路徑與腱順應性。
 
-胸肌在舊長度代理下，直立划船起段產生異常大的被動內收力矩，迫使棘下肌代償；目前胸肌被動張力暫設為零，直到路徑校準。彎舉上臂貼身時，肩外展投影也不可靠；仍報告原始外展力矩需求，但不把它放進肌肉分配約束。這些處理不是文獻的生理參數。
+所有肌肉一律套用相同的被動張力公式與完整的動作自由度約束（已移除胸大肌被動張力特例與彎舉 `shAbd` 排除）；剛體槓橫向互推力統一採 `minimizeAxialMoment()` 最小化肩與肘力矩平方和。剩餘的模型偏差（例如彎舉／反手彎舉的二頭肌與喙肱肌偏高、聳肩喙肱肌偏高、直立划船棘下肌居首）如實輸出並列於 `tests/plausibility.mjs` 的 `KNOWN_ISSUES`。
 
 ## 力臂逐項資料
 

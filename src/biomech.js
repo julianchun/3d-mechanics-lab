@@ -1226,19 +1226,22 @@ function twoContactReactions(pose, P, W, out) {
 // 阻力的種類：自由重量（重力，方向固定）、滑輪（朝向滑輪，大小固定）、導軌（只能沿軌道方向，垂直方向由機器承受）、
 // 槓桿／凸輪（繞機器轉軸的力矩隨角度改變）。坐在器械上的動作，椅墊／靠墊承受身體，不算地面反作用力。
 
-// 滑輪：手上的力 = 配重 × 方向（槓中心 → 滑輪）；ext = 外力（站姿時影響壓力中心與腳底摩擦）
-function cableLoads(pose, P, W, out) {
-  const T = (pose.barW * W) / 2;
-  const d = norm(sub(pose.pulley, [0, pose.bar[1], pose.bar[2]]));
-  const F = mul(d, T);
-  // 雙手握同一根剛體握把：兩手之間可以互推／互拉（左右方向，左右相消），
-  // 取讓肩＋肘關節力矩平方和最小的那個橫向力（上限為拉力的一半）
+// 同一根剛體握把的兩手可沿槓軸互推／互拉；取肩與肘力矩平方和最小的橫向力。
+function minimizeAxialMoment(pose, F, limit) {
   let ab = 0, bb = 0;
   for (const J of [pose.R.shoulder, pose.R.elbow]) {
     const r = sub(pose.R.hand, J), a = cross(r, F), b = cross(r, [1, 0, 0]);
     ab += dot(a, b); bb += dot(b, b);
   }
-  F[0] += clamp(-ab / (bb || 1), -0.5 * T, 0.5 * T);
+  F[0] += clamp(-ab / (bb || 1), -limit, limit);
+}
+
+// 滑輪：手上的力 = 配重 × 方向（槓中心 → 滑輪）；ext = 外力（站姿時影響壓力中心與腳底摩擦）
+function cableLoads(pose, P, W, out) {
+  const T = (pose.barW * W) / 2;
+  const d = norm(sub(pose.pulley, [0, pose.bar[1], pose.bar[2]]));
+  const F = mul(d, T);
+  minimizeAxialMoment(pose, F, 0.5 * T);
   out.push({ p: pose.R.hand, F, region: 'fore', ext: true });
   pose.forceLine = { p: pose.R.hand, d };
 }
@@ -1590,11 +1593,7 @@ function barInHandsLoads(pose, P, W, out) {
 
 function handBarLoads(pose, P, W, out) {
   const F = [0, -(pose.barW * W) / 2, 0];
-  // 垂手握槓：槓是剛體，兩手之間可以互推／互拉，讓手上的合力在額狀面指向肩膀（三角肌不必撐住手臂外展）
-  if (pose.barAxial) {
-    const R = pose.R, dy = R.shoulder[1] - R.hand[1];
-    if (dy > 0.2) F[0] = clamp((-F[1] * (R.hand[0] - R.shoulder[0])) / dy, -0.3 * -F[1], 0.3 * -F[1]);
-  }
+  if (pose.barAxial) minimizeAxialMoment(pose, F, -F[1] * 0.5);
   out.push({ p: pose.R.hand, F, region: 'fore' });
 }
 
@@ -1753,8 +1752,6 @@ export function analyze(lift, P, e) {
 
   const q = jointAngles(pose);
   const muscles = liftMuscles(lift);
-  // 彎舉上臂貼身時額狀面肩外展投影不可靠；仍報告原始需求，但不把它當成肌肉分配約束。
-  const solveDofs = lift === 'curl' ? dofs.filter((d) => d !== 'shAbd') : dofs;
   // 偏好與共同收縮
   const pref = Object.fromEntries(muscles.map((m) => [m.id, 1]));
   for (const p of L.params) {
@@ -1768,12 +1765,45 @@ export function analyze(lift, P, e) {
   L.lowerBounds?.(P, lb);
   L.adjust?.(P, pref);
 
+  // 由力臂定義 r(θ) = -∂L/∂θ，對隨角度變化的力臂沿自由度區間積分 ΔL = -∫ r(θ) dθ，
+  // 避免端點力臂劇烈變化時以 r(q)·(q - q_ref) 放大位移與被動張力。
+  const DOF_ANGLE_MAP = {
+    hipExt: ['hipFlex', -1], kneeExt: ['kneeFlex', -1], ankPF: ['ankleDorsi', -1],
+    shFlex: ['shFlex', 1], shAbd: ['shAbd', 1], elbExt: ['elbFlex', -1],
+  };
+  const qSample = { ...q };
+  const integrateArm = (armFn, key, sign, lo, hi) => {
+    const dq = hi - lo;
+    if (!dq) return 0;
+    const N = 8, step = dq / N, prev = qSample[key];
+    let sum = 0;
+    for (let k = 0; k < N; k++) {
+      qSample[key] = sign * (lo + (k + 0.5) * step);
+      sum += armFn(qSample);
+    }
+    qSample[key] = prev;
+    return -(sum / N) * dq;
+  };
+  const dofDisplacement = (arm, d) => {
+    if (!arm) return 0;
+    const q0 = DOF_REF[d] ?? 0, q1 = q.dof[d] ?? q0, dq = q1 - q0;
+    if (!dq) return 0;
+    if (typeof arm !== 'function') return -arm * dq;
+    const mapped = DOF_ANGLE_MAP[d];
+    if (!mapped) return -arm(q) * dq;
+    const [key, sign] = mapped;
+    // 跨越 0° 時拆兩段積分，避免分段力臂在 0° 附近產生數值誤差
+    return (q0 < 0) !== (q1 < 0)
+      ? integrateArm(arm, key, sign, q0, 0) + integrateArm(arm, key, sign, 0, q1)
+      : integrateArm(arm, key, sign, q0, q1);
+  };
+
   const info = muscles.map((m) => {
-    const arms = solveDofs.map((d) => { const a = m.arms[d]; return typeof a === 'function' ? a(q) : a || 0; });
+    const arms = dofs.map((d) => { const a = m.arms[d]; return typeof a === 'function' ? a(q) : a || 0; });
     let displacement = 0;
-    solveDofs.forEach((d, j) => { if (arms[j]) displacement -= arms[j] * (q.dof[d] - DOF_REF[d]); });
+    dofs.forEach((d) => { displacement += dofDisplacement(m.arms[d], d); });
     // optDofs：不分析力矩、但關節角度仍影響肌肉長度（例如坐姿腿彎舉時髖屈曲拉長膕繩肌）
-    for (const d of L.optDofs || []) { let r = m.arms[d]; r = typeof r === 'function' ? r(q) : r || 0; if (r) displacement -= r * ((q.dof[d] ?? DOF_REF[d]) - DOF_REF[d]); }
+    for (const d of L.optDofs || []) displacement += dofDisplacement(m.arms[d], d);
     const geometry = FIBER_GEOMETRY[m.id];
     // 剛性肌腱：Lmt0=Lt+Lf cos(alpha)，Lf_now≈(Lmt0+ΔLmt-Lt)/cos(alpha)。
     // 羽狀角暫固定在最佳長度值；此值用於診斷，尚未求解腱伸長與羽狀角隨收縮變化。
@@ -1784,18 +1814,17 @@ export function analyze(lift, P, e) {
     const l = legacyLength;
     // 採 Thelen2003Muscle 的 Gaussian 形式與 KshapeActive=0.45，輸入仍是現有 Lmt 長度代理，尚非真實纖維長。
     const fl = Math.exp(-((l - 1) ** 2) / 0.45);
-    // 胸肌的舊路徑代理在直立划船起段產生虛假的大量被動內收力矩；缺少可驗證路徑前不計其被動力。
-    const pas = ['pecs', 'pecc'].includes(m.id) ? 0 : l <= 1.15 ? 0 : Math.min(0.8, 0.5 * ((l - 1.15) / 0.45) ** 2);
+    const pas = l <= 1.15 ? 0 : Math.min(0.8, 0.5 * ((l - 1.15) / 0.45) ** 2);
     const Feff = m.F * fl;
     return { m, arms, l, lRigid: rigidFiberLength, pas, A: arms.map((r) => r * Feff), F: m.F };
   });
-  const b0 = solveDofs.map((d, j) => (dem[d] || 0) - info.reduce((s, x) => s + x.pas * x.F * x.arms[j], 0));
+  const b0 = dofs.map((d, j) => (dem[d] || 0) - info.reduce((s, x) => s + x.pas * x.F * x.arms[j], 0));
   const act = Object.fromEntries(info.map((x) => [x.m.id, 0]));
   const fixed = new Set();
   for (let it = 0; it < 80; it++) {
     const free = info.filter((x) => !fixed.has(x.m.id));
     const b = b0.map((v, j) => v - info.filter((x) => fixed.has(x.m.id)).reduce((s, x) => s + act[x.m.id] * x.A[j], 0));
-    const n = solveDofs.length;
+    const n = dofs.length;
     const K = Array.from({ length: n }, () => Array(n).fill(0));
     let tr = 0;
     for (const x of free) {
