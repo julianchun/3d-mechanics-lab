@@ -227,6 +227,8 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
     pose: hipThrustPose, loads: barOnPelvisLoads, reactions: twoContactReactions,
     moving: ['hipExt'],
+    // 臀推／臀橋時膝保持屈曲，膕繩肌髖伸貢獻較低；依 EMG 趨勢給臀大肌較高分配偏好。
+    adjust: (_P, pref) => { if (pref.gmax !== undefined) pref.gmax *= 3; },
     params: [
       { key: 'surface', label: '上背靠在', type: 'select', options: [['bench', '臥推椅（臀推）'], ['floor', '地板（臀橋）']], def: 'bench', joint: 'equip', mech: 'A' },
       { key: 'kneeTop', label: '頂點膝角度（腳的位置）', left: '60°（腳放遠）', right: '140°（腳放很近）', min: 60, max: 140, step: 1, def: 90, joint: 'knee', mech: 'A', unit: '°' },
@@ -388,7 +390,8 @@ const hipFit = (a, b, c) => (q) => {
 // 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/muscle-params.md。
 const angleSlope = (base, key, per90) => (q) => base + per90 * clamp((q[key] || 0) / rad(90), -0.5, 1.7);
 export const MUSCLES = [
-  { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 9594.0, Lf: 0.0986, Lmt: 0.3101, arms: { kneeExt: angleSlope(0.045, 'kneeFlex', 0.005) } },
+  // R 三束原始 F=9594 N 對本模型膝伸軸的理論力矩過高；按單側等長膝伸力矩校正有效能力。
+  { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 5000, Lf: 0.0986, Lmt: 0.3101, arms: { kneeExt: angleSlope(0.045, 'kneeFlex', 0.005) } },
   { id: 'rf', name: '股直肌', F: 2191.7, Lf: 0.0759, Lmt: 0.5244, arms: { kneeExt: angleSlope(0.04, 'kneeFlex', 0.004), hipExt: -0.035 } },
   { id: 'hams', name: '膕繩肌', F: 4105.5, Lf: 0.0960, Lmt: 0.4220, arms: { hipExt: angleSlope(0.06, 'hipFlex', -0.01), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
   // 臀大肌的直線弦在深屈髖時穿過骨盆，90° 以後甚至反轉；保留原先繞行估計，避免用錯誤幾何外插。
@@ -400,29 +403,32 @@ export const MUSCLES = [
   { id: 'gas', name: '腓腸肌', F: 4690.6, Lf: 0.0536, Lmt: 0.4447, arms: { ankPF: angleSlope(0.05, 'ankleDorsi', 0.005), kneeExt: angleSlope(-0.02, 'kneeFlex', -0.003) } },
   { id: 'sol', name: '比目魚肌', F: 6194.8, Lf: 0.0440, Lmt: 0.3208, arms: { ankPF: angleSlope(0.05, 'ankleDorsi', 0.005) } },
   { id: 'ta', name: '脛前肌', F: 1227.5, Lf: 0.0683, Lmt: 0.3088, arms: { ankPF: angleSlope(-0.04, 'ankleDorsi', 0.004) } },
-  { id: 'erec', name: '豎脊肌', F: 1285, Lf: 0.0808, Lmt: 0.1947, arms: { trunkExt: 0.0465 } },
-  { id: 'ra', name: '腹直肌', F: 261, Lf: 0.2986, Lmt: 0.3796, arms: { trunkExt: -0.0635 } },
+  // 軀幹單條代表同側所有伸／屈肌的功能群；依最大等長軀幹力矩校正總能力，非單一肌束的 OpenSim F。
+  { id: 'erec', name: '腰背伸肌群', F: 5000, Lf: 0.0808, Lmt: 0.1947, arms: { trunkExt: 0.0465 } },
+  { id: 'ra', name: '腹部屈肌群', F: 1250, Lf: 0.2986, Lmt: 0.3796, arms: { trunkExt: -0.0635 } },
   { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shHAdd: hadd(0.07), shFlex: (q) => 0.055 - 0.05 * clamp(q.shFlex / rad(110), 0, 1), scElev: -0.025 } },
   // 上胸：手臂舉過約 100° 之後屈曲力臂逐漸消失
   { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shHAdd: hadd(0.04), shFlex: (q) => 0.035 * clamp((rad(150) - q.shFlex) / rad(50), 0, 1) } },
   { id: 'adelt', name: '三角肌前束', F: 1218.9, Lf: 0.0976, Lmt: 0.1906, arms: { shFlex: angleSlope(0.035, 'shFlex', 0.008), shHAdd: hadd(0.02), shAbd: 0.012 } },
   { id: 'pdelt', name: '三角肌後束', F: 201.6, Lf: 0.1367, Lmt: 0.1747, arms: { shFlex: angleSlope(-0.025, 'shFlex', -0.004), shHAdd: hadd(-0.04), shAbd: 0.012 } },
   // 背闊肌從軀幹接到肱骨、跨過肩胛：也是肩帶的主要下壓肌（scElev 負力臂）
-  { id: 'lat', name: '背闊肌', F: 797.0, Lf: 0.2513, Lmt: 0.3986, opt: ['shHAdd'], arms: { shFlex: (q) => -0.05 * clamp((rad(170) - q.shFlex) / rad(80), 0.15, 1), shAbd: (q) => -0.035 * clamp(q.shAbd / rad(60), 0.2, 1), shHAdd: hadd(-0.02), scElev: -0.04 } },
+  // 肩伸與肘伸的功能群總能力依單側最大等長力矩交叉檢查；模型肌束 F 不直接等於受試者測得力矩。
+  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, opt: ['shHAdd'], arms: { shFlex: (q) => -0.05 * clamp((rad(170) - q.shFlex) / rad(80), 0.15, 1), shAbd: (q) => -0.035 * clamp(q.shAbd / rad(60), 0.2, 1), shHAdd: hadd(-0.02), scElev: -0.04 } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFlex: -0.02 } },
-  { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1435.0, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
-  { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFlex: 0.012 } },
+  { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1600, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
+  // 肱二頭肌的肩屈作用在高舉時減弱；固定正力臂會使反握下拉起段錯誤地壓低二頭肌。
+  { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFlex: (q) => 0.012 * clamp((rad(60) - q.shFlex) / rad(60), 0, 1) } },
   { id: 'brach', name: '肱肌／肱橈肌', F: 1453.4, Lf: 0.1023, Lmt: 0.1709, arms: { elbExt: angleSlope(-0.025, 'elbFlex', -0.006) } },
   // 起點在肩胛骨的肩內收肌：不跨肩胛胸廓，單純提供內收（避免只有背闊肌能內收、牽動整串副作用）
   { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: { shFlex: -0.025, shAbd: -0.03 } },
   { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFlex: 0.015, shAbd: -0.02 } },
-  { id: 'infra', name: '棘下肌／小圓肌', F: 1345.3, Lf: 0.0752, Lmt: 0.1141, arms: { shHAdd: (q) => -0.025 * Math.max(axial(q), q.haddW ?? 1) } },
+  { id: 'infra', name: '棘下肌／小圓肌', F: 1800, Lf: 0.0752, Lmt: 0.1141, arms: { shHAdd: (q) => -0.025 * Math.max(axial(q), q.haddW ?? 1) } },
   { id: 'subsc', name: '肩胛下肌', F: 1306.9, Lf: 0.0873, Lmt: 0.1203, arms: { shHAdd: (q) => 0.025 * axial(q) } },
   // 以下只在有分析肩外展與肩胛的動作出現（划船、肩推）
-  { id: 'mdelt', name: '三角肌中束', F: 1103.5, Lf: 0.1078, Lmt: 0.2173, arms: { shAbd: (q) => 0.02 + 0.015 * clamp(q.shAbd / rad(60), 0, 1) } },
+  { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shAbd: (q) => 0.02 + 0.015 * clamp(q.shAbd / rad(60), 0, 1) } },
   // 肩胛：力臂相對胸鎖關節；scRet = 後收、scElev = 上提（含上旋）
   { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: { scRet: 0.07 } },
-  { id: 'uptrap', name: '斜方肌上束', F: 900, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
+  { id: 'uptrap', name: '斜方肌上束', F: 1500, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
   { id: 'lowtrap', name: '斜方肌下束', F: 500, Lf: 0.15, arms: { scElev: -0.035, scRet: 0.05 } },
   { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: { scRet: -0.07, scElev: 0.03 } },
 ];
