@@ -4,6 +4,7 @@
 //   node tools/review-sheet.mjs              # 自動啟動 port 5191 的 vite 開發伺服器
 //   node tools/review-sheet.mjs --url http://localhost:5191/
 //   node tools/review-sheet.mjs --publish    # 同步複製到 dist/review/（不重啟 4173）
+//   node tools/review-sheet.mjs --port 5196 --resume  # 同一版程式中斷後沿用已完成圖片
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,16 +38,17 @@ function loadPlaywright() {
 }
 
 function parseArgs(argv) {
-  const opts = { url: null, port: DEFAULT_PORT, publish: false };
+  const opts = { url: null, port: DEFAULT_PORT, publish: false, resume: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--publish') opts.publish = true;
+    else if (a === '--resume') opts.resume = true;
     else if (a === '--url' && argv[i + 1]) opts.url = argv[++i];
     else if (a.startsWith('--url=')) opts.url = a.slice(6);
     else if (a === '--port' && argv[i + 1]) opts.port = Number(argv[++i]);
     else if (a.startsWith('--port=')) opts.port = Number(a.slice(7));
     else if (a === '-h' || a === '--help') {
-      console.log('用法: node tools/review-sheet.mjs [--url <URL>] [--port 5191] [--publish]');
+      console.log('用法: node tools/review-sheet.mjs [--url <URL>] [--port 5191] [--publish] [--resume]');
       process.exit(0);
     } else {
       throw new Error(`未知參數：${a}`);
@@ -410,8 +412,8 @@ async function main() {
     if (customExe && fs.existsSync(customExe)) launchOpts.executablePath = customExe;
 
     browser = await chromium.launch(launchOpts);
-    // 伺服器與瀏覽器都就緒後才清除舊圖片（避免失敗時留下空資料夾），並移除已刪除動作的孤兒檔案
-    for (const f of fs.readdirSync(IMG_DIR)) {
+    // 一般模式在就緒後清除舊圖片；續拍只沿用同一版程式的圖片。
+    if (!opts.resume) for (const f of fs.readdirSync(IMG_DIR)) {
       if (f.endsWith('.png')) fs.unlinkSync(path.join(IMG_DIR, f));
     }
     // viewport 寬 600、高 1000（#stage 為 50dvh → canvas 約 600×500）
@@ -447,26 +449,30 @@ async function main() {
       const info = analyzeItem(entry);
       const shots = [];
 
-      // 還原該動作的內建預設並切換到該清單項目
-      await page.evaluate(({ id, lift, def }) => {
-        const m = window.__mm;
-        m.state.params[lift] = structuredClone(def);
-        m.pick(id);
-        m.state.playing = false;
-      }, { id: entry.id, lift: entry.lift, def: initDefaults[entry.lift] });
+      const missing = SHOT_SPECS.filter((spec) => !opts.resume || !fs.existsSync(path.join(IMG_DIR, `${entry.id}-${spec.key}.png`)));
+      if (missing.length) {
+        // 還原該動作的內建預設並切換到該清單項目
+        await page.evaluate(({ id, lift, def }) => {
+          const m = window.__mm;
+          m.state.params[lift] = structuredClone(def);
+          m.pick(id);
+          m.state.playing = false;
+        }, { id: entry.id, lift: entry.lift, def: initDefaults[entry.lift] });
+      }
 
       for (const spec of SHOT_SPECS) {
-        await page.evaluate(({ t, view }) => {
-          const m = window.__mm;
-          m.state.playing = false;
-          m.state.t = t;
-          m.setView(view);
-        }, { t: spec.t, view: spec.view });
-        // 等待 2 幀確保 WebGL 畫面以新姿勢與新視角完成繪製
-        await waitFrames(page, 2);
-
         const filename = `${entry.id}-${spec.key}.png`;
-        await canvas.screenshot({ path: path.join(IMG_DIR, filename) });
+        if (missing.includes(spec)) {
+          await page.evaluate(({ t, view }) => {
+            const m = window.__mm;
+            m.state.playing = false;
+            m.state.t = t;
+            m.setView(view);
+          }, { t: spec.t, view: spec.view });
+          // 等待 2 幀確保 WebGL 畫面以新姿勢與新視角完成繪製
+          await waitFrames(page, 2);
+          await canvas.screenshot({ path: path.join(IMG_DIR, filename) });
+        }
         shots.push({
           key: spec.key,
           label: spec.label,

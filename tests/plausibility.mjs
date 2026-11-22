@@ -11,11 +11,11 @@ const RANKS = {
   deadlift: { top3: ['erec', 'hams', 'gmax'] }, 'deficit-dl': { top3: ['erec', 'hams', 'gmax'] },
   'block-pull': { top3: ['erec', 'hams', 'gmax'] }, sumo: { top3: ['erec', 'hams', 'gmax'] },
   'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top2: ['gmax'] },
-  bench: { top3: ['pecs'] }, 'incline-bench': { top3: ['pecs'] }, 'cg-bench': { top3: ['trilat'] },
-  'floor-press': { top3: ['pecs'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top3: ['adelt'] },
-  pulldown: { first: ['lat'] }, 'pulldown-sup': { first: ['lat'] },
-  row: { top3: ['lat', 'midtrap'] }, 'row-sup': { top3: ['lat', 'midtrap'] },
-  'cable-row': { top3: ['lat', 'midtrap'] }, 'cable-row-wide': { top3: ['lat', 'midtrap'] },
+  bench: { first: ['pecs'] }, 'incline-bench': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'cg-bench': { top3: ['trilat'] },
+  'floor-press': { first: ['pecs'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
+  pulldown: { first: ['lat'], notTop4: ['pecs'] }, 'pulldown-sup': { first: ['lat'], notTop4: ['pecs'] },
+  row: { within: { lat: 4, midtrap: 4 } }, 'row-sup': { within: { lat: 4, midtrap: 4 } },
+  'cable-row': { within: { lat: 4, midtrap: 4 } }, 'cable-row-wide': { within: { lat: 4, midtrap: 4 } },
   curl: { first: ['bic', 'brach'] }, 'reverse-curl': { first: ['bic', 'brach'] },
   pushdown: { first: ['trilat', 'trilong'] }, 'leg-ext': { first: ['vasti'] },
   'leg-curl': { first: ['hams'] }, 'lying-leg-curl': { first: ['hams'] }, shrug: { first: ['uptrap'] },
@@ -26,47 +26,37 @@ const RANKS = {
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
   {
-    id: 'row', rule: 'rank:top3',
-    current: '前三名 infra、mdelt、uptrap；lat 第五',
-    cause: '肩胛等效軸與旋轉肌袖分配尚未校準',
-    fix: '校準肩胛後收軸與肩水平力矩模型',
-  },
-  {
-    id: 'row-sup', rule: 'rank:top3',
-    current: '前三名 infra、mdelt、uptrap；lat 第五',
-    cause: '肩胛等效軸與旋轉肌袖分配尚未校準',
-    fix: '校準肩胛後收軸與肩水平力矩模型',
-  },
-  {
-    id: 'cable-row-wide', rule: 'rank:top3',
-    current: '前三名 mdelt、uptrap、erec；midtrap 第五',
-    cause: '寬握肩胛與肩關節分配讓中三角、上斜方與旋轉肌袖偏高',
-    fix: '校準肩胛等效軸、握把力線與肩肌力臂',
-  },
-  {
     id: 'uprow', rule: 'rank:notFirst',
-    current: '第一名 infra（峰值 s≈0.832，未超載）',
-    cause: '缺少肱骨內外旋自由度而以旋轉肌袖承擔肩水平力矩，且上臂近水平側舉時 shFlex 矢狀面投影接近奇異點，拉高胸肌被動張力',
-    fix: '加入肱骨旋轉自由度並重設肩三維角度與胸肌路徑模型',
-  },
-  {
-    id: 'curl', rule: 'activation:bic',
-    current: '肱二頭肌峰值 a≈1.236（e=0.575）',
-    cause: '三角肌前束固定肩外展力臂（+12 mm）在高肩屈、低外展需求下產生過多外展力矩，現有肌肉集僅小型喙肱肌（208 N）能在不對抗肩屈的前提下平衡內收，迫使二頭肌分擔更多肩屈力矩',
-    fix: '補齊胸大肌肩內收力臂並依解剖路徑校準肩前束／喙肱肌三維力臂',
-  },
-  {
-    id: 'reverse-curl', rule: 'activation:corb',
-    current: '喙肱肌峰值 a≈1.197（e=0.625）',
-    cause: '反手彎舉降低二頭肌偏好後，前三角肌承擔更多肩屈並產生多餘外展力矩，全數壓在小型喙肱肌（208 N）內收平衡',
-    fix: '補齊胸大肌肩內收力臂並依解剖路徑校準肩前束／喙肱肌三維力臂',
+    kind: '既有問題', current: '棘下肌／小圓肌仍居首',
+    cause: '直立划船頂點的握把力線沿上臂軸產生約 25 N·m 外旋需求；目前只有合併的棘下肌／小圓肌承擔主要外旋，尚未分出棘上肌與旋轉肌袖各束',
+    fix: '依實測肩旋轉力臂補齊肩袖分束與肩關節穩定力矩',
   },
   {
     id: 'reverse-curl', rule: 'rank:first',
-    current: '第一名 corb；屈肘肌（bic、brach）未居首',
-    cause: '前三角肌肩外展耦合推高小型喙肱肌活化，使其超過屈肘主動肌',
-    fix: '補齊胸大肌肩內收力臂並依解剖路徑校準肩前束／喙肱肌三維力臂',
+    kind: '既有問題', current: '正握彎舉前三角肌（0.92）高於肱肌／肱橈肌（0.69）與肱二頭肌（0.47）',
+    cause: '正握降低肱二頭肌效率後，屈肘肌群對抗前臂重力的肩屈貢獻減少，肩部前舉穩定需求集中到前三角肌；目前肱肌與肱橈肌合併且未單獨校準',
+    fix: '核對肱肌／肱橈肌與二頭肌的握法差異，以及上臂貼身時的肩關節穩定模型',
   },
+  ...[
+    ['pulldown', '胸大肌（0.70）排第 2'],
+    ['pulldown-sup', '胸大肌（0.51）排第 2'],
+  ].map(([id, current]) => ({
+    id, rule: 'rank:notTop4', kind: '本分支退步',
+    current: `${current}，main 分支胸大肌未進前四`,
+    cause: '本分支改採 3D shFwd/shSide/shRot 移除了舊 2D shHAdd 對胸大肌的 -0.62 懲罰，並將 lat 水平外展由 -20 mm 增為 -40 mm、肩胛下壓由 -40 mm 減為 -30 mm；高外展位（plane≈90°）時 lat 產生過量水平外展（-37.7 N·m）且肩胛下壓需求（-56～-61 N·m）集中至 pecs（scElev 貢獻 +0.70、shFwd 拮抗 +0.14）。若單純將 lat 水平外展降回 -20 mm，因 pdelt F=201.6 N 偏小且 infra 缺水平外展力臂，會使寬握划船 lat 上升並破壞趨勢第 33 項（窄握 > 寬握）',
+    fix: '依 Kuechle 1997 與 OpenSim 路徑整體校準後三角、棘下肌、背闊肌的水平外展分攤，並以肩胛肌束路徑重算下斜方、背闊與胸大肌的 scElev 下壓力臂',
+  })),
+  ...[
+    ['row', 'lat', '相對 T6（midtrap 35 mm 時 0.86）：還原 midtrap 70 mm 後中斜方由 0.86 降至 0.63，仍居前四但背闊肌（0.62）居第 5'],
+    ['row-sup', 'lat', '相對 T6（midtrap 35 mm 時 0.86）：還原 midtrap 70 mm 後中斜方由 0.86 降至 0.63，仍居前四但背闊肌（0.62）居第 5'],
+    ['cable-row', 'midtrap', '相對 T6（midtrap 35 mm 時 0.67 居第 3）：還原 midtrap 70 mm 後中斜方降至 0.50（第 6）掉出前四，背闊肌（0.62）升至第 3'],
+    ['cable-row-wide', 'lat', '相對 T6（midtrap 35 mm 時 0.93）：還原 midtrap 70 mm 後中斜方由 0.93 降至 0.69，仍居前四但背闊肌（0.55）居第 5'],
+  ].map(([id, muscle, delta]) => ({
+    id, rule: `rank:${muscle}:top4`, kind: '既有問題',
+    current: `${muscle} 未進前四（${delta}）`,
+    cause: `main 與 T6 的上肢前四名都未能讓背闊肌和中斜方同時進前四；${delta}；肩胛與肩關節力矩分攤仍待校準`,
+    fix: '以肩胛肌束路徑和實測肩內收力臂重新校準，不以動作專屬係數補排名',
+  })),
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));
 if (known.size !== KNOWN_ISSUES.length) throw new Error('KNOWN_ISSUES 有重複的動作與規則');
@@ -79,11 +69,12 @@ const check = (id, rule, result) => {
   const issue = known.get(key);
   if (issue) {
     seen.add(key);
-    console.log(`已知問題 ${id} ${rule}：${result}；原因：${issue.cause}；預計：${issue.fix}`);
+    console.log(`已知問題（${issue.kind}）${id} ${rule}：${result}；原因：${issue.cause}；預計：${issue.fix}`);
   } else errors.push(`${id} ${rule}：${result}`);
 };
 let checked = 0;
 const catalogIds = new Set();
+const declaredRules = new Set();
 for (const c of CATALOG.filter((entry) => entry.lift)) {
   catalogIds.add(c.id);
   const P = { ...defaultParams(c.lift), ...c.set };
@@ -102,11 +93,29 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   const ranked = [...peaks].sort((a, b) => b[1] - a[1]);
   for (const [id, { a, e }] of overload) check(c.id, `activation:${id}`, `e=${e.toFixed(3)} a=${a.toFixed(4)} > 1`);
   const rule = RANKS[c.id];
+  if (rule?.first) declaredRules.add(`${c.id}|rank:first`);
+  if (rule?.notFirst) declaredRules.add(`${c.id}|rank:notFirst`);
+  if (rule?.notTop4) declaredRules.add(`${c.id}|rank:notTop4`);
+  if (rule?.allTop3) declaredRules.add(`${c.id}|rank:allTop3`);
+  for (const id of Object.keys(rule?.within || {})) declaredRules.add(`${c.id}|rank:${id}:top${rule.within[id]}`);
+  for (const n of [2, 3, 4]) if (rule?.[`top${n}`]) declaredRules.add(`${c.id}|rank:top${n}`);
   if (rule?.first && !rule.first.includes(ranked[0][0])) {
     check(c.id, 'rank:first', `第一名 ${ranked[0][0]}，預期 ${rule.first.join(' 或 ')}`);
   }
   if (rule?.notFirst?.includes(ranked[0][0])) {
     check(c.id, 'rank:notFirst', `第一名不應為 ${ranked[0][0]}`);
+  }
+  if (rule?.notTop4) {
+    const hit = ranked.slice(0, 4).filter(([id]) => rule.notTop4.includes(id)).map(([id, v]) => `${id} ${v.toFixed(2)}`);
+    if (hit.length) check(c.id, 'rank:notTop4', `前4名不應含 ${rule.notTop4.join('、')}，目前含 ${hit.join(', ')}`);
+  }
+  if (rule?.allTop3 && !rule.allTop3.every((id) => ranked.slice(0, 3).some(([muscle]) => muscle === id))) {
+    check(c.id, 'rank:allTop3', `前三名 ${ranked.slice(0, 3).map(([id]) => id).join(', ')}，預期同時含 ${rule.allTop3.join('、')}`);
+  }
+  for (const [id, n] of Object.entries(rule?.within || {})) {
+    if (!ranked.slice(0, n).some(([muscle]) => muscle === id)) {
+      check(c.id, `rank:${id}:top${n}`, `前${n}名 ${ranked.slice(0, n).map(([muscle]) => muscle).join(', ')}，預期含 ${id}`);
+    }
   }
   for (const n of [2, 3, 4]) {
     const accepted = rule?.[`top${n}`];
@@ -117,11 +126,10 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   checked++;
 }
 for (const issue of KNOWN_ISSUES) {
-  const rankKind = issue.rule.startsWith('rank:') ? issue.rule.slice(5) : null;
-  if (!catalogIds.has(issue.id) || (rankKind && !RANKS[issue.id]?.[rankKind])) {
+  if (!catalogIds.has(issue.id) || (issue.rule.startsWith('rank:') && !declaredRules.has(`${issue.id}|${issue.rule}`))) {
     errors.push(`已知問題沒有對應規則：${issue.id} ${issue.rule}`);
   } else if (!seen.has(`${issue.id}|${issue.rule}`)) {
-    console.warn(`提示：${issue.id} ${issue.rule} 已通過，請從 KNOWN_ISSUES 移除`);
+    errors.push(`已知問題已通過，請從 KNOWN_ISSUES 移除：${issue.id} ${issue.rule}`);
   }
 }
 
