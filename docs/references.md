@@ -496,3 +496,5 @@
 
 - **反向蝴蝶機**：肩關節肌肉力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)；未查證同機型握把阻力、凸輪曲線或直接肌電比較。
 - **45° 背伸展**：[Andersen et al. 2021](https://pubmed.ncbi.nlm.nih.gov/33948095/) 比較羅馬椅、羅馬尼亞硬舉與坐姿背伸機的臀大肌、股二頭肌、豎脊肌肌電。研究未比較墊子高度，因此不建立墊高趨勢檢查。
+- **哈克深蹲機**：目前僅以 [Escamilla et al. 1998](https://pubmed.ncbi.nlm.nih.gov/9565938/) 的深蹲與腿推閉鎖鏈資料間接說明膝伸肌需求；未查證此哈克機軌道或肌電。
+- **器械肩推**：[Saeterbakken & Fimland 2013](https://pubmed.ncbi.nlm.nih.gov/23096062/) 比較肩推身體姿勢及負重型式；未量本模型固定握把軌跡。

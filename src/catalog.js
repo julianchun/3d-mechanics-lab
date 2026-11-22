@@ -24,6 +24,7 @@ export const CATALOG = [
   { id: 'front-squat', name: '前蹲', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'front' }, alias: ['front squat'] },
   { id: 'smith-squat', name: '史密斯深蹲', cat: 'squat', equip: 'machine', lift: 'smith', set: {}, alias: ['smith'] },
   { id: 'leg-press', name: '45° 腿推機', cat: 'squat', equip: 'machine', lift: 'legpress', set: {}, alias: ['leg press'] },
+  { id: 'hack-squat', name: '哈克深蹲機', cat: 'squat', equip: 'machine', lift: 'hacksquat', set: {}, alias: ['hack squat'] },
   // 髖鉸鏈
   { id: 'deadlift', name: '硬舉（傳統）', cat: 'hinge', equip: 'barbell', lift: 'deadlift', set: { style: 'conv', start: 0 }, alias: ['deadlift', 'dl'] },
   { id: 'deficit-dl', name: '赤字硬舉', cat: 'hinge', equip: 'barbell', lift: 'deadlift', set: { style: 'conv', start: -5 }, alias: ['deficit deadlift'] },
@@ -42,6 +43,7 @@ export const CATALOG = [
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
   { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
+  { id: 'machine-press', name: '器械肩推', cat: 'vpush', equip: 'machine', lift: 'machinepress', set: {}, alias: ['shoulder press machine'] },
   { id: 'cable-fly-high', name: '滑輪夾胸（高位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'high' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '高滑輪'] },
   { id: 'cable-fly-mid', name: '滑輪夾胸（中位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'mid' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '中滑輪'] },
   { id: 'cable-fly-low', name: '滑輪夾胸（低位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'low' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '低滑輪'] },

@@ -8,6 +8,7 @@ import { analyze, defaultParams } from '../src/biomech.js';
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
   'smith-squat': { top2: ['vasti'] }, 'leg-press': { top2: ['vasti'] },
+  'hack-squat': { first: ['vasti'] },
   deadlift: { top3: ['erec', 'hams', 'gmax'] }, 'deficit-dl': { top3: ['erec', 'hams', 'gmax'] },
   'block-pull': { top3: ['erec', 'hams', 'gmax'] }, sumo: { top3: ['erec', 'hams', 'gmax'] },
   'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top2: ['gmax'] },

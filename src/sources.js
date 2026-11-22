@@ -252,6 +252,22 @@ export const SOURCES = {
     refs: ['andersen2021_backext'],
     trendNote: '已有羅馬椅與其他髖伸動作肌電比較；墊高與圓背的定量影響尚無直接可用對照。',
   },
+  'hack-squat': {
+    assumptions: [
+      '背墊沿假設 45° 軌道滑動，肩墊承擔滑台與掛片；軌道法向反作用力與傾斜腳踏板壓力中心共同平衡。',
+      '滑軌 45°、腳板 12°、總配重 80 kg、軌道長 185 cm 與機架寬度都是未查證假設；忽略滑軌摩擦。',
+    ],
+    refs: ['escamilla1998'],
+    trendNote: 'Escamilla 1998 提供深蹲與腿推比較，並非本哈克深蹲機的直接量測。',
+  },
+  'machine-press': {
+    assumptions: [
+      '坐姿背靠椅背，雙手握把沿固定的上推軌跡移動；座墊與靠背承擔身體重量。',
+      '握把行程 47 cm、預設軌跡向前 8°、配重 40 kg、轉軸與座椅尺寸都是未查證假設；正握／中立握只改握把方向，模型沒有肱骨內外旋自由度。',
+    ],
+    refs: ['saeterbakken2013'],
+    trendNote: 'Saeterbakken 2013 比較肩推姿勢及負重型式，沒有驗證此固定軌跡器械。',
+  },
   'cable-fly-high': {
     assumptions: [
       '站姿雙側獨立滑輪（高位滑輪 192 cm，左右柱距 260 cm），每手各握獨立把手連向同側滑輪，不套用剛體握把互推。',
@@ -418,6 +434,8 @@ const LIFT_FALLBACK_ID = {
   pecdeck: 'pec-deck',
   reversedeck: 'reverse-deck',
   backext: 'back-extension',
+  hacksquat: 'hack-squat',
+  machinepress: 'machine-press',
   cablefly: 'cable-fly-mid',
 };
 
