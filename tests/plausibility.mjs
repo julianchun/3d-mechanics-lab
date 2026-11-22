@@ -56,8 +56,8 @@ const KNOWN_ISSUES = [
   ].map(([id, muscle]) => ({
     id, rule: `rank:${muscle}:top4`, kind: '既有問題',
     current: `${muscle} 未進前四`,
-    cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；肩胛後收的等效力臂尚未由肌束路徑驗證',
-    fix: '以肩胛肌束路徑和實測肩內收力臂重新校準，不以動作專屬係數補排名',
+    cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；Seth 路徑的中斜方等效力臂直接替換又使已通過的划船排名失敗',
+    fix: '以 OpenSim 逐點驗證肩胛兩軸力矩與中斜方路徑，再校準功能群能力',
   })),
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));

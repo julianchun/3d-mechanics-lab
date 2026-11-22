@@ -7,7 +7,7 @@
 - **R**：[Rajagopal et al. (2016)](https://pubmed.ncbi.nlm.nih.gov/27392337/)，[OpenSim `Rajagopal2016.osim`](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/Rajagopal2016.osim)，`opensim-models` commit `d9b05d470b1a481c222372c85b75772faf8f7792`。該儲存庫 [README](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/README.txt) 說明：此檔從原始發布版更新至 OpenSim 4.5 XML 格式，並將纖維阻尼設為 0.1；本文使用的 `F`、`Lf`、肌腱鬆弛長與路徑點都直接讀取此檔。
 - **U**：[Holzbaur et al. (2005)](https://pubmed.ncbi.nlm.nih.gov/16078622/) 為上肢模型前身；實際取值來自 [Saul et al. (2015) MoBL-ARMS 動態模型](https://pmc.ncbi.nlm.nih.gov/articles/PMC4282829/) 的 [CEINMS-RT `MOBL_ARMS_41.osim`](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)，commit `459e2ebbf47acb72b0ecbc59950a2d0a983d28db`。**不能把這些數字稱作 Holzbaur 原版的逐項數值。**
 - **C**：[Christophy et al. (2012)](https://link.springer.com/content/pdf/10.1007/s10237-011-0290-6.pdf)，Table 1 的單側肌束表與 Fig. 7 的 L5/S1 力臂。SimTK `Lumbar_C_210.osim` 下載需登入，本次未取得可核對的模型檔版本；因此軀幹值標示為「論文表格」，**模型檔版本未查證**。
-- **S**：[Seth et al. (2016)](https://pubmed.ncbi.nlm.nih.gov/26734761/) 與 [Seth et al. (2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6856649/) 說明肩胛胸廓模型；T8 已定位 [TSM 模型檔](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/v1.1/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim)，但未完成 OpenSim 執行、座標映射與肩帶力臂驗證，故不宣稱現有肩帶數值來自該模型。
+- **S**：[Seth et al. (2016)](https://pubmed.ncbi.nlm.nih.gov/26734761/) 與 [Seth et al. (2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6856649/) 說明肩胛胸廓模型；T8 使用 [TSM 模型檔](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/b47b06cd23c872e69f92687270e47d4c560bb14b/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim) 的斜方肌、前鋸肌、菱形肌路徑點，固定 commit `b47b06cd23c872e69f92687270e47d4c560bb14b`；對應到本模型肩帶軸仍是近似，未經 OpenSim 執行驗證。
 
 `python3 tools/muscle_params.py` 以固定 commit 下載 R、U 檔案，重算來源模型的組合 `F`、`Lf`、肌腱鬆弛長 `Lt`、最佳長度羽狀角 `alpha` 與髖路徑弦力臂；標「調整」的有效 `F` 應以本表與程式為準。原始來源採樣對應：`F來源=ΣFᵢ`；`Lf=Σ(Fᵢ Lfᵢ)/ΣFᵢ`；`Lmt=Σ[Fᵢ(Lfᵢ+Ltᵢ)]/ΣFᵢ`；`Lt` 與 `alpha` 也按來源 F 加權。合併後的肌群各成分共用一個活化度。現行出力仍用 `Lmt` 當長度位移的代理分母；它**不是**最佳纖維長，也不是完整的肌纖維／肌腱求解。
 
@@ -48,7 +48,7 @@
 | midtrap | 斜方肌中束／菱形肌 | 1000 | 0.12 | 未使用 | **估計**：未取得 S 對應模型與分束 F、Lf；沿用原值 |
 | uptrap | 斜方肌上束／同側上提功能群 | 1500 | 0.15 | 未使用 | **調整／估計**：以雙側最大上提力與肩帶長度估算單側力矩；肌束 F 未查證 |
 | lowtrap | 斜方肌下束 | 500 | 0.15 | 未使用 | **估計**：同上 |
-| serr | 前鋸肌 | 1000 | 0.15 | 未使用 | **估計**：同上 |
+| serr | 前鋸肌；S 三束原始 F=1325.8 | 1000 | 0.15 | 未使用 | **調整／估計**：保留既有有效 F，肩帶力臂改用 S 路徑擬合；Lf 未取 S |
 
 ## 功能群總能力交叉驗證
 
@@ -115,7 +115,7 @@
 
 ## T8：肩肌路徑重建、校準與採用範圍
 
-`python3 tools/shoulder_arms.py --osim MOBL_ARMS_41.osim --js src/shoulder-arms.js` 讀取固定版 [MoBL-ARMS 模型檔](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)，依胸廓→鎖骨→肩胛→肱骨關節鏈、肩胛節律、固定／條件／移動路徑點與球／橢球／圓柱包覆，對肌腱長度做中央差分，再轉到本模型 `X=右、Y=上、Z=前` 的三維力臂。取樣範圍為上舉 5°～165°（10° 一格）、平面 −60°～180°（15° 一格）、軸旋 −45°／0°／45°；各群 867 點，依來源 F 加權合群。用上臂單位向量的三次多項式與軸旋的一次項擬合；三維力臂長度超過 120 mm 的樣本剔除。120 mm 是防止簡化包覆在切換處產生非生理尖峰的保守數值門檻，**不是**人體量測上限。`src/shoulder-arms.js` 是可重生的擬合結果；其肩帶項只供診斷，未接入出力。
+`python3 tools/shoulder_arms.py --osim MOBL_ARMS_41.osim --seth TSM_subject_noWeight.osim --js src/shoulder-arms.js` 讀取固定版 [MoBL-ARMS 模型檔](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)，依胸廓→鎖骨→肩胛→肱骨關節鏈、肩胛節律、固定／條件／移動路徑點與球／橢球／圓柱包覆，對肌腱長度做中央差分，再轉到本模型 `X=右、Y=上、Z=前` 的三維力臂。另讀固定版 [Seth TSM 肩胛肌束模型](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/b47b06cd23c872e69f92687270e47d4c560bb14b/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim)，將肩胛肌束局部路徑點放入 MoBL 節律姿勢，繞胸鎖中心的兩個本模型等效軸求虛功力臂。兩來源模型的胸鎖／盂肱中心相差約 1～2 mm，但骨面與關節運動學仍非完全相同。取樣範圍為上舉 5°～165°（10° 一格）、平面 −60°～180°（15° 一格）、軸旋 −45°／0°／45°；各群 867 點，依來源 F 加權合群。盂肱用上臂單位向量的三次多項式與軸旋的一次項擬合；三維力臂長度超過 120 mm 的樣本剔除。120 mm 是防止簡化包覆在切換處產生非生理尖峰的保守數值門檻，**不是**人體量測上限。肩胛兩軸用上臂向量的二次多項式擬合，單軸超過 200 mm 的樣本不納入。`src/shoulder-arms.js` 是可重生的擬合結果。
 
 | 群 | 擬合 RMS X／Y／Z（mm） | 採用情況 |
 |---|---:|---|
@@ -127,9 +127,16 @@
 | 喙肱肌 | 4.97／3.52／2.92 | 已算出，保留原曲線以維持肩推前束排名 |
 | 棘上肌 | 2.95／7.66／2.77 | 新增肌肉，三維向量已採用；視覺附著點另為近似 |
 
+| Seth 肩胛群 | 擬合 RMS scElev／scRet（mm） | 採用情況 |
+|---|---:|---|
+| 中斜方＋菱形 | 0.34／0.34 | 路徑擬合已算出；直接替換使划船中斜方掉出前四，保留原等效力臂 |
+| 上斜方（肩胛＋鎖骨束） | 0.09／0.57 | 直接替換使肩推／划船出現新失敗；保留依上提量測校準的既有能力 |
+| 下斜方 | 1.72／1.67 | 直接替換使坐姿划船出現新排名失敗；保留原等效力臂 |
+| 前鋸肌 | 8.96／7.37 | 兩軸擬合已採用；來源 F=1325.8 N，本模型仍用有效 F=1000 N |
+
 在水平位（`shElev=90°`、`shPlane=90°`），背闊肌擬合水平外展力臂約 13.5 mm，較舊值 40 mm 小；大圓肌約 15.8 mm。後三角原曲線的 40 mm 與路徑擬合約 41.5 mm 同量級，因此保留其幾何曲線。固定版 U 的 `DELT3` 最大等長力**確為 201.6 N**，但與本模型合併功能群不等價。將後三角有效 F 設為 675 N，於該姿勢計算背闊、大圓、後三角的水平外展理論上限約 `1500×0.0135 + 144×0.0158 + 675×0.040 = 49.5 N·m`。對照 [Duaibes 2010 原始研究](https://journals.najah.edu/media/journals/full_texts/isokinetic-dynamometry-measuring-bilateral-shoulder-peak-torque-comparison-and-prediction.pdf) 的 23 名年輕男性**等速**肩水平外展平均峰值 49.38 N·m；量測方式與模型準靜態上限不同，故此 F 是功能群校準。垂臂肩伸的約 111 N·m 亦在 [Danneskiold-Samsøe 2009](https://onlinelibrary.wiley.com/doi/10.1111/j.1748-1716.2009.02022.x) 男性單側等長肩伸 91.9±19.7 N·m 的約一個標準差上緣。這兩項是量級交叉檢查，不是個體肌力預測。
 
-路徑重建仍非 OpenSim 引擎：橢球以仿射球面弧近似，包覆象限只在直線相交時啟用；DELT3 與棘下肌的 torus 尚未實作，亦未作 OpenSim 逐點交叉驗算。[Ackland 2008 Table 1](https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1469-7580.2008.00965.x) 的前三角近垂臂屈曲力臂為 11.6 mm（2.5°），本工具 DELT1 在 5° 前舉約 50 mm，兩者關節定義／肩胛節律不同，仍顯示不可直接替換的量級差距。[Kuechle 1997](https://pubmed.ncbi.nlm.nih.gov/9356931/) 可驗證方向，但無法證明每條曲線的數值。MoBL-ARMS 沒有斜方肌上中下束、前鋸肌、菱形肌的完整主動肌束；[Seth 2016](https://pubmed.ncbi.nlm.nih.gov/26734761/) 是肩胛運動學模型，[Seth 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6856649/) 的肌束模型未在此重建。[Seth 肌束模型檔](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/v1.1/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim)含斜方肌、前鋸肌、菱形肌，但它的肩胛胸廓關節與本模型的兩個等效軸不相同，尚待座標與力矩交叉驗算。故這些肩胛肌肉的等效力臂尚不能宣稱由路徑求得。來源胸廓肌對胸鎖關節的診斷值與本模型 `scRet`／`scElev` 耦合不一致，直接接入造成多處新超載，保留原有肩帶等效力臂。全 10 群直接替換也產生多項新失敗；T8 只採已通過全上肢規則的部分，剩餘校準不可用單一排名補償。
+路徑重建仍非 OpenSim 引擎：橢球以仿射球面弧近似，包覆象限只在直線相交時啟用；DELT3 與棘下肌的 torus 尚未實作，亦未作 OpenSim 逐點交叉驗算。[Ackland 2008 Table 1](https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1469-7580.2008.00965.x) 的前三角近垂臂屈曲力臂為 11.6 mm（2.5°），本工具 DELT1 在 5° 前舉約 50 mm，兩者關節定義／肩胛節律不同，仍顯示不可直接替換的量級差距。[Kuechle 1997](https://pubmed.ncbi.nlm.nih.gov/9356931/) 可驗證方向，但無法證明每條曲線的數值。Seth TSM 的肩胛胸廓關節有四個自由度，本工具以 MoBL 節律姿勢與胸鎖兩軸虛功近似，尚未與 OpenSim 原模型力矩逐點交叉驗算。胸廓起點的盂肱肌診斷肩帶力臂與本模型 `scRet`／`scElev` 耦合不一致，直接接入造成新超載；除前鋸肌外，肩帶群直接替換亦造成新排名失敗。故 T8 僅採全上肢規則可接受的擬合部分，剩餘校準不可用單一排名補償。
 
 ## 其餘力臂逐項資料
 
@@ -154,7 +161,7 @@
 | brach | elbExt=`S(-0.025,elbFlex,-0.006)` | **估計**：肘包覆未解析 |
 | uptrap | scElev=`+0.070`；scRet=`+0.020` | **估計**：胸鎖等效上提／後收軸 |
 | lowtrap | scElev=`-0.035`；scRet=`+0.050` | **估計**：下束只作下壓肌；未表示其上旋功能 |
-| serr | scRet=`-0.070`；scElev=`+0.030` | **估計**：胸鎖等效前伸／上提軸 |
+| serr | `shoulderFitScap(serr,scRet/scElev,q)` | Seth TSM 前鋸肌三束路徑 F 加權擬合；本模型有效 F 仍為估計 |
 
 胸鎖等效力臂的計算規則應為 `r_axis=(p_attachment-p_SC)×u_muscle · axis`。現有 `GIRDLE` 只提供胸鎖與肩中心，沒有可供數值重建的肩胛肌束端點與胸廓包覆面。**現值未經該公式逐條重算，仍是估計**；視覺用 `rig.js/ATTACH` 也不能當成解剖端點。
 

@@ -635,7 +635,7 @@
         "compare": "正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12)",
-        "model": "正握 = 0.960 a vs 反握 = 0.801 a"
+        "model": "正握 = 0.969 a vs 反握 = 0.801 a"
       },
       {
         "index": 31,
@@ -659,7 +659,7 @@
         "compare": "正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12)",
-        "model": "正握 = 0.960 a vs 反握 = 0.801 a"
+        "model": "正握 = 0.969 a vs 反握 = 0.801 a"
       },
       {
         "index": 31,
@@ -683,7 +683,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.536 a vs 窄握 V 把 = 0.275 a"
+        "model": "寬握 = 0.527 a vs 窄握 V 把 = 0.275 a"
       },
       {
         "index": 33,
@@ -694,7 +694,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.566 a vs 寬握 = 0.490 a"
+        "model": "窄握 V 把 = 0.566 a vs 寬握 = 0.493 a"
       }
     ],
     "cable-row": [
@@ -707,7 +707,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.536 a vs 窄握 V 把 = 0.275 a"
+        "model": "寬握 = 0.527 a vs 窄握 V 把 = 0.275 a"
       },
       {
         "index": 33,
@@ -718,7 +718,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.566 a vs 寬握 = 0.490 a"
+        "model": "窄握 V 把 = 0.566 a vs 寬握 = 0.493 a"
       },
       {
         "index": 34,
@@ -766,7 +766,7 @@
         "compare": "寬握 (grip=1.5) vs 窄握 (grip=0.7) — 上斜方肌活化",
         "expected": "寬握 > 窄握",
         "ref": "McAllister 2013 (PMID 22362088, n=16；上斜方 UT 僅離心期達顯著，向心期不顯著，中度證據)",
-        "model": "寬握 = 0.433 a vs 窄握 = 0.332 a"
+        "model": "寬握 = 0.431 a vs 窄握 = 0.323 a"
       },
       {
         "index": 37,

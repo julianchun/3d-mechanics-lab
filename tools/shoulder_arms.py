@@ -1,6 +1,6 @@
 """由 MoBL-ARMS（Saul et al. 2015，固定 commit）肌肉路徑點系統性計算肩部力臂，並擬合成本模型的肩座標函數。
 
-執行：python3 tools/shoulder_arms.py [--osim 本機檔案] [--js src/shoulder-arms.js] [--json 輸出.json]
+執行：python3 tools/shoulder_arms.py [--osim MoBL檔案] [--seth TSM檔案] [--js src/shoulder-arms.js] [--json 輸出.json]
 
 只用標準函式庫（不需要 OpenSim）。步驟：
 1. 讀取 `MOBL_ARMS_41.osim` 的關節鏈（胸廓→鎖骨→肩胛→肱骨）、肩胛節律耦合（CoordinateCouplerConstraint）、
@@ -12,6 +12,8 @@
 3. 對起點在胸廓的肌肉（胸大肌、背闊肌），另以「離開胸廓的那一段力線」對胸鎖關節求肩帶力臂
    `r_axis = (p − p_SC) × u · axis`：scElev 軸＝前方、scRet 軸＝上方（與 biomech.js 的 dem.scElev／dem.scRet 一致）。
 4. 以 F 加權合併成本模型的肌群，對上臂方向單位向量 h 與 ψ 做最小平方多項式擬合，輸出 `src/shoulder-arms.js`。
+5. 另讀 Seth TSM 的斜方肌／菱形肌／前鋸肌九束路徑點，放入同一節律姿勢，繞胸鎖中心的兩個等效軸
+   做中央差分，按來源 F 合群後擬合肩帶力臂。
 
 限制（如實記錄於 docs/muscle-params.md）：
 - 包覆面採簡化演算法：球與橢球以「通過兩端點與中心的平面」求切線與弧（橢球先仿射縮放成單位球；仿射變換保留切線），
@@ -20,7 +22,8 @@
   INFSP torus 位於棘下窩起點附近，影響應小但未驗證。
 - MoBL 的肩胛節律是單一上舉角的固定耦合（de Groot & Brand），本模型另有 scRet/scElev，故力臂只取節律位置。
 - 沒有 OpenSim 可交叉驗算；以文獻量測量級檢查（見 docs）。超過 120 mm 的尖峰樣本不納入擬合。
-- MoBL 沒有斜方肌、菱形肌、前鋸肌的主動肌束；sc 診斷向量未接入本模型。
+- MoBL 沒有斜方肌、菱形肌、前鋸肌的主動肌束；另讀 Seth 模型路徑，將其胸廓／鎖骨／肩胛局部點放到 MoBL 剛體節律位置。
+- Seth 肩胛肌束的力臂以繞胸鎖中心旋轉鎖骨與肩胛的虛功求得；這是本模型兩個等效軸的近似，尚未以 OpenSim 驗證。
 """
 
 import argparse
@@ -32,6 +35,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 URL = "https://raw.githubusercontent.com/CEINMS-RT/UpperLimbModel/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim"
+SETH_URL = "https://raw.githubusercontent.com/ComputationalBiomechanicsLab/rmr-solver/b47b06cd23c872e69f92687270e47d4c560bb14b/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim"
 
 # 本模型肌群 ← MoBL 肌肉
 GROUPS = {
@@ -48,6 +52,12 @@ GROUPS = {
     "supsp": ["SUPSP"],
 }
 THORAX_ORIGIN = {"pecc", "pecs", "lat"}
+SCAP_GROUPS = {
+    "midtrap": ["TrapeziusScapula_M", "Rhomboideus_S", "Rhomboideus_I"],
+    "uptrap": ["TrapeziusScapula_S", "TrapeziusClavicle_S"],
+    "lowtrap": ["TrapeziusScapula_I"],
+    "serr": ["SerratusAnterior_I", "SerratusAnterior_M", "SerratusAnterior_S"],
+}
 
 
 # ---------------- 向量／矩陣 ----------------
@@ -534,6 +544,28 @@ def moment_arms(model, pc, theta, phi, psi=0.0, names=None):
     return out, to_ours(h_os)
 
 
+def scap_moment_arms(mobl, pc, theta, phi, psi, names):
+    """把 Seth 胸廓／肩胛路徑點放入 MoBL 節律姿勢，求本模型肩帶兩軸 −∂L/∂角。"""
+    ea, se = solve_mobl_angles(mobl, theta, phi)
+    q = mobl.coords(ea, se, psi)
+    X = mobl.transforms(q)
+    SC = mobl.joints["clavicle"]["t"]
+
+    def moved(axis, angle):
+        Rmove = rot_axis(axis, angle)
+        out = dict(X)
+        for body in ("clavicle", "scapula"):
+            R, p = X[body]
+            out[body] = (mmul(Rmove, R), vadd(SC, mvec(Rmove, vsub(p, SC))))
+        return out
+
+    eps = 1e-5
+    axes = ([-1, 0, 0], [0, -1, 0])  # 本模型 +scElev/+scRet，映回 MoBL 的反射座標
+    shifts = [(moved(axis, eps), moved(axis, -eps)) for axis in axes]
+    return {name: [-(pc.length(name, q, xp) - pc.length(name, q, xm)) / (2 * eps)
+                   for xp, xm in shifts] for name in names}
+
+
 def vsub_m(A, B): return [[A[i][j] - B[i][j] for j in range(3)] for i in range(3)]
 
 
@@ -595,23 +627,43 @@ def load_root(path):
         return ET.fromstring(r.read())
 
 
+def load_seth(path):
+    if path:
+        root = ET.parse(path).getroot()
+    else:
+        with urllib.request.urlopen(SETH_URL) as response:
+            root = ET.fromstring(response.read())
+    names = {name for group in SCAP_GROUPS.values() for name in group}
+    # TSM 其餘肌肉含本工具不需要的 MultiplierFunction 移動點，先只保留肩胛九束。
+    for obj in root.iter("objects"):
+        for el in list(obj):
+            if el.tag.endswith("Muscle") and el.attrib.get("name") not in names:
+                obj.remove(el)
+    return root
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--osim")
+    ap.add_argument("--seth")
     ap.add_argument("--json")
     ap.add_argument("--js")
     ap.add_argument("--table", action="store_true")
     a = ap.parse_args()
     model = Model(load_root(a.osim))
     pc = PathCalc(model)
+    scap_model = Model(load_seth(a.seth))
+    scap_pc = PathCalc(scap_model)
     names = sorted({n for g in GROUPS.values() for n in g})
+    scap_names = sorted({n for g in SCAP_GROUPS.values() for n in g})
     # 取樣：上舉 5°～165°、平面 −60°～180°、軸旋 −45°～+45°；更大軸旋需外插（見 docs）
     samples = []
     for th in range(5, 170, 10):
         for ph in range(-60, 181, 15):
             for ps in (-45, 0, 45):
                 res, h = moment_arms(model, pc, math.radians(th), math.radians(ph), math.radians(ps), names)
-                samples.append(dict(theta=th, phi=ph, psi=ps, h=h, res=res))
+                scap = scap_moment_arms(model, scap_pc, math.radians(th), math.radians(ph), math.radians(ps), scap_names)
+                samples.append(dict(theta=th, phi=ph, psi=ps, h=h, res=res, scap=scap))
     groups = {}
     for gname, members in GROUPS.items():
         F = [model.muscles[n]["F"] for n in members]
@@ -623,9 +675,17 @@ def main():
                 sc = [sum(Fi * (s["res"][n]["sc"] or [0, 0])[k] for Fi, n in zip(F, members)) / sum(F) for k in range(2)]
             gs.append(dict(theta=s["theta"], phi=s["phi"], psi=s["psi"], h=s["h"], m=m, sc=sc))
         groups[gname] = dict(F=sum(F), members=members, samples=gs)
+    scap_groups = {}
+    for gname, members in SCAP_GROUPS.items():
+        F = [scap_model.muscles[n]["F"] for n in members]
+        gs = []
+        for s in samples:
+            arms = [sum(Fi * s["scap"][n][k] for Fi, n in zip(F, members)) / sum(F) for k in range(2)]
+            gs.append(dict(theta=s["theta"], phi=s["phi"], psi=s["psi"], h=s["h"], sc=arms))
+        scap_groups[gname] = dict(F=sum(F), members=members, samples=gs)
     if a.json:
         with open(a.json, "w") as f:
-            json.dump(groups, f)
+            json.dump(dict(shoulder=groups, scapula=scap_groups), f)
     DEG, DEG_PSI, DEG_SC = 3, 2, 2
     fits = {}
     for gname, g in groups.items():
@@ -648,8 +708,17 @@ def main():
             fit["sc"] = [lstsq(rows_sc, [s["sc"][k] for s in usable]) for k in range(2)]
         fits[gname] = fit
         print(f"{gname:6s} F={g['F']:.1f} 樣本={len(usable)}/{len(g['samples'])} 擬合 RMS (mm) x={rms[0]*1000:.2f} y={rms[1]*1000:.2f} z={rms[2]*1000:.2f}", file=sys.stderr)
+    scap_fits = {}
+    for gname, g in scap_groups.items():
+        usable = [s for s in g["samples"] if all(abs(v) <= 0.20 for v in s["sc"])]
+        rows = [monomials(s["h"], DEG_SC) for s in usable]
+        coef = [lstsq(rows, [s["sc"][k] for s in usable]) for k in range(2)]
+        rms = [math.sqrt(sum((sum(ci * ri for ci, ri in zip(coef[k], row)) - s["sc"][k]) ** 2
+                             for row, s in zip(rows, usable)) / len(usable)) for k in range(2)]
+        scap_fits[gname] = dict(sc=coef, rms=rms, used=len(usable), rejected=len(g["samples"]) - len(usable))
+        print(f"{gname:7s} Seth F={g['F']:.1f} 樣本={len(usable)}/{len(g['samples'])} 擬合 RMS (mm) elev={rms[0]*1000:.2f} ret={rms[1]*1000:.2f}", file=sys.stderr)
     if a.js:
-        write_js(a.js, fits, DEG, DEG_PSI, DEG_SC)
+        write_js(a.js, fits, scap_fits, DEG, DEG_PSI, DEG_SC)
     if a.table:
         print_table(groups)
 
@@ -672,13 +741,14 @@ def print_table(groups):
             print(f"  θ={s['theta']:3d} φ={s['phi']:4d}: {e*1000:6.1f} {hd*1000:6.1f} {r*1000:6.1f}{sc}")
 
 
-def write_js(path, fits, deg, deg_psi, deg_sc):
+def write_js(path, fits, scap_fits, deg, deg_psi, deg_sc):
     r6 = lambda v: float(f"{v:.6g}")
     lines = [
         "// 由 tools/shoulder_arms.py 自動產生，請勿手改：MoBL-ARMS（MOBL_ARMS_41.osim，commit 459e2eb）路徑點計算的肩部力臂擬合。",
         "// m(h, ψ)：相對盂肱中心的三維力臂向量（本模型座標 X 右、Y 上、Z 前；單位 m），",
         "// h 為上臂（肩→肘）單位向量，ψ 為上臂軸旋（rad）；m = Σ c·x^i y^j z^k ＋ ψ Σ d·x^i y^j z^k。",
         "// sc：胸廓肌對胸鎖關節的 [scElev, scRet] 診斷投影；與本模型肩胛座標不等價，未接入出力。",
+        "// scap：Seth TSM 肩胛肌束放入 MoBL 節律姿勢後，對本模型兩個胸鎖等效軸的虛功擬合。",
         f"export const SHOULDER_FIT_DEG = {{ m: {deg}, psi: {deg_psi}, sc: {deg_sc} }};",
         f"export const SHOULDER_FIT_EXP = {json.dumps({'m': exps(deg), 'psi': exps(deg_psi), 'sc': exps(deg_sc)})};",
         "export const SHOULDER_FITS = {",
@@ -690,6 +760,10 @@ def write_js(path, fits, deg, deg_psi, deg_sc):
             s += f", sc: {json.dumps([[r6(v) for v in c] for c in f['sc']])}"
         s += " },"
         lines.append(s)
+    lines.append("};")
+    lines.append("export const SHOULDER_SCAP_FITS = {")
+    for g, fit in scap_fits.items():
+        lines.append(f"  {g}: {json.dumps([[r6(v) for v in c] for c in fit['sc']])},")
     lines.append("};")
     lines += [
         "const dotPoly = (coefs, powers, h) => coefs.reduce((sum, c, i) => {",
@@ -706,7 +780,8 @@ def write_js(path, fits, deg, deg_psi, deg_sc):
         "export function shoulderFitScap(id, axis, q) {",
         "  const t = q.shElev, p = q.shPlane;",
         "  const h = [Math.sin(t) * Math.sin(p), -Math.cos(t), Math.sin(t) * Math.cos(p)];",
-        "  return dotPoly(SHOULDER_FITS[id].sc[axis], SHOULDER_FIT_EXP.sc, h);",
+        "  const coefs = SHOULDER_SCAP_FITS[id]?.[axis] || SHOULDER_FITS[id].sc[axis];",
+        "  return dotPoly(coefs, SHOULDER_FIT_EXP.sc, h);",
         "}",
     ]
     with open(path, "w") as fh:

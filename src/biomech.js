@@ -1,6 +1,6 @@
 // 力學核心：姿勢求解 → 關節力矩（準靜態）→ 肌肉分配（最小化活化平方和）
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
-import { shoulderFitVector } from './shoulder-arms.js';
+import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 
 export const MODEL_VERSION = '0.7.2';
 const G = 9.81;
@@ -636,6 +636,10 @@ const pathHadd = (id, q) => {
   const t = q.shElev, p = q.shPlane;
   return dot(shoulderFitVector(id, q), [-Math.cos(t) * Math.sin(p), -Math.sin(t), -Math.cos(t) * Math.cos(p)]);
 };
+const fittedScapArms = (id) => ({
+  scElev: (q) => shoulderFitScap(id, 0, q),
+  scRet: (q) => shoulderFitScap(id, 1, q),
+});
 // 髖路徑點直線近似：在 0／45／90° 取 ∂肌腱長／∂髖屈角，二次插值；超出路徑可靠區間則固定端點。
 const hipFit = (a, b, c) => (q) => {
   const x = clamp((q.hipFlex || 0) / rad(45), 0, 2);
@@ -703,11 +707,12 @@ export const MUSCLES = [
   { id: 'subsc', name: '肩胛下肌', F: 1306.9, Lf: 0.0873, Lmt: 0.1203, arms: { shRot: 0.025 } },
   { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shFwd: shoulderArm(0.004, mdeltAbduction, -0.004, 'fwd'), shSide: shoulderArm(0.004, mdeltAbduction, -0.004, 'side') } },
   // 肩胛：力臂相對胸鎖關節；scRet = 後收、scElev = 上提（含上旋）
-  // T6 的 35 mm 缺肌束路徑推導；還原 70 mm，仍屬肩胛等效力臂估計。
+  // Seth 路徑的中斜方力臂已算出，但直接接入會破壞划船排名；此處保留既有等效值。
   { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: { scRet: 0.070 } },
   { id: 'uptrap', name: '斜方肌上束', F: 1500, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
   { id: 'lowtrap', name: '斜方肌下束', F: 500, Lf: 0.15, arms: { scElev: -0.035, scRet: 0.05 } },
-  { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: { scRet: -0.07, scElev: 0.03 } },
+  // 前鋸肌肩帶兩軸用 Seth 三束路徑 F 加權擬合；1000 N 仍是本模型的有效能力估計。
+  { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: fittedScapArms('serr') },
 ];
 export const MUSCLE_BY_ID = Object.fromEntries(MUSCLES.map((m) => [m.id, m]));
 
