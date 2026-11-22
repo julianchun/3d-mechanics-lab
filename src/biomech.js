@@ -1,7 +1,8 @@
 // 力學核心：姿勢求解 → 關節力矩（準靜態）→ 肌肉分配（最小化活化平方和）
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
+import { shoulderFitVector } from './shoulder-arms.js';
 
-export const MODEL_VERSION = '0.7.1';
+export const MODEL_VERSION = '0.7.2';
 const G = 9.81;
 
 export const BODY = {
@@ -618,6 +619,23 @@ const shoulderArm = (flex, abd, hadd, axis) => {
   fn.shoulderVec = (q) => shoulderVec(flex, abd, hadd, q).vec;
   return fn;
 };
+// MoBL-ARMS 路徑擬合的三維力臂投影到本模型的瞬時轉軸。
+const fittedArms = (id) => {
+  const vec = (q) => shoulderFitVector(id, q);
+  const fwd = (q) => dot(vec(q), shoulderAxes(q).fwd);
+  fwd.shoulderVec = vec;
+  const side = (q) => dot(vec(q), shoulderAxes(q).side);
+  const rot = (q) => {
+    const t = q.shElev, p = q.shPlane;
+    return dot(vec(q), [Math.sin(t) * Math.sin(p), -Math.cos(t), Math.sin(t) * Math.cos(p)]);
+  };
+  return { shFwd: fwd, shSide: side, shRot: rot };
+};
+// 將路徑擬合向量投影到上臂的水平內收軸；沿用既有肩座標的平滑端點映射。
+const pathHadd = (id, q) => {
+  const t = q.shElev, p = q.shPlane;
+  return dot(shoulderFitVector(id, q), [-Math.cos(t) * Math.sin(p), -Math.sin(t), -Math.cos(t) * Math.cos(p)]);
+};
 // 髖路徑點直線近似：在 0／45／90° 取 ∂肌腱長／∂髖屈角，二次插值；超出路徑可靠區間則固定端點。
 const hipFit = (a, b, c) => (q) => {
   const x = clamp((q.hipFlex || 0) / rad(45), 0, 2);
@@ -668,18 +686,20 @@ export const MUSCLES = [
   { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shFwd: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'fwd'), shSide: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'side'), shRot: 0.020, scElev: -0.025 } },
   { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shFwd: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'fwd'), shSide: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'side'), shRot: 0.009 } },
   { id: 'adelt', name: '三角肌前束', F: 1350, Lf: 0.0976, Lmt: 0.1906, arms: { shFwd: shoulderArm(adeltFlex, adeltAbduction, 0.015, 'fwd'), shSide: shoulderArm(adeltFlex, adeltAbduction, 0.015, 'side'), shRot: 0.005 } },
-  { id: 'pdelt', name: '三角肌後束', F: 201.6, Lf: 0.1367, Lmt: 0.1747, arms: { shFwd: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'fwd'), shSide: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'side'), shRot: -0.006 } },
+  // 後束 675 N 是以肩水平外展群總力矩校準的有效能力，非 MoBL DELT3 的原始 201.6 N。
+  { id: 'pdelt', name: '三角肌後束', F: 675, Lf: 0.1367, Lmt: 0.1747, arms: { shFwd: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'fwd'), shSide: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'side'), shRot: -0.006 } },
   // 背闊肌跨過肩胛與肱骨，是肩伸、內收與內旋肌；肩帶下壓另由 scElev 表示。
-  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => -0.040 * Math.sin(q.shElev), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => -0.040 * Math.sin(q.shElev), 'side'), shRot: 0.020, scElev: -0.030 } },
+  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'), shRot: 0.020, scElev: -0.030 } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFwd: shoulderArm(-0.020, -0.010, 0, 'fwd'), shSide: shoulderArm(-0.020, -0.010, 0, 'side') } },
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
   // 二頭肌肩屈基值取 MOBL_ARMS_41.osim 長頭（16.0 mm）與短頭（21.6 mm）0° 路徑弦長依 F 加權（18.1 mm，屬文獻上緣）；
   // Landin 2008（PMID 17196396，電刺激＋測力儀）測得上舉 ≥60° 肩上提力矩近零，此處 0°→60° 線性歸零且省略肘角相依為估計。
   { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
   { id: 'brach', name: '肱肌／肱橈肌', F: 1453.4, Lf: 0.1023, Lmt: 0.1709, arms: { elbExt: angleSlope(-0.025, 'elbFlex', -0.006) } },
-  { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: { shFwd: shoulderArm(-0.025, (q) => -0.030 * Math.sin(q.shElev) ** 2, -0.015, 'fwd'), shSide: shoulderArm(-0.025, (q) => -0.030 * Math.sin(q.shElev) ** 2, -0.015, 'side'), shRot: 0.012 } },
+  { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: fittedArms('tmaj') },
   { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFwd: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'fwd'), shSide: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'side') } },
   { id: 'infra', name: '棘下肌／小圓肌', F: 1345.3, Lf: 0.0752, Lmt: 0.1141, arms: { shRot: -0.025 } },
+  { id: 'supsp', name: '棘上肌', F: 499.2, Lf: 0.0682, Lmt: 0.1077, arms: fittedArms('supsp') },
   { id: 'subsc', name: '肩胛下肌', F: 1306.9, Lf: 0.0873, Lmt: 0.1203, arms: { shRot: 0.025 } },
   { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shFwd: shoulderArm(0.004, mdeltAbduction, -0.004, 'fwd'), shSide: shoulderArm(0.004, mdeltAbduction, -0.004, 'side') } },
   // 肩胛：力臂相對胸鎖關節；scRet = 後收、scElev = 上提（含上旋）
@@ -701,7 +721,7 @@ const FIBER_GEOMETRY = {
   pecc: [0.0028, 0.2967], adelt: [0.0930, 0.3840], pdelt: [0.0380, 0.3142],
   lat: [0.1473, 0.3781], trilong: [0.1430, 0.2094], trilat: [0.0944, 0.1571],
   bic: [0.2422, 0], brach: [0.0686, 0], tmaj: [0.0200, 0.2793],
-  corb: [0.0970, 0.4712], infra: [0.0389, 0.3491], subsc: [0.0330, 0.3491],
+  corb: [0.0970, 0.4712], infra: [0.0389, 0.3491], supsp: [0.0395, 0.1222], subsc: [0.0330, 0.3491],
   mdelt: [0.1095, 0.2618],
 };
 

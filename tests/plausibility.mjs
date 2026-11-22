@@ -32,8 +32,8 @@ const KNOWN_ISSUES = [
   {
     id: 'uprow', rule: 'rank:notFirst',
     kind: '既有問題', current: '棘下肌／小圓肌仍居首',
-    cause: '直立划船頂點的握把力線沿上臂軸產生約 25 N·m 外旋需求；目前只有合併的棘下肌／小圓肌承擔主要外旋，尚未分出棘上肌與旋轉肌袖各束',
-    fix: '依實測肩旋轉力臂補齊肩袖分束與肩關節穩定力矩',
+    cause: '握把力線沿上臂軸造成外旋需求；新增棘上肌後仍由棘下肌／小圓肌承擔最多，現有模型缺握把接觸偶矩與旋前自由度',
+    fix: '取得握把軸向力矩量測並拆分肩袖肌束，再校準外旋分攤',
   },
   {
     id: 'reverse-curl', rule: 'rank:first',
@@ -42,23 +42,21 @@ const KNOWN_ISSUES = [
     fix: '核對肱肌／肱橈肌與二頭肌的握法差異，以及上臂貼身時的肩關節穩定模型',
   },
   ...[
-    ['pulldown', '胸大肌（0.70）排第 2'],
-    ['pulldown-sup', '胸大肌（0.51）排第 2'],
+    ['pulldown', '胸大肌仍進前四'],
   ].map(([id, current]) => ({
     id, rule: 'rank:notTop4', kind: '本分支退步',
     current: `${current}，main 分支胸大肌未進前四`,
-    cause: '本分支改採 3D shFwd/shSide/shRot 移除了舊 2D shHAdd 對胸大肌的 -0.62 懲罰，並將 lat 水平外展由 -20 mm 增為 -40 mm、肩胛下壓由 -40 mm 減為 -30 mm；高外展位（plane≈90°）時 lat 產生過量水平外展（-37.7 N·m）且肩胛下壓需求（-56～-61 N·m）集中至 pecs（scElev 貢獻 +0.70、shFwd 拮抗 +0.14）。若單純將 lat 水平外展降回 -20 mm，因 pdelt F=201.6 N 偏小且 infra 缺水平外展力臂，會使寬握划船 lat 上升並破壞趨勢第 33 項（窄握 > 寬握）',
-    fix: '依 Kuechle 1997 與 OpenSim 路徑整體校準後三角、棘下肌、背闊肌的水平外展分攤，並以肩胛肌束路徑重算下斜方、背闊與胸大肌的 scElev 下壓力臂',
+    cause: '背闊肌水平力臂已改用路徑擬合，下壓需求仍由既有肩胛等效力臂分攤；胸大肌在正握下拉仍代償肩胛下壓',
+    fix: '以可驗證的肩胛肌束路徑及肩胛下壓力矩量測重建 scElev 力臂',
   })),
   ...[
-    ['row', 'lat', '相對 T6（midtrap 35 mm 時 0.86）：還原 midtrap 70 mm 後中斜方由 0.86 降至 0.63，仍居前四但背闊肌（0.62）居第 5'],
-    ['row-sup', 'lat', '相對 T6（midtrap 35 mm 時 0.86）：還原 midtrap 70 mm 後中斜方由 0.86 降至 0.63，仍居前四但背闊肌（0.62）居第 5'],
-    ['cable-row', 'midtrap', '相對 T6（midtrap 35 mm 時 0.67 居第 3）：還原 midtrap 70 mm 後中斜方降至 0.50（第 6）掉出前四，背闊肌（0.62）升至第 3'],
-    ['cable-row-wide', 'lat', '相對 T6（midtrap 35 mm 時 0.93）：還原 midtrap 70 mm 後中斜方由 0.93 降至 0.69，仍居前四但背闊肌（0.55）居第 5'],
-  ].map(([id, muscle, delta]) => ({
+    ['row', 'lat'],
+    ['row-sup', 'lat'],
+    ['cable-row-wide', 'lat'],
+  ].map(([id, muscle]) => ({
     id, rule: `rank:${muscle}:top4`, kind: '既有問題',
-    current: `${muscle} 未進前四（${delta}）`,
-    cause: `main 與 T6 的上肢前四名都未能讓背闊肌和中斜方同時進前四；${delta}；肩胛與肩關節力矩分攤仍待校準`,
+    current: `${muscle} 未進前四`,
+    cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；肩胛後收的等效力臂尚未由肌束路徑驗證',
     fix: '以肩胛肌束路徑和實測肩內收力臂重新校準，不以動作專屬係數補排名',
   })),
 ];

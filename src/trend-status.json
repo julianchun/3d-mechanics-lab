@@ -1,14 +1,14 @@
 {
-  "modelVersion": "0.7.1",
+  "modelVersion": "0.7.2",
   "summary": {
     "total": 46,
-    "pass": 43,
-    "fail": 3,
+    "pass": 44,
+    "fail": 2,
     "byEvidence": {
       "direct": {
         "total": 27,
-        "pass": 24,
-        "fail": 3
+        "pass": 25,
+        "fail": 2
       },
       "indirect": {
         "total": 14,
@@ -519,7 +519,7 @@
         "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "上斜 30° = 0.765 a vs 平板 0° = 0.574 a"
+        "model": "上斜 30° = 0.761 a vs 平板 0° = 0.574 a"
       },
       {
         "index": 27,
@@ -530,7 +530,7 @@
         "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
         "expected": "平板 0° > 上斜 30°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "平板 0° = 0.770 a vs 上斜 30° = 0.648 a"
+        "model": "平板 0° = 0.768 a vs 上斜 30° = 0.640 a"
       }
     ],
     "bench": [
@@ -554,7 +554,7 @@
         "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "上斜 30° = 0.765 a vs 平板 0° = 0.574 a"
+        "model": "上斜 30° = 0.761 a vs 平板 0° = 0.574 a"
       },
       {
         "index": 27,
@@ -565,7 +565,7 @@
         "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
         "expected": "平板 0° > 上斜 30°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "平板 0° = 0.770 a vs 上斜 30° = 0.648 a"
+        "model": "平板 0° = 0.768 a vs 上斜 30° = 0.640 a"
       },
       {
         "index": 28,
@@ -576,7 +576,7 @@
         "compare": "窄握 (grip=0.9, flare=35) vs 標準 (grip=1.6, flare=52) — 三頭肌活化",
         "expected": "窄握 > 標準握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "窄握 = 0.952 a vs 標準握 = 0.471 a"
+        "model": "窄握 = 0.951 a vs 標準握 = 0.471 a"
       },
       {
         "index": 29,
@@ -587,7 +587,7 @@
         "compare": "標準 (grip=1.6, flare=52) vs 窄握 (grip=0.9, flare=35) — 中下胸活化",
         "expected": "標準握 > 窄握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "標準握 = 0.770 a vs 窄握 = 0.573 a"
+        "model": "標準握 = 0.768 a vs 窄握 = 0.554 a"
       },
       {
         "index": 43,
@@ -611,7 +611,7 @@
         "compare": "窄握 (grip=0.9, flare=35) vs 標準 (grip=1.6, flare=52) — 三頭肌活化",
         "expected": "窄握 > 標準握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "窄握 = 0.952 a vs 標準握 = 0.471 a"
+        "model": "窄握 = 0.951 a vs 標準握 = 0.471 a"
       },
       {
         "index": 29,
@@ -622,7 +622,7 @@
         "compare": "標準 (grip=1.6, flare=52) vs 窄握 (grip=0.9, flare=35) — 中下胸活化",
         "expected": "標準握 > 窄握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "標準握 = 0.770 a vs 窄握 = 0.573 a"
+        "model": "標準握 = 0.768 a vs 窄握 = 0.554 a"
       }
     ],
     "pulldown": [
@@ -635,18 +635,18 @@
         "compare": "正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12)",
-        "model": "正握 = 0.895 a vs 反握 = 0.648 a"
+        "model": "正握 = 0.960 a vs 反握 = 0.801 a"
       },
       {
         "index": 31,
-        "pass": false,
+        "pass": true,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "滑輪下拉（同握距）",
         "compare": "同握距 (grip=1.4) 正握 vs 反握 — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12, 握法主效應)",
-        "model": "正握 = 0.730 a vs 反握 = 0.730 a"
+        "model": "正握 = 0.842 a vs 反握 = 0.842 a"
       }
     ],
     "pulldown-sup": [
@@ -659,18 +659,18 @@
         "compare": "正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12)",
-        "model": "正握 = 0.895 a vs 反握 = 0.648 a"
+        "model": "正握 = 0.960 a vs 反握 = 0.801 a"
       },
       {
         "index": 31,
-        "pass": false,
+        "pass": true,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "滑輪下拉（同握距）",
         "compare": "同握距 (grip=1.4) 正握 vs 反握 — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12, 握法主效應)",
-        "model": "正握 = 0.730 a vs 反握 = 0.730 a"
+        "model": "正握 = 0.842 a vs 反握 = 0.842 a"
       }
     ],
     "cable-row-wide": [
@@ -683,7 +683,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.176 a vs 窄握 V 把 = 0.095 a"
+        "model": "寬握 = 0.536 a vs 窄握 V 把 = 0.275 a"
       },
       {
         "index": 33,
@@ -694,7 +694,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.615 a vs 寬握 = 0.554 a"
+        "model": "窄握 V 把 = 0.566 a vs 寬握 = 0.490 a"
       }
     ],
     "cable-row": [
@@ -707,7 +707,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.176 a vs 窄握 V 把 = 0.095 a"
+        "model": "寬握 = 0.536 a vs 窄握 V 把 = 0.275 a"
       },
       {
         "index": 33,
@@ -718,7 +718,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.615 a vs 寬握 = 0.554 a"
+        "model": "窄握 V 把 = 0.566 a vs 寬握 = 0.490 a"
       },
       {
         "index": 34,
@@ -755,7 +755,7 @@
         "compare": "寬握 (grip=1.5) vs 窄握 (grip=0.7) — 側／中三角肌活化",
         "expected": "寬握 > 窄握",
         "ref": "McAllister 2013 (PMID 22362088, n=16；側三角 LD 向心 50/100 vs 200% BAB 與離心全部比較皆顯著，強證據)",
-        "model": "寬握 = 0.436 a vs 窄握 = 0.239 a"
+        "model": "寬握 = 0.380 a vs 窄握 = 0.193 a"
       },
       {
         "index": 36,
@@ -766,7 +766,7 @@
         "compare": "寬握 (grip=1.5) vs 窄握 (grip=0.7) — 上斜方肌活化",
         "expected": "寬握 > 窄握",
         "ref": "McAllister 2013 (PMID 22362088, n=16；上斜方 UT 僅離心期達顯著，向心期不顯著，中度證據)",
-        "model": "寬握 = 0.446 a vs 窄握 = 0.332 a"
+        "model": "寬握 = 0.433 a vs 窄握 = 0.332 a"
       },
       {
         "index": 37,
@@ -888,7 +888,7 @@
         "compare": "握把式 (handle) vs 前臂墊式 (pad) — 屈肘肌群 (brach) 活化",
         "expected": "握把式 > 前臂墊式",
         "ref": "力學／解剖推論（握把式需屈肘肌等長維持微彎肘角；前臂墊式阻力直接作用於前臂且垂直於屈肘平面，無直接 EMG 對照文獻）",
-        "model": "握把式 = 0.453 a vs 前臂墊式 = 0.007 a"
+        "model": "握把式 = 0.453 a vs 前臂墊式 = 0.000 a"
       }
     ],
     "cable-fly-high": [
@@ -901,7 +901,7 @@
         "compare": "高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化",
         "expected": "高位往下 > 低位往上",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "高位往下 = 0.819 a vs 低位往上 = 0.544 a"
+        "model": "高位往下 = 0.749 a vs 低位往上 = 0.543 a"
       },
       {
         "index": 46,
@@ -912,7 +912,7 @@
         "compare": "低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化",
         "expected": "低位往上 > 高位往下",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "低位往上 = 0.296 a vs 高位往下 = 0.198 a"
+        "model": "低位往上 = 0.297 a vs 高位往下 = 0.189 a"
       }
     ],
     "cable-fly-mid": [
@@ -925,7 +925,7 @@
         "compare": "高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化",
         "expected": "高位往下 > 低位往上",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "高位往下 = 0.819 a vs 低位往上 = 0.544 a"
+        "model": "高位往下 = 0.749 a vs 低位往上 = 0.543 a"
       },
       {
         "index": 46,
@@ -936,7 +936,7 @@
         "compare": "低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化",
         "expected": "低位往上 > 高位往下",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "低位往上 = 0.296 a vs 高位往下 = 0.198 a"
+        "model": "低位往上 = 0.297 a vs 高位往下 = 0.189 a"
       }
     ],
     "cable-fly-low": [
@@ -949,7 +949,7 @@
         "compare": "高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化",
         "expected": "高位往下 > 低位往上",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "高位往下 = 0.819 a vs 低位往上 = 0.544 a"
+        "model": "高位往下 = 0.749 a vs 低位往上 = 0.543 a"
       },
       {
         "index": 46,
@@ -960,7 +960,7 @@
         "compare": "低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化",
         "expected": "低位往上 > 高位往下",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "低位往上 = 0.296 a vs 高位往下 = 0.198 a"
+        "model": "低位往上 = 0.297 a vs 高位往下 = 0.189 a"
       }
     ]
   }
