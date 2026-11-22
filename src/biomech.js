@@ -18,7 +18,7 @@ MF.trunk = 1 - 2 * (MF.foot + MF.shank + MF.thigh + MF.upper + MF.fore);
 //   因本模型以深蹲 1.0× 體重為基準，採用 1.70／1.83 可同時反映「臀推負重顯著高於深蹲」與「臀橋 5RM 略高於臀推」之實測排序，取代原無出處之 1.3× 假設。
 export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row: 0.7, ohp: 0.5, goodmorning: 0.45, curl: 0.35, shrug: 1.2, uprow: 0.35, hipthrust: 1.7, glutebridge: 1.83,
   // 器械示範負重基準（× 體重；細部設定集中在下方 MACHINES）
-  smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9 };
+  smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
 
 // ---------- 器械規格與參數設定 ----------
 // 每個數值均標註 docs/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
@@ -122,6 +122,32 @@ export const MACHINES = {
     pivotY: 1.72,                    // 假設：上方轉軸高度（m）
     pivotZ: -0.18,                   // 假設：上方轉軸前後位置（m）
     colZ: -0.36,                     // 假設：後方立柱前後位置（m）
+  },
+  pecdeck: {
+    styleDefault: 'handle',          // 假設：預設握把式（手臂微彎）；可切換前臂墊式（屈肘 90°）
+    loadDefault: 45,                 // 假設：示範配重片＝45 kg（0.6× 體重，1:1 凸輪傳動）
+    loadRange: [20, 80],             // 假設：配重範圍（kg）
+    camArmM: 0.22,                   // 假設：等效凸輪基準力臂（m；單臂阻力力矩 = camArmM × 配重/2 × 凸輪係數）
+    seatY0: 0.55,                    // 假設：預設座墊骨盆高度（m）
+    pivX: 0.18,                      // 假設：垂直轉軸左右偏移（m，位於肩關節正上方附近）
+    pivY: 1.76,                      // 假設：上方垂直轉軸高度（m）
+    pivZ: -0.02,                     // 假設：垂直轉軸前後位置（m）
+    handleR: 0.54,                   // 假設：握把式機械臂水平半徑（m）
+    padR: 0.29,                      // 假設：前臂墊式機械臂水平半徑（m）
+    colZ: -0.36,                     // 假設：後方配重塔前後位置（m）
+    // 假設：商用蝴蝶機典型溫和鐘型凸輪（機械臂角度 °，0°=正前、90°=正側 → 相對力矩係數；未查得單一原廠實測凸輪表）
+    camTable: [[-20, 0.85], [15, 0.96], [45, 1.0], [80, 0.94], [110, 0.84]],
+  },
+  cablefly: {
+    heightDefault: 'mid',            // 滑輪高度：高位往下／與肩同高／低位往上
+    pulleyRatioDefault: '2:1',       // docs/machine-data.md §3.1：多功能滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格）
+    dualStack: true,                 // 雙側獨立配重塔，每手一條鋼索
+    stackKg: 18,                     // 假設：單側示範配重片＝18 kg（2:1 實感單手 9 kg；1:1 實感單手 18 kg）
+    pulleyX: 1.30,                   // 假設：左右滑輪柱半寬（m，總寬 2.60 m，對應商用大飛鳥門框寬度）
+    pulleyZ: -0.10,                  // 假設：滑輪柱位於雙腳站位後方 10 cm（人站在大飛鳥門框略前方）
+    // docs/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
+    pulleyY: { high: 1.92, mid: 1.34, low: 0.85 },
+    towerH: 2.15,                    // 假設：雙側龍門架高度（m）
   },
 };
 
@@ -497,6 +523,42 @@ export const LIFTS = {
       { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
     ],
     standardNote: '椅子調到握把與胸中段同高、肩胛後收貼椅背、手肘外開約 45～60°，推到手臂接近伸直；內聚弧線推直時雙手向中線收攏。',
+  },
+  pecdeck: {
+    name: '蝴蝶機', topLabel: '夾緊', bottomLabel: '外展拉伸',
+    viewCenter: [0, 1.05, 0.15], viewScale: 1.08,
+    seated: true, dofs: ['shFwd', 'shSide', 'shRot', 'elbExt'],
+    pose: pecDeckPose, loads: padLoads,
+    moving: ['shFwd', 'shSide', 'shRot'],
+    params: [
+      { key: 'style', label: '握把型式', type: 'select', options: [['handle', '握把式（手臂微彎）'], ['pad', '前臂墊式（屈肘 90°）']], def: MACHINES.pecdeck.styleDefault, joint: 'equip', mech: 'A' },
+      { key: 'stretch', label: '起始外展（拉伸程度）', left: '60°（保守）', right: '105°（深拉伸）', min: 60, max: 105, step: 1, def: 85, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'seat', label: '座椅高度（手臂相對肩）', left: '-10 cm（手臂高於肩）', right: '+10 cm（手臂低於肩）', min: -10, max: 10, step: 1, def: 0, joint: 'equip', mech: 'A', unit: ' cm' },
+      { key: 'scap', label: '肩胛後收', left: '前伸', right: '完全後收', min: 0, max: 1, step: 0.01, def: 0.7, joint: 'scap', mech: 'A' },
+      { key: 'load', label: '配重', left: '20 kg', right: '80 kg', min: MACHINES.pecdeck.loadRange[0], max: MACHINES.pecdeck.loadRange[1], step: 5, def: MACHINES.pecdeck.loadDefault, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
+      { key: 'prefUL', label: '胸大肌偏好', left: '偏上胸', right: '偏中下胸', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecc'], ['pecs']] },
+    ],
+    standardNote: '調整座椅讓握把或前臂墊約與胸中段同高、肩胛穩定後收貼椅背；從肩前側有拉伸感處沿圓弧水平內收至胸前交會。',
+  },
+  cablefly: {
+    name: '滑輪夾胸', topLabel: '夾緊交會', bottomLabel: '外展拉伸',
+    viewCenter: [0, 1.05, 0.05], viewScale: 1.22,
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt'],
+    pose: cableFlyPose, loads: cableLoads,
+    moving: ['shFwd', 'shSide', 'shRot'],
+    params: [
+      { key: 'height', label: '滑輪高度', type: 'select', options: [['high', '高位（由上往下）'], ['mid', '中位（與肩同高）'], ['low', '低位（由下往上）']], def: MACHINES.cablefly.heightDefault, joint: 'equip', mech: 'A' },
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.cablefly.pulleyRatioDefault, joint: 'equip', mech: 'A' },
+      { key: 'stretch', label: '起始外展（拉伸程度）', left: '60°（保守）', right: '100°（深拉伸）', min: 60, max: 100, step: 1, def: 82, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'elbowBend', label: '手肘微彎角度', left: '15°（近直臂）', right: '45°（較彎）', min: 15, max: 45, step: 1, def: 25, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'lean', label: '軀幹前傾', left: '5°', right: '35°', min: 5, max: 35, step: 1, def: 12, joint: 'lumbar', mech: 'A', unit: '°' },
+      { key: 'scap', label: '肩胛後收', left: '前伸', right: '完全後收', min: 0, max: 1, step: 0.01, def: 0.6, joint: 'scap', mech: 'A' },
+      { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.3, joint: 'lumbar', mech: 'B' },
+      { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
+      { key: 'prefUL', label: '胸大肌偏好', left: '偏上胸', right: '偏中下胸', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecc'], ['pecs']] },
+    ],
+    standardNote: '雙手各握獨立把手、手肘固定微彎約 20°～30°、軀幹微前傾對抗後方拉力；高位往下偏中下胸、中位均衡水平內收、低位往上偏上胸。',
   },
 };
 export const JOINT_NAMES = { equip: '器材', scap: '肩胛', hip: '髖', knee: '膝', ankle: '踝', lumbar: '下背', shoulder: '肩', elbow: '肘', hand: '握距', bar: '槓' };
@@ -1473,8 +1535,16 @@ function minimizeAxialMoment(pose, F, limit) {
 }
 
 // 滑輪：手上的力 = 配重 × 方向（槓中心 → 滑輪）；ext = 外力（站姿時影響壓力中心與腳底摩擦）
+// dualCable：雙側獨立滑輪（如滑輪夾胸），兩手各握獨立把手、各向同側滑輪拉，不套用剛體握把互推
 function cableLoads(pose, P, W, out) {
   const T = (pose.barW * W) / 2;
+  if (pose.dualCable) {
+    const d = norm(sub(pose.pulley, pose.R.hand));
+    const F = mul(d, T);
+    out.push({ p: pose.R.hand, F, region: 'fore', ext: true });
+    pose.forceLine = { p: pose.R.hand, d, is3d: true };
+    return;
+  }
   const d = norm(sub(pose.pulley, [0, pose.bar[1], pose.bar[2]]));
   const F = mul(d, T);
   minimizeAxialMoment(pose, F, 0.5 * T);
@@ -1491,9 +1561,9 @@ function pushLoads(pose, P, W, out) {
 }
 // 槓桿＋凸輪：繞關節的阻力力矩 τ(角度)，由墊子垂直壓在肢段上（pose.pad = { p, dir, arm, tau, region }）
 function padLoads(pose, P, W, out) {
-  const { p, dir, arm, tau, region } = pose.pad;
+  const { p, dir, arm, tau, region, is3d } = pose.pad;
   out.push({ p, F: mul(dir, (tau * W) / arm), region });
-  pose.forceLine = { p, d: dir };
+  pose.forceLine = { p, d: dir, is3d };
 }
 // 凸輪阻力曲線內插：以膝屈角度（°；0°＝伸直）查表內插相對阻力力矩
 function interpTable(table, x) {
@@ -1982,6 +2052,185 @@ function chestPressPose(P, e) {
       ...(conv ? [box([sx * (pose.R.hand[0] - 0.01), barY, barZ], [0.14, 0.03, 0.03], 0, 'frame')] : []),
     ]),
   ];
+  return pose;
+}
+
+// ---------- 蝴蝶機（夾胸機）----------
+// 坐姿、機械臂繞位於肩關節正上方附近的垂直軸轉動；支援握把式（手臂微彎）與前臂墊式（屈肘 90°）
+function pecDeckPose(P, e) {
+  const M = MACHINES.pecdeck;
+  const pad = (P.style ?? M.styleDefault) === 'pad';
+  const seatOff = (P.seat ?? 0) / 100;
+  const seatY = M.seatY0 + seatOff;
+  const pose = seatedBase(0, seatY, 0.45);
+  pose.girdle = { ret: rad(lerp(-6, 22, P.scap ?? 0.7)), elev: rad(-4) };
+  const S = toWorld(pose, shoulderLocal(pose.girdle));
+  // 機械臂／握把維持在機台固定高度（對應預設座高時的肩高），調座椅即改變手臂相對肩的高度
+  const refArmY = M.seatY0 + BODY.Ltr - 0.015;
+  const thTop = rad(pad ? -12 : -10);
+  const thBot = rad(P.stretch ?? 85);
+  const theta = lerp(thTop, thBot, e);
+  const st = Math.sin(theta), ct = Math.cos(theta);
+  const armDir = [st, 0, ct];
+  const tanRes = [ct, 0, -st]; // 水平圓弧切線（阻力方向：反於內收、往外後方推）
+  let loadPt, effArm, tipX, tipZ, padBoxMid = null;
+  if (pad) {
+    const dy = clamp(refArmY - S[1], -0.45 * BODY.Lu, 0.45 * BODY.Lu);
+    const rh = Math.sqrt(Math.max(0.01, BODY.Lu * BODY.Lu - dy * dy));
+    const E = [S[0] + rh * st, S[1] + dy, S[2] + rh * ct];
+    const H = add(E, [0, BODY.Lf, 0]);
+    pose.R.shoulder = S; pose.R.elbow = E; pose.R.hand = H;
+    pose.R.grip = H;
+    pose.armPole = norm(add([0, -1, 0], tanRes));
+    pose.gripAxis = armDir;
+    loadPt = lerpV(E, H, 0.45);
+    effArm = rh;
+    // 前臂墊位於前臂內／前側（-tanRes 方向），手臂內收時往前壓進墊子
+    padBoxMid = add(loadPt, mul(tanRes, -0.055));
+    tipX = padBoxMid[0]; tipZ = padBoxMid[2];
+  } else {
+    const H = [M.pivX + M.handleR * st, refArmY, M.pivZ + M.handleR * ct];
+    const pole = norm(add(tanRes, [0, -0.25, 0]));
+    const ok = armChain(pose, S, H, pole);
+    if (!ok) { pose.ok = false; pose.conflict = '座椅或拉伸角度超出握把可及範圍'; }
+    pose.R.grip = H;
+    pose.gripAxis = [0, -1, 0]; // 直立握把：小指朝下、拇指朝上
+    loadPt = pose.R.hand;
+    effArm = M.handleR;
+    tipX = H[0]; tipZ = H[2];
+  }
+  pose.bar = [0, refArmY, M.pivZ + 0.3];
+  pose.barStyle = 'none';
+  const loadKg = P.load ?? M.loadDefault;
+  pose.barW = loadKg / BODY.mass;
+  const cf = interpTable(M.camTable, deg(theta));
+  const tau = (M.camArmM * pose.barW * cf) / 2;
+  pose.pad = { p: loadPt, dir: tanRes, arm: effArm, tau, region: 'fore', is3d: true };
+  pose.armJoints = ['shoulder', 'elbow'];
+  // 機台幾何：可調座墊、垂直椅背、後方配重塔、雙側垂直轉軸與旋轉機械臂
+  const backC = add(add(pose.Pc, mul(pose.u, 0.34)), mul(pose.f, -0.155));
+  const seatTopY = seatY - 0.08;
+  const pivY = M.pivY, pivZ = M.pivZ, pivX = M.pivX, colZ = M.colZ;
+  const armR = Math.hypot(tipX - pivX, tipZ - pivZ);
+  const armAng = Math.atan2(tipX - pivX, tipZ - pivZ);
+  const dropBotY = pad ? padBoxMid[1] - 0.12 : refArmY - 0.12;
+  pose.boxes = [
+    box([0, seatTopY - 0.04, 0.08], [0.42, 0.08, 0.42]), // 座墊（隨 seat 上下移）
+    boxAlong(backC, pose.u, [0.34, 0.82, 0.07]), // 椅背
+    box([0, 0.025, -0.12], [0.58, 0.05, 0.72], 0, 'frame'), // 底座
+    box([0, (seatTopY - 0.08) / 2, 0.08], [0.1, Math.max(0.1, seatTopY - 0.08), 0.12], 0, 'frame'), // 座椅支柱
+    box([0, 0.42, -0.18], [0.1, 0.78, 0.07], 0, 'frame'), // 椅背立柱
+    box([0, 0.92, colZ], [0.16, 1.84, 0.16], 0, 'glass'), // 後方配重塔
+    box([0, pivY + 0.04, (colZ + pivZ) / 2], [0.44, 0.07, pivZ - colZ + 0.12], 0, 'glass'), // 上方懸臂橋
+    // 左右獨立垂直轉軸＋旋轉水平臂＋垂直連桿＋握把／前臂墊
+    ...[-1, 1].flatMap((sx) => {
+      const midX = sx * (pivX + 0.5 * armR * Math.sin(armAng));
+      const midZ = pivZ + 0.5 * armR * Math.cos(armAng);
+      const dropH = Math.max(0.1, pivY - dropBotY);
+      const parts = [
+        box([sx * pivX, pivY - 0.02, pivZ], [0.08, 0.12, 0.08], 0, 'frame'), // 垂直轉軸座
+        { c: [midX, pivY, midZ], s: [0.045, 0.045, armR], rx: 0, ry: sx * armAng, mat: 'frame' }, // 水平旋轉臂
+        box([sx * tipX, (pivY + dropBotY) / 2, tipZ], [0.036, dropH, 0.036], 0, 'frame'), // 垂直下垂連桿
+      ];
+      if (pad) {
+        parts.push({ c: [sx * padBoxMid[0], padBoxMid[1], padBoxMid[2]], s: [0.06, 0.34, 0.13], rx: 0, ry: sx * theta, mat: 'pad' });
+      } else {
+        parts.push(box([sx * tipX, refArmY, tipZ], [0.034, 0.24, 0.034], 0, 'frame'));
+      }
+      return parts;
+    }),
+  ];
+  if (P.stretch > 95 && e > 0.7) pose.warn.push('起始外展角度大（' + Math.round(P.stretch) + '°）：肩前側拉伸深，留意關節囊壓力');
+  if (P.seat < -6) pose.warn.push('座椅偏低（手臂高於肩）：肩外展超過 90°，留意肩峰下空間');
+  return pose;
+}
+
+// ---------- 滑輪夾胸／飛鳥（站姿、雙側獨立滑輪）----------
+// 雙手各握獨立把手、各連至同側滑輪柱，不套用剛體握把互推；雙腳併站、軀幹前傾維持平衡
+function cableFlyPose(P, e) {
+  const M = MACHINES.cablefly;
+  const hKey = P.height ?? M.heightDefault;
+  const div = pulleyDivisor(P.pulleyRatio ?? M.pulleyRatioDefault);
+  // 單側配重片 ÷ 滑輪比 = 單手拉力；barW 為雙手總拉力（× 體重）
+  const effBarW = (2 * M.stackKg) / (div * BODY.mass);
+  const py = M.pulleyY[hKey] ?? M.pulleyY.mid;
+  const pulleyR = [M.pulleyX, py, M.pulleyZ];
+  const ef = rad(P.elbowBend ?? 25);
+  const Lch = Math.sqrt(BODY.Lu ** 2 + BODY.Lf ** 2 + 2 * BODY.Lu * BODY.Lf * Math.cos(ef));
+  // 軀幹座標內的上舉角（elev）與水平方位角（plane）：e = 0 胸前交會、e = 1 外展拉伸
+  const cfg = {
+    high: { elevBot: rad(96), elevTop: rad(54) },
+    mid: { elevBot: rad(86), elevTop: rad(84) },
+    low: { elevBot: rad(68), elevTop: rad(90) },
+  }[hKey] || { elevBot: rad(86), elevTop: rad(84) };
+  const planeBot = rad(P.stretch ?? 82);
+  const toWorldVec = (tf, v) => add(add(mul(tf.lat, v[0]), mul(tf.u, v[1])), mul(tf.f, v[2]));
+  const solveAt = (eAt, extra) => {
+    const elev = lerp(cfg.elevTop, cfg.elevBot, eAt);
+    const girdle = { ret: rad(lerp(-4, 18, P.scap ?? 0.6)), elev: rad(hKey === 'low' ? lerp(2, -4, eAt) : -4) };
+    const handAt = (tf, S) => {
+      const sinTop = clamp((0.065 - S[0]) / Math.max(0.1, Lch * Math.sin(cfg.elevTop)), -0.5, 0.5);
+      const planeTop = Math.asin(sinTop);
+      const plane = lerp(planeTop, planeBot, eAt);
+      const cLoc = [Math.sin(elev) * Math.sin(plane), -Math.cos(elev), Math.sin(elev) * Math.cos(plane)];
+      const H = add(S, mul(toWorldVec(tf, cLoc), Lch));
+      // 手肘與鋼索力線共面（S-H-pulley），符合教練教學「前臂順著鋼索方向」並避免肩關節異常扭轉力矩
+      const chDir = norm(sub(H, S));
+      const cDir = norm(sub(pulleyR, H));
+      const inPlane = sub(cDir, mul(chDir, dot(cDir, chDir)));
+      const outVec = toWorldVec(tf, [Math.cos(plane), 0, -Math.sin(plane)]);
+      const pole = len(inPlane) > 0.12 ? norm(inPlane) : norm(outVec);
+      const arm = ik2(S, H, BODY.Lu, BODY.Lf, pole);
+      return { bar: H, elbow: arm.mid, pole, ok: arm.ok };
+    };
+    // 兩側鋼索的 X 分量左右相消；Y、Z 分量合計作用於系統平衡（雙手總和 = effBarW）
+    // 鋼索往後拉時壓力中心落在腳跟側（copZ = -0.07），重心不需過度前傾
+    return standingHands(P, {
+      kap: rad(10), lean: rad(P.lean ?? 12) + extra, girdle, barW: 0, copZ: -0.07,
+      ext: (r) => {
+        const d = norm(sub(pulleyR, r.bar));
+        return [0, d[1] * effBarW, d[2] * effBarW];
+      },
+      pole: (tf, r) => r.pole,
+      barAt: (tf, S) => handAt(tf, S),
+    });
+  };
+  // 以行程中段決定整組動作一致的站姿前傾補充角，避免每幀軀幹上下晃動
+  const extra = bisect((x) => rad(12) - solveAt(0.5, x).shinTilt, 0, rad(24), 16);
+  const pose = solveAt(e, extra);
+  if (!pose.armOk) { pose.ok = false; pose.conflict = '手臂無法達到此夾胸位置'; }
+  pose.dualCable = true;
+  pose.barAxial = false;
+  pose.barStyle = 'none';
+  pose.barW = effBarW;
+  pose.pulley = pulleyR;
+  pose.R.grip = pose.R.hand;
+  pose.gripAxis = [0, -1, 0];
+  pose.armJoints = ['shoulder', 'elbow'];
+  // 雙側龍門架、可調滑輪座、雙手獨立 D 把與雙側獨立鋼索
+  const px = M.pulleyX, pz = M.pulleyZ, th = M.towerH;
+  const HR = pose.R.hand, HL = [-HR[0], HR[1], HR[2]];
+  const pulleyL = [-px, py, pz];
+  pose.boxes = [
+    box([0, th, pz], [2 * px + 0.16, 0.07, 0.1], 0, 'glass'), // 頂部橫樑
+    ...[-1, 1].flatMap((sx) => [
+      box([sx * px, th / 2, pz], [0.12, th, 0.12], 0, 'glass'), // 左右滑輪柱
+      box([sx * px, 0.025, pz + 0.08], [0.34, 0.05, 0.62], 0, 'frame'), // 柱底腳座
+      box([sx * px, py, pz + 0.03], [0.14, 0.12, 0.12], 0, 'frame'), // 可調滑輪滑車
+      box([sx * HR[0], HR[1], HR[2]], [0.026, 0.13, 0.026], 0, 'frame'), // D 型把手
+    ]),
+  ];
+  pose.cables = [
+    [HR, pulleyR],
+    [HL, pulleyL],
+    [pulleyR, [px, th - 0.04, pz]],
+    [pulleyL, [-px, th - 0.04, pz]],
+  ];
+  if (deg(extra) > 4) {
+    pose.warn.push('雙側鋼索往後拉：目前以雙腳併站、軀幹需額外前傾約 ' + Math.round(deg(extra)) + '° 平衡（實務上常用前後腳站姿）');
+  } else {
+    pose.warn.push('目前為雙腳併站模型，實務上建議前後腳分站以增加前後穩定度');
+  }
   return pose;
 }
 

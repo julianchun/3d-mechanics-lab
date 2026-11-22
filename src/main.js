@@ -125,13 +125,13 @@ function makeProps() {
 }
 function updateProps(g, pose) {
   const { plat, blkL, blkR, boxes, cables } = g.userData;
-  // 器械：pose.boxes = [{ c: 中心, s: 尺寸, rx: 繞左右軸轉角, mat: 'pad' | 'frame' }]
+  // 器械：pose.boxes = [{ c: 中心, s: 尺寸, rx/ry/rz: 轉角, mat: 'pad' | 'frame' | 'glass' }]
   const bl = pose.boxes || [];
   bl.forEach((bx, i) => {
     let m = boxes[i];
     if (!m) { m = new THREE.Mesh(UNIT, PAD); boxes.push(m); g.add(m); }
     m.material = bx.mat === 'frame' ? FRAME : bx.mat === 'glass' ? GLASS : PAD;
-    m.position.set(...bx.c); m.scale.set(...bx.s); m.rotation.set(bx.rx || 0, 0, 0);
+    m.position.set(...bx.c); m.scale.set(...bx.s); m.rotation.set(bx.rx || 0, bx.ry || 0, bx.rz || 0);
     m.visible = true;
   });
   for (let i = bl.length; i < boxes.length; i++) boxes[i].visible = false;
@@ -393,7 +393,9 @@ function paramHint(p, v) {
     if (!M?.stackKg) return null;
     const div = pulleyDivisor(v);
     const handKg = +(M.stackKg / div).toFixed(1);
-    return `示範配重片 ${M.stackKg} kg（${v} 滑輪比）→ 手上實際拉力 ${handKg} kg`;
+    return M.dualStack
+      ? `單側示範配重片 ${M.stackKg} kg（${v} 滑輪比）→ 單手實際拉力 ${handKg} kg`
+      : `示範配重片 ${M.stackKg} kg（${v} 滑輪比）→ 手上實際拉力 ${handKg} kg`;
   }
   if (p.key === 'cam') return CAM_HINTS[state.lift]?.[v] || null;
   if (p.key === 'friction') {
@@ -701,9 +703,15 @@ function frame(now) {
     } else {
       const L5 = [0, ...[1, 2].map((i) => r.pose.Pc[i] + r.pose.u[i] * 0.05)];
       const lz = r.pose.lineZ ?? r.pose.bar[2]; // 力線：預設是槓的垂直線；臀推等用腳底壓力中心
-      const fl = r.pose.forceLine; // 器械／滑輪：力臂 = 關節到外力作用線的垂直距離（矢狀面）
+      const fl = r.pose.forceLine; // 器械／滑輪：力臂 = 關節到外力作用線的垂直距離
       const foot = (p) => {
         if (!fl) return [p[0], p[1], lz];
+        if (fl.is3d) {
+          const v = [p[0] - fl.p[0], p[1] - fl.p[1], p[2] - fl.p[2]];
+          const n2 = fl.d[0] ** 2 + fl.d[1] ** 2 + fl.d[2] ** 2 || 1;
+          const k = (v[0] * fl.d[0] + v[1] * fl.d[1] + v[2] * fl.d[2]) / n2;
+          return [fl.p[0] + fl.d[0] * k, fl.p[1] + fl.d[1] * k, fl.p[2] + fl.d[2] * k];
+        }
         const v = [0, p[1] - fl.p[1], p[2] - fl.p[2]], dd = [0, fl.d[1], fl.d[2]], n2 = dd[1] ** 2 + dd[2] ** 2 || 1;
         const k = (v[1] * dd[1] + v[2] * dd[2]) / n2;
         return [p[0], fl.p[1] + dd[1] * k, fl.p[2] + dd[2] * k];
@@ -783,11 +791,12 @@ function drawLabels(res, aLines, vA, maxV, set, offA, B) {
       if (p) put(p, msg, 'rom', offA);
     }
     if (state.layers.forceLine) {
-      const lens = aLines.map(([, a, b]) => Math.hypot(a[0] - b[0], a[2] - b[2]));
+      const is3d = !!res.pose.forceLine?.is3d;
+      const lens = aLines.map(([, a, b]) => (is3d ? Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) : Math.hypot(a[0] - b[0], a[2] - b[2])));
       const m = Math.max(1e-6, ...lens);
       aLines.forEach(([k, a, b], j) => {
         if (lens[j] < 0.01) return;
-        put([(a[0] + b[0]) / 2, a[1], (a[2] + b[2]) / 2], `${JOINT_NAMES[k]} 力臂 ${Math.round((lens[j] / m) * 100)}%`, 'arm', offA);
+        put([(a[0] + b[0]) / 2, is3d ? (a[1] + b[1]) / 2 : a[1], (a[2] + b[2]) / 2], `${JOINT_NAMES[k]} 力臂 ${Math.round((lens[j] / m) * 100)}%`, 'arm', offA);
       });
     }
     if (state.layers.muscles && state.colorMode !== 'length' && !state.diff) {

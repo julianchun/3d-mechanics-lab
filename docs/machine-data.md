@@ -147,3 +147,18 @@
 
 - **參考說明**：針對「內聚弧線 vs 直線軌跡」胸推機的同儕審查 EMG 直接量化比較文獻極為稀缺（**未查得直接比較此二軌跡之 PubMed 實測論文**），上表屬機構運動學與商用設計規範整理；相關穩定度對照可參考 Schick et al. (2010, [PubMed 20093960](https://pubmed.ncbi.nlm.nih.gov/20093960/)) 與 Saeterbakken et al. (2011, [PubMed 21225489](https://pubmed.ncbi.nlm.nih.gov/21225489/))。
 - **現行模型對應**：`src/biomech.js` 的 `chestPressPose` 目前以旋轉 90° 的臥推幾何搭配固定方向推力 `d = pose.f` 近似**直線軌跡胸推機**；若未來要模擬內聚弧線，可讓手部 X 座標 `g` 隨進度 `e` 減小（推直時變窄）。
+
+---
+
+## 6. 蝴蝶機（Pec Deck / Pectoral Fly）與雙側滑輪夾胸（Cable Crossover）
+
+### 6.1 商用機構與規格整理
+
+| 設備類型 | 機構與傳動特徵 | 參數／範圍 | 來源與備註 |
+|---|---|---|---|
+| **蝴蝶機（握把式／前臂墊式）** | 雙側獨立機械臂繞位於肩關節正上方附近的**垂直軸**轉動；阻力經凸輪傳動，方向恆為圓弧切線（頂點夾緊時仍維持向外的水平張力） | 傳動多為 1:1 凸輪直連；機械臂半徑（握把 54 cm／前臂墊 29 cm）、等效凸輪基準力臂（22 cm）與溫和鐘型凸輪曲線表皆屬**無出處假設** | 商用雙用蝴蝶機／經典前臂墊式蝴蝶機結構；**未查得單一商用機台公開實測凸輪阻力曲線表** |
+| **雙側可調滑輪柱／大飛鳥（Cable Crossover / Dual Adjustable Pulley）** | 兩手各握獨立 D 型把手、各連一條獨立鋼索（無剛體握把互推）；滑輪可於低／中／高檔調整 | 商用主流滑輪比為 **2:1**（部分四線系統為 4:1）；滑輪高度範圍 **17.8–193.0 cm**（7"–76"），機架高約 **210–240 cm**；柱距 260 cm 與單側 18 kg 配重為假設 | Life Fitness PWR Play / Signature Cable Crossover 規格表（見 §3.1）；站位距離與配重屬模型假設 |
+
+### 6.2 模型對應
+- `src/biomech.js` 的 `pecDeckPose` 與 `MACHINES.pecdeck` 實作坐姿垂直轉軸圓弧阻力（`padLoads` 搭配切線方向），提供握把式（`style: 'handle'`）與前臂墊式（`style: 'pad'`）。
+- `src/biomech.js` 的 `cableFlyPose` 與 `MACHINES.cablefly` 實作站姿雙側獨立滑輪（`pose.dualCable = true`，`cableLoads` 不套用 `minimizeAxialMoment`），提供高位（192 cm）、中位（134 cm）、低位（85 cm）三種滑輪高度。

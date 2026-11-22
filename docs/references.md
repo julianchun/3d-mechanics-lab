@@ -1,6 +1,6 @@
 # 重訓動作生物力學與肌電圖文獻彙整
 
-本文件針對 [`src/catalog.js`](../src/catalog.js) 中**所有已實作動作**（共 33 項，不含 `planned: true` 之蝴蝶機）整理同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
+本文件針對 [`src/catalog.js`](../src/catalog.js) 中**所有已實作動作**（共 37 項）整理同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
 
 > **驗證原則**：每筆引用均附已查證之 PubMed（PMID）或 DOI／原始出處連結；針對目前缺乏直接同儕審查動態研究之動作，明確標記「未找到」並說明替代參考方向。
 
@@ -28,6 +28,10 @@
 | 水平推 | `cg-bench` | 窄握臥推 | 完整（握距 EMG） |
 | 水平推 | `floor-press` | 地板臥推 | 動態 EMG／逆動力學未找到（僅等長測試研究） |
 | 水平推 | `chest-press` | 坐姿胸推機 | 部分（多以史密斯機或機械臥推代替比較） |
+| 水平推 | `pec-deck` | 蝴蝶機 | 完整（與臥推直接比較 EMG、預先疲勞） |
+| 水平推 | `cable-fly-high` | 滑輪夾胸（高位） | 間接（斜向水平內收 EMG、肩力臂、滑輪比較） |
+| 水平推 | `cable-fly-mid` | 滑輪夾胸（中位） | 間接（斜向水平內收 EMG、滑輪比較） |
+| 水平推 | `cable-fly-low` | 滑輪夾胸（低位） | 間接（斜向水平內收 EMG、肩力臂、傾角比較） |
 | 垂直推 | `ohp` | 站姿肩推 | 完整（站姿 vs 坐姿、槓鈴 vs 啞鈴 EMG） |
 | 水平拉 | `row` | 槓鈴划船（正握） | 完整（腰椎負荷與 EMG） |
 | 水平拉 | `row-sup` | 槓鈴划船（反握） | 直接正反握槓鈴划船全文未找到（參考拉類握法研究） |
@@ -292,6 +296,37 @@
   - **說明**：直接比較「坐姿插銷／掛片胸推機（特別是直線軌跡 vs 內聚弧線軌跡）」與自由臥推之同儕審查 EMG 文獻較稀缺，多以史密斯機／固定軌跡胸推推論。
 - **可檢驗趨勢**
   - 坐姿胸推機胸大肌與三頭肌為主要動肌；與自由平板臥推相比，同等相對參數下胸大肌活化處於同量級（Schick 2010）。
+
+### 18b. `pec-deck` 蝴蝶機
+
+- **可靠研究來源**
+  1. Rocha Júnior VA, Gentil P, Oliveira E, do Carmo J. (2007). *Comparison among the EMG activity of the pectoralis major, anterior deltoidis and triceps brachii during the bench press and peck deck exercises.* Rev Bras Med Esporte, 13(1):43–46. [DOI](https://doi.org/10.1590/S1517-86922007000100012)
+  2. Gentil P, Oliveira E, de Araújo Rocha Júnior V, do Carmo J, Bottaro M. (2007). *Effects of exercise order on upper-body muscle activation and exercise performance.* J Strength Cond Res, 21(4):1082–1086. [PubMed 18076251](https://pubmed.ncbi.nlm.nih.gov/18076251/)
+  3. Welsch EA, Bird MJ, Mayhew JL. (2005). *Electromyographic activity of the pectoralis major and anterior deltoid muscles during three upper-body lifts.* J Strength Cond Res, 19(2):449–452. [PubMed 15903389](https://pubmed.ncbi.nlm.nih.gov/15903389/)
+  4. Solstad TE, Andersen V, Shaw M, Hoel EM, Vonheim A, Saeterbakken AH. (2020). *A comparison of muscle activation between barbell bench press and dumbbell flyes in resistance-trained males.* J Sports Sci Med, 19(4):645–651. [PubMed 33239937](https://pubmed.ncbi.nlm.nih.gov/33239937/)
+  5. Ackland DC, Pak P, Richardson M, Pandy MG. (2008). *Moment arms of the muscles crossing the anatomical shoulder.* J Anat, 213(4):383–390. [PubMed 18691376](https://pubmed.ncbi.nlm.nih.gov/18691376/)
+- **可比較量化結果**
+  - Rocha Júnior et al. (2007, 10RM)：蝴蝶機與平板臥推在**胸大肌**與**前三角肌**之 EMG 無顯著差異，但平板臥推之**肱三頭肌** EMG 顯著高於蝴蝶機；蝴蝶機內胸大肌與前三角肌顯著高於三頭肌。
+  - Solstad et al. (2020, 6RM 啞鈴飛鳥 vs 槓鈴臥推)：飛鳥類動作以水平內收為主，三頭肌參與大幅降低，而保持微彎肘角時**肱二頭肌**活化高於臥推（57%–86%）。
+  - **握把式 vs 前臂墊式**：同儕審查期刊中直接比較握把式與前臂墊式蝴蝶機之 EMG 全文**未找到**；由機構力學推論，握把式需屈肘肌等長維持微彎肘角，前臂墊式阻力垂直於屈肘平面而大幅減少屈肘肌需求。
+- **可檢驗趨勢**
+  - 平板臥推肱三頭肌（`trilat`）活化 > 蝴蝶機（Rocha Júnior 2007, direct）。
+  - 蝴蝶機握把式（`style: 'handle'`）屈肘肌群（`brach`）活化 > 前臂墊式（`style: 'pad'`）（力學／解剖推論）。
+
+### 18c. `cable-fly-high`／`cable-fly-mid`／`cable-fly-low` 滑輪夾胸（高位／中位／低位）
+
+- **可靠研究來源**
+  1. Lee HM. (2019). *Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing.* J Hand Ther, 32(1):71–79. [PubMed 28943236](https://pubmed.ncbi.nlm.nih.gov/28943236/)
+  2. Ackland DC, Pak P, Richardson M, Pandy MG. (2008). *Moment arms of the muscles crossing the anatomical shoulder.* J Anat, 213(4):383–390. [PubMed 18691376](https://pubmed.ncbi.nlm.nih.gov/18691376/)
+  3. Signorile JF, Rendos NK, Heredia Vargas HH, Alipio TC, Regis RC, Eltoukhy MM, Nargund RS, Romero MA. (2017). *Differences in muscle activation and kinematics between cable-based and selectorized weight training.* J Strength Cond Res, 31(2):313–322. [PubMed 28129277](https://pubmed.ncbi.nlm.nih.gov/28129277/)
+  4. Rodríguez-Ridao D et al. (2020). [DOI](https://doi.org/10.3390/ijerph17197339)；Lauver JD et al. (2016). [PubMed 25799093](https://pubmed.ncbi.nlm.nih.gov/25799093/)
+- **可比較量化結果**
+  - **直接比較動態高／中／低三檔滑輪夾胸之同儕審查期刊全文：未找到**。
+  - Lee (2019, 橫斷面等長測試)：比較水平、上斜 +30° 與下斜 -30° 施力方向對胸大肌鎖骨部與胸骨部之貢獻，顯示**上斜 +30° 方向**結合肩外旋 45° 最能區分鎖骨部（上胸）與胸骨部（中下胸），兩部仍高度協同。
+  - Ackland et al. (2008, 解剖力臂量測)：胸大肌鎖骨部具顯著較大的肩屈曲力臂（71° 時達 53.7 mm），胸骨中下束則屈曲力臂甚小且具肩內收／下壓傾向，從力學結構支持低位往上偏上胸、高位往下偏中下胸。
+- **可檢驗趨勢**
+  - 高位滑輪夾胸（`height: 'high'`）中下胸（`pecs`）活化 > 低位滑輪夾胸（`height: 'low'`）（Lee 2019；Ackland 2008；Rodríguez-Ridao 2020，indirect）。
+  - 低位滑輪夾胸（`height: 'low'`）上胸（`pecc`）活化 > 高位滑輪夾胸（`height: 'high'`）（Lee 2019；Ackland 2008；Rodríguez-Ridao 2020，indirect）。
 
 ---
 

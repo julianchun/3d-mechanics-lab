@@ -256,7 +256,7 @@ export class Rig {
       _m.elements[15] = 1;
       const grip = pose.supinated ? -1 : 1; // 右手：正握時小指在外側（+x）
       const barPt = pose.R.grip || [pose.R.hand[0], pose.bar[1], pose.bar[2]];
-      const out = this.hand.solve(_m, barPt, grip, pose.R.wrist);
+      const out = this.hand.solve(_m, barPt, grip, pose.R.wrist, pose.gripAxis);
       const put = (name, M) => {
         const arr = this.boneMeshes[name];
         arr[0].matrix.copy(M);
@@ -448,7 +448,7 @@ export class HandRig {
       // 2) 手掌：槓沿 tLoc 斜躺在掌心；W 到槓的垂足方向對齊
       const a2 = tLoc.clone().applyMatrix3(Fn).normalize();
       const a1 = uLoc.clone().applyMatrix3(Fn); a1.addScaledVector(a2, -a1.dot(a2)).normalize();
-      const v2 = new THREE.Vector3(grip, 0, 0);
+      const v2 = ctx.axis.clone().multiplyScalar(grip);
       const v1 = B.clone().sub(W); v1.addScaledVector(v2, -v1.dot(v2)).normalize();
       const A = new THREE.Matrix4().makeBasis(a1, a2, a1.clone().cross(a2));
       const Vb = new THREE.Matrix4().makeBasis(v1, v2, v1.clone().cross(v2));
@@ -482,12 +482,13 @@ export class HandRig {
     const pn = this.palmN.clone().addScaledVector(h0, -this.palmN.dot(h0)).addScaledVector(tp, -this.palmN.dot(tp)).normalize();
     return { ext: Math.atan2(-h1.dot(pn), h1.dot(h0)), uln: Math.atan2(h1.dot(tp), h1.dot(h0)) };
   }
-  solve(foreM0, barPt, grip, wristPt) {
+  solve(foreM0, barPt, grip, wristPt, gripAxis = null) {
     const { out } = this;
+    const axis = gripAxis ? V3(gripAxis).normalize() : new THREE.Vector3(1, 0, 0);
     const mk = (fm) => {
       const L = new THREE.Vector3().setFromMatrixColumn(fm, 0).length();
       const Fn = new THREE.Matrix3().setFromMatrix4(fm).multiplyScalar(1 / L); // 正交（行列式可能為 -1）
-      return { foreM: fm, L, Fn, Finv: Fn.clone().transpose(), B: V3(barPt), grip, F0: fm.clone().setPosition(0, 0, 0) };
+      return { foreM: fm, L, Fn, Finv: Fn.clone().transpose(), B: V3(barPt), grip, axis, F0: fm.clone().setPosition(0, 0, 0) };
     };
     // 前臂旋前時橈骨遠端（手腕）會繞尺骨頭轉開好幾公分；把整支前臂繞肘關節轉一點，讓手腕回到該在的位置
     // （力學模型的握點固定在尺骨座標，沒有跟著旋前移動）
@@ -560,7 +561,7 @@ export class HandRig {
     // 4) 手指：在手的局部座標裡，一節一節往掌側彎，直到碰到槓
     const inv = out.hand.clone().invert();
     const c = B.clone().applyMatrix4(inv);
-    const u = B.clone().add(new THREE.Vector3(1, 0, 0)).applyMatrix4(inv).sub(c).normalize();
+    const u = B.clone().add(ctx.axis).applyMatrix4(inv).sub(c).normalize();
     const R = 0.023 / L; // 槓半徑 14 mm + 手指掌側軟組織 9 mm
     for (const d of this.digits) {
       let M = new THREE.Matrix4(); // 累積的局部轉動

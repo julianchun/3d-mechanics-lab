@@ -39,7 +39,10 @@ export const CATALOG = [
   { id: 'cg-bench', name: '窄握臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.0, flare: 32, touch: 0.75 }, alias: ['close grip', 'cgbp'] },
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
-  { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', planned: true, alias: ['pec deck', 'fly'] },
+  { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
+  { id: 'cable-fly-high', name: '滑輪夾胸（高位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'high' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '高滑輪'] },
+  { id: 'cable-fly-mid', name: '滑輪夾胸（中位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'mid' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '中滑輪'] },
+  { id: 'cable-fly-low', name: '滑輪夾胸（低位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'low' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '低滑輪'] },
   // 垂直推
   { id: 'ohp', name: '站姿肩推', cat: 'vpush', equip: 'barbell', lift: 'ohp', set: {}, alias: ['ohp', 'press', '肩推'] },
   // 水平拉
