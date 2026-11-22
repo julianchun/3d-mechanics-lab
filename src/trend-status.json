@@ -2,13 +2,13 @@
   "modelVersion": "0.7.2",
   "summary": {
     "total": 46,
-    "pass": 42,
-    "fail": 4,
+    "pass": 43,
+    "fail": 3,
     "byEvidence": {
       "direct": {
         "total": 27,
-        "pass": 24,
-        "fail": 3
+        "pass": 25,
+        "fail": 2
       },
       "indirect": {
         "total": 14,
@@ -688,19 +688,19 @@
         "compare": "正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12)",
-        "model": "正握 = 0.969 a vs 反握 = 0.801 a"
+        "model": "正握 = 0.969 a vs 反握 = 0.733 a"
       },
       {
         "index": 31,
-        "pass": false,
-        "tie": true,
+        "pass": true,
+        "tie": false,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "滑輪下拉（同握距）",
         "compare": "同握距 (grip=1.4) 正握 vs 反握 — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12, 握法主效應)",
-        "model": "正握 = 0.842 a vs 反握 = 0.842 a"
+        "model": "正握 = 0.842 a vs 反握 = 0.742 a"
       }
     ],
     "pulldown-sup": [
@@ -714,19 +714,19 @@
         "compare": "正握 (pro, grip=1.7) vs 反握 (sup, grip=1.1) — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12)",
-        "model": "正握 = 0.969 a vs 反握 = 0.801 a"
+        "model": "正握 = 0.969 a vs 反握 = 0.733 a"
       },
       {
         "index": 31,
-        "pass": false,
-        "tie": true,
+        "pass": true,
+        "tie": false,
         "evidence": "direct",
         "evidenceLabel": "文獻直接量到",
         "exercise": "滑輪下拉（同握距）",
         "compare": "同握距 (grip=1.4) 正握 vs 反握 — 背闊肌活化",
         "expected": "正握 > 反握",
         "ref": "Lusk 2010 (PMID 20543740, n=12, 握法主效應)",
-        "model": "正握 = 0.842 a vs 反握 = 0.842 a"
+        "model": "正握 = 0.842 a vs 反握 = 0.742 a"
       }
     ],
     "cable-row-wide": [
