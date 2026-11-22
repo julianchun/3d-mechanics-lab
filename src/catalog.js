@@ -60,6 +60,10 @@ export const CATALOG = [
   { id: 'pulldown-sup', name: '反握滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'sup', grip: 1.1 }, alias: ['chin', 'underhand'] },
   // 單關節
   { id: 'leg-ext', name: '腿伸機', cat: 'iso', equip: 'machine', lift: 'legext', set: {}, alias: ['leg extension'] },
+  { id: 'calf-raise-standing', name: '站姿提踵機', cat: 'iso', equip: 'machine', lift: 'calfraise', set: { posture: 'standing', knee: 90, load: 60, range: 1 }, alias: ['standing calf raise'] },
+  { id: 'calf-raise-seated', name: '坐姿提踵機', cat: 'iso', equip: 'machine', lift: 'calfraise', set: { posture: 'seated', knee: 90, load: 45, range: 1 }, alias: ['seated calf raise'] },
+  { id: 'hip-abduction', name: '臀外展機', cat: 'iso', equip: 'machine', lift: 'hipabd', set: { direction: 'abd', lean: 0, load: 35 }, alias: ['hip abduction'] },
+  { id: 'hip-adduction', name: '臀內收機', cat: 'iso', equip: 'machine', lift: 'hipabd', set: { direction: 'add', lean: 0, load: 35 }, alias: ['hip adduction'] },
   { id: 'leg-curl', name: '坐姿腿彎舉', cat: 'iso', equip: 'machine', lift: 'legcurl', set: { posture: 'seated' }, alias: ['leg curl', 'seated'] },
   { id: 'lying-leg-curl', name: '俯臥腿彎舉', cat: 'iso', equip: 'machine', lift: 'legcurl', set: { posture: 'lying' }, alias: ['leg curl', 'lying'] },
   { id: 'pushdown', name: '滑輪三頭下壓', cat: 'iso', equip: 'cable', lift: 'pushdown', set: {}, alias: ['pushdown', 'triceps'] },
@@ -70,9 +74,9 @@ export const CATALOG = [
 
 // 清單上「主要肌群」用的簡稱；沒列在這裡的（穩定肌、小腿、旋轉肌袖）不顯示
 export const MUSCLE_SHORT = {
-  vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', addmag: '內收大肌', erec: '腰背伸肌',
+  vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', gmed: '臀中肌', addl: '內收長／短肌', addmag: '內收大肌', erec: '腰背伸肌',
   pecs: '胸大肌', pecc: '上胸', adelt: '前三角', mdelt: '中三角', pdelt: '後三角', lat: '背闊肌',
-  trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌',
+  trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌', gas: '腓腸肌', sol: '比目魚肌',
 };
 
 // 目前的動作＋參數對應到哪一個清單項目（參數被改過、對不上任何變化式時回傳 null）

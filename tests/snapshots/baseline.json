@@ -5725,6 +5725,256 @@
   "warn": [],
   "ok": true
  },
+ "calf-raise-standing@0": {
+  "dem": {
+   "ankPF": 96.0014
+  },
+  "mus": {
+   "gas": 0.1545,
+   "sol": 0.2017,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-standing@0.25": {
+  "dem": {
+   "ankPF": 107.489
+  },
+  "mus": {
+   "gas": 0.1699,
+   "sol": 0.2231,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-standing@0.5": {
+  "dem": {
+   "ankPF": 116.4745
+  },
+  "mus": {
+   "gas": 0.1814,
+   "sol": 0.2392,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-standing@0.75": {
+  "dem": {
+   "ankPF": 122.7488
+  },
+  "mus": {
+   "gas": 0.1888,
+   "sol": 0.2499,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-standing@1": {
+  "dem": {
+   "ankPF": 126.1659
+  },
+  "mus": {
+   "gas": 0.1923,
+   "sol": 0.2551,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-seated@0": {
+  "dem": {
+   "ankPF": 48.8807
+  },
+  "mus": {
+   "gas": 0.0807,
+   "sol": 0.1069,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-seated@0.25": {
+  "dem": {
+   "ankPF": 54.752
+  },
+  "mus": {
+   "gas": 0.088,
+   "sol": 0.1168,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-seated@0.5": {
+  "dem": {
+   "ankPF": 59.3489
+  },
+  "mus": {
+   "gas": 0.0933,
+   "sol": 0.124,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-seated@0.75": {
+  "dem": {
+   "ankPF": 62.5643
+  },
+  "mus": {
+   "gas": 0.0969,
+   "sol": 0.1285,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "calf-raise-seated@1": {
+  "dem": {
+   "ankPF": 64.3234
+  },
+  "mus": {
+   "gas": 0.0986,
+   "sol": 0.1304,
+   "ta": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-abduction@0": {
+  "dem": {
+   "hipAbd": 24.5593
+  },
+  "mus": {
+   "gmax": 0,
+   "gmed": 0.349,
+   "addmag": 0,
+   "addl": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-abduction@0.25": {
+  "dem": {
+   "hipAbd": 29.6735
+  },
+  "mus": {
+   "gmax": 0,
+   "gmed": 0.3433,
+   "addmag": 0,
+   "addl": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-abduction@0.5": {
+  "dem": {
+   "hipAbd": 34.016
+  },
+  "mus": {
+   "gmax": 0,
+   "gmed": 0.3452,
+   "addmag": 0,
+   "addl": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-abduction@0.75": {
+  "dem": {
+   "hipAbd": 37.4738
+  },
+  "mus": {
+   "gmax": 0,
+   "gmed": 0.3487,
+   "addmag": 0,
+   "addl": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-abduction@1": {
+  "dem": {
+   "hipAbd": 39.957
+  },
+  "mus": {
+   "gmax": 0,
+   "gmed": 0.3524,
+   "addmag": 0,
+   "addl": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-adduction@0": {
+  "dem": {
+   "hipAbd": -41.3761
+  },
+  "mus": {
+   "gmax": 0.03,
+   "gmed": 0,
+   "addmag": 0.2245,
+   "addl": 0.1732
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-adduction@0.25": {
+  "dem": {
+   "hipAbd": -40.0621
+  },
+  "mus": {
+   "gmax": 0.0297,
+   "gmed": 0,
+   "addmag": 0.2178,
+   "addl": 0.171
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-adduction@0.5": {
+  "dem": {
+   "hipAbd": -37.868
+  },
+  "mus": {
+   "gmax": 0.0286,
+   "gmed": 0,
+   "addmag": 0.2045,
+   "addl": 0.1628
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-adduction@0.75": {
+  "dem": {
+   "hipAbd": -34.842
+  },
+  "mus": {
+   "gmax": 0.0265,
+   "gmed": 0,
+   "addmag": 0.1845,
+   "addl": 0.1482
+  },
+  "warn": [],
+  "ok": true
+ },
+ "hip-adduction@1": {
+  "dem": {
+   "hipAbd": -31.0506
+  },
+  "mus": {
+   "gmax": 0.0233,
+   "gmed": 0,
+   "addmag": 0.1572,
+   "addl": 0.1269
+  },
+  "warn": [],
+  "ok": true
+ },
  "leg-curl@0": {
   "dem": {
    "kneeExt": -26.6165

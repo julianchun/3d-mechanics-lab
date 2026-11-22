@@ -1,8 +1,8 @@
 {
   "modelVersion": "0.7.2",
   "summary": {
-    "total": 46,
-    "pass": 43,
+    "total": 47,
+    "pass": 44,
     "fail": 3,
     "byEvidence": {
       "direct": {
@@ -11,8 +11,8 @@
         "fail": 2
       },
       "indirect": {
-        "total": 14,
-        "pass": 14,
+        "total": 15,
+        "pass": 15,
         "fail": 0
       },
       "inference": {
@@ -1041,6 +1041,34 @@
         "expected": "低位往上 > 高位往下",
         "ref": "解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
         "model": "低位往上 = 0.297 a vs 高位往下 = 0.189 a"
+      }
+    ],
+    "calf-raise-standing": [
+      {
+        "index": 47,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "站姿 vs 坐姿提踵",
+        "compare": "同一踝角時，站姿近伸膝 vs 坐姿屈膝 — 腓腸肌相對長度",
+        "expected": "站姿腓腸肌較長",
+        "ref": "Kinoshita et al. 2023 (PMID 38156065，OpenSim 圖 1 顯示站姿腓腸肌操作長度高於坐姿；屬文獻中的模型推算，非即時肌電)",
+        "model": "站姿 = 1.015 l vs 坐姿 = 0.930 l"
+      }
+    ],
+    "calf-raise-seated": [
+      {
+        "index": 47,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "站姿 vs 坐姿提踵",
+        "compare": "同一踝角時，站姿近伸膝 vs 坐姿屈膝 — 腓腸肌相對長度",
+        "expected": "站姿腓腸肌較長",
+        "ref": "Kinoshita et al. 2023 (PMID 38156065，OpenSim 圖 1 顯示站姿腓腸肌操作長度高於坐姿；屬文獻中的模型推算，非即時肌電)",
+        "model": "站姿 = 1.015 l vs 坐姿 = 0.930 l"
       }
     ]
   }

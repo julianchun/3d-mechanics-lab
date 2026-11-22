@@ -86,6 +86,9 @@ const REFS = {
   ackland2008: { authors: 'Ackland DC, Pak P, Richardson M, Pandy MG', year: 2008, title: 'Moment arms of the muscles crossing the anatomical shoulder', venue: 'J Anat, 213(4):383–390', url: 'https://pubmed.ncbi.nlm.nih.gov/18691376/', tag: 'PubMed 18691376' },
   signorile2017: { authors: 'Signorile JF et al.', year: 2017, title: 'Differences in muscle activation and kinematics between cable-based and selectorized weight training', venue: 'J Strength Cond Res, 31(2):313–322', url: 'https://pubmed.ncbi.nlm.nih.gov/28129277/', tag: 'PubMed 28129277' },
   andersen2021_backext: { authors: 'Andersen V et al.', year: 2021, title: 'Comparison of Muscle Activity in Three Single-Joint, Hip Extension Exercises in Resistance-Trained Women', venue: 'J Sports Sci Med, 20(2):181–186', url: 'https://pubmed.ncbi.nlm.nih.gov/33948095/', tag: 'PubMed 33948095' },
+  paz2022_hipabd: { authors: 'de Almeida Paz I et al.', year: 2022, title: 'Hip abduction machine is better than free weights to target the gluteus medius while minimizing tensor fascia latae activation', venue: 'J Bodyw Mov Ther, 30:160–167', url: 'https://pubmed.ncbi.nlm.nih.gov/35500965/', tag: 'PubMed 35500965' },
+  kinoshita2023_calf: { authors: 'Kinoshita M et al.', year: 2023, title: 'Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training', venue: 'Front Physiol, 14:1272106', url: 'https://pubmed.ncbi.nlm.nih.gov/38156065/', tag: 'PubMed 38156065' },
+  paz2021_calf: { authors: 'Paz GA et al.', year: 2021, title: 'Myoelectric activity of the gastrocnemius during plantar flexion in a standing versus seated position and with a neutral or dorsiflexed ankle: A pilot study', venue: 'J Bodyw Mov Ther', url: 'https://pubmed.ncbi.nlm.nih.gov/33992275/', tag: 'PubMed 33992275' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -268,6 +271,34 @@ export const SOURCES = {
     refs: ['saeterbakken2013'],
     trendNote: 'Saeterbakken 2013 比較肩推姿勢及負重型式，沒有驗證此固定軌跡器械。',
   },
+  'calf-raise-standing': {
+    assumptions: [
+      '站姿膝近伸直，前腳掌固定在 13 cm 台階；腳跟下放與踮起繞前腳掌轉動，肩墊向下施加負重。',
+      '肩墊配重 60 kg、台階高度與行程角度為未查證假設；腓腸肌與比目魚肌的模型活化不可直接視為 EMG。',
+    ],
+    refs: ['kinoshita2023_calf', 'paz2021_calf'],
+  },
+  'calf-raise-seated': {
+    assumptions: [
+      '坐姿膝約 90°，前腳掌踩台階，膝上墊負重由前腳掌反力支撐；座墊承擔軀幹重量。',
+      '膝墊配重 45 kg、台階尺寸與行程角度為未查證假設；Kinoshita 2023 比較的是 12 週肌肥大，不能當作即時肌電順位。',
+    ],
+    refs: ['kinoshita2023_calf', 'paz2021_calf'],
+  },
+  'hip-abduction': {
+    assumptions: [
+      '坐姿大腿在水平面外展，以膝外側墊阻力沿左右方向施力；椅墊承擔身體重量。',
+      '槓桿半徑 35 cm、等效凸輪力臂 22 cm、配重 35 kg 均為未查證假設；模型沒有臀大肌上束獨立肌束，前傾趨勢未驗證。',
+    ],
+    refs: ['paz2022_hipabd'],
+  },
+  'hip-adduction': {
+    assumptions: [
+      '坐姿大腿在水平面內收，以膝內側墊阻力沿左右方向施力；椅墊承擔身體重量。',
+      '槓桿半徑 35 cm、等效凸輪力臂 22 cm、配重 35 kg 均為未查證假設；目前未查證本機型的內收肌束肌電對照。',
+    ],
+    refs: [], noStudy: true,
+  },
   'cable-fly-high': {
     assumptions: [
       '站姿雙側獨立滑輪（高位滑輪 192 cm，左右柱距 260 cm），每手各握獨立把手連向同側滑輪，不套用剛體握把互推。',
@@ -436,6 +467,8 @@ const LIFT_FALLBACK_ID = {
   backext: 'back-extension',
   hacksquat: 'hack-squat',
   machinepress: 'machine-press',
+  calfraise: 'calf-raise-standing',
+  hipabd: 'hip-abduction',
   cablefly: 'cable-fly-mid',
 };
 

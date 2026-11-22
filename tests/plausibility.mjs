@@ -25,6 +25,8 @@ const RANKS = {
   'cable-row': { within: { lat: 4, midtrap: 4 } }, 'cable-row-wide': { within: { lat: 4, midtrap: 4 } },
   curl: { first: ['bic', 'brach'] }, 'reverse-curl': { first: ['bic', 'brach'] },
   pushdown: { first: ['trilat', 'trilong'] }, 'leg-ext': { first: ['vasti'] },
+  'calf-raise-standing': { first: ['gas', 'sol'] }, 'calf-raise-seated': { first: ['sol'], above: [['sol', 'gas']] },
+  'hip-abduction': { first: ['gmed'] }, 'hip-adduction': { first: ['addl', 'addmag'] },
   'leg-curl': { first: ['hams'] }, 'lying-leg-curl': { first: ['hams'] }, shrug: { first: ['uptrap'] },
   uprow: { notFirst: ['infra'] },
   rdl: { top3: ['hams'] }, 'good-morning': { top3: ['hams'] },
