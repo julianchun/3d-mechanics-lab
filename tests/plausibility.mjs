@@ -13,7 +13,7 @@ const RANKS = {
   'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top2: ['gmax'] },
   bench: { first: ['pecs'] }, 'incline-bench': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'cg-bench': { top3: ['trilat'] },
   'floor-press': { first: ['pecs'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
-  pulldown: { first: ['lat'] }, 'pulldown-sup': { first: ['lat'] },
+  pulldown: { first: ['lat'], notTop4: ['pecs'] }, 'pulldown-sup': { first: ['lat'], notTop4: ['pecs'] },
   row: { within: { lat: 4, midtrap: 4 } }, 'row-sup': { within: { lat: 4, midtrap: 4 } },
   'cable-row': { within: { lat: 4, midtrap: 4 } }, 'cable-row-wide': { within: { lat: 4, midtrap: 4 } },
   curl: { first: ['bic', 'brach'] }, 'reverse-curl': { first: ['bic', 'brach'] },
@@ -38,11 +38,23 @@ const KNOWN_ISSUES = [
     fix: '核對肱肌／肱橈肌與二頭肌的握法差異，以及上臂貼身時的肩關節穩定模型',
   },
   ...[
-    ['row', 'lat'], ['row-sup', 'lat'], ['cable-row', 'midtrap'], ['cable-row-wide', 'lat'],
-  ].map(([id, muscle]) => ({
+    ['pulldown', '胸大肌（0.70）排第 2'],
+    ['pulldown-sup', '胸大肌（0.51）排第 2'],
+  ].map(([id, current]) => ({
+    id, rule: 'rank:notTop4', kind: '本分支退步',
+    current: `${current}，main 分支胸大肌未進前四`,
+    cause: '本分支改採 3D shFwd/shSide/shRot 移除了舊 2D shHAdd 對胸大肌的 -0.62 懲罰，並將 lat 水平外展由 -20 mm 增為 -40 mm、肩胛下壓由 -40 mm 減為 -30 mm；高外展位（plane≈90°）時 lat 產生過量水平外展（-37.7 N·m）且肩胛下壓需求（-56～-61 N·m）集中至 pecs（scElev 貢獻 +0.70、shFwd 拮抗 +0.14）。若單純將 lat 水平外展降回 -20 mm，因 pdelt F=201.6 N 偏小且 infra 缺水平外展力臂，會使寬握划船 lat 上升並破壞趨勢第 33 項（窄握 > 寬握）',
+    fix: '依 Kuechle 1997 與 OpenSim 路徑整體校準後三角、棘下肌、背闊肌的水平外展分攤，並以肩胛肌束路徑重算下斜方、背闊與胸大肌的 scElev 下壓力臂',
+  })),
+  ...[
+    ['row', 'lat', '相對 T6（midtrap 35 mm 時 0.86）：還原 midtrap 70 mm 後中斜方由 0.86 降至 0.63，仍居前四但背闊肌（0.62）居第 5'],
+    ['row-sup', 'lat', '相對 T6（midtrap 35 mm 時 0.86）：還原 midtrap 70 mm 後中斜方由 0.86 降至 0.63，仍居前四但背闊肌（0.62）居第 5'],
+    ['cable-row', 'midtrap', '相對 T6（midtrap 35 mm 時 0.67 居第 3）：還原 midtrap 70 mm 後中斜方降至 0.50（第 6）掉出前四，背闊肌（0.62）升至第 3'],
+    ['cable-row-wide', 'lat', '相對 T6（midtrap 35 mm 時 0.93）：還原 midtrap 70 mm 後中斜方由 0.93 降至 0.69，仍居前四但背闊肌（0.55）居第 5'],
+  ].map(([id, muscle, delta]) => ({
     id, rule: `rank:${muscle}:top4`, kind: '既有問題',
-    current: `${muscle} 未進前四`,
-    cause: 'main 與 T6 的上肢前四名都未能讓背闊肌和中斜方同時進前四；肩胛與肩關節力矩分攤仍待校準',
+    current: `${muscle} 未進前四（${delta}）`,
+    cause: `main 與 T6 的上肢前四名都未能讓背闊肌和中斜方同時進前四；${delta}；肩胛與肩關節力矩分攤仍待校準`,
     fix: '以肩胛肌束路徑和實測肩內收力臂重新校準，不以動作專屬係數補排名',
   })),
 ];
@@ -83,6 +95,7 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   const rule = RANKS[c.id];
   if (rule?.first) declaredRules.add(`${c.id}|rank:first`);
   if (rule?.notFirst) declaredRules.add(`${c.id}|rank:notFirst`);
+  if (rule?.notTop4) declaredRules.add(`${c.id}|rank:notTop4`);
   if (rule?.allTop3) declaredRules.add(`${c.id}|rank:allTop3`);
   for (const id of Object.keys(rule?.within || {})) declaredRules.add(`${c.id}|rank:${id}:top${rule.within[id]}`);
   for (const n of [2, 3, 4]) if (rule?.[`top${n}`]) declaredRules.add(`${c.id}|rank:top${n}`);
@@ -91,6 +104,10 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   }
   if (rule?.notFirst?.includes(ranked[0][0])) {
     check(c.id, 'rank:notFirst', `第一名不應為 ${ranked[0][0]}`);
+  }
+  if (rule?.notTop4) {
+    const hit = ranked.slice(0, 4).filter(([id]) => rule.notTop4.includes(id)).map(([id, v]) => `${id} ${v.toFixed(2)}`);
+    if (hit.length) check(c.id, 'rank:notTop4', `前4名不應含 ${rule.notTop4.join('、')}，目前含 ${hit.join(', ')}`);
   }
   if (rule?.allTop3 && !rule.allTop3.every((id) => ranked.slice(0, 3).some(([muscle]) => muscle === id))) {
     check(c.id, 'rank:allTop3', `前三名 ${ranked.slice(0, 3).map(([id]) => id).join(', ')}，預期同時含 ${rule.allTop3.join('、')}`);

@@ -563,7 +563,7 @@ const hipFit = (a, b, c) => (q) => {
 };
 // 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/muscle-params.md。
 const angleSlope = (base, key, per90) => (q) => base + per90 * clamp((q[key] || 0) / rad(90), -0.5, 1.7);
-// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；90° 後斜率為高上舉模型估計，見 docs/muscle-params.md。
+// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；0.65 衰減幅度與 90°→170° 區間皆為無直接出處的估計，見 docs/muscle-params.md。
 const deltoidScale = (q) => 1 - 0.65 * clamp((q.shElev - rad(90)) / rad(80), 0, 1);
 const adeltFlex = (q) => 0.035 + 0.008 * clamp(q.shElev / rad(90), 0, 1);
 const adeltAbduction = (q) => (0.006 + 0.020 * clamp(q.shElev / rad(75), 0, 1)) * deltoidScale(q);
@@ -611,7 +611,8 @@ export const MUSCLES = [
   { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => -0.040 * Math.sin(q.shElev), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => -0.040 * Math.sin(q.shElev), 'side'), shRot: 0.020, scElev: -0.030 } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFwd: shoulderArm(-0.020, -0.010, 0, 'fwd'), shSide: shoulderArm(-0.020, -0.010, 0, 'side') } },
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
-  // 二頭肌肩屈基值取 MOBL_ARMS_41.osim 長頭（16.0 mm）與短頭（21.6 mm）依 F 加權弦力臂（18.1 mm），上舉 60° 歸零（Landin 2008）。
+  // 二頭肌肩屈基值取 MOBL_ARMS_41.osim 長頭（16.0 mm）與短頭（21.6 mm）0° 路徑弦長依 F 加權（18.1 mm，屬文獻上緣）；
+  // Landin 2008（PMID 17196396，電刺激＋測力儀）測得上舉 ≥60° 肩上提力矩近零，此處 0°→60° 線性歸零且省略肘角相依為估計。
   { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
   { id: 'brach', name: '肱肌／肱橈肌', F: 1453.4, Lf: 0.1023, Lmt: 0.1709, arms: { elbExt: angleSlope(-0.025, 'elbFlex', -0.006) } },
   { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: { shFwd: shoulderArm(-0.025, (q) => -0.030 * Math.sin(q.shElev) ** 2, -0.015, 'fwd'), shSide: shoulderArm(-0.025, (q) => -0.030 * Math.sin(q.shElev) ** 2, -0.015, 'side'), shRot: 0.012 } },
@@ -1040,8 +1041,11 @@ function ohpPose(P, e) {
     // 前臂垂直時槓約在肩關節高度、架在三角肌前束上
     const rack = add(add(tf.Pc, mul(tf.u, 0.535)), mul(tf.f, 0.11));
     rack[0] = gx;
+    // 鎖死端（e→0）手臂近全伸直（Rl=0.995(Lu+Lf)），雙連桿 IK 具奇異點（線性 e 時首步 1/80 上臂跳動 5.56°）；
+    // 以 e^1.25 放緩離開鎖死端速度、並以 smoothstep 取代原避頭硬判斷（原硬判斷造成上臂 8.60°／軸旋 10.72° 跳動），
+    // 僅為連續性修正（最大步長降至上臂 3.18°／軸旋 2.07°），不改變前五名肌群排名（峰值差 ≤0.003）。
     const bar = lerpV(lock, rack, Math.pow(e, 1.25));
-    // 槓經過頭部高度時要繞過下巴
+    // 槓經過頭部高度時以平滑過渡繞過下巴，避免硬門檻階躍
     const head = add(tf.SC, mul(tf.u, 0.2));
     const headGap = Math.abs(bar[1] - head[1]);
     const clearance = clamp((0.16 - headGap) / 0.12, 0, 1);
@@ -1179,6 +1183,8 @@ function uprowPose(P, e) {
       // 頂點：槓在軀幹前方 4 cm，高度從下胸（0.36）到鎖骨（0.5）
       const top = add(add(tf.Pc, mul(tf.u, lerp(0.36, 0.5, P.height))), mul(tf.f, 0.155));
       top[0] = gx;
+      // 垂臂端（t→0）手臂近全伸直（Lr=0.997(Lu+Lf)），原 t^0.9 在 t→0 導數發散疊加 IK 奇異點（1/80 上臂跳動 7.25°，線性 t 仍達 5.28°）；
+      // 改用 t^1.12 放緩垂臂起步速度，僅為連續性修正（最大步長降至 4.57°），不改變前四名肌群排名（峰值差 ≤0.0014）。
       const bar = lerpV(hang, top, Math.pow(t, 1.12));
       // 中間行程：槓貼著身體前緣（不能穿過軀幹）
       const rel = sub(bar, tf.Pc), along = dot(rel, tf.u), front = dot(rel, tf.f);
@@ -2102,7 +2108,9 @@ function jointAngles(pose) {
   const pole = pose.armPole || pose.f;
   const ref = len(forePlane) > 0.04 ? forePlane : sub(pole, mul(h, dot(pole, h)));
   q.elbFlex = Math.acos(clamp(dot(h, fo), -1, 1));
-  // 手肘接近伸直時，前臂投影極短，軸旋無法可靠辨認；平滑回到中立參考。
+  // 全域軸旋置信權重：手肘接近伸直時前臂投影極短，軸旋無法可靠辨認；
+  // 由 15°→60° 線性改為 15°→110° smoothstep 以消除肩推（8.54°→2.07°）、直立划船（8.44°→2.48°）與寬握划船（5.46°→1.21°）的軸旋步長跳動；
+  // 影響所有屈肘含肩動作的 q.shRot 與軸旋肌肉長度代理，對划船、彎舉、下拉前四名排名無變動。
   const rotPhase = clamp((q.elbFlex - rad(15)) / rad(95), 0, 1);
   const rotConfidence = rotPhase * rotPhase * (3 - 2 * rotPhase);
   q.shRot = Math.atan2(dot(ref, refS), dot(ref, refF)) * rotConfidence;
