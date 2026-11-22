@@ -1800,6 +1800,96 @@
   "warn": [],
   "ok": true
  },
+ "back-extension@0": {
+  "dem": {
+   "hipExt": 73.3862,
+   "trunkExt": 62.8337
+  },
+  "mus": {
+   "rf": 0,
+   "hams": 0.1893,
+   "gmax": 0.1469,
+   "addmag": 0.0173,
+   "addl": 0,
+   "ilio": 0,
+   "erec": 0.2907,
+   "ra": 0.06
+  },
+  "warn": [],
+  "ok": true
+ },
+ "back-extension@0.25": {
+  "dem": {
+   "hipExt": 87.0984,
+   "trunkExt": 74.1743
+  },
+  "mus": {
+   "rf": 0,
+   "hams": 0.2016,
+   "gmax": 0.1777,
+   "addmag": 0.0186,
+   "addl": 0,
+   "ilio": 0,
+   "erec": 0.3395,
+   "ra": 0.06
+  },
+  "warn": [],
+  "ok": true
+ },
+ "back-extension@0.5": {
+  "dem": {
+   "hipExt": 94.7392,
+   "trunkExt": 80.3242
+  },
+  "mus": {
+   "rf": 0,
+   "hams": 0.2048,
+   "gmax": 0.1954,
+   "addmag": 0.0311,
+   "addl": 0,
+   "ilio": 0,
+   "erec": 0.366,
+   "ra": 0.06
+  },
+  "warn": [],
+  "ok": true
+ },
+ "back-extension@0.75": {
+  "dem": {
+   "hipExt": 95.6263,
+   "trunkExt": 80.7028
+  },
+  "mus": {
+   "rf": 0,
+   "hams": 0.2008,
+   "gmax": 0.1972,
+   "addmag": 0.0505,
+   "addl": 0,
+   "ilio": 0,
+   "erec": 0.3676,
+   "ra": 0.06
+  },
+  "warn": [],
+  "ok": true
+ },
+ "back-extension@1": {
+  "dem": {
+   "hipExt": 89.6545,
+   "trunkExt": 75.2395
+  },
+  "mus": {
+   "rf": 0,
+   "hams": 0.1886,
+   "gmax": 0.1853,
+   "addmag": 0.0624,
+   "addl": 0,
+   "ilio": 0,
+   "erec": 0.3441,
+   "ra": 0.06
+  },
+  "warn": [],
+  "ok": true
+ },
  "glute-bridge@0": {
   "dem": {
    "hipExt": 97.3005,
@@ -2661,6 +2751,171 @@
    "supsp": 0.1874,
    "subsc": 0,
    "mdelt": 0.2688
+  },
+  "warn": [],
+  "ok": true
+ },
+ "reverse-deck@0": {
+  "dem": {
+   "shFwd": -31.7029,
+   "shSide": -3.4789,
+   "shRot": -8.597,
+   "elbExt": 22.164,
+   "scRet": 56.7327,
+   "scElev": 14.2814
+  },
+  "mus": {
+   "pecs": 0,
+   "pecc": 0,
+   "adelt": 0,
+   "pdelt": 0.9907,
+   "lat": 0.5903,
+   "trilong": 0.2515,
+   "trilat": 0.3983,
+   "bic": 0,
+   "brach": 0,
+   "tmaj": 0.0828,
+   "corb": 0,
+   "infra": 0.7036,
+   "supsp": 0.0059,
+   "subsc": 0,
+   "mdelt": 0.2246,
+   "midtrap": 0.5783,
+   "uptrap": 0.4245,
+   "lowtrap": 0.1809,
+   "serr": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "reverse-deck@0.25": {
+  "dem": {
+   "shFwd": -31.2746,
+   "shSide": 8.5184,
+   "shRot": -7.473,
+   "elbExt": 23.2364,
+   "scRet": 54.6643,
+   "scElev": 14.4748
+  },
+  "mus": {
+   "pecs": 0,
+   "pecc": 0,
+   "adelt": 0,
+   "pdelt": 1.1429,
+   "lat": 0.4184,
+   "trilong": 0.2154,
+   "trilat": 0.4476,
+   "bic": 0,
+   "brach": 0,
+   "tmaj": 0.0467,
+   "corb": 0,
+   "infra": 0.4697,
+   "supsp": 0,
+   "subsc": 0,
+   "mdelt": 0.4867,
+   "midtrap": 0.5769,
+   "uptrap": 0.3489,
+   "lowtrap": 0.1927,
+   "serr": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "reverse-deck@0.5": {
+  "dem": {
+   "shFwd": -26.7025,
+   "shSide": 19.0892,
+   "shRot": -7.0664,
+   "elbExt": 23.8752,
+   "scRet": 51.2088,
+   "scElev": 13.5115
+  },
+  "mus": {
+   "pecs": 0,
+   "pecc": 0,
+   "adelt": 0,
+   "pdelt": 1.274,
+   "lat": 0.2648,
+   "trilong": 0.1832,
+   "trilat": 0.4833,
+   "bic": 0,
+   "brach": 0,
+   "tmaj": 0.0265,
+   "corb": 0,
+   "infra": 0.2827,
+   "supsp": 0.0843,
+   "subsc": 0,
+   "mdelt": 0.6064,
+   "midtrap": 0.5581,
+   "uptrap": 0.2727,
+   "lowtrap": 0.1971,
+   "serr": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "reverse-deck@0.75": {
+  "dem": {
+   "shFwd": -19.2391,
+   "shSide": 26.924,
+   "shRot": -7.4453,
+   "elbExt": 24.0136,
+   "scRet": 46.783,
+   "scElev": 11.6089
+  },
+  "mus": {
+   "pecs": 0,
+   "pecc": 0,
+   "adelt": 0,
+   "pdelt": 1.3187,
+   "lat": 0.1163,
+   "trilong": 0.1657,
+   "trilat": 0.4965,
+   "bic": 0,
+   "brach": 0,
+   "tmaj": 0.0066,
+   "corb": 0,
+   "infra": 0.1641,
+   "supsp": 0.255,
+   "subsc": 0,
+   "mdelt": 0.6436,
+   "midtrap": 0.5288,
+   "uptrap": 0.1914,
+   "lowtrap": 0.1978,
+   "serr": 0
+  },
+  "warn": [],
+  "ok": true
+ },
+ "reverse-deck@1": {
+  "dem": {
+   "shFwd": -10.2208,
+   "shSide": 31.6823,
+   "shRot": -9.0427,
+   "elbExt": 23.38,
+   "scRet": 41.9207,
+   "scElev": 9.0592
+  },
+  "mus": {
+   "pecs": 0,
+   "pecc": 0,
+   "adelt": 0,
+   "pdelt": 1.2344,
+   "lat": 0,
+   "trilong": 0.1375,
+   "trilat": 0.491,
+   "bic": 0,
+   "brach": 0,
+   "tmaj": 0,
+   "corb": 0,
+   "infra": 0.1602,
+   "supsp": 0.3808,
+   "subsc": 0,
+   "mdelt": 0.6943,
+   "midtrap": 0.4915,
+   "uptrap": 0.1181,
+   "lowtrap": 0.1937,
+   "serr": 0
   },
   "warn": [],
   "ok": true

@@ -32,6 +32,7 @@ export const CATALOG = [
   { id: 'rdl', name: '羅馬尼亞硬舉', cat: 'hinge', equip: 'barbell', lift: 'rdl', set: {}, alias: ['rdl', 'romanian'] },
   { id: 'good-morning', name: '早安體前屈', cat: 'hinge', equip: 'barbell', lift: 'goodmorning', set: { barPos: 'high' }, alias: ['good morning', 'gm'] },
   { id: 'hip-thrust', name: '臀推', cat: 'hinge', equip: 'barbell', lift: 'hipthrust', set: { surface: 'bench', kneeTop: 90 }, alias: ['hip thrust', '臀部'] },
+  { id: 'back-extension', name: '45° 背伸展', cat: 'hinge', equip: 'machine', lift: 'backext', set: {}, alias: ['back extension', '羅馬椅'] },
   { id: 'glute-bridge', name: '槓鈴臀橋', cat: 'hinge', equip: 'barbell', lift: 'hipthrust', set: { surface: 'floor', kneeTop: 130 }, alias: ['glute bridge', '臀橋'] },
   // 水平推
   { id: 'bench', name: '臥推（平板）', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.6, flare: 52, touch: 0.6 }, alias: ['bench', 'bp'] },
@@ -40,6 +41,7 @@ export const CATALOG = [
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
+  { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
   { id: 'cable-fly-high', name: '滑輪夾胸（高位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'high' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '高滑輪'] },
   { id: 'cable-fly-mid', name: '滑輪夾胸（中位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'mid' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '中滑輪'] },
   { id: 'cable-fly-low', name: '滑輪夾胸（低位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'low' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '低滑輪'] },

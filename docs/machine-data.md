@@ -162,3 +162,14 @@
 ### 6.2 模型對應
 - `src/biomech.js` 的 `pecDeckPose` 與 `MACHINES.pecdeck` 實作坐姿垂直轉軸圓弧阻力（`padLoads` 搭配切線方向），提供握把式（`style: 'handle'`）與前臂墊式（`style: 'pad'`）。
 - `src/biomech.js` 的 `cableFlyPose` 與 `MACHINES.cablefly` 實作站姿雙側獨立滑輪（`pose.dualCable = true`，`cableLoads` 不套用 `minimizeAxialMoment`），提供高位（192 cm）、中位（134 cm）、低位（85 cm）三種滑輪高度。
+
+---
+
+## 7. E 階段新增器械與羅馬椅（皆為未查證幾何假設）
+
+下表尺寸、配重與凸輪值只供教學示意，未取得單一商用機型的原廠尺寸、握把力曲線或實測校正；程式數值集中於 `MACHINES`。所列研究僅支持動作與肌肉作用，不視為器械尺寸的出處。
+
+| 動作 | 模型尺寸與負重假設 | 支撐與力線 |
+|---|---|---|
+| 反向蝴蝶機 | 握把半徑 52 cm、凸輪等效力臂 22 cm、配重 40 kg、座高 55 cm | 胸墊承受握把水平合力；握把阻力沿旋轉臂切線。肩力臂可間接參考 [Ackland 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)，未查證本機型凸輪。 |
+| 45° 背伸展 | 髖高 92 cm、腳踝墊在後方 50 cm、胸前槓片 10 kg | 大腿墊向上、腳踝墊向下；兩接觸力以全身力矩平衡求解。[Andersen 2021](https://pubmed.ncbi.nlm.nih.gov/33948095/) 直接比較羅馬椅肌電，未量墊高效果。 |

@@ -85,6 +85,7 @@ const REFS = {
   lee2019: { authors: 'Lee HM', year: 2019, title: 'Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing', venue: 'J Hand Ther, 32(1):71–79', url: 'https://pubmed.ncbi.nlm.nih.gov/28943236/', tag: 'PubMed 28943236' },
   ackland2008: { authors: 'Ackland DC, Pak P, Richardson M, Pandy MG', year: 2008, title: 'Moment arms of the muscles crossing the anatomical shoulder', venue: 'J Anat, 213(4):383–390', url: 'https://pubmed.ncbi.nlm.nih.gov/18691376/', tag: 'PubMed 18691376' },
   signorile2017: { authors: 'Signorile JF et al.', year: 2017, title: 'Differences in muscle activation and kinematics between cable-based and selectorized weight training', venue: 'J Strength Cond Res, 31(2):313–322', url: 'https://pubmed.ncbi.nlm.nih.gov/28129277/', tag: 'PubMed 28129277' },
+  andersen2021_backext: { authors: 'Andersen V et al.', year: 2021, title: 'Comparison of Muscle Activity in Three Single-Joint, Hip Extension Exercises in Resistance-Trained Women', venue: 'J Sports Sci Med, 20(2):181–186', url: 'https://pubmed.ncbi.nlm.nih.gov/33948095/', tag: 'PubMed 33948095' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -234,6 +235,22 @@ export const SOURCES = {
       '機械臂半徑（握把 54 cm／前臂墊 29 cm）、等效凸輪基準力臂（22 cm）、溫和鐘型凸輪曲線表與預設配重（45 kg）皆為假設（未查得單一商用機台實測凸輪表）。',
     ],
     refs: ['rochajunior2007', 'welsch2005', 'solstad2020', 'ackland2008'],
+  },
+  'reverse-deck': {
+    assumptions: [
+      '面向胸墊坐姿，雙側握把各沿水平圓弧向外打開；胸墊承受握把向前的水平合力，座墊承受垂直重量。',
+      '握把半徑 52 cm、等效凸輪力臂 22 cm、預設配重 40 kg 與胸墊位置都是未查證假設；後三角與肩胛肌順位為模型估計，沒有直接機型測力。',
+    ],
+    refs: ['ackland2008'],
+    trendNote: '未查證同機型的反向蝴蝶機軌跡、凸輪與後三角肌電對照。',
+  },
+  'back-extension': {
+    assumptions: [
+      '45° 羅馬椅以大腿墊向上、腳踝墊向下的雙接觸力維持準靜態平衡；髖與軀幹共用單一剛體軀幹近似。',
+      '髖高 92 cm、踝墊位置、胸前槓片 10 kg 及墊高調整均為未查證假設；圓背以軀幹長度代理，未逐節模擬腰椎。',
+    ],
+    refs: ['andersen2021_backext'],
+    trendNote: '已有羅馬椅與其他髖伸動作肌電比較；墊高與圓背的定量影響尚無直接可用對照。',
   },
   'cable-fly-high': {
     assumptions: [
@@ -399,6 +416,8 @@ const LIFT_FALLBACK_ID = {
   legcurl: 'leg-curl',
   chestpress: 'chest-press',
   pecdeck: 'pec-deck',
+  reversedeck: 'reverse-deck',
+  backext: 'back-extension',
   cablefly: 'cable-fly-mid',
 };
 

@@ -11,9 +11,11 @@ const RANKS = {
   deadlift: { top3: ['erec', 'hams', 'gmax'] }, 'deficit-dl': { top3: ['erec', 'hams', 'gmax'] },
   'block-pull': { top3: ['erec', 'hams', 'gmax'] }, sumo: { top3: ['erec', 'hams', 'gmax'] },
   'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top2: ['gmax'] },
+  'back-extension': { top3: ['erec', 'hams', 'gmax'] },
   bench: { first: ['pecs'] }, 'incline-bench': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'cg-bench': { top3: ['trilat'] },
   'floor-press': { first: ['pecs'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
   'pec-deck': { first: ['pecs', 'pecc'] },
+  'reverse-deck': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
   'cable-fly-high': { first: ['pecs', 'pecc'] },
   'cable-fly-mid': { first: ['pecs', 'pecc'] },
   'cable-fly-low': { first: ['pecs', 'pecc'] },
@@ -29,6 +31,11 @@ const RANKS = {
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  {
+    id: 'reverse-deck', rule: 'activation:pdelt', kind: '新動作', current: '預設 40 kg 配重時後三角肌需求超過最大主動活化',
+    cause: '52 cm 握把與 22 cm 等效凸輪下，現有後三角肌最大力和力臂不足以負擔全行程估計力矩；機台實際凸輪曲線未查證',
+    fix: '量測實機握把阻力曲線，再核對後三角肌有效最大力；暫不手調模型參數',
+  },
   {
     id: 'uprow', rule: 'rank:notFirst',
     kind: '既有問題', current: '棘下肌／小圓肌仍居首',
@@ -99,6 +106,7 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   if (rule?.notFirst) declaredRules.add(`${c.id}|rank:notFirst`);
   if (rule?.notTop4) declaredRules.add(`${c.id}|rank:notTop4`);
   if (rule?.allTop3) declaredRules.add(`${c.id}|rank:allTop3`);
+  for (const [a, b] of rule?.above || []) declaredRules.add(`${c.id}|rank:${a}>${b}`);
   for (const id of Object.keys(rule?.within || {})) declaredRules.add(`${c.id}|rank:${id}:top${rule.within[id]}`);
   for (const n of [2, 3, 4]) if (rule?.[`top${n}`]) declaredRules.add(`${c.id}|rank:top${n}`);
   if (rule?.first && !rule.first.includes(ranked[0][0])) {
@@ -113,6 +121,9 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   }
   if (rule?.allTop3 && !rule.allTop3.every((id) => ranked.slice(0, 3).some(([muscle]) => muscle === id))) {
     check(c.id, 'rank:allTop3', `前三名 ${ranked.slice(0, 3).map(([id]) => id).join(', ')}，預期同時含 ${rule.allTop3.join('、')}`);
+  }
+  for (const [a, b] of rule?.above || []) {
+    if ((peaks.get(a) || 0) <= (peaks.get(b) || 0)) check(c.id, `rank:${a}>${b}`, `${a} ${(peaks.get(a) || 0).toFixed(2)} ≤ ${b} ${(peaks.get(b) || 0).toFixed(2)}`);
   }
   for (const [id, n] of Object.entries(rule?.within || {})) {
     if (!ranked.slice(0, n).some(([muscle]) => muscle === id)) {
