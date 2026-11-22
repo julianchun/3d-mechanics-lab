@@ -486,7 +486,7 @@ const CHECKS = [
     ids: ['pulldown', 'pulldown-sup'],
     exercise: '滑輪下拉（同握距）',
     compare: '同握距 (grip=1.4) 正握 vs 反握 — 背闊肌活化',
-    ref: 'Lusk 2010 (PMID 20543740, n=12, 握法主效應)',
+    ref: 'Lusk 2010 (PMID 20543740, n=12, 握法主效應)｜模型能呈現差異，靠的是推論的反握手肘平面（較前、較貼身，未經實測）',
     evidence: 'direct',
     expected: '正握 > 反握',
     run() {
