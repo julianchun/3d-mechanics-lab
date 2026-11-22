@@ -36,8 +36,13 @@ const RANKS = {
 const KNOWN_ISSUES = [
   {
     id: 'reverse-deck', rule: 'activation:pdelt', kind: '新動作', current: '預設 40 kg 配重時後三角肌需求超過最大主動活化',
-    cause: '52 cm 握把與 22 cm 等效凸輪下，現有後三角肌最大力和力臂不足以負擔全行程估計力矩；機台實際凸輪曲線未查證',
-    fix: '量測實機握把阻力曲線，再核對後三角肌有效最大力；暫不手調模型參數',
+    cause: '52 cm 握把與 22 cm 等效凸輪下，現有後三角肌最大力和力臂不足以負擔全行程估計力矩；肩胛後收需求約 57 Nm 也偏高；機台實際凸輪曲線未查證',
+    fix: '量測實機握把阻力曲線，再核對後三角肌有效最大力；肩胛後收需求待肩胛模型後續處理，暫不手調模型參數',
+  },
+  {
+    id: 'back-extension', rule: 'model:padHeight', kind: '新動作', current: '墊高無法改變髖與腰背力矩分配',
+    cause: '單一剛體軀幹與固定腰背受力點無法描述墊子壓住骨盆時髖鉸鏈受限；墊高只影響肌肉長度與畫面，圓背也沒有逐節腰椎屈曲',
+    fix: '取得骨盆與腰椎分段運動及墊子壓力資料後，建立分段軀幹與骨盆接觸模型',
   },
   {
     id: 'uprow', rule: 'rank:notFirst',
@@ -140,6 +145,25 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
     }
   }
   checked++;
+}
+// 掃過站距 0～1 的每個介面刻度；股廣肌群須全程維持第一位。
+for (let i = 0; i <= 100; i++) {
+  const P = { ...defaultParams('hacksquat'), stance: i / 100 };
+  const peaks = new Map();
+  for (let j = 0; j <= N; j++) {
+    for (const [id, muscle] of Object.entries(analyze('hacksquat', P, j / N).mus)) {
+      peaks.set(id, Math.max(peaks.get(id) || 0, muscle.s));
+    }
+  }
+  const first = [...peaks].sort((a, b) => b[1] - a[1])[0][0];
+  if (first !== 'vasti') errors.push(`hack-squat 站距 ${(i / 100).toFixed(2)} 第一名 ${first}，預期 vasti`);
+}
+// 墊高的需求力矩若日後真的因分段支撐改變，這項已知限制應移除。
+const padBase = defaultParams('backext');
+const lowPad = analyze('backext', { ...padBase, padHeight: -6 }, 0.5).dem;
+const highPad = analyze('backext', { ...padBase, padHeight: 6 }, 0.5).dem;
+if (Math.abs(lowPad.hipExt - highPad.hipExt) < 1e-6 && Math.abs(lowPad.trunkExt - highPad.trunkExt) < 1e-6) {
+  check('back-extension', 'model:padHeight', '墊高 ±6 cm 時 hipExt 與 trunkExt 需求不變；只影響肌肉長度與畫面');
 }
 for (const issue of KNOWN_ISSUES) {
   if (!catalogIds.has(issue.id) || (issue.rule.startsWith('rank:') && !declaredRules.has(`${issue.id}|${issue.rule}`))) {

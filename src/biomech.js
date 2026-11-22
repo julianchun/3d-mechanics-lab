@@ -569,12 +569,12 @@ export const LIFTS = {
     pose: backExtPose, loads: backExtLoads, reactions: backExtReactions,
     moving: ['hipExt', 'trunkExt'],
     params: [
-      { key: 'padHeight', label: '髖相對大腿墊', left: '髖低於墊 6 cm', right: '髖高於墊 6 cm', min: -6, max: 6, step: 1, def: 0, joint: 'equip', mech: 'A', unit: ' cm' },
+      { key: 'padHeight', label: '髖與大腿墊位置（示意）', left: '髖低於墊 6 cm', right: '髖高於墊 6 cm', min: -6, max: 6, step: 1, def: 0, joint: 'equip', mech: 'A', unit: ' cm' },
       { key: 'load', label: '抱胸前槓片', left: '徒手', right: '20 kg', min: 0, max: 20, step: 5, def: MACHINES.backext.loadKg, joint: 'equip', mech: 'A', unit: ' kg' },
-      { key: 'round', label: '圓背比例', left: '髖鉸鏈、背平', right: '軀幹較圓', min: 0, max: 1, step: 0.01, def: 0, joint: 'lumbar', mech: 'A' },
+      { key: 'round', label: '圓背程度（示意）', left: '髖鉸鏈、背平', right: '軀幹較圓', min: 0, max: 1, step: 0.01, def: 0, joint: 'lumbar', mech: 'A' },
       { key: 'brace', label: '核心收緊', left: '放鬆', right: '收緊', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
     ],
-    standardNote: '大腿前側靠墊、腳踝卡在後墊；從髖部折疊到軀幹與腿約成一直線，不用腰椎猛然過伸。',
+    standardNote: '大腿前側靠墊、腳踝卡在後墊；從髖部折疊到軀幹與腿約成一直線，不用腰椎猛然過伸。模型以單一剛體表示軀幹：墊高只影響畫面與肌肉長度，不會改變髖與腰背力矩分配；圓背僅改軀幹角度與肌肉長度，無法預測腰椎逐節屈伸的分力。',
   },
   hacksquat: {
     name: '哈克深蹲機', topLabel: '站起', bottomLabel: '最低點',
@@ -2434,7 +2434,9 @@ function backExtReactions(pose, P, W, out) {
   const C = pose.thighContact, D = pose.ankleContact;
   let Fy = 0, M = 0;
   for (const f of out) { Fy += f.F[1]; M += (f.p[1] - C[1]) * f.F[2] - (f.p[2] - C[2]) * f.F[1]; }
-  const n = Math.max(0, M / Math.max(0.08, C[2] - D[2]));
+  const rawAnkle = M / Math.max(0.08, C[2] - D[2]);
+  if (rawAnkle < 0) pose.warn.push('腳踝墊無法提供所需反向接觸力；此姿勢的支撐力矩未平衡');
+  const n = Math.max(0, rawAnkle);
   const ankle = [0, -n, 0], thigh = [0, -Fy + n, 0];
   out.push({ p: D, F: ankle, region: 'shank' }, { p: C, F: thigh, region: 'thigh' });
   pose.support = { ankle, thigh };
@@ -2489,6 +2491,8 @@ function hackSquatReactions(pose, P, W, out) {
   const k = (C[1] - cop[1]) * n[2] - (C[2] - cop[2]) * n[1];
   const rail = mul(n, Math.abs(k) > 1e-5 ? -M / k : 0);
   const foot = neg(add(F, rail));
+  // 雙腳對稱站立：足底反力的額狀面力線通過髖關節，避免把外側壓力中心誤算成髖內收需求。
+  foot[0] = coronalFootForce(R.hip, cop, foot[1]);
   out.push({ p: C, F: rail, region: 'trunk' }, { p: cop, F: foot, region: 'foot' });
   pose.cop = cop; pose.support = { N: rail, G: foot };
 }
@@ -2652,6 +2656,10 @@ function benchLoads(pose, P, W, out) {
   if (P.pullApart > 0) out.push({ p: pose.R.hand, F: [-P.pullApart * 0.12 * W, 0, 0], region: 'fore' });
 }
 
+function coronalFootForce(hip, cop, verticalForce) {
+  return ((hip[0] - cop[0]) / Math.max(0.3, hip[1] - cop[1])) * verticalForce;
+}
+
 function forcesOf(pose, P, lift) {
   const L = LIFTS[lift];
   const W = BODY.mass * G;
@@ -2684,7 +2692,7 @@ function forcesOf(pose, P, lift) {
     else if (cop[2] > R.toe[2] + 0.02) pose.warn.push('重心落在腳尖前方，會往前倒');
     // 水平分量讓力線在額狀面通過髖關節（雙腳站立時髖外展力矩最小）
     const hip = pose.R.hip;
-    const grf = [((hip[0] - cop[0]) / Math.max(0.3, hip[1] - fy)) * m, m, -SFz];
+    const grf = [coronalFootForce(hip, cop, m), m, -SFz];
     if (P.kneesOut > 0) grf[0] -= P.kneesOut * 0.1 * W;
     out.push({ p: cop, F: grf, region: 'foot' });
   }
