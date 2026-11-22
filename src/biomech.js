@@ -1779,7 +1779,11 @@ function pulldownPose(P, e) {
   // 槓經過臉時要在臉前方
   const head = add(tf.SC, mul(tf.u, 0.2));
   if (Math.abs(bar[1] - head[1]) < 0.14) bar[2] = Math.max(bar[2], head[2] + 0.13);
-  const pole = norm(add(add(tf.lat, mul(tf.u, -0.4)), mul(tf.f, -0.15)));
+  // 反握時手肘沿身體前側下拉，屈肘平面較接近矢狀面；正握保留向外開的路徑。
+  // 這是握法與上臂平面連動的解剖推論，文獻量到肌電差異，未提供手肘軌跡角度。
+  const pole = P.supin === 'sup'
+    ? norm(add(add(tf.lat, tf.f), mul(tf.u, -0.4)))
+    : norm(add(add(tf.lat, mul(tf.u, -0.4)), mul(tf.f, -0.15)));
   const ok = armChain(pose, S, bar, pole);
   if (!ok && e > 0.15) { pose.ok = false; pose.conflict = '手臂長度無法把槓拉到這個位置'; }
   pose.bar = [0, bar[1], bar[2]];
