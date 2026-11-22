@@ -10,6 +10,9 @@
 //   'inference' — 解剖或幾何推論（無直接實測文獻支持，或文獻顯示無顯著差異）
 
 import fs from 'node:fs';
+
+// 兩個比較值的相對差小於這個比例時視為平手（例如 0.0000001 的差距不代表模型呈現了文獻的方向）
+const TIE_MARGIN = 0.01;
 import { MODEL_VERSION, analyze, peakAnalysis, defaultParams } from '../src/biomech.js';
 
 const P = (lift, overrides = {}) => ({ ...defaultParams(lift), ...overrides });
@@ -729,7 +732,11 @@ for (let i = 0; i < CHECKS.length; i++) {
     throw new Error(`Check #${i + 1} 缺少有效的 ids 欄位`);
   }
   const r = c.run();
-  const status = r.pass ? 'PASS' : 'FAIL';
+  // 差距太小（相對差 < TIE_MARGIN）視為平手：模型沒有呈現出方向，不算與文獻一致
+  const rel = Math.abs(r.valA - r.valB) / Math.max(Math.abs(r.valA), Math.abs(r.valB), 1e-9);
+  r.tie = rel < TIE_MARGIN;
+  if (r.tie) r.pass = false;
+  const status = r.pass ? 'PASS' : r.tie ? 'FAIL（平手）' : 'FAIL';
   if (r.pass) {
     passed++;
     stats[c.evidence].pass++;
@@ -751,6 +758,7 @@ for (let i = 0; i < CHECKS.length; i++) {
   const item = {
     index: i + 1,
     pass: r.pass,
+    tie: r.tie,
     evidence: c.evidence,
     evidenceLabel: EVIDENCE_LABEL[c.evidence],
     exercise: c.exercise,
