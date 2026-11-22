@@ -871,6 +871,7 @@ function updateData(force) {
       el('div', { class: 'track' }, el('i', { style: `width:${(v / jm) * 100}%;background:#0891b2` }))));
   }
   box.append(jl);
+  if (LIFTS[state.lift].dofs.includes('shRot')) box.append(el('div', { class: 'muted' }, '肩部數值合併上臂前舉、側舉與內外旋的力矩需求。'));
   box.append(el('div', { class: 'note', style: 'margin-top:10px' }, '只顯示比例，不顯示公斤或牛頓。模型不涵蓋代謝灼熱感、疲勞、延遲性痠痛與個人神經控制。教學用途，非傷害診斷。'));
 }
 

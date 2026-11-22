@@ -26,46 +26,28 @@ const RANKS = {
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
   {
-    id: 'row', rule: 'rank:top3',
-    current: '前三名 infra、mdelt、uptrap；lat 第五',
-    cause: '肩胛等效軸與旋轉肌袖分配尚未校準',
-    fix: '校準肩胛後收軸與肩水平力矩模型',
-  },
-  {
-    id: 'row-sup', rule: 'rank:top3',
-    current: '前三名 infra、mdelt、uptrap；lat 第五',
-    cause: '肩胛等效軸與旋轉肌袖分配尚未校準',
-    fix: '校準肩胛後收軸與肩水平力矩模型',
-  },
-  {
-    id: 'cable-row-wide', rule: 'rank:top3',
-    current: '前三名 mdelt、uptrap、erec；midtrap 第五',
-    cause: '寬握肩胛與肩關節分配讓中三角、上斜方與旋轉肌袖偏高',
-    fix: '校準肩胛等效軸、握把力線與肩肌力臂',
-  },
-  {
     id: 'uprow', rule: 'rank:notFirst',
-    current: '第一名 infra（峰值 s≈0.832，未超載）',
-    cause: '缺少肱骨內外旋自由度而以旋轉肌袖承擔肩水平力矩，且上臂近水平側舉時 shFlex 矢狀面投影接近奇異點，拉高胸肌被動張力',
-    fix: '加入肱骨旋轉自由度並重設肩三維角度與胸肌路徑模型',
+    current: '棘下肌／小圓肌仍居首，峰值 s 約 0.79',
+    cause: '直立划船頂點的握把力線沿上臂軸產生約 25 N·m 外旋需求；目前只有合併的棘下肌／小圓肌承擔主要外旋，尚未分出棘上肌與旋轉肌袖各束',
+    fix: '依實測肩旋轉力臂補齊肩袖分束與肩關節穩定力矩',
   },
   {
-    id: 'curl', rule: 'activation:bic',
-    current: '肱二頭肌峰值 a≈1.236（e=0.575）',
-    cause: '三角肌前束固定肩外展力臂（+12 mm）在高肩屈、低外展需求下產生過多外展力矩，現有肌肉集僅小型喙肱肌（208 N）能在不對抗肩屈的前提下平衡內收，迫使二頭肌分擔更多肩屈力矩',
-    fix: '補齊胸大肌肩內收力臂並依解剖路徑校準肩前束／喙肱肌三維力臂',
+    id: 'ohp', rule: 'rank:top3',
+    current: '前三名肱三頭肌外／內側頭、三角肌中束、斜方肌上束；前三角第 4',
+    cause: '肩推頂點上臂近垂直，三維舉臂前向力臂縮小；中三角與肩胛上提需求分走活化',
+    fix: '以肩胛上旋及三角肌分束的三維路徑校準舉臂力臂',
   },
   {
-    id: 'reverse-curl', rule: 'activation:corb',
-    current: '喙肱肌峰值 a≈1.197（e=0.625）',
-    cause: '反手彎舉降低二頭肌偏好後，前三角肌承擔更多肩屈並產生多餘外展力矩，全數壓在小型喙肱肌（208 N）內收平衡',
-    fix: '補齊胸大肌肩內收力臂並依解剖路徑校準肩前束／喙肱肌三維力臂',
+    id: 'curl', rule: 'rank:first',
+    current: '前三角肌約 0.90、肱二頭肌約 0.80',
+    cause: '前臂持槓的肩屈需求仍由前三角肌分攤較多；合併的肱二頭肌肩屈力臂偏小或肩胛穩定近似不足',
+    fix: '核對二頭長／短頭肩路徑與肩屈力臂',
   },
   {
     id: 'reverse-curl', rule: 'rank:first',
-    current: '第一名 corb；屈肘肌（bic、brach）未居首',
-    cause: '前三角肌肩外展耦合推高小型喙肱肌活化，使其超過屈肘主動肌',
-    fix: '補齊胸大肌肩內收力臂並依解剖路徑校準肩前束／喙肱肌三維力臂',
+    current: '前三角肌約 0.96、肱肌／肱橈肌約 0.72',
+    cause: '正握使肱二頭肌效率下降，但前臂持槓的肩屈需求仍讓前三角肌居首',
+    fix: '核對肱肌／肱橈肌與二頭肌的握法差異，以及上臂固定的肩關節力矩',
   },
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));
