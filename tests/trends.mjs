@@ -647,6 +647,62 @@ const CHECKS = [
       return { labelA: '反手正握', valA: a, labelB: '反握', valB: b, unit: 'a', pass: a > b };
     },
   },
+
+  // ---------- 23. 蝴蝶機 vs 平板臥推 ----------
+  {
+    ids: ['pec-deck', 'bench'],
+    exercise: '平板臥推 vs 蝴蝶機',
+    compare: '平板臥推 vs 蝴蝶機 — 肱三頭肌活化',
+    ref: 'Rocha Júnior, Gentil et al. 2007 (DOI 10.1590/S1517-86922007000100012，實測臥推三頭肌 EMG 顯著高於蝴蝶機)',
+    evidence: 'direct',
+    expected: '平板臥推 > 蝴蝶機',
+    run() {
+      const a = peakMus('bench', P('bench'), 'trilat', 'a');
+      const b = peakMus('pecdeck', P('pecdeck'), 'trilat', 'a');
+      return { labelA: '平板臥推', valA: a, labelB: '蝴蝶機', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['pec-deck'],
+    exercise: '蝴蝶機（握把型式）',
+    compare: '握把式 (handle) vs 前臂墊式 (pad) — 屈肘肌群 (brach) 活化',
+    ref: '力學／解剖推論（握把式需屈肘肌等長維持微彎肘角；前臂墊式阻力直接作用於前臂且垂直於屈肘平面，無直接 EMG 對照文獻）',
+    evidence: 'inference',
+    expected: '握把式 > 前臂墊式',
+    run() {
+      const a = peakMus('pecdeck', P('pecdeck', { style: 'handle' }), 'brach', 'a');
+      const b = peakMus('pecdeck', P('pecdeck', { style: 'pad' }), 'brach', 'a');
+      return { labelA: '握把式', valA: a, labelB: '前臂墊式', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+
+  // ---------- 24. 滑輪夾胸：高位往下 vs 低位往上 ----------
+  {
+    ids: ['cable-fly-high', 'cable-fly-mid', 'cable-fly-low'],
+    exercise: '滑輪夾胸（滑輪高度）',
+    compare: '高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化',
+    ref: 'Lee 2019 (PMID 28943236，斜向水平內收改變胸骨／鎖骨部比例); Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
+    evidence: 'indirect',
+    expected: '高位往下 > 低位往上',
+    run() {
+      const a = peakMus('cablefly', P('cablefly', { height: 'high' }), 'pecs', 'a');
+      const b = peakMus('cablefly', P('cablefly', { height: 'low' }), 'pecs', 'a');
+      return { labelA: '高位往下', valA: a, labelB: '低位往上', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['cable-fly-low', 'cable-fly-mid', 'cable-fly-high'],
+    exercise: '滑輪夾胸（滑輪高度）',
+    compare: '低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化',
+    ref: 'Lee 2019 (PMID 28943236，上斜 +30° 方向較能區分鎖骨部); Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
+    evidence: 'indirect',
+    expected: '低位往上 > 高位往下',
+    run() {
+      const a = peakMus('cablefly', P('cablefly', { height: 'low' }), 'pecc', 'a');
+      const b = peakMus('cablefly', P('cablefly', { height: 'high' }), 'pecc', 'a');
+      return { labelA: '低位往上', valA: a, labelB: '高位往下', valB: b, unit: 'a', pass: a > b };
+    },
+  },
 ];
 
 const writeStatus = process.argv.includes('--write-status');

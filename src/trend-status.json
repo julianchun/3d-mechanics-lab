@@ -1,23 +1,23 @@
 {
   "modelVersion": "0.7.1",
   "summary": {
-    "total": 42,
-    "pass": 39,
+    "total": 46,
+    "pass": 43,
     "fail": 3,
     "byEvidence": {
       "direct": {
-        "total": 26,
-        "pass": 23,
+        "total": 27,
+        "pass": 24,
         "fail": 3
       },
       "indirect": {
-        "total": 14,
-        "pass": 14,
+        "total": 16,
+        "pass": 16,
         "fail": 0
       },
       "inference": {
-        "total": 2,
-        "pass": 2,
+        "total": 3,
+        "pass": 3,
         "fail": 0
       }
     }
@@ -588,6 +588,17 @@
         "expected": "標準握 > 窄握",
         "ref": "Lehman 2005 (PMID 16095407)",
         "model": "標準握 = 0.770 a vs 窄握 = 0.573 a"
+      },
+      {
+        "index": 43,
+        "pass": true,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "平板臥推 vs 蝴蝶機",
+        "compare": "平板臥推 vs 蝴蝶機 — 肱三頭肌活化",
+        "expected": "平板臥推 > 蝴蝶機",
+        "ref": "Rocha Júnior, Gentil et al. 2007 (DOI 10.1590/S1517-86922007000100012，實測臥推三頭肌 EMG 顯著高於蝴蝶機)",
+        "model": "平板臥推 = 0.471 a vs 蝴蝶機 = 0.000 a"
       }
     ],
     "cg-bench": [
@@ -854,6 +865,102 @@
         "expected": "反手正握 > 反握",
         "ref": "Kleiber 2015 (PMID 26300781, n=16，實測肱橈肌旋前貢獻顯著較高；註：模型 brach 為肱肌＋肱橈肌合併)",
         "model": "反手正握 = 0.690 a vs 反握 = 0.404 a"
+      }
+    ],
+    "pec-deck": [
+      {
+        "index": 43,
+        "pass": true,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "平板臥推 vs 蝴蝶機",
+        "compare": "平板臥推 vs 蝴蝶機 — 肱三頭肌活化",
+        "expected": "平板臥推 > 蝴蝶機",
+        "ref": "Rocha Júnior, Gentil et al. 2007 (DOI 10.1590/S1517-86922007000100012，實測臥推三頭肌 EMG 顯著高於蝴蝶機)",
+        "model": "平板臥推 = 0.471 a vs 蝴蝶機 = 0.000 a"
+      },
+      {
+        "index": 44,
+        "pass": true,
+        "evidence": "inference",
+        "evidenceLabel": "解剖／幾何推論",
+        "exercise": "蝴蝶機（握把型式）",
+        "compare": "握把式 (handle) vs 前臂墊式 (pad) — 屈肘肌群 (brach) 活化",
+        "expected": "握把式 > 前臂墊式",
+        "ref": "力學／解剖推論（握把式需屈肘肌等長維持微彎肘角；前臂墊式阻力直接作用於前臂且垂直於屈肘平面，無直接 EMG 對照文獻）",
+        "model": "握把式 = 0.453 a vs 前臂墊式 = 0.007 a"
+      }
+    ],
+    "cable-fly-high": [
+      {
+        "index": 45,
+        "pass": true,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "滑輪夾胸（滑輪高度）",
+        "compare": "高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化",
+        "expected": "高位往下 > 低位往上",
+        "ref": "Lee 2019 (PMID 28943236，斜向水平內收改變胸骨／鎖骨部比例); Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
+        "model": "高位往下 = 0.819 a vs 低位往上 = 0.544 a"
+      },
+      {
+        "index": 46,
+        "pass": true,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "滑輪夾胸（滑輪高度）",
+        "compare": "低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化",
+        "expected": "低位往上 > 高位往下",
+        "ref": "Lee 2019 (PMID 28943236，上斜 +30° 方向較能區分鎖骨部); Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
+        "model": "低位往上 = 0.296 a vs 高位往下 = 0.198 a"
+      }
+    ],
+    "cable-fly-mid": [
+      {
+        "index": 45,
+        "pass": true,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "滑輪夾胸（滑輪高度）",
+        "compare": "高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化",
+        "expected": "高位往下 > 低位往上",
+        "ref": "Lee 2019 (PMID 28943236，斜向水平內收改變胸骨／鎖骨部比例); Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
+        "model": "高位往下 = 0.819 a vs 低位往上 = 0.544 a"
+      },
+      {
+        "index": 46,
+        "pass": true,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "滑輪夾胸（滑輪高度）",
+        "compare": "低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化",
+        "expected": "低位往上 > 高位往下",
+        "ref": "Lee 2019 (PMID 28943236，上斜 +30° 方向較能區分鎖骨部); Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
+        "model": "低位往上 = 0.296 a vs 高位往下 = 0.198 a"
+      }
+    ],
+    "cable-fly-low": [
+      {
+        "index": 45,
+        "pass": true,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "滑輪夾胸（滑輪高度）",
+        "compare": "高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化",
+        "expected": "高位往下 > 低位往上",
+        "ref": "Lee 2019 (PMID 28943236，斜向水平內收改變胸骨／鎖骨部比例); Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
+        "model": "高位往下 = 0.819 a vs 低位往上 = 0.544 a"
+      },
+      {
+        "index": 46,
+        "pass": true,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "滑輪夾胸（滑輪高度）",
+        "compare": "低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化",
+        "expected": "低位往上 > 高位往下",
+        "ref": "Lee 2019 (PMID 28943236，上斜 +30° 方向較能區分鎖骨部); Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
+        "model": "低位往上 = 0.296 a vs 高位往下 = 0.198 a"
       }
     ]
   }
