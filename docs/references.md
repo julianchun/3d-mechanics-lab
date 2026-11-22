@@ -301,9 +301,9 @@
 
 - **可靠研究來源**
   1. Rocha Júnior VA, Gentil P, Oliveira E, do Carmo J. (2007). *Comparison among the EMG activity of the pectoralis major, anterior deltoidis and triceps brachii during the bench press and peck deck exercises.* Rev Bras Med Esporte, 13(1):43–46. [DOI](https://doi.org/10.1590/S1517-86922007000100012)
-  2. Gentil P, Oliveira E, de Araújo Carvalho JR, Bottaro M. (2007). *Effects of exercise order on upper-body muscle activation and exercise performance.* J Strength Cond Res, 21(4):1082–1086. [PubMed 18076251](https://pubmed.ncbi.nlm.nih.gov/18076251/)
+  2. Gentil P, Oliveira E, de Araújo Rocha Júnior V, do Carmo J, Bottaro M. (2007). *Effects of exercise order on upper-body muscle activation and exercise performance.* J Strength Cond Res, 21(4):1082–1086. [PubMed 18076251](https://pubmed.ncbi.nlm.nih.gov/18076251/)
   3. Welsch EA, Bird MJ, Mayhew JL. (2005). *Electromyographic activity of the pectoralis major and anterior deltoid muscles during three upper-body lifts.* J Strength Cond Res, 19(2):449–452. [PubMed 15903389](https://pubmed.ncbi.nlm.nih.gov/15903389/)
-  4. Solstad TE, Andersen V, Shaw M, Hoel EM, Vonheim A, Saeterbakken AH. (2020). *A comparison of muscle activation between barbell bench press and dumbbell flyes in resistance-trained males.* J Sports Sci Med, 19(4):762–771. [PubMed 33239937](https://pubmed.ncbi.nlm.nih.gov/33239937/)
+  4. Solstad TE, Andersen V, Shaw M, Hoel EM, Vonheim A, Saeterbakken AH. (2020). *A comparison of muscle activation between barbell bench press and dumbbell flyes in resistance-trained males.* J Sports Sci Med, 19(4):645–651. [PubMed 33239937](https://pubmed.ncbi.nlm.nih.gov/33239937/)
   5. Ackland DC, Pak P, Richardson M, Pandy MG. (2008). *Moment arms of the muscles crossing the anatomical shoulder.* J Anat, 213(4):383–390. [PubMed 18691376](https://pubmed.ncbi.nlm.nih.gov/18691376/)
 - **可比較量化結果**
   - Rocha Júnior et al. (2007, 10RM)：蝴蝶機與平板臥推在**胸大肌**與**前三角肌**之 EMG 無顯著差異，但平板臥推之**肱三頭肌** EMG 顯著高於蝴蝶機；蝴蝶機內胸大肌與前三角肌顯著高於三頭肌。
@@ -318,7 +318,7 @@
 - **可靠研究來源**
   1. Lee HM. (2019). *Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing.* J Hand Ther, 32(1):71–79. [PubMed 28943236](https://pubmed.ncbi.nlm.nih.gov/28943236/)
   2. Ackland DC, Pak P, Richardson M, Pandy MG. (2008). *Moment arms of the muscles crossing the anatomical shoulder.* J Anat, 213(4):383–390. [PubMed 18691376](https://pubmed.ncbi.nlm.nih.gov/18691376/)
-  3. Signorile JF, Rendos NK, Heredia Vargas HH, Alipio TC, Regis RC, Eltoukhy MM, Nargund RS, Romero MA. (2017). *Differences in muscle activation and kinematics between cable-based and selectorized weight training.* J Strength Cond Res, 31(2):313–322. [PubMed 28121931](https://pubmed.ncbi.nlm.nih.gov/28121931/)
+  3. Signorile JF, Rendos NK, Heredia Vargas HH, Alipio TC, Regis RC, Eltoukhy MM, Nargund RS, Romero MA. (2017). *Differences in muscle activation and kinematics between cable-based and selectorized weight training.* J Strength Cond Res, 31(2):313–322. [PubMed 28129277](https://pubmed.ncbi.nlm.nih.gov/28129277/)
   4. Rodríguez-Ridao D et al. (2020). [DOI](https://doi.org/10.3390/ijerph17197339)；Lauver JD et al. (2016). [PubMed 25799093](https://pubmed.ncbi.nlm.nih.gov/25799093/)
 - **可比較量化結果**
   - **直接比較動態高／中／低三檔滑輪夾胸之同儕審查期刊全文：未找到**。

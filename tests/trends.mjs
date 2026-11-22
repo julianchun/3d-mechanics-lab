@@ -681,8 +681,8 @@ const CHECKS = [
     ids: ['cable-fly-high', 'cable-fly-mid', 'cable-fly-low'],
     exercise: '滑輪夾胸（滑輪高度）',
     compare: '高位往下 (high) vs 低位往上 (low) — 中下胸 (pecs) 活化',
-    ref: 'Lee 2019 (PMID 28943236，斜向水平內收改變胸骨／鎖骨部比例); Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
-    evidence: 'indirect',
+    ref: '解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，胸骨部具肩內收／下壓傾向); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
+    evidence: 'inference',
     expected: '高位往下 > 低位往上',
     run() {
       const a = peakMus('cablefly', P('cablefly', { height: 'high' }), 'pecs', 'a');
@@ -694,8 +694,8 @@ const CHECKS = [
     ids: ['cable-fly-low', 'cable-fly-mid', 'cable-fly-high'],
     exercise: '滑輪夾胸（滑輪高度）',
     compare: '低位往上 (low) vs 高位往下 (high) — 上胸 (pecc) 活化',
-    ref: 'Lee 2019 (PMID 28943236，上斜 +30° 方向較能區分鎖骨部); Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
-    evidence: 'indirect',
+    ref: '解剖推論：Ackland 2008 力臂方向；Lee 2019 (PMID 28943236) 等長施力方向研究未區分出胸骨／鎖骨部差異，不是滑輪高低位的直接證據; Ackland 2008 (PMID 18691376，鎖骨部肩屈力臂大); Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)',
+    evidence: 'inference',
     expected: '低位往上 > 高位往下',
     run() {
       const a = peakMus('cablefly', P('cablefly', { height: 'low' }), 'pecc', 'a');

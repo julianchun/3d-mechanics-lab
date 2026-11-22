@@ -79,12 +79,12 @@ const REFS = {
   andersen2008: { authors: 'Andersen LL et al.', year: 2008, title: 'Muscle activation during selected strength exercises in women with chronic neck muscle pain', venue: 'Phys Ther, 88(6):703–711', url: 'https://pubmed.ncbi.nlm.nih.gov/18339796/', tag: 'PubMed 18339796' },
   pizzari2014: { authors: 'Pizzari T et al.', year: 2014, title: 'Modifying a shrug exercise can facilitate the upward rotator muscles of the scapula', venue: 'Clin Biomech, 29(2):201–205', url: 'https://pubmed.ncbi.nlm.nih.gov/24342452/', tag: 'PubMed 24342452' },
   rochajunior2007: { authors: 'Rocha Júnior VA, Gentil P, Oliveira E, do Carmo J', year: 2007, title: 'Comparison among the EMG activity of the pectoralis major, anterior deltoidis and triceps brachii during the bench press and peck deck exercises', venue: 'Rev Bras Med Esporte, 13(1):43–46', url: 'https://doi.org/10.1590/S1517-86922007000100012', tag: 'DOI' },
-  gentil2007: { authors: 'Gentil P, Oliveira E, de Araújo Carvalho JR, Bottaro M', year: 2007, title: 'Effects of exercise order on upper-body muscle activation and exercise performance', venue: 'J Strength Cond Res, 21(4):1082–1086', url: 'https://pubmed.ncbi.nlm.nih.gov/18076251/', tag: 'PubMed 18076251' },
+  gentil2007: { authors: 'Gentil P, Oliveira E, de Araújo Rocha Júnior V, do Carmo J, Bottaro M', year: 2007, title: 'Effects of exercise order on upper-body muscle activation and exercise performance', venue: 'J Strength Cond Res, 21(4):1082–1086', url: 'https://pubmed.ncbi.nlm.nih.gov/18076251/', tag: 'PubMed 18076251' },
   welsch2005: { authors: 'Welsch EA, Bird MJ, Mayhew JL', year: 2005, title: 'Electromyographic activity of the pectoralis major and anterior deltoid muscles during three upper-body lifts', venue: 'J Strength Cond Res, 19(2):449–452', url: 'https://pubmed.ncbi.nlm.nih.gov/15903389/', tag: 'PubMed 15903389' },
-  solstad2020: { authors: 'Solstad TE et al.', year: 2020, title: 'A comparison of muscle activation between barbell bench press and dumbbell flyes in resistance-trained males', venue: 'J Sports Sci Med, 19(4):762–771', url: 'https://pubmed.ncbi.nlm.nih.gov/33239937/', tag: 'PubMed 33239937' },
+  solstad2020: { authors: 'Solstad TE et al.', year: 2020, title: 'A comparison of muscle activation between barbell bench press and dumbbell flyes in resistance-trained males', venue: 'J Sports Sci Med, 19(4):645–651', url: 'https://pubmed.ncbi.nlm.nih.gov/33239937/', tag: 'PubMed 33239937' },
   lee2019: { authors: 'Lee HM', year: 2019, title: 'Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing', venue: 'J Hand Ther, 32(1):71–79', url: 'https://pubmed.ncbi.nlm.nih.gov/28943236/', tag: 'PubMed 28943236' },
   ackland2008: { authors: 'Ackland DC, Pak P, Richardson M, Pandy MG', year: 2008, title: 'Moment arms of the muscles crossing the anatomical shoulder', venue: 'J Anat, 213(4):383–390', url: 'https://pubmed.ncbi.nlm.nih.gov/18691376/', tag: 'PubMed 18691376' },
-  signorile2017: { authors: 'Signorile JF et al.', year: 2017, title: 'Differences in muscle activation and kinematics between cable-based and selectorized weight training', venue: 'J Strength Cond Res, 31(2):313–322', url: 'https://pubmed.ncbi.nlm.nih.gov/28121931/', tag: 'PubMed 28121931' },
+  signorile2017: { authors: 'Signorile JF et al.', year: 2017, title: 'Differences in muscle activation and kinematics between cable-based and selectorized weight training', venue: 'J Strength Cond Res, 31(2):313–322', url: 'https://pubmed.ncbi.nlm.nih.gov/28129277/', tag: 'PubMed 28129277' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -233,7 +233,7 @@ export const SOURCES = {
       '握把式（手臂微彎）施力點在手掌，需屈肘肌等長維持肘角；前臂墊式（屈肘 90°）施力點在前臂中段且垂直於屈肘平面，幾乎無屈肘力矩需求但產生肩內旋力矩需求。',
       '機械臂半徑（握把 54 cm／前臂墊 29 cm）、等效凸輪基準力臂（22 cm）、溫和鐘型凸輪曲線表與預設配重（45 kg）皆為假設（未查得單一商用機台實測凸輪表）。',
     ],
-    refs: ['rochajunior2007', 'gentil2007', 'welsch2005', 'solstad2020', 'ackland2008'],
+    refs: ['rochajunior2007', 'welsch2005', 'solstad2020', 'ackland2008'],
   },
   'cable-fly-high': {
     assumptions: [
@@ -256,7 +256,7 @@ export const SOURCES = {
     assumptions: [
       '站姿雙側獨立滑輪（低位滑輪 85 cm，髖部高度，由下往上斜向夾胸；左右柱距 260 cm），每手各握獨立把手，不套用剛體握把互推。',
       '兩側鋼索左右分量相消，向下與向後分量計入站姿重心平衡；採雙腳併站（實務上建議前後腳分站）。',
-      '滑輪比預設 2:1，單側示範配重 18 kg（實感單手 9 kg）與機架尺寸為假設；低位往上斜向夾胸較高位更能提高上胸（鎖骨部）與前三角肌參與。',
+      '滑輪比預設 2:1，單側示範配重 18 kg（實感單手 9 kg）與機架尺寸為假設；低位往上斜向夾胸預期較偏上胸（鎖骨部）與前三角肌——此為依肌肉力臂方向的推論，尚無直接比較滑輪高低位的研究。',
     ],
     refs: ['lee2019', 'ackland2008', 'rodriguezridao2020', 'lauver2016', 'signorile2017', 'lifefitness_pwrplay'],
   },
