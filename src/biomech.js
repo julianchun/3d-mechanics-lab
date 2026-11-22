@@ -1,7 +1,7 @@
 // 力學核心：姿勢求解 → 關節力矩（準靜態）→ 肌肉分配（最小化活化平方和）
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 
-export const MODEL_VERSION = '0.7.0';
+export const MODEL_VERSION = '0.7.1';
 const G = 9.81;
 
 export const BODY = {
@@ -517,22 +517,44 @@ export function defaultParams(lift) {
 function shoulderAxes(q) {
   const x = q.shFwd, y = q.shSide, t = Math.hypot(x, y);
   const c = t < 1e-8 ? 1 : x / t, s = t < 1e-8 ? 0 : y / t;
-  const h = [Math.sin(t) * s, -Math.cos(t), Math.sin(t) * c];
+  const ct = Math.cos(t), st = Math.sin(t);
+  const sinc = t < 1e-5 ? 1 - (t * t) / 6 : st / t;
   const elev = [-c, 0, s];
-  const dhPlane = [Math.sin(t) * c, 0, -Math.sin(t) * s];
-  const plane = cross(h, dhPlane);
-  const k = t < 1e-5 ? 1 : 1 / t;
+  const plane = [ct * s, st, ct * c];
   return {
-    fwd: add(mul(elev, c), mul(plane, -s * k)),
-    side: add(mul(elev, s), mul(plane, c * k)),
+    fwd: add(mul(elev, c), mul(plane, -s * sinc)),
+    side: add(mul(elev, s), mul(plane, c * sinc)),
   };
 }
-const shoulderArm = (flex, abd, hadd, axis) => (q) => {
+// 在上臂正交基底（上舉軸 e_elev、水平內收軸 e_hadd）定義三維力臂向量：
+// - r_elev = f cosφ + a sinφ（矢狀面屈曲 f 與額狀面外展 a 依上舉平面 φ 過渡）
+// - r_hadd = h sinθ + max(0, cosθ)(f sinφ - a cosφ)：垂臂（θ=0）時完全不依賴 φ，
+//   水平位（θ=90°）為純水平內收 h，舉過頭（θ>90°）不因 cosθ 變號反轉。
+function shoulderVec(flex, abd, hadd, q) {
   const f = typeof flex === 'function' ? flex(q) : flex;
   const a = typeof abd === 'function' ? abd(q) : abd;
   const h = typeof hadd === 'function' ? hadd(q) : hadd;
-  const v = [-f, -h, a];
-  return dot(v, shoulderAxes(q)[axis]);
+  const t = q.shElev, p = q.shPlane;
+  const c = Math.cos(p), s = Math.sin(p), ct = Math.cos(t), st = Math.sin(t);
+  const w0 = Math.max(0, ct);
+  const rElev = f * c + a * s;
+  const rHadd = h * st + w0 * (f * s - a * c);
+  return {
+    rElev, rHadd,
+    vec: add(mul([-c, 0, s], rElev), mul([-ct * s, -st, -ct * c], rHadd)),
+  };
+}
+const shoulderArm = (flex, abd, hadd, axis) => {
+  const fn = (q) => {
+    const { rElev, rHadd } = shoulderVec(flex, abd, hadd, q);
+    const t = q.shElev, p = q.shPlane, c = Math.cos(p), s = Math.sin(p);
+    const sinc = t < 1e-5 ? 1 - (t * t) / 6 : Math.sin(t) / t;
+    return axis === 'fwd'
+      ? c * rElev + s * sinc * rHadd
+      : s * rElev - c * sinc * rHadd;
+  };
+  fn.shoulderVec = (q) => shoulderVec(flex, abd, hadd, q).vec;
+  return fn;
 };
 // 髖路徑點直線近似：在 0／45／90° 取 ∂肌腱長／∂髖屈角，二次插值；超出路徑可靠區間則固定端點。
 const hipFit = (a, b, c) => (q) => {
@@ -541,10 +563,16 @@ const hipFit = (a, b, c) => (q) => {
 };
 // 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/muscle-params.md。
 const angleSlope = (base, key, per90) => (q) => base + per90 * clamp((q[key] || 0) / rad(90), -0.5, 1.7);
+// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；90° 後斜率為高上舉模型估計，見 docs/muscle-params.md。
+const deltoidScale = (q) => 1 - 0.65 * clamp((q.shElev - rad(90)) / rad(80), 0, 1);
+const adeltFlex = (q) => 0.035 + 0.008 * clamp(q.shElev / rad(90), 0, 1);
+const adeltAbduction = (q) => (0.006 + 0.020 * clamp(q.shElev / rad(75), 0, 1)) * deltoidScale(q);
+const mdeltAbduction = (q) => (0.019 + 0.012 * clamp(q.shElev / rad(60), 0, 1)) * deltoidScale(q);
+const pdeltAbduction = (q) => (0.004 + 0.008 * clamp(q.shElev / rad(75), 0, 1)) * deltoidScale(q);
 // Ackland et al. 2008 Table 1：胸大肌胸骨中束屈曲力臂遠小於鎖骨束，下束可為伸肌。
 // PECM2／3 合群仍須共用一個力臂；下列節點是依原文區域差異的近似，非原文逐角度量測。
 const pecSternalFlex = (q) => {
-  const flex = q.shFwd;
+  const flex = q.shFlex;
   if (flex < 0) return 0.003 - 0.05 * clamp(flex / rad(50), -1, 0);
   const angle = clamp(flex / rad(45), 0, 3);
   const arms = [0.003, 0.006, -0.002, -0.005];
@@ -553,8 +581,8 @@ const pecSternalFlex = (q) => {
 };
 // Ackland et al. 2008：鎖骨束 2.5° 約 9.6 mm，71° 約 53.7 mm；其餘角度線性插值。
 const pecClavicularFlex = (q) => {
-  const angle = q.shFwd / rad(1);
-  if (angle < 0) return 0.035;
+  const angle = q.shFlex / rad(1);
+  if (angle < 0) return 0.0096 + (0.035 - 0.0096) * clamp(-angle / 45, 0, 1);
   if (angle < 70) return 0.0096 + (0.0537 - 0.0096) * angle / 70;
   return 0.0537 - 0.0137 * clamp((angle - 70) / 50, 0, 1);
 };
@@ -575,23 +603,25 @@ export const MUSCLES = [
   // 軀幹單條代表同側所有伸／屈肌的功能群；依最大等長軀幹力矩校正總能力，非單一肌束的 OpenSim F。
   { id: 'erec', name: '腰背伸肌群', F: 5000, Lf: 0.0808, Lmt: 0.1947, arms: { trunkExt: 0.0465 } },
   { id: 'ra', name: '腹部屈肌群', F: 1250, Lf: 0.2986, Lmt: 0.3796, arms: { trunkExt: -0.0635 } },
-  { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shFwd: shoulderArm(pecSternalFlex, -0.030, 0.070, 'fwd'), shSide: shoulderArm(pecSternalFlex, -0.030, 0.070, 'side'), shRot: 0.020, scElev: -0.025 } },
-  { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shFwd: shoulderArm(pecClavicularFlex, -0.015, 0.040, 'fwd'), shSide: shoulderArm(pecClavicularFlex, -0.015, 0.040, 'side'), shRot: 0.009 } },
-  { id: 'adelt', name: '三角肌前束', F: 1350, Lf: 0.0976, Lmt: 0.1906, arms: { shFwd: shoulderArm(angleSlope(0.035, 'shElev', 0.008), 0.012, 0.020, 'fwd'), shSide: shoulderArm(angleSlope(0.035, 'shElev', 0.008), 0.012, 0.020, 'side'), shRot: 0.005 } },
-  { id: 'pdelt', name: '三角肌後束', F: 201.6, Lf: 0.1367, Lmt: 0.1747, arms: { shFwd: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), 0.012, -0.040, 'fwd'), shSide: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), 0.012, -0.040, 'side'), shRot: -0.006 } },
+  { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shFwd: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'fwd'), shSide: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'side'), shRot: 0.020, scElev: -0.025 } },
+  { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shFwd: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'fwd'), shSide: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'side'), shRot: 0.009 } },
+  { id: 'adelt', name: '三角肌前束', F: 1350, Lf: 0.0976, Lmt: 0.1906, arms: { shFwd: shoulderArm(adeltFlex, adeltAbduction, 0.015, 'fwd'), shSide: shoulderArm(adeltFlex, adeltAbduction, 0.015, 'side'), shRot: 0.005 } },
+  { id: 'pdelt', name: '三角肌後束', F: 201.6, Lf: 0.1367, Lmt: 0.1747, arms: { shFwd: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'fwd'), shSide: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'side'), shRot: -0.006 } },
   // 背闊肌跨過肩胛與肱骨，是肩伸、內收與內旋肌；肩帶下壓另由 scElev 表示。
-  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * clamp(q.shElev / rad(60), 0.2, 1), (q) => -0.040 * Math.sin(q.shElev), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * clamp(q.shElev / rad(60), 0.2, 1), (q) => -0.040 * Math.sin(q.shElev), 'side'), shRot: 0.020, scElev: -0.030 } },
+  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => -0.040 * Math.sin(q.shElev), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => -0.040 * Math.sin(q.shElev), 'side'), shRot: 0.020, scElev: -0.030 } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFwd: shoulderArm(-0.020, -0.010, 0, 'fwd'), shSide: shoulderArm(-0.020, -0.010, 0, 'side') } },
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
-  { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.012 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0.003, 0, 'fwd'), shSide: shoulderArm((q) => 0.012 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0.003, 0, 'side') } },
+  // 二頭肌肩屈基值取 MOBL_ARMS_41.osim 長頭（16.0 mm）與短頭（21.6 mm）依 F 加權弦力臂（18.1 mm），上舉 60° 歸零（Landin 2008）。
+  { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
   { id: 'brach', name: '肱肌／肱橈肌', F: 1453.4, Lf: 0.1023, Lmt: 0.1709, arms: { elbExt: angleSlope(-0.025, 'elbFlex', -0.006) } },
-  { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: { shFwd: shoulderArm(-0.025, -0.030, -0.015, 'fwd'), shSide: shoulderArm(-0.025, -0.030, -0.015, 'side'), shRot: 0.012 } },
-  { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFwd: shoulderArm(0.015, -0.020, 0.012, 'fwd'), shSide: shoulderArm(0.015, -0.020, 0.012, 'side') } },
+  { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: { shFwd: shoulderArm(-0.025, (q) => -0.030 * Math.sin(q.shElev) ** 2, -0.015, 'fwd'), shSide: shoulderArm(-0.025, (q) => -0.030 * Math.sin(q.shElev) ** 2, -0.015, 'side'), shRot: 0.012 } },
+  { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFwd: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'fwd'), shSide: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'side') } },
   { id: 'infra', name: '棘下肌／小圓肌', F: 1345.3, Lf: 0.0752, Lmt: 0.1141, arms: { shRot: -0.025 } },
   { id: 'subsc', name: '肩胛下肌', F: 1306.9, Lf: 0.0873, Lmt: 0.1203, arms: { shRot: 0.025 } },
-  { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shFwd: shoulderArm(0.004, (q) => 0.020 + 0.015 * clamp(q.shElev / rad(60), 0, 1), -0.004, 'fwd'), shSide: shoulderArm(0.004, (q) => 0.020 + 0.015 * clamp(q.shElev / rad(60), 0, 1), -0.004, 'side') } },
+  { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shFwd: shoulderArm(0.004, mdeltAbduction, -0.004, 'fwd'), shSide: shoulderArm(0.004, mdeltAbduction, -0.004, 'side') } },
   // 肩胛：力臂相對胸鎖關節；scRet = 後收、scElev = 上提（含上旋）
-  { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: { scRet: 0.035 } },
+  // T6 的 35 mm 缺肌束路徑推導；還原 70 mm，仍屬肩胛等效力臂估計。
+  { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: { scRet: 0.070 } },
   { id: 'uptrap', name: '斜方肌上束', F: 1500, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
   { id: 'lowtrap', name: '斜方肌下束', F: 500, Lf: 0.15, arms: { scElev: -0.035, scRet: 0.05 } },
   { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: { scRet: -0.07, scElev: 0.03 } },
@@ -621,7 +651,7 @@ export function liftMuscles(lift) {
     const ks = Object.keys(m.arms);
     // opt：次要作用，該動作沒分析這個方向時可以忽略（不會因此把整條肌肉排除）
     return ks.some((k) => dofs.includes(k)) && ks.every((k) => dofs.includes(k) || OPTIONAL_DOFS.includes(k) || opt.includes(k) || m.opt?.includes(k));
-  });
+  }).map((m) => ({ ...m, arms: Object.fromEntries(Object.entries(m.arms).filter(([k]) => dofs.includes(k) || opt.includes(k))) }));
 }
 
 // ---------- 姿勢 ----------
@@ -1010,10 +1040,13 @@ function ohpPose(P, e) {
     // 前臂垂直時槓約在肩關節高度、架在三角肌前束上
     const rack = add(add(tf.Pc, mul(tf.u, 0.535)), mul(tf.f, 0.11));
     rack[0] = gx;
-    const bar = lerpV(lock, rack, e);
+    const bar = lerpV(lock, rack, Math.pow(e, 1.25));
     // 槓經過頭部高度時要繞過下巴
     const head = add(tf.SC, mul(tf.u, 0.2));
-    if (Math.abs(bar[1] - head[1]) < 0.13) bar[2] = Math.max(bar[2], head[2] + 0.12);
+    const headGap = Math.abs(bar[1] - head[1]);
+    const clearance = clamp((0.16 - headGap) / 0.12, 0, 1);
+    const blend = clearance * clearance * (3 - 2 * clearance);
+    bar[2] += Math.max(0, head[2] + 0.12 - bar[2]) * blend;
     return { knee, hip, tf, S, bar, head };
   };
   const com = (th) => {
@@ -1146,7 +1179,7 @@ function uprowPose(P, e) {
       // 頂點：槓在軀幹前方 4 cm，高度從下胸（0.36）到鎖骨（0.5）
       const top = add(add(tf.Pc, mul(tf.u, lerp(0.36, 0.5, P.height))), mul(tf.f, 0.155));
       top[0] = gx;
-      const bar = lerpV(hang, top, Math.pow(t, 0.9));
+      const bar = lerpV(hang, top, Math.pow(t, 1.12));
       // 中間行程：槓貼著身體前緣（不能穿過軀幹）
       const rel = sub(bar, tf.Pc), along = dot(rel, tf.u), front = dot(rel, tf.f);
       if (along > 0 && along < 0.55 && front < 0.15) return { bar: add(bar, mul(tf.f, 0.15 - front)) };
@@ -2057,6 +2090,8 @@ function jointAngles(pose) {
   const down = neg(pose.u), forward = dot(h, pose.f), lateral = dot(h, pose.lat);
   q.shElev = Math.acos(clamp(dot(h, down), -1, 1));
   q.shPlane = Math.atan2(lateral, forward);
+  // 文獻的矢狀面屈曲角：先把上臂投影到軀幹矢狀面，再由垂臂方向量角。
+  q.shFlex = Math.atan2(forward, dot(h, down));
   q.shFwd = q.shElev * Math.cos(q.shPlane);
   q.shSide = q.shElev * Math.sin(q.shPlane);
   // 從軀幹向下軸平行運送參考方向；屈肘時由前臂決定上臂軸旋。
@@ -2068,7 +2103,8 @@ function jointAngles(pose) {
   const ref = len(forePlane) > 0.04 ? forePlane : sub(pole, mul(h, dot(pole, h)));
   q.elbFlex = Math.acos(clamp(dot(h, fo), -1, 1));
   // 手肘接近伸直時，前臂投影極短，軸旋無法可靠辨認；平滑回到中立參考。
-  const rotConfidence = clamp((q.elbFlex - rad(15)) / rad(45), 0, 1);
+  const rotPhase = clamp((q.elbFlex - rad(15)) / rad(95), 0, 1);
+  const rotConfidence = rotPhase * rotPhase * (3 - 2 * rotPhase);
   q.shRot = Math.atan2(dot(ref, refS), dot(ref, refF)) * rotConfidence;
   q.dof = {
     hipExt: -(q.hipFlex || 0), hipAbd: q.hipAbd || 0, kneeExt: -(q.kneeFlex || 0), ankPF: -(q.ankleDorsi || 0),
@@ -2177,6 +2213,7 @@ export function analyze(lift, P, e) {
       if (key === 'shFwd' || key === 'shSide') {
         qSample.shElev = Math.hypot(qSample.shFwd, qSample.shSide);
         qSample.shPlane = Math.atan2(qSample.shSide, qSample.shFwd);
+        qSample.shFlex = Math.atan2(Math.sin(qSample.shElev) * Math.cos(qSample.shPlane), Math.cos(qSample.shElev));
       }
       sum += armFn(qSample);
     }
@@ -2184,6 +2221,7 @@ export function analyze(lift, P, e) {
     if (key === 'shFwd' || key === 'shSide') {
       qSample.shElev = q.shElev;
       qSample.shPlane = q.shPlane;
+      qSample.shFlex = q.shFlex;
     }
     return -(sum / N) * dq;
   };
@@ -2201,10 +2239,42 @@ export function analyze(lift, P, e) {
       : integrateArm(arm, key, sign, q0, q1);
   };
 
+  // 肩部雙軸（shFwd、shSide）沿上臂單位球面大圓路徑積分 ΔL = -∫ v(h(s))·ω ds，
+  // 不依賴旋轉向量 180° 分支，避免肩推鎖死附近因 shFwd/shSide 快速換號造成長度擺動。
+  const humerusDir = (x, y) => {
+    const t = Math.hypot(x, y), c = t < 1e-8 ? 1 : x / t, sn = t < 1e-8 ? 0 : y / t;
+    return [Math.sin(t) * sn, -Math.cos(t), Math.sin(t) * c];
+  };
+  const hRef = has('shFwd') && has('shSide') ? humerusDir(DOF_REF.shFwd, DOF_REF.shSide) : null;
+  const hNow = hRef ? humerusDir(q.shFwd, q.shSide) : null;
+  const shAxis = hRef ? cross(hRef, hNow) : null;
+  const shSin = shAxis ? len(shAxis) : 0;
+  const shAng = hRef ? Math.atan2(shSin, clamp(dot(hRef, hNow), -1, 1)) : 0;
+  const shW = shAng > 1e-7 && shSin > 1e-9 ? mul(shAxis, 1 / shSin) : null;
+
   const info = muscles.map((m) => {
     const arms = dofs.map((d) => { const a = m.arms[d]; return typeof a === 'function' ? a(q) : a || 0; });
     let displacement = 0;
-    dofs.forEach((d) => { displacement += dofDisplacement(m.arms[d], d); });
+    const shVec = m.arms.shFwd?.shoulderVec;
+    if (shVec && hRef) {
+      if (shW) {
+        const N = 10;
+        let sum = 0;
+        for (let k = 0; k < N; k++) {
+          const a = ((k + 0.5) / N) * shAng, ca = Math.cos(a), sa = Math.sin(a);
+          const hs = add(mul(hRef, ca), mul(cross(shW, hRef), sa));
+          qSample.shElev = Math.acos(clamp(-hs[1], -1, 1));
+          qSample.shPlane = Math.atan2(hs[0], hs[2]);
+          qSample.shFlex = Math.atan2(hs[2], -hs[1]);
+          sum += dot(shVec(qSample), shW);
+        }
+        qSample.shElev = q.shElev; qSample.shPlane = q.shPlane; qSample.shFlex = q.shFlex;
+        displacement += -(sum / N) * shAng;
+      }
+      dofs.forEach((d) => { if (d !== 'shFwd' && d !== 'shSide') displacement += dofDisplacement(m.arms[d], d); });
+    } else {
+      dofs.forEach((d) => { displacement += dofDisplacement(m.arms[d], d); });
+    }
     // optDofs：不分析力矩、但關節角度仍影響肌肉長度（例如坐姿腿彎舉時髖屈曲拉長膕繩肌）
     for (const d of L.optDofs || []) displacement += dofDisplacement(m.arms[d], d);
     const geometry = FIBER_GEOMETRY[m.id];
