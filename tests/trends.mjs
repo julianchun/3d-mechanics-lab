@@ -706,6 +706,20 @@ const CHECKS = [
       return { labelA: '低位往上', valA: a, labelB: '高位往下', valB: b, unit: 'a', pass: a > b };
     },
   },
+  // ---------- 25. 提踵：膝角對腓腸肌操作長度 ----------
+  {
+    ids: ['calf-raise-standing', 'calf-raise-seated'],
+    exercise: '站姿 vs 坐姿提踵',
+    compare: '同一踝角時，站姿近伸膝 vs 坐姿屈膝 — 腓腸肌相對長度',
+    ref: 'Kinoshita et al. 2023 (PMID 38156065，OpenSim 圖 1 顯示站姿腓腸肌操作長度高於坐姿；屬文獻中的模型推算，非即時肌電)',
+    evidence: 'indirect',
+    expected: '站姿腓腸肌較長',
+    run() {
+      const a = atE('calfraise', P('calfraise', { posture: 'standing' }), 0.5).mus.gas.l;
+      const b = atE('calfraise', P('calfraise', { posture: 'seated' }), 0.5).mus.gas.l;
+      return { labelA: '站姿', valA: a, labelB: '坐姿', valB: b, unit: 'l', pass: a > b };
+    },
+  },
 ];
 
 const writeStatus = process.argv.includes('--write-status');

@@ -85,6 +85,10 @@ const REFS = {
   lee2019: { authors: 'Lee HM', year: 2019, title: 'Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing', venue: 'J Hand Ther, 32(1):71–79', url: 'https://pubmed.ncbi.nlm.nih.gov/28943236/', tag: 'PubMed 28943236' },
   ackland2008: { authors: 'Ackland DC, Pak P, Richardson M, Pandy MG', year: 2008, title: 'Moment arms of the muscles crossing the anatomical shoulder', venue: 'J Anat, 213(4):383–390', url: 'https://pubmed.ncbi.nlm.nih.gov/18691376/', tag: 'PubMed 18691376' },
   signorile2017: { authors: 'Signorile JF et al.', year: 2017, title: 'Differences in muscle activation and kinematics between cable-based and selectorized weight training', venue: 'J Strength Cond Res, 31(2):313–322', url: 'https://pubmed.ncbi.nlm.nih.gov/28129277/', tag: 'PubMed 28129277' },
+  andersen2021_backext: { authors: 'Andersen V et al.', year: 2021, title: 'Comparison of Muscle Activity in Three Single-Joint, Hip Extension Exercises in Resistance-Trained Women', venue: 'J Sports Sci Med, 20(2):181–186', url: 'https://pubmed.ncbi.nlm.nih.gov/33948095/', tag: 'PubMed 33948095' },
+  paz2022_hipabd: { authors: 'de Almeida Paz I et al.', year: 2022, title: 'Hip abduction machine is better than free weights to target the gluteus medius while minimizing tensor fascia latae activation', venue: 'J Bodyw Mov Ther, 30:160–167', url: 'https://pubmed.ncbi.nlm.nih.gov/35500965/', tag: 'PubMed 35500965' },
+  kinoshita2023_calf: { authors: 'Kinoshita M et al.', year: 2023, title: 'Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training', venue: 'Front Physiol, 14:1272106', url: 'https://pubmed.ncbi.nlm.nih.gov/38156065/', tag: 'PubMed 38156065' },
+  paz2021_calf: { authors: 'Paz GA et al.', year: 2021, title: 'Myoelectric activity of the gastrocnemius during plantar flexion in a standing versus seated position and with a neutral or dorsiflexed ankle: A pilot study', venue: 'J Bodyw Mov Ther', url: 'https://pubmed.ncbi.nlm.nih.gov/33992275/', tag: 'PubMed 33992275' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -234,6 +238,67 @@ export const SOURCES = {
       '機械臂半徑（握把 54 cm／前臂墊 29 cm）、等效凸輪基準力臂（22 cm）、溫和鐘型凸輪曲線表與預設配重（45 kg）皆為假設（未查得單一商用機台實測凸輪表）。',
     ],
     refs: ['rochajunior2007', 'welsch2005', 'solstad2020', 'ackland2008'],
+  },
+  'reverse-deck': {
+    assumptions: [
+      '面向胸墊坐姿，雙側握把各沿水平圓弧向外打開；胸墊承受握把向前的水平合力，座墊承受垂直重量。',
+      '握把半徑 52 cm、等效凸輪力臂 22 cm、預設配重 40 kg 與胸墊位置都是未查證假設；後三角與肩胛肌順位為模型估計，沒有直接機型測力。',
+    ],
+    refs: ['ackland2008'],
+    trendNote: '未查證同機型的反向蝴蝶機軌跡、凸輪與後三角肌電對照。',
+  },
+  'back-extension': {
+    assumptions: [
+      '45° 羅馬椅以大腿墊向上、腳踝墊向下的雙接觸力維持準靜態平衡；髖與軀幹共用單一剛體軀幹近似。',
+      '髖高 92 cm、踝墊位置、胸前槓片 10 kg 及墊高調整均為未查證假設。墊高只影響畫面與肌肉操作長度，不改變髖／腰背力矩分配；圓背僅以整段軀幹角度及肌肉長度代理，未逐節模擬腰椎，不能用來推算髖與腰背之間的真實負荷轉移。',
+      '若腳踝墊所需反力方向超出單向接觸假設，模型會將反力截為零並顯示支撐力矩未平衡警告。',
+    ],
+    refs: ['andersen2021_backext'],
+    trendNote: '已有羅馬椅與其他髖伸動作肌電比較；墊高與圓背的定量影響尚無直接可用對照。',
+  },
+  'hack-squat': {
+    assumptions: [
+      '背墊沿假設 45° 軌道滑動，肩墊承擔滑台與掛片；軌道法向反作用力與傾斜腳踏板壓力中心共同平衡。腳底反力的額狀面分量按站姿共用幾何設定，使力線通過髖關節，並非實測踏板剪力。',
+      '滑軌 45°、腳板 12°、總配重 80 kg、軌道長 185 cm 與機架寬度都是未查證假設；忽略滑軌摩擦。',
+    ],
+    refs: ['escamilla1998'],
+    trendNote: 'Escamilla 1998 提供深蹲與腿推比較，並非本哈克深蹲機的直接量測。',
+  },
+  'machine-press': {
+    assumptions: [
+      '坐姿背靠椅背，雙手握把沿固定的上推軌跡移動；座墊與靠背承擔身體重量。',
+      '握把行程 47 cm、預設軌跡向前 8°、配重 40 kg、轉軸與座椅尺寸都是未查證假設；正握／中立握只改握把方向，模型沒有肱骨內外旋自由度。',
+    ],
+    refs: ['saeterbakken2013'],
+    trendNote: 'Saeterbakken 2013 比較肩推姿勢及負重型式，沒有驗證此固定軌跡器械。',
+  },
+  'calf-raise-standing': {
+    assumptions: [
+      '站姿膝近伸直，前腳掌固定在 13 cm 台階；腳跟下放與踮起繞前腳掌轉動，肩墊向下施加負重。',
+      '肩墊配重 60 kg、台階高度與行程角度為未查證假設；腓腸肌與比目魚肌的模型活化不可直接視為 EMG。',
+    ],
+    refs: ['kinoshita2023_calf', 'paz2021_calf'],
+  },
+  'calf-raise-seated': {
+    assumptions: [
+      '坐姿膝約 90°，前腳掌踩台階，膝上墊負重由前腳掌反力支撐；座墊承擔軀幹重量。',
+      '膝墊配重 45 kg、台階尺寸與行程角度為未查證假設；Kinoshita 2023 比較的是 12 週肌肥大，不能當作即時肌電順位。',
+    ],
+    refs: ['kinoshita2023_calf', 'paz2021_calf'],
+  },
+  'hip-abduction': {
+    assumptions: [
+      '坐姿大腿在水平面外展，以膝外側墊阻力沿左右方向施力；椅墊承擔身體重量。',
+      '槓桿半徑 35 cm、等效凸輪力臂 22 cm、配重 35 kg 均為未查證假設；模型沒有臀大肌上束獨立肌束，前傾趨勢未驗證。',
+    ],
+    refs: ['paz2022_hipabd'],
+  },
+  'hip-adduction': {
+    assumptions: [
+      '坐姿大腿在水平面內收，以膝內側墊阻力沿左右方向施力；椅墊承擔身體重量。',
+      '槓桿半徑 35 cm、等效凸輪力臂 22 cm、配重 35 kg 均為未查證假設；目前未查證本機型的內收肌束肌電對照。',
+    ],
+    refs: [], noStudy: true,
   },
   'cable-fly-high': {
     assumptions: [
@@ -399,6 +464,12 @@ const LIFT_FALLBACK_ID = {
   legcurl: 'leg-curl',
   chestpress: 'chest-press',
   pecdeck: 'pec-deck',
+  reversedeck: 'reverse-deck',
+  backext: 'back-extension',
+  hacksquat: 'hack-squat',
+  machinepress: 'machine-press',
+  calfraise: 'calf-raise-standing',
+  hipabd: 'hip-abduction',
   cablefly: 'cable-fly-mid',
 };
 

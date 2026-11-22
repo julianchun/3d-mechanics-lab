@@ -24,6 +24,7 @@ export const CATALOG = [
   { id: 'front-squat', name: '前蹲', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'front' }, alias: ['front squat'] },
   { id: 'smith-squat', name: '史密斯深蹲', cat: 'squat', equip: 'machine', lift: 'smith', set: {}, alias: ['smith'] },
   { id: 'leg-press', name: '45° 腿推機', cat: 'squat', equip: 'machine', lift: 'legpress', set: {}, alias: ['leg press'] },
+  { id: 'hack-squat', name: '哈克深蹲機', cat: 'squat', equip: 'machine', lift: 'hacksquat', set: {}, alias: ['hack squat'] },
   // 髖鉸鏈
   { id: 'deadlift', name: '硬舉（傳統）', cat: 'hinge', equip: 'barbell', lift: 'deadlift', set: { style: 'conv', start: 0 }, alias: ['deadlift', 'dl'] },
   { id: 'deficit-dl', name: '赤字硬舉', cat: 'hinge', equip: 'barbell', lift: 'deadlift', set: { style: 'conv', start: -5 }, alias: ['deficit deadlift'] },
@@ -32,6 +33,7 @@ export const CATALOG = [
   { id: 'rdl', name: '羅馬尼亞硬舉', cat: 'hinge', equip: 'barbell', lift: 'rdl', set: {}, alias: ['rdl', 'romanian'] },
   { id: 'good-morning', name: '早安體前屈', cat: 'hinge', equip: 'barbell', lift: 'goodmorning', set: { barPos: 'high' }, alias: ['good morning', 'gm'] },
   { id: 'hip-thrust', name: '臀推', cat: 'hinge', equip: 'barbell', lift: 'hipthrust', set: { surface: 'bench', kneeTop: 90 }, alias: ['hip thrust', '臀部'] },
+  { id: 'back-extension', name: '45° 背伸展', cat: 'hinge', equip: 'machine', lift: 'backext', set: {}, alias: ['back extension', '羅馬椅'] },
   { id: 'glute-bridge', name: '槓鈴臀橋', cat: 'hinge', equip: 'barbell', lift: 'hipthrust', set: { surface: 'floor', kneeTop: 130 }, alias: ['glute bridge', '臀橋'] },
   // 水平推
   { id: 'bench', name: '臥推（平板）', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.6, flare: 52, touch: 0.6 }, alias: ['bench', 'bp'] },
@@ -40,6 +42,8 @@ export const CATALOG = [
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
+  { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
+  { id: 'machine-press', name: '器械肩推', cat: 'vpush', equip: 'machine', lift: 'machinepress', set: {}, alias: ['shoulder press machine'] },
   { id: 'cable-fly-high', name: '滑輪夾胸（高位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'high' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '高滑輪'] },
   { id: 'cable-fly-mid', name: '滑輪夾胸（中位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'mid' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '中滑輪'] },
   { id: 'cable-fly-low', name: '滑輪夾胸（低位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'low' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '低滑輪'] },
@@ -56,6 +60,10 @@ export const CATALOG = [
   { id: 'pulldown-sup', name: '反握滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'sup', grip: 1.1 }, alias: ['chin', 'underhand'] },
   // 單關節
   { id: 'leg-ext', name: '腿伸機', cat: 'iso', equip: 'machine', lift: 'legext', set: {}, alias: ['leg extension'] },
+  { id: 'calf-raise-standing', name: '站姿提踵機', cat: 'iso', equip: 'machine', lift: 'calfraise', set: { posture: 'standing', knee: 90, load: 60, range: 1 }, alias: ['standing calf raise'] },
+  { id: 'calf-raise-seated', name: '坐姿提踵機', cat: 'iso', equip: 'machine', lift: 'calfraise', set: { posture: 'seated', knee: 90, load: 45, range: 1 }, alias: ['seated calf raise'] },
+  { id: 'hip-abduction', name: '臀外展機', cat: 'iso', equip: 'machine', lift: 'hipabd', set: { direction: 'abd', lean: 0, load: 35 }, alias: ['hip abduction'] },
+  { id: 'hip-adduction', name: '臀內收機', cat: 'iso', equip: 'machine', lift: 'hipabd', set: { direction: 'add', lean: 0, load: 35 }, alias: ['hip adduction'] },
   { id: 'leg-curl', name: '坐姿腿彎舉', cat: 'iso', equip: 'machine', lift: 'legcurl', set: { posture: 'seated' }, alias: ['leg curl', 'seated'] },
   { id: 'lying-leg-curl', name: '俯臥腿彎舉', cat: 'iso', equip: 'machine', lift: 'legcurl', set: { posture: 'lying' }, alias: ['leg curl', 'lying'] },
   { id: 'pushdown', name: '滑輪三頭下壓', cat: 'iso', equip: 'cable', lift: 'pushdown', set: {}, alias: ['pushdown', 'triceps'] },
@@ -66,9 +74,9 @@ export const CATALOG = [
 
 // 清單上「主要肌群」用的簡稱；沒列在這裡的（穩定肌、小腿、旋轉肌袖）不顯示
 export const MUSCLE_SHORT = {
-  vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', addmag: '內收大肌', erec: '腰背伸肌',
+  vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', gmed: '臀中肌', addl: '內收長／短肌', addmag: '內收大肌', erec: '腰背伸肌',
   pecs: '胸大肌', pecc: '上胸', adelt: '前三角', mdelt: '中三角', pdelt: '後三角', lat: '背闊肌',
-  trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌',
+  trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌', gas: '腓腸肌', sol: '比目魚肌',
 };
 
 // 目前的動作＋參數對應到哪一個清單項目（參數被改過、對不上任何變化式時回傳 null）
