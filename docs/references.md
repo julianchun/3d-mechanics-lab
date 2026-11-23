@@ -1,6 +1,6 @@
 # 重訓動作生物力學與肌電圖文獻彙整
 
-本文件針對 [`src/catalog.js`](../src/catalog.js) 中**所有已實作動作**（共 37 項）整理同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
+本文件整理 [`src/catalog.js`](../src/catalog.js) 動作的同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
 
 > **驗證原則**：每筆引用均附已查證之 PubMed（PMID）或 DOI／原始出處連結；針對目前缺乏直接同儕審查動態研究之動作，明確標記「未找到」並說明替代參考方向。
 
@@ -511,3 +511,12 @@
 - **啞鈴彎舉／錘式彎舉**：[Coratella et al. 2023](https://pubmed.ncbi.nlm.nih.gov/36976950/) 直接比較反握、對握（錘式）與正握彎舉，顯示向心期反握肱二頭肌 sEMG 顯著高於對握（約 +12%），對握前三角肌穩定活化顯著高於反握（約 +9%）；亦參考 [Kleiber et al. 2015](https://pubmed.ncbi.nlm.nih.gov/26300781/) 與 [Marcolin et al. 2018](https://pubmed.ncbi.nlm.nih.gov/30013836/)。
 - **俯身啞鈴反向飛鳥**：[Schoenfeld et al. 2013](https://pubmed.ncbi.nlm.nih.gov/23302754/)（J Strength Cond Res, 27(10):2644–2649；DOI 10.1519/JSC.0b013e318281e1e9，反向飛鳥機）比較水平外展時對握與正握對後三角與棘下肌 sEMG 之影響；[Franke et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24947920/) 比較反向飛鳥與多關節拉類動作之後三角活化；肩部力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)。
 - **高腳杯深蹲**：[Collins et al. 2021](https://pubmed.ncbi.nlm.nih.gov/34341315/) 比較高腳杯深蹲與地雷管深蹲之肌電與地面反作用力，證實高腳杯深蹲具高股四頭肌活化與較高垂直負荷；前側負重使軀幹較背蹲直立間接參考 [Yavuz et al. 2015](https://pubmed.ncbi.nlm.nih.gov/25630691/) 與 [Krzyszkowski & Kipp 2020](https://pubmed.ncbi.nlm.nih.gov/32544021/)。
+
+## 自體重量動作（T15）
+
+- **伏地挺身手距**：Cogley RM et al. (2005), *Comparison of muscle activation using various hand positions during the push-up exercise*, J Strength Cond Res 19(3):628–633. [PubMed 16095413](https://pubmed.ncbi.nlm.nih.gov/16095413/)。40 人各做一次肩寬、寬、窄手距伏地挺身；原文摘要指出**窄距高於寬距**的胸大肌及肱三頭肌 EMG。`tests/trends.mjs` 逐肌測相同方向；模型 0.8× 與 1.8× 肩寬僅是窄／寬的示範設定，不宣稱為原文量測距離。模型胸大肌方向相反，照實記為 FAIL。
+- **伏地挺身手部承重**：Suprak DN, Dawes J, Stephenson MD (2011), *The effect of position on the percentage of body mass supported during traditional and modified push-up variants*, J Strength Cond Res 25(2):497–503. [PubMed 20179649](https://pubmed.ncbi.nlm.nih.gov/20179649/)。傳統腳尖著地伏地挺身於撐起與下放靜態姿勢量手部反力，原文摘要指出下放時手部承重較高；趨勢檢查只比較相同傳統伏地挺身的兩個位置。
+- **伏地挺身手位與深度**：Suprak DN et al. (2013), *Scapular Kinematics and Shoulder Elevation in a Traditional Push-Up*, J Athl Train 48(6):826–835. [PubMed 23952043](https://pubmed.ncbi.nlm.nih.gov/23952043/)／[全文方法](https://pmc.ncbi.nlm.nih.gov/articles/PMC3867095/)。受試者手略寬於肩、放在肩部附近，最低點胸中段輕觸 10 cm 木塊。這篇未提供手掌相對肩關節的精確前後距離或前臂角度；模型預設撐起時手掌在肩關節後方 6 cm，讓最低點側視前臂接近垂直，數值屬幾何假設。20 cm 墊高、肩部高度及腕關節高度也只是示範設定。
+- **雙槓撐體**：McKenzie A et al. (2022), *Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?*, Int J Environ Res Public Health 19(20):13211. [DOI 10.3390/ijerph192013211](https://doi.org/10.3390/ijerph192013211)。研究比較椅上、雙槓和吊環撐體；雙槓相較椅上有較高胸大肌、前三角、三頭等峰值 EMG，並呈現軀幹前傾。**未比較雙槓的直立與前傾兩個條件**，因此不加入該方向的趨勢檢查。
+- **引體向上握法**：Dickie JA et al. (2017), *Electromyographic analysis of muscle activation during pull-up variations*, J Electromyogr Kinesiol 32:30–36. [PubMed 28011412](https://pubmed.ncbi.nlm.nih.gov/28011412/)。研究比較正握、反握、對握和繩索；摘要指出握法之間大多數全程峰值與平均肌電相近，特定顯著差異是正握相較對握的中斜方肌，而非正握與反握背闊肌／二頭肌的固定方向。因此未加正反握背闊肌／二頭肌趨勢。
+- **輔助引體機**：目前未查到可直接支援「輔助公斤數增加，各肌肉 EMG 逐級下降」的原始比較研究。膝墊輔助的單調檢查僅驗證模型內部的總主動活化與支撐力平衡，不標記為文獻趨勢。

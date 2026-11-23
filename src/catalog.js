@@ -16,6 +16,7 @@ export const EQUIPMENT = [
   ['dumbbell', '啞鈴'],
   ['machine', '器械'],
   ['cable', '滑輪'],
+  ['bodyweight', '自體重量'],
 ];
 
 export const CATALOG = [
@@ -44,6 +45,9 @@ export const CATALOG = [
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
   { id: 'db-bench', name: '啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '0' }, alias: ['dumbbell bench', 'db bench', '啞鈴平板臥推'] },
   { id: 'db-bench-incline', name: '上斜啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '30' }, alias: ['incline dumbbell press', 'incline db bench', '啞鈴上斜臥推'] },
+  { id: 'pushup', name: '伏地挺身', cat: 'hpush', equip: 'bodyweight', lift: 'pushup', set: { elevation: 'flat' }, alias: ['push-up', 'push up'] },
+  { id: 'pushup-feet', name: '下斜伏地挺身', cat: 'hpush', equip: 'bodyweight', lift: 'pushup', set: { elevation: 'feet' }, alias: ['decline push-up'] },
+  { id: 'pushup-hands', name: '上斜伏地挺身', cat: 'hpush', equip: 'bodyweight', lift: 'pushup', set: { elevation: 'hands' }, alias: ['incline push-up'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
   { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
@@ -54,6 +58,8 @@ export const CATALOG = [
   // 垂直推
   { id: 'ohp', name: '站姿肩推', cat: 'vpush', equip: 'barbell', lift: 'ohp', set: {}, alias: ['ohp', 'press', '肩推'] },
   { id: 'db-press', name: '坐姿啞鈴肩推', cat: 'vpush', equip: 'dumbbell', lift: 'dbpress', set: {}, alias: ['dumbbell shoulder press', 'db press', '啞鈴肩推'] },
+  { id: 'dips', name: '雙槓撐體', cat: 'vpush', equip: 'bodyweight', lift: 'dips', set: { lean: 15 }, alias: ['dips', 'parallel bar dips'] },
+  { id: 'dips-upright', name: '直立雙槓撐體', cat: 'vpush', equip: 'bodyweight', lift: 'dips', set: { lean: 0 }, alias: ['upright dips'] },
   // 水平拉
   { id: 'row', name: '槓鈴划船（正握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'pro' }, alias: ['row', 'bor'] },
   { id: 'row-sup', name: '槓鈴划船（反握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'sup' }, alias: ['row', 'yates'] },
@@ -64,6 +70,11 @@ export const CATALOG = [
   { id: 'uprow', name: '直立划船', cat: 'vpull', equip: 'barbell', lift: 'uprow', set: {}, alias: ['upright row'] },
   { id: 'pulldown', name: '滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'pro' }, alias: ['lat pulldown', 'pulldown'] },
   { id: 'pulldown-sup', name: '反握滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'sup', grip: 1.1 }, alias: ['chin', 'underhand'] },
+  { id: 'pullup', name: '引體向上（正握）', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'pro', width: 1.35 }, alias: ['pull-up'] },
+  { id: 'pullup-wide', name: '寬握引體向上', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'pro', width: 1.8 }, alias: ['wide pull-up'] },
+  { id: 'chinup', name: '反手引體向上', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'sup', width: 1.1 }, alias: ['chin-up'] },
+  { id: 'assist-pullup', name: '輔助引體機', cat: 'vpull', equip: 'machine', lift: 'assistpullup', set: { grip: 'pro', width: 1.35 }, alias: ['assisted pull-up'] },
+  { id: 'assist-chinup', name: '輔助反手引體機', cat: 'vpull', equip: 'machine', lift: 'assistpullup', set: { grip: 'sup', width: 1.1 }, alias: ['assisted chin-up'] },
   // 單關節
   { id: 'leg-ext', name: '腿伸機', cat: 'iso', equip: 'machine', lift: 'legext', set: {}, alias: ['leg extension'] },
   { id: 'calf-raise-standing', name: '站姿提踵機', cat: 'iso', equip: 'machine', lift: 'calfraise', set: { posture: 'standing', knee: 90, load: 60, range: 1 }, alias: ['standing calf raise'] },

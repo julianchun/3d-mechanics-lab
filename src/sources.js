@@ -11,6 +11,11 @@ export const COMMON_ASSUMPTIONS = [
 
 // 已查證之參考文獻庫（所有條目均取自 docs/references.md 與 docs/machine-data.md）
 const REFS = {
+  cogley2005: { authors: 'Cogley RM et al.', year: 2005, title: 'Comparison of muscle activation using various hand positions during the push-up exercise', venue: 'J Strength Cond Res, 19(3):628–633', url: 'https://pubmed.ncbi.nlm.nih.gov/16095413/', tag: 'PubMed 16095413' },
+  suprak2011: { authors: 'Suprak DN, Dawes J, Stephenson MD', year: 2011, title: 'The effect of position on the percentage of body mass supported during traditional and modified push-up variants', venue: 'J Strength Cond Res, 25(2):497–503', url: 'https://pubmed.ncbi.nlm.nih.gov/20179649/', tag: 'PubMed 20179649' },
+  suprak2013: { authors: 'Suprak DN et al.', year: 2013, title: 'Scapular Kinematics and Shoulder Elevation in a Traditional Push-Up', venue: 'J Athl Train, 48(6):826–835', url: 'https://pubmed.ncbi.nlm.nih.gov/23952043/', tag: 'PubMed 23952043' },
+  dickie2017: { authors: 'Dickie JA et al.', year: 2017, title: 'Electromyographic analysis of muscle activation during pull-up variations', venue: 'J Electromyogr Kinesiol, 32:30–36', url: 'https://pubmed.ncbi.nlm.nih.gov/28011412/', tag: 'PubMed 28011412' },
+  mckenzie2022: { authors: 'McKenzie A et al.', year: 2022, title: 'Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?', venue: 'Int J Environ Res Public Health, 19(20):13211', url: 'https://doi.org/10.3390/ijerph192013211', tag: 'DOI' },
   escamilla1998: { authors: 'Escamilla RF et al.', year: 1998, title: 'Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises', venue: 'Med Sci Sports Exerc, 30(4):556–569', url: 'https://pubmed.ncbi.nlm.nih.gov/9565938/', tag: 'PubMed 9565938' },
   escamilla2001_sq: { authors: 'Escamilla RF', year: 2001, title: 'Knee biomechanics of the dynamic squat exercise', venue: 'Med Sci Sports Exerc, 33(1):127–141', url: 'https://pubmed.ncbi.nlm.nih.gov/11194098/', tag: 'PubMed 11194098' },
   escamilla2001_stance: { authors: 'Escamilla RF et al.', year: 2001, title: 'A three-dimensional biomechanical analysis of the squat during varying stance widths', venue: 'Med Sci Sports Exerc, 33(6):984–998', url: 'https://pubmed.ncbi.nlm.nih.gov/11404665/', tag: 'PubMed 11404665' },
@@ -101,6 +106,35 @@ const REFS = {
 
 // 以清單 ID 為鍵的動作假設與參考文獻
 export const SOURCES = {
+  pushup: {
+    assumptions: [
+      '掌根與腳尖為兩個支撐點，依身體各節段重量與可選負重背心求垂直反力；假設沒有水平外力，兩處水平反力為零，因此不需摩擦。左右各自承擔一半，不允許手掌透過剛體槓互推。',
+      'Suprak 等人 2013 年傳統伏地挺身以手略寬於肩、手在肩部附近、最低點胸中段輕觸 10 cm 木塊；本模型參照此姿勢描述。預設手掌在撐起時肩關節後方 6 cm，使最低點前臂於側視約偏離垂直 8°；此 6 cm 與前臂角度是模型幾何假設，不是文獻量測值。',
+      '軀幹與腿近乎一直線，骨盆可上下微調 4 cm；腳或手墊高 20 cm、撐起與下放時肩部高於支撐面 58／27 cm、腕關節中心高於支撐面 8 cm，均為示範幾何假設。手位參數以撐起時的實際肩關節中心為零點。',
+      '只分析肩、肘及肩胛力矩；不含肱骨內外旋自由度。肌肉活化為模型估計，不能直接當作 EMG。',
+    ], refs: ['suprak2011', 'suprak2013', 'cogley2005'],
+  },
+  'pushup-feet': { assumptions: ['腳尖墊高 20 cm，沿用伏地挺身的手位、雙點垂直反力與零水平摩擦假設；墊高高度與所得前臂角度均未由文獻校準。'], refs: ['suprak2011', 'suprak2013', 'cogley2005'] },
+  'pushup-hands': { assumptions: ['手掌墊高 20 cm，沿用伏地挺身的手位、雙點垂直反力與零水平摩擦假設；墊高高度與所得前臂角度均未由文獻校準。'], refs: ['suprak2011', 'suprak2013', 'cogley2005'] },
+  dips: {
+    assumptions: [
+      '雙手各握獨立平行槓，手部垂直反力合計承擔全身與腰掛負重；每幀水平調整身體位置，使含彎腿的質心投影落在握點支撐線。假設無水平外力，槓面無須摩擦，兩手不能透過剛體橫桿互推。',
+      '槓高 1.18 m、腿於身後彎曲與下放路徑為示範幾何假設；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
+    ], refs: ['mckenzie2022'], trendNote: '文獻比較的是椅上、雙槓與吊環撐體，未查到直立與前傾雙槓撐體之直接 EMG 比較，故不加前傾趨勢。',
+  },
+  'dips-upright': { assumptions: ['軀幹前傾設為 0°，雙槓支撐、腿部重心平衡與示範幾何同雙槓撐體。'], refs: ['mckenzie2022'], trendNote: '未查到同負重下直立與前傾雙槓撐體的直接 EMG 比較。' },
+  pullup: {
+    assumptions: [
+      '雙手握固定剛體單槓，手部向上反力等於全身與腰掛負重；每幀調整身體前後位置使質心落在握點支撐線。左右各承擔一半，允許兩手沿單槓互推／互拉以減少肩肘橫向力矩（上限為單手反力一半）。',
+      '槓高 2.35 m、近伸直懸垂到下巴過槓及膝微彎為示範幾何假設；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
+    ], refs: ['dickie2017'], trendNote: 'Dickie 等人的正握與反握比較未發現背闊肌或二頭肌全行程峰值的明確差異；不加該方向的趨勢。',
+  },
+  'pullup-wide': { assumptions: ['正握寬距 1.8× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
+  chinup: { assumptions: ['反握 1.1× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
+  'assist-pullup': {
+    assumptions: ['雙膝跪在機台墊上，膝墊向上推力等於所選輔助公斤數乘重力加速度；手部反力等於全身重量減膝墊推力。每幀以身體重量、腰掛負重與膝墊力求重心落在手部支撐線；機台柱高與墊尺寸為未查證估計。', '其餘握槓與肩肘肩胛分析同引體向上。'], refs: ['dickie2017'], trendNote: '輔助重量的單調檢查為模型內部物理檢查，未找到直接比較各配重輔助引體機全身 EMG 的研究。',
+  },
+  'assist-chinup': { assumptions: ['反握 1.1× 肩寬、膝墊向上輔助；其餘支撐平衡同輔助引體機。'], refs: ['dickie2017'] },
   'squat-high': {
     assumptions: [
       '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
@@ -515,6 +549,7 @@ export const SOURCES = {
 
 // 當參數被使用者自訂、對不上清單變化式時，依 lift 對應預設來源鍵
 const LIFT_FALLBACK_ID = {
+  pushup: 'pushup', dips: 'dips', pullup: 'pullup', assistpullup: 'assist-pullup',
   squat: 'squat-high',
   deadlift: 'deadlift',
   rdl: 'rdl',

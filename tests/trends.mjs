@@ -52,6 +52,29 @@ const EVIDENCE_LABEL = {
 
 // 每一項檢查回傳 { labelA, valA, labelB, valB, unit, pass }；ids 為對應的清單項目 ID
 const CHECKS = [
+  // Cogley 2005 比較同一伏地挺身的窄手距與寬手距；兩組肌電均以原文方向檢查。
+  ...[['pecs', '胸大肌'], ['trilat', '肱三頭肌']].map(([muscle, name]) => ({
+    ids: ['pushup'], exercise: '伏地挺身',
+    compare: `窄手距（模型 0.8× 肩寬）vs 寬手距（模型 1.8× 肩寬）— ${name}活化`,
+    ref: 'Cogley et al. 2005（PMID 16095413；40 人、窄手距與寬手距伏地挺身，胸大肌及肱三頭肌 EMG 均較高）',
+    evidence: 'direct', expected: '窄手距 > 寬手距',
+    run() {
+      const a = peakMus('pushup', P('pushup', { grip: 0.8 }), muscle, 'a');
+      const b = peakMus('pushup', P('pushup', { grip: 1.8 }), muscle, 'a');
+      return { labelA: '窄手距', valA: a, labelB: '寬手距', valB: b, unit: 'a', pass: a > b };
+    },
+  })),
+  {
+    ids: ['pushup'], exercise: '伏地挺身',
+    compare: '平地標準伏地挺身：下放位置 vs 撐起位置 — 手部承擔的體重比例',
+    ref: 'Suprak et al. 2011（PMID 20179649；傳統腳尖著地伏地挺身，手部測力平台記錄下放位置承重高於撐起位置）',
+    evidence: 'direct', expected: '下放位置 > 撐起位置',
+    run() {
+      const a = atE('pushup', P('pushup'), 1).pose.support.hand[1];
+      const b = atE('pushup', P('pushup'), 0).pose.support.hand[1];
+      return { labelA: '下放', valA: a, labelB: '撐起', valB: b, unit: 'N', pass: a > b };
+    },
+  },
   // ---------- 1. 45° 腿推機：腳位高低 ----------
   {
     ids: ['leg-press'],
