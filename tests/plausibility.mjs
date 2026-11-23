@@ -7,6 +7,7 @@ import { analyze, defaultParams } from '../src/biomech.js';
 // 臀橋已修正為肩線貼地支撐與地板連續反力模型，臀大肌為第一位（高於腰背伸肌）。
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
+  'goblet-squat': { first: ['vasti'] },
   'smith-squat': { top2: ['vasti'] }, 'leg-press': { top2: ['vasti'] },
   'hack-squat': { first: ['vasti'] },
   deadlift: { top3: ['erec', 'hams', 'gmax'] }, 'deficit-dl': { top3: ['erec', 'hams', 'gmax'] },
@@ -14,9 +15,10 @@ const RANKS = {
   'hip-thrust': { top2: ['gmax'] }, 'glute-bridge': { top2: ['gmax'] },
   'back-extension': { top3: ['erec', 'hams', 'gmax'] },
   bench: { first: ['pecs'] }, 'incline-bench': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'cg-bench': { top3: ['trilat'] },
-  'floor-press': { first: ['pecs'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
+  'floor-press': { first: ['pecs'] }, 'db-bench': { first: ['pecs'] }, 'db-bench-incline': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
+  'db-press': { top2: ['adelt'] },
   'pec-deck': { first: ['pecs', 'pecc'] },
-  'reverse-deck': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
+  'reverse-deck': { top2: ['pdelt'] }, 'db-reverse-fly': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
   'cable-fly-high': { first: ['pecs', 'pecc'] },
   'cable-fly-mid': { first: ['pecs', 'pecc'] },
   'cable-fly-low': { first: ['pecs', 'pecc'] },
@@ -24,6 +26,8 @@ const RANKS = {
   row: { within: { lat: 4, midtrap: 4 } }, 'row-sup': { within: { lat: 4, midtrap: 4 } },
   'cable-row': { within: { lat: 4, midtrap: 4 } }, 'cable-row-wide': { within: { lat: 4, midtrap: 4 } },
   curl: { first: ['bic', 'brach'] }, 'reverse-curl': { first: ['bic', 'brach'] },
+  'lat-raise': { first: ['mdelt', 'supsp'] },
+  'db-curl': { first: ['bic'] }, 'hammer-curl': { first: ['brach', 'bic'] },
   pushdown: { first: ['trilat', 'trilong'] }, 'leg-ext': { first: ['vasti'] },
   'calf-raise-standing': { first: ['gas', 'sol'] }, 'calf-raise-seated': { first: ['sol'], above: [['sol', 'gas']] },
   'hip-abduction': { first: ['gmed'] }, 'hip-adduction': { first: ['addl', 'addmag'] },
@@ -34,6 +38,26 @@ const RANKS = {
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  {
+    id: 'db-bench-incline', rule: 'rank:first', kind: '新動作', current: '上斜 30° 啞鈴臥推底端三角肌中束（0.74）高於前三角肌（0.57）與胸大肌（0.36）',
+    cause: '上斜 30° 下放至較深拉伸端（depth=0.6）時上臂低於肩線且向外展開，重力於肩外展軸（shSide）需求上升，使現有中三角外展分攤於底端超過前三角與胸大肌（類似上斜槓鈴臥推底端 mdelt=0.64）',
+    fix: '待取得上斜啞鈴臥推 3D 軌跡與肩部三軸力矩實測資料後再校對深拉伸端軌跡與三角肌分攤，暫不手調參數',
+  },
+  {
+    id: 'db-press', rule: 'rank:top2', kind: '新動作', current: '坐姿啞鈴肩推前兩名為中三角（0.45）與上斜方（0.45），前三角（0.40）居第三',
+    cause: '啞鈴於肩胛平面（elbowFwd=30° 前偏，即離矢狀面 60°）兩側下放、不受槓鈴迫使雙手往前繞過下巴，肩外展（shSide≈32 Nm）高於肩屈（shFwd≈23 Nm），且手臂外側承重造成胸鎖關節上提需求（scElev≈56 Nm）偏高',
+    fix: '待以 OpenSim 肩帶模型與肩推三軸肌電／運動學資料檢核肩胛平面推舉分攤，暫不手調模型參數',
+  },
+  {
+    id: 'hammer-curl', rule: 'rank:first', kind: '新動作', current: '錘式彎舉前三角肌（0.75）高於肱二頭肌（0.59）與肱肌／肱橈肌（0.51）',
+    cause: '沿用既有對握偏好（pref.bic × 1.0）後，二頭肌分擔下降、單關節肱肌／肱橈肌上升，導致二頭肌對抗前臂重力的肩屈貢獻減少、肩前舉穩定集中到前三角肌（與既有反手彎舉 reverse-curl 同源）',
+    fix: '待統一校準上臂貼身彎舉的肩前舉穩定模型並拆分肱肌與肱橈肌後再檢核，暫不加特例',
+  },
+  {
+    id: 'db-reverse-fly', rule: 'activation:pdelt', kind: '新動作', current: '預設每顆 6 kg 啞鈴於展開頂點時三角肌後束主動活化（1.15）超過 1.0',
+    cause: '近直臂（肘微彎 20°）水平外展約 58 cm 力臂承受 6 kg 啞鈴與手臂自重，現有三角肌後束有效最大力（675 N）與水平外展力臂（40 mm）不足以負擔全行程需求（與既有反向蝴蝶機 reverse-deck 同源）',
+    fix: '待以實測水平外展力矩與肩胛後收模型共同核對後三角有效最大力，暫不修改 MUSCLES 參數',
+  },
   {
     id: 'reverse-deck', rule: 'activation:pdelt', kind: '新動作', current: '預設 40 kg 配重時後三角肌需求超過最大主動活化',
     cause: '52 cm 握把與 22 cm 等效凸輪下，現有後三角肌最大力和力臂不足以負擔全行程估計力矩；肩胛後收需求約 57 Nm 也偏高；機台實際凸輪曲線未查證',

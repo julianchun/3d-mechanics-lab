@@ -89,6 +89,14 @@ const REFS = {
   paz2022_hipabd: { authors: 'de Almeida Paz I et al.', year: 2022, title: 'Hip abduction machine is better than free weights to target the gluteus medius while minimizing tensor fascia latae activation', venue: 'J Bodyw Mov Ther, 30:160–167', url: 'https://pubmed.ncbi.nlm.nih.gov/35500965/', tag: 'PubMed 35500965' },
   kinoshita2023_calf: { authors: 'Kinoshita M et al.', year: 2023, title: 'Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training', venue: 'Front Physiol, 14:1272106', url: 'https://pubmed.ncbi.nlm.nih.gov/38156065/', tag: 'PubMed 38156065' },
   paz2021_calf: { authors: 'Paz GA et al.', year: 2021, title: 'Myoelectric activity of the gastrocnemius during plantar flexion in a standing versus seated position and with a neutral or dorsiflexed ankle: A pilot study', venue: 'J Bodyw Mov Ther', url: 'https://pubmed.ncbi.nlm.nih.gov/33992275/', tag: 'PubMed 33992275' },
+  farias2017: { authors: 'Farias DA et al.', year: 2017, title: 'Maximal strength performance and muscle activation for the bench press and triceps extension exercises adopting dumbbell, barbell, and machine modalities over multiple sets', venue: 'J Strength Cond Res, 31(7):1879–1887', url: 'https://pubmed.ncbi.nlm.nih.gov/27669189/', tag: 'PubMed 27669189' },
+  coratella2020: { authors: 'Coratella G et al.', year: 2020, title: 'An electromyographic analysis of lateral raise variations and frontal raise in competitive bodybuilders', venue: 'Int J Environ Res Public Health, 17(17):6015', url: 'https://pubmed.ncbi.nlm.nih.gov/32824894/', tag: 'PubMed 32824894' },
+  campos2020: { authors: 'Campos YAC et al.', year: 2020, title: 'Different shoulder exercises affect the activation of deltoid portions in resistance-trained individuals', venue: 'J Hum Kinet, 75:5–14', url: 'https://pubmed.ncbi.nlm.nih.gov/33312291/', tag: 'PubMed 33312291' },
+  reinold2007: { authors: 'Reinold MM et al.', year: 2007, title: 'Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises', venue: 'J Athl Train, 42(4):464–469', url: 'https://pubmed.ncbi.nlm.nih.gov/18174934/', tag: 'PubMed 18174934' },
+  coratella2023: { authors: 'Coratella G et al.', year: 2023, title: 'Biceps brachii and brachioradialis excitation in biceps curl exercise: different handgrips, different synergy', venue: 'Sports (Basel), 11(3):64', url: 'https://pubmed.ncbi.nlm.nih.gov/36976950/', tag: 'PubMed 36976950' },
+  schoenfeld2013: { authors: 'Schoenfeld B et al.', year: 2013, title: 'Effect of hand position on EMG activity of the posterior shoulder musculature during a horizontal abduction exercise', venue: 'J Strength Cond Res, 27(10):2644–2649', url: 'https://pubmed.ncbi.nlm.nih.gov/23302754/', tag: 'PubMed 23302754' },
+  franke2015: { authors: 'Franke RA et al.', year: 2015, title: 'Analysis of anterior, middle and posterior deltoid activation during single and multijoint exercises', venue: 'J Sports Med Phys Fitness, 55(7–8):714–721', url: 'https://pubmed.ncbi.nlm.nih.gov/24947920/', tag: 'PubMed 24947920' },
+  collins2021: { authors: 'Collins KS et al.', year: 2021, title: 'Differences in muscle activity and kinetics between the goblet squat and landmine squat in men and women', venue: 'J Strength Cond Res, 35(10):2661–2668', url: 'https://pubmed.ncbi.nlm.nih.gov/34341315/', tag: 'PubMed 34341315' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -116,6 +124,14 @@ export const SOURCES = {
       '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
     ],
     refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance'],
+  },
+  'goblet-squat': {
+    assumptions: [
+      '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.25，無單一實測出處之預設假設，較背蹲預設 0.45 更偏膝主導）反映前側負重深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
+      '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
+      '啞鈴尺寸與預設單顆 20 kg 為假設。',
+    ],
+    refs: ['collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020'],
   },
   'smith-squat': {
     assumptions: [
@@ -221,6 +237,31 @@ export const SOURCES = {
     noStudy: true,
     trendNote: '尚無直接比較動態地板臥推與平板臥推之同儕審查肌電／逆動力學研究。',
   },
+  'db-bench': {
+    assumptions: [
+      '仰臥於平板臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
+      '手部路徑假設：下放時雙手依手肘外展角落在胸兩側並可低於胸面，推起時向肩膀上方微內聚（頂點間距 36 cm）；對握與正握僅改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸（握把內距 13 cm、直徑 32 mm）與預設每顆 22 kg（雙手 44 kg）為假設。',
+    ],
+    refs: ['saeterbakken2011', 'welsch2005', 'farias2017', 'rodriguezridao2020'],
+  },
+  'db-bench-incline': {
+    assumptions: [
+      '仰臥於上斜 30° 臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
+      '手部路徑假設與平板啞鈴臥推相同並隨椅背旋轉 30°；不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 22 kg（雙手 44 kg）為假設。',
+    ],
+    refs: ['lauver2016', 'rodriguezridao2020', 'saeterbakken2011', 'farias2017'],
+  },
+  'db-press': {
+    assumptions: [
+      '坐姿背靠微後傾 8°（82°）椅背（座高 50 cm），椅墊與椅背承擔身體重量，不算地面反作用力；兩手各自獨立承重（無剛體槓互推）。',
+      '手部路徑假設：下放時手肘位於肩胛／前移平面且前臂接近垂直，推起時沿微內聚弧線推至肩膀上方（頂點間距 36 cm）；正握與對握改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 14 kg（雙手 28 kg）為假設。',
+    ],
+    refs: ['saeterbakken2013'],
+    trendNote: 'Saeterbakken & Fimland 2013 (PMID 23096062) 比較站姿／坐姿 × 槓鈴／啞鈴肩推，本模型目前僅有站姿槓鈴與坐姿啞鈴、無法對齊同姿勢或同器材比較，故未列入自動化趨勢比對。',
+  },
   'chest-press': {
     assumptions: [
       '坐姿器械：椅背承擔身體重量，不算地面反作用力；僅分析肩屈伸、肩水平內收與肘伸展。',
@@ -246,6 +287,14 @@ export const SOURCES = {
     ],
     refs: ['ackland2008'],
     trendNote: '未查證同機型的反向蝴蝶機軌跡、凸輪與後三角肌電對照。',
+  },
+  'db-reverse-fly': {
+    assumptions: [
+      '俯身站姿（預設前傾 65°、膝微彎 22°），兩手各持獨立啞鈴（無剛體槓互推），每幀維持系統總重心在腳掌中段上方。',
+      '手部路徑假設：手臂在世界 XY 平面由胸前下方（外展 8°）水平外展至 86°，手肘維持固定微彎角度、對握（掌心相對→朝下）；模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 6 kg 為假設。',
+    ],
+    refs: ['schoenfeld2013', 'franke2015', 'ackland2008'],
   },
   'back-extension': {
     assumptions: [
@@ -432,6 +481,28 @@ export const SOURCES = {
     ],
     refs: ['kleiber2015', 'oliveira2009', 'marcolin2018'],
   },
+  'lat-raise': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴（無剛體槓互推），每幀維持系統總重心在腳掌中段上方。',
+      '手部路徑假設：從體側 14°（避開大腿）沿肩胛平面（前偏 30°）或冠狀面（0°）外展至上舉高度，手肘固定微彎；模型不含肱骨內外旋自由度，無法區分內旋／外旋握法差異。',
+      '啞鈴尺寸與預設每顆 8 kg 為假設。',
+    ],
+    refs: ['coratella2020', 'campos2020', 'reinold2007', 'ackland2008'],
+  },
+  'db-curl': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴（無剛體槓互推），上臂微外開 8° 避開髖部，每幀維持系統總重心在腳掌中段上方。',
+      '反握二頭肌偏好沿用現有槓鈴彎舉機制（1.6×）；啞鈴尺寸與預設每顆 12 kg（雙手 24 kg）為假設。',
+    ],
+    refs: ['coratella2023', 'kleiber2015', 'oliveira2009', 'marcolin2018'],
+  },
+  'hammer-curl': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴採對握（掌心相對、啞鈴垂直於前臂），無剛體槓互推；每幀維持系統總重心在腳掌中段上方。',
+      '錘式對握沿用現有對握二頭肌偏好係數（1.0×，同坐姿划船 V 把），不另設單獨特例；註：模型 brach 為肱肌＋肱橈肌合併，啞鈴尺寸與預設每顆 12 kg 為假設。',
+    ],
+    refs: ['coratella2023', 'kleiber2015', 'marcolin2018'],
+  },
   shrug: {
     assumptions: [
       '站姿手臂垂直垂於大腿前，雙手透過剛體槓身可橫向互推／互拉，僅動肩胛上提／後收。',
@@ -471,6 +542,12 @@ const LIFT_FALLBACK_ID = {
   calfraise: 'calf-raise-standing',
   hipabd: 'hip-abduction',
   cablefly: 'cable-fly-mid',
+  dbbench: 'db-bench',
+  dbpress: 'db-press',
+  latraise: 'lat-raise',
+  dbcurl: 'db-curl',
+  dbreversefly: 'db-reverse-fly',
+  goblet: 'goblet-squat',
 };
 
 export function getSourceInfo(lift, catalogId) {

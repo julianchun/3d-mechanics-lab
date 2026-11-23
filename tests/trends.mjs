@@ -404,7 +404,7 @@ const CHECKS = [
     ids: ['incline-bench', 'bench'],
     exercise: '上斜 vs 平板臥推',
     compare: '上斜 30° vs 平板 0° — 上胸 (pecc) 活化',
-    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093)',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，上胸於 30° 達最高); Lauver 2016 (PMID 25799093，整段向心期無顯著差異，僅 26–50% 段 30°／45° 高於平板)',
     evidence: 'direct',
     expected: '上斜 30° > 平板 0°',
     run() {
@@ -718,6 +718,88 @@ const CHECKS = [
       const a = atE('calfraise', P('calfraise', { posture: 'standing' }), 0.5).mus.gas.l;
       const b = atE('calfraise', P('calfraise', { posture: 'seated' }), 0.5).mus.gas.l;
       return { labelA: '站姿', valA: a, labelB: '坐姿', valB: b, unit: 'l', pass: a > b };
+    },
+  },
+  // ---------- 26. 啞鈴彎舉：反握 vs 錘式對握 ----------
+  {
+    ids: ['db-curl', 'hammer-curl'],
+    exercise: '啞鈴彎舉（反握 vs 錘式）',
+    compare: '反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化',
+    ref: 'Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)',
+    evidence: 'direct',
+    expected: '反握 > 錘式對握',
+    run() {
+      const a = peakMus('dbcurl', P('dbcurl', { grip: 'sup' }), 'bic', 'a');
+      const b = peakMus('dbcurl', P('dbcurl', { grip: 'neutral' }), 'bic', 'a');
+      return { labelA: '反握', valA: a, labelB: '錘式對握', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['hammer-curl', 'db-curl'],
+    exercise: '啞鈴彎舉（錘式 vs 反握）',
+    compare: '錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化',
+    ref: 'Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)',
+    evidence: 'direct',
+    expected: '錘式對握 > 反握',
+    run() {
+      const a = peakMus('dbcurl', P('dbcurl', { grip: 'neutral' }), 'adelt', 'a');
+      const b = peakMus('dbcurl', P('dbcurl', { grip: 'sup' }), 'adelt', 'a');
+      return { labelA: '錘式對握', valA: a, labelB: '反握', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 27. 啞鈴側平舉 vs 平板臥推 ----------
+  {
+    ids: ['lat-raise', 'bench'],
+    exercise: '啞鈴側平舉 vs 平板臥推',
+    compare: '啞鈴側平舉 vs 平板臥推 — 三角肌中束活化',
+    ref: 'Campos et al. 2020 (PMID 33312291，側平舉三角肌中束 sEMG 顯著高於臥推)',
+    evidence: 'direct',
+    expected: '側平舉 > 平板臥推',
+    run() {
+      const a = peakMus('latraise', P('latraise'), 'mdelt', 'a');
+      const b = peakMus('bench', P('bench'), 'mdelt', 'a');
+      return { labelA: '側平舉', valA: a, labelB: '平板臥推', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 28. 啞鈴臥推：上斜 30° vs 平板 0° ----------
+  {
+    ids: ['db-bench', 'db-bench-incline'],
+    exercise: '啞鈴臥推（平板 0° vs 上斜 30°）',
+    compare: '平板 0° vs 上斜 30° — 中下胸 (pecs) 活化',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)',
+    evidence: 'indirect',
+    expected: '平板 0° > 上斜 30°',
+    run() {
+      const a = peakMus('dbbench', P('dbbench', { incline: '0' }), 'pecs', 'a');
+      const b = peakMus('dbbench', P('dbbench', { incline: '30' }), 'pecs', 'a');
+      return { labelA: '平板 0°', valA: a, labelB: '上斜 30°', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['db-bench-incline', 'db-bench'],
+    exercise: '啞鈴臥推（上斜 30° vs 平板 0°）',
+    compare: '上斜 30° vs 平板 0° — 上胸 (pecc) 活化',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上胸於 30° 達最高，間接支持啞鈴上斜趨勢); Lauver 2016 (PMID 25799093，槓鈴臥推上胸整段向心期無顯著差異，僅 26–50% 向心段 30°／45° 高於平板)',
+    evidence: 'indirect',
+    expected: '上斜 30° > 平板 0°',
+    run() {
+      const a = peakMus('dbbench', P('dbbench', { incline: '30' }), 'pecc', 'a');
+      const b = peakMus('dbbench', P('dbbench', { incline: '0' }), 'pecc', 'a');
+      return { labelA: '上斜 30°', valA: a, labelB: '平板 0°', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 29. 高腳杯深蹲 vs 高槓背蹲：軀幹前傾角 ----------
+  {
+    ids: ['goblet-squat', 'squat-high'],
+    exercise: '高腳杯深蹲 vs 高槓深蹲',
+    compare: '高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角',
+    ref: '幾何／預設推論（高腳杯預設 dom=0.25 與前側偏移 domShift=-0.08 皆為模型設定，與高槓預設 dom=0.45 比較屬預設反映而非獨立實測驗證；前側負重較直立概念參考 Yavuz 2015 PMID 25630691）',
+    evidence: 'inference',
+    expected: '高腳杯 < 高槓（較直立）',
+    run() {
+      const a = (atE('goblet', P('goblet'), 1).pose.phi * 180) / Math.PI;
+      const b = (atE('squat', P('squat', { barPos: 'high' }), 1).pose.phi * 180) / Math.PI;
+      return { labelA: '高腳杯', valA: a, labelB: '高槓', valB: b, unit: '°', pass: a < b };
     },
   },
 ];

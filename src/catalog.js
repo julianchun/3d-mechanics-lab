@@ -13,6 +13,7 @@ export const CATEGORIES = [
 
 export const EQUIPMENT = [
   ['barbell', '槓鈴'],
+  ['dumbbell', '啞鈴'],
   ['machine', '器械'],
   ['cable', '滑輪'],
 ];
@@ -22,6 +23,7 @@ export const CATALOG = [
   { id: 'squat-high', name: '深蹲（高槓）', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'high' }, alias: ['squat', 'high bar', '背蹲'] },
   { id: 'squat-low', name: '深蹲（低槓）', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'low' }, alias: ['squat', 'low bar', '背蹲'] },
   { id: 'front-squat', name: '前蹲', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'front' }, alias: ['front squat'] },
+  { id: 'goblet-squat', name: '高腳杯深蹲', cat: 'squat', equip: 'dumbbell', lift: 'goblet', set: {}, alias: ['goblet squat', '高腳杯', '酒杯深蹲'] },
   { id: 'smith-squat', name: '史密斯深蹲', cat: 'squat', equip: 'machine', lift: 'smith', set: {}, alias: ['smith'] },
   { id: 'leg-press', name: '45° 腿推機', cat: 'squat', equip: 'machine', lift: 'legpress', set: {}, alias: ['leg press'] },
   { id: 'hack-squat', name: '哈克深蹲機', cat: 'squat', equip: 'machine', lift: 'hacksquat', set: {}, alias: ['hack squat'] },
@@ -40,6 +42,8 @@ export const CATALOG = [
   { id: 'incline-bench', name: '上斜臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 30, grip: 1.6, flare: 52, touch: 0.6 }, alias: ['incline'] },
   { id: 'cg-bench', name: '窄握臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.0, flare: 32, touch: 0.75 }, alias: ['close grip', 'cgbp'] },
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
+  { id: 'db-bench', name: '啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '0' }, alias: ['dumbbell bench', 'db bench', '啞鈴平板臥推'] },
+  { id: 'db-bench-incline', name: '上斜啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '30' }, alias: ['incline dumbbell press', 'incline db bench', '啞鈴上斜臥推'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
   { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
@@ -49,11 +53,13 @@ export const CATALOG = [
   { id: 'cable-fly-low', name: '滑輪夾胸（低位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'low' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '低滑輪'] },
   // 垂直推
   { id: 'ohp', name: '站姿肩推', cat: 'vpush', equip: 'barbell', lift: 'ohp', set: {}, alias: ['ohp', 'press', '肩推'] },
+  { id: 'db-press', name: '坐姿啞鈴肩推', cat: 'vpush', equip: 'dumbbell', lift: 'dbpress', set: {}, alias: ['dumbbell shoulder press', 'db press', '啞鈴肩推'] },
   // 水平拉
   { id: 'row', name: '槓鈴划船（正握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'pro' }, alias: ['row', 'bor'] },
   { id: 'row-sup', name: '槓鈴划船（反握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'sup' }, alias: ['row', 'yates'] },
   { id: 'cable-row', name: '坐姿滑輪划船', cat: 'hpull', equip: 'cable', lift: 'cablerow', set: { grip: 'v' }, alias: ['cable row', 'seated row'] },
   { id: 'cable-row-wide', name: '坐姿滑輪划船（寬握）', cat: 'hpull', equip: 'cable', lift: 'cablerow', set: { grip: 'wide' }, alias: ['cable row', 'wide'] },
+  { id: 'db-reverse-fly', name: '俯身啞鈴反向飛鳥', cat: 'hpull', equip: 'dumbbell', lift: 'dbreversefly', set: {}, alias: ['reverse fly', 'rear delt fly', '反向飛鳥', '後三角飛鳥'] },
   // 垂直拉
   { id: 'uprow', name: '直立划船', cat: 'vpull', equip: 'barbell', lift: 'uprow', set: {}, alias: ['upright row'] },
   { id: 'pulldown', name: '滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'pro' }, alias: ['lat pulldown', 'pulldown'] },
@@ -69,6 +75,9 @@ export const CATALOG = [
   { id: 'pushdown', name: '滑輪三頭下壓', cat: 'iso', equip: 'cable', lift: 'pushdown', set: {}, alias: ['pushdown', 'triceps'] },
   { id: 'curl', name: '槓鈴彎舉', cat: 'iso', equip: 'barbell', lift: 'curl', set: { supin: 'sup' }, alias: ['curl', 'biceps'] },
   { id: 'reverse-curl', name: '反手彎舉', cat: 'iso', equip: 'barbell', lift: 'curl', set: { supin: 'pro' }, alias: ['reverse curl'] },
+  { id: 'lat-raise', name: '啞鈴側平舉', cat: 'iso', equip: 'dumbbell', lift: 'latraise', set: {}, alias: ['lateral raise', 'side raise', '側平舉', '飛鳥'] },
+  { id: 'db-curl', name: '啞鈴彎舉', cat: 'iso', equip: 'dumbbell', lift: 'dbcurl', set: { grip: 'sup' }, alias: ['dumbbell curl', 'db curl', 'biceps'] },
+  { id: 'hammer-curl', name: '錘式彎舉', cat: 'iso', equip: 'dumbbell', lift: 'dbcurl', set: { grip: 'neutral' }, alias: ['hammer curl', '錘式', '對握彎舉'] },
   { id: 'shrug', name: '槓鈴聳肩', cat: 'iso', equip: 'barbell', lift: 'shrug', set: {}, alias: ['shrug', '斜方'] },
 ];
 
