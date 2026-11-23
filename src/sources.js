@@ -94,7 +94,7 @@ const REFS = {
   campos2020: { authors: 'Campos YAC et al.', year: 2020, title: 'Different shoulder exercises affect the activation of deltoid portions in resistance-trained individuals', venue: 'J Hum Kinet, 75:5–14', url: 'https://pubmed.ncbi.nlm.nih.gov/33312291/', tag: 'PubMed 33312291' },
   reinold2007: { authors: 'Reinold MM et al.', year: 2007, title: 'Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises', venue: 'J Athl Train, 42(4):464–469', url: 'https://pubmed.ncbi.nlm.nih.gov/18174934/', tag: 'PubMed 18174934' },
   coratella2023: { authors: 'Coratella G et al.', year: 2023, title: 'Biceps brachii and brachioradialis excitation in biceps curl exercise: different handgrips, different synergy', venue: 'Sports (Basel), 11(3):64', url: 'https://pubmed.ncbi.nlm.nih.gov/36976950/', tag: 'PubMed 36976950' },
-  schoenfeld2013: { authors: 'Schoenfeld B et al.', year: 2013, title: 'Effect of hand position on EMG activity of the posterior shoulder musculature during a horizontal abduction exercise', venue: 'J Strength Cond Res, 27(10):2644–2649', url: 'https://pubmed.ncbi.nlm.nih.gov/23538944/', tag: 'PubMed 23538944' },
+  schoenfeld2013: { authors: 'Schoenfeld B et al.', year: 2013, title: 'Effect of hand position on EMG activity of the posterior shoulder musculature during a horizontal abduction exercise', venue: 'J Strength Cond Res, 27(10):2644–2649', url: 'https://pubmed.ncbi.nlm.nih.gov/23302754/', tag: 'PubMed 23302754' },
   franke2015: { authors: 'Franke RA et al.', year: 2015, title: 'Analysis of anterior, middle and posterior deltoid activation during single and multijoint exercises', venue: 'J Sports Med Phys Fitness, 55(7–8):714–721', url: 'https://pubmed.ncbi.nlm.nih.gov/24947920/', tag: 'PubMed 24947920' },
   collins2021: { authors: 'Collins KS et al.', year: 2021, title: 'Differences in muscle activity and kinetics between the goblet squat and landmine squat in men and women', venue: 'J Strength Cond Res, 35(10):2661–2668', url: 'https://pubmed.ncbi.nlm.nih.gov/34341315/', tag: 'PubMed 34341315' },
 };
@@ -127,7 +127,7 @@ export const SOURCES = {
   },
   'goblet-squat': {
     assumptions: [
-      '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.30）反映輕負重前抱式深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
+      '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.25，無單一實測出處之預設假設，較背蹲預設 0.45 更偏膝主導）反映前側負重深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
       '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
       '啞鈴尺寸與預設單顆 20 kg 為假設。',
     ],
@@ -260,6 +260,7 @@ export const SOURCES = {
       '啞鈴尺寸與預設每顆 14 kg（雙手 28 kg）為假設。',
     ],
     refs: ['saeterbakken2013'],
+    trendNote: 'Saeterbakken & Fimland 2013 (PMID 23096062) 比較站姿／坐姿 × 槓鈴／啞鈴肩推，本模型目前僅有站姿槓鈴與坐姿啞鈴、無法對齊同姿勢或同器材比較，故未列入自動化趨勢比對。',
   },
   'chest-press': {
     assumptions: [

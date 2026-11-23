@@ -404,7 +404,7 @@ const CHECKS = [
     ids: ['incline-bench', 'bench'],
     exercise: '上斜 vs 平板臥推',
     compare: '上斜 30° vs 平板 0° — 上胸 (pecc) 活化',
-    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093)',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，上胸於 30° 達最高); Lauver 2016 (PMID 25799093，整段向心期無顯著差異，僅 26–50% 段 30°／45° 高於平板)',
     evidence: 'direct',
     expected: '上斜 30° > 平板 0°',
     run() {
@@ -761,47 +761,7 @@ const CHECKS = [
       return { labelA: '側平舉', valA: a, labelB: '平板臥推', valB: b, unit: 'a', pass: a > b };
     },
   },
-  // ---------- 28. 站姿槓鈴肩推 vs 坐姿啞鈴肩推 ----------
-  {
-    ids: ['ohp', 'db-press'],
-    exercise: '站姿槓鈴肩推 vs 坐姿啞鈴肩推',
-    compare: '站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 肱三頭肌活化',
-    ref: 'Saeterbakken & Fimland 2013 (PMID 23096062，槓鈴肩推肱三頭肌 sEMG 顯著高於啞鈴肩推)',
-    evidence: 'direct',
-    expected: '站姿槓鈴 > 坐姿啞鈴',
-    run() {
-      const a = peakMus('ohp', P('ohp'), 'trilat', 'a');
-      const b = peakMus('dbpress', P('dbpress'), 'trilat', 'a');
-      return { labelA: '站姿槓鈴', valA: a, labelB: '坐姿啞鈴', valB: b, unit: 'a', pass: a > b };
-    },
-  },
-  {
-    ids: ['ohp', 'db-press'],
-    exercise: '站姿槓鈴肩推 vs 坐姿啞鈴肩推',
-    compare: '站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 前三角肌活化',
-    ref: 'Saeterbakken & Fimland 2013 (PMID 23096062，站姿肩推前三角肌 sEMG 顯著高於坐姿)',
-    evidence: 'direct',
-    expected: '站姿槓鈴 > 坐姿啞鈴',
-    run() {
-      const a = peakMus('ohp', P('ohp'), 'adelt', 'a');
-      const b = peakMus('dbpress', P('dbpress'), 'adelt', 'a');
-      return { labelA: '站姿槓鈴', valA: a, labelB: '坐姿啞鈴', valB: b, unit: 'a', pass: a > b };
-    },
-  },
-  // ---------- 29. 啞鈴臥推：上斜 30° vs 平板 0° ----------
-  {
-    ids: ['db-bench-incline', 'db-bench'],
-    exercise: '啞鈴臥推（上斜 30° vs 平板 0°）',
-    compare: '上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化',
-    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上斜 30° 前三角高於平板，間接支持啞鈴上斜趨勢)',
-    evidence: 'indirect',
-    expected: '上斜 30° > 平板 0°',
-    run() {
-      const a = peakMus('dbbench', P('dbbench', { incline: '30' }), 'adelt', 'a');
-      const b = peakMus('dbbench', P('dbbench', { incline: '0' }), 'adelt', 'a');
-      return { labelA: '上斜 30°', valA: a, labelB: '平板 0°', valB: b, unit: 'a', pass: a > b };
-    },
-  },
+  // ---------- 28. 啞鈴臥推：上斜 30° vs 平板 0° ----------
   {
     ids: ['db-bench', 'db-bench-incline'],
     exercise: '啞鈴臥推（平板 0° vs 上斜 30°）',
@@ -819,7 +779,7 @@ const CHECKS = [
     ids: ['db-bench-incline', 'db-bench'],
     exercise: '啞鈴臥推（上斜 30° vs 平板 0°）',
     compare: '上斜 30° vs 平板 0° — 上胸 (pecc) 活化',
-    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093，槓鈴上斜 30° 上胸高於平板，間接支持啞鈴上斜趨勢)',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上胸於 30° 達最高，間接支持啞鈴上斜趨勢); Lauver 2016 (PMID 25799093，槓鈴臥推上胸整段向心期無顯著差異，僅 26–50% 向心段 30°／45° 高於平板)',
     evidence: 'indirect',
     expected: '上斜 30° > 平板 0°',
     run() {
@@ -828,13 +788,13 @@ const CHECKS = [
       return { labelA: '上斜 30°', valA: a, labelB: '平板 0°', valB: b, unit: 'a', pass: a > b };
     },
   },
-  // ---------- 30. 高腳杯深蹲 vs 高槓背蹲：軀幹前傾角 ----------
+  // ---------- 29. 高腳杯深蹲 vs 高槓背蹲：軀幹前傾角 ----------
   {
     ids: ['goblet-squat', 'squat-high'],
     exercise: '高腳杯深蹲 vs 高槓深蹲',
     compare: '高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角',
-    ref: 'Yavuz 2015 (PMID 25630691，前側負重深蹲軀幹前傾角顯著小於背蹲，間接對應高腳杯深蹲); Collins 2021 (PMID 34341315)',
-    evidence: 'indirect',
+    ref: '幾何／預設推論（高腳杯預設 dom=0.25 與前側偏移 domShift=-0.08 皆為模型設定，與高槓預設 dom=0.45 比較屬預設反映而非獨立實測驗證；前側負重較直立概念參考 Yavuz 2015 PMID 25630691）',
+    evidence: 'inference',
     expected: '高腳杯 < 高槓（較直立）',
     run() {
       const a = (atE('goblet', P('goblet'), 1).pose.phi * 180) / Math.PI;

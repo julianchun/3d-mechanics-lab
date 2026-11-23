@@ -1,23 +1,23 @@
 {
   "modelVersion": "0.7.2",
   "summary": {
-    "total": 56,
-    "pass": 53,
+    "total": 53,
+    "pass": 50,
     "fail": 3,
     "byEvidence": {
       "direct": {
-        "total": 32,
-        "pass": 30,
+        "total": 30,
+        "pass": 28,
         "fail": 2
       },
       "indirect": {
-        "total": 19,
-        "pass": 19,
+        "total": 17,
+        "pass": 17,
         "fail": 0
       },
       "inference": {
-        "total": 5,
-        "pass": 4,
+        "total": 6,
+        "pass": 5,
         "fail": 1
       }
     }
@@ -231,16 +231,16 @@
         "model": "深屈端 = 117.6 N·m vs 淺屈端 = 9.2 N·m"
       },
       {
-        "index": 56,
+        "index": 53,
         "pass": true,
         "tie": false,
-        "evidence": "indirect",
-        "evidenceLabel": "文獻相關非直接",
+        "evidence": "inference",
+        "evidenceLabel": "解剖／幾何推論",
         "exercise": "高腳杯深蹲 vs 高槓深蹲",
         "compare": "高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角",
         "expected": "高腳杯 < 高槓（較直立）",
-        "ref": "Yavuz 2015 (PMID 25630691，前側負重深蹲軀幹前傾角顯著小於背蹲，間接對應高腳杯深蹲); Collins 2021 (PMID 34341315)",
-        "model": "高腳杯 = 37.5 ° vs 高槓 = 46.6 °"
+        "ref": "幾何／預設推論（高腳杯預設 dom=0.25 與前側偏移 domShift=-0.08 皆為模型設定，與高槓預設 dom=0.45 比較屬預設反映而非獨立實測驗證；前側負重較直立概念參考 Yavuz 2015 PMID 25630691）",
+        "model": "高腳杯 = 35.2 ° vs 高槓 = 46.6 °"
       }
     ],
     "smith-squat": [
@@ -561,7 +561,7 @@
         "exercise": "上斜 vs 平板臥推",
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093)",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，上胸於 30° 達最高); Lauver 2016 (PMID 25799093，整段向心期無顯著差異，僅 26–50% 段 30°／45° 高於平板)",
         "model": "上斜 30° = 0.290 a vs 平板 0° = 0.267 a"
       },
       {
@@ -599,7 +599,7 @@
         "exercise": "上斜 vs 平板臥推",
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093)",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，上胸於 30° 達最高); Lauver 2016 (PMID 25799093，整段向心期無顯著差異，僅 26–50% 段 30°／45° 高於平板)",
         "model": "上斜 30° = 0.290 a vs 平板 0° = 0.267 a"
       },
       {
@@ -1161,73 +1161,35 @@
         "model": "側平舉 = 0.650 a vs 平板臥推 = 0.265 a"
       }
     ],
-    "ohp": [
+    "db-bench": [
       {
         "index": 51,
         "pass": true,
         "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
-        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
-        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 肱三頭肌活化",
-        "expected": "站姿槓鈴 > 坐姿啞鈴",
-        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，槓鈴肩推肱三頭肌 sEMG 顯著高於啞鈴肩推)",
-        "model": "站姿槓鈴 = 0.623 a vs 坐姿啞鈴 = 0.292 a"
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（平板 0° vs 上斜 30°）",
+        "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
+        "expected": "平板 0° > 上斜 30°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)",
+        "model": "平板 0° = 0.536 a vs 上斜 30° = 0.365 a"
       },
       {
         "index": 52,
         "pass": true,
         "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
-        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
-        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 前三角肌活化",
-        "expected": "站姿槓鈴 > 坐姿啞鈴",
-        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，站姿肩推前三角肌 sEMG 顯著高於坐姿)",
-        "model": "站姿槓鈴 = 0.615 a vs 坐姿啞鈴 = 0.397 a"
-      }
-    ],
-    "db-press": [
-      {
-        "index": 51,
-        "pass": true,
-        "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
-        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
-        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 肱三頭肌活化",
-        "expected": "站姿槓鈴 > 坐姿啞鈴",
-        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，槓鈴肩推肱三頭肌 sEMG 顯著高於啞鈴肩推)",
-        "model": "站姿槓鈴 = 0.623 a vs 坐姿啞鈴 = 0.292 a"
-      },
-      {
-        "index": 52,
-        "pass": true,
-        "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
-        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
-        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 前三角肌活化",
-        "expected": "站姿槓鈴 > 坐姿啞鈴",
-        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，站姿肩推前三角肌 sEMG 顯著高於坐姿)",
-        "model": "站姿槓鈴 = 0.615 a vs 坐姿啞鈴 = 0.397 a"
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
+        "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
+        "expected": "上斜 30° > 平板 0°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上胸於 30° 達最高，間接支持啞鈴上斜趨勢); Lauver 2016 (PMID 25799093，槓鈴臥推上胸整段向心期無顯著差異，僅 26–50% 向心段 30°／45° 高於平板)",
+        "model": "上斜 30° = 0.203 a vs 平板 0° = 0.189 a"
       }
     ],
     "db-bench-incline": [
       {
-        "index": 53,
-        "pass": true,
-        "tie": false,
-        "evidence": "indirect",
-        "evidenceLabel": "文獻相關非直接",
-        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
-        "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
-        "expected": "上斜 30° > 平板 0°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上斜 30° 前三角高於平板，間接支持啞鈴上斜趨勢)",
-        "model": "上斜 30° = 0.586 a vs 平板 0° = 0.457 a"
-      },
-      {
-        "index": 54,
+        "index": 51,
         "pass": true,
         "tie": false,
         "evidence": "indirect",
@@ -1239,7 +1201,7 @@
         "model": "平板 0° = 0.536 a vs 上斜 30° = 0.365 a"
       },
       {
-        "index": 55,
+        "index": 52,
         "pass": true,
         "tie": false,
         "evidence": "indirect",
@@ -1247,60 +1209,22 @@
         "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093，槓鈴上斜 30° 上胸高於平板，間接支持啞鈴上斜趨勢)",
-        "model": "上斜 30° = 0.203 a vs 平板 0° = 0.189 a"
-      }
-    ],
-    "db-bench": [
-      {
-        "index": 53,
-        "pass": true,
-        "tie": false,
-        "evidence": "indirect",
-        "evidenceLabel": "文獻相關非直接",
-        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
-        "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
-        "expected": "上斜 30° > 平板 0°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上斜 30° 前三角高於平板，間接支持啞鈴上斜趨勢)",
-        "model": "上斜 30° = 0.586 a vs 平板 0° = 0.457 a"
-      },
-      {
-        "index": 54,
-        "pass": true,
-        "tie": false,
-        "evidence": "indirect",
-        "evidenceLabel": "文獻相關非直接",
-        "exercise": "啞鈴臥推（平板 0° vs 上斜 30°）",
-        "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
-        "expected": "平板 0° > 上斜 30°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)",
-        "model": "平板 0° = 0.536 a vs 上斜 30° = 0.365 a"
-      },
-      {
-        "index": 55,
-        "pass": true,
-        "tie": false,
-        "evidence": "indirect",
-        "evidenceLabel": "文獻相關非直接",
-        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
-        "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
-        "expected": "上斜 30° > 平板 0°",
-        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093，槓鈴上斜 30° 上胸高於平板，間接支持啞鈴上斜趨勢)",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上胸於 30° 達最高，間接支持啞鈴上斜趨勢); Lauver 2016 (PMID 25799093，槓鈴臥推上胸整段向心期無顯著差異，僅 26–50% 向心段 30°／45° 高於平板)",
         "model": "上斜 30° = 0.203 a vs 平板 0° = 0.189 a"
       }
     ],
     "goblet-squat": [
       {
-        "index": 56,
+        "index": 53,
         "pass": true,
         "tie": false,
-        "evidence": "indirect",
-        "evidenceLabel": "文獻相關非直接",
+        "evidence": "inference",
+        "evidenceLabel": "解剖／幾何推論",
         "exercise": "高腳杯深蹲 vs 高槓深蹲",
         "compare": "高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角",
         "expected": "高腳杯 < 高槓（較直立）",
-        "ref": "Yavuz 2015 (PMID 25630691，前側負重深蹲軀幹前傾角顯著小於背蹲，間接對應高腳杯深蹲); Collins 2021 (PMID 34341315)",
-        "model": "高腳杯 = 37.5 ° vs 高槓 = 46.6 °"
+        "ref": "幾何／預設推論（高腳杯預設 dom=0.25 與前側偏移 domShift=-0.08 皆為模型設定，與高槓預設 dom=0.45 比較屬預設反映而非獨立實測驗證；前側負重較直立概念參考 Yavuz 2015 PMID 25630691）",
+        "model": "高腳杯 = 35.2 ° vs 高槓 = 46.6 °"
       }
     ]
   }
