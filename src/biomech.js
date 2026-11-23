@@ -233,7 +233,7 @@ export const LIFTS = {
     params: [
       { key: 'grip', label: '手距（× 肩寬）', left: '窄', right: '寬', min: 0.8, max: 1.8, step: 0.05, def: 1.2, joint: 'hand', mech: 'A' },
       { key: 'flare', label: '手肘外展角', left: '貼近身體', right: '向兩側', min: 20, max: 80, step: 1, def: 45, joint: 'elbow', mech: 'A', unit: '°' },
-      { key: 'handFwd', label: '手掌前後位置', left: '肩後方', right: '肩前方', min: -0.1, max: 0.15, step: 0.01, def: 0.04, joint: 'hand', mech: 'A', unit: ' m' },
+      { key: 'handFwd', label: '手掌前後位置（相對撐起時肩關節）', left: '肩後方', right: '肩前方', min: -0.15, max: 0.15, step: 0.01, def: -0.06, joint: 'hand', mech: 'A', unit: ' m' },
       { key: 'elevation', label: '墊高位置', type: 'select', options: [['flat', '平地'], ['feet', '腳墊高'], ['hands', '手墊高']], def: 'flat', joint: 'equip', mech: 'A' },
       { key: 'pelvis', label: '骨盆位置', left: '稍下沉', right: '稍上翹', min: -0.04, max: 0.04, step: 0.01, def: 0, joint: 'hip', mech: 'A', unit: ' m' },
       { key: 'load', label: '負重背心', left: '徒手', right: '30 kg', min: 0, max: 30, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
@@ -258,7 +258,7 @@ export const LIFTS = {
     ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
     pose: pullupPose, loads: bodyweightLoads, reactions: handSupportReactions,
     params: [
-      { key: 'grip', label: '握法', type: 'select', options: [['pro-wide', '正握寬距'], ['pro', '正握中距'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
+      { key: 'grip', label: '握法', type: 'select', options: [['pro', '正握'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
       { key: 'width', label: '握距（× 肩寬）', left: '1.0', right: '2.0', min: 1, max: 2, step: 0.05, def: 1.35, joint: 'hand', mech: 'A' },
       { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'load', label: '腰掛負重', left: '徒手', right: '25 kg', min: 0, max: 25, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
@@ -271,7 +271,7 @@ export const LIFTS = {
     ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
     pose: pullupPose, loads: bodyweightLoads, reactions: handSupportReactions,
     params: [
-      { key: 'grip', label: '握法', type: 'select', options: [['pro-wide', '正握寬距'], ['pro', '正握中距'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
+      { key: 'grip', label: '握法', type: 'select', options: [['pro', '正握'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
       { key: 'width', label: '握距（× 肩寬）', left: '1.0', right: '2.0', min: 1, max: 2, step: 0.05, def: 1.35, joint: 'hand', mech: 'A' },
       { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'assist', label: '膝墊輔助', left: '0 kg', right: '60 kg', min: 0, max: 60, step: 5, def: 30, joint: 'equip', mech: 'A', unit: ' kg' },
@@ -3102,10 +3102,13 @@ function bodyweightCenter(pose, P, assist = 0) {
 }
 
 function pushupPose(P, e) {
-  const handH = P.elevation === 'hands' ? 0.2 : 0;
-  const footH = P.elevation === 'feet' ? 0.2 : 0;
+  // 20 cm 墊高與撐起時肩部高於支撐面 58 cm 都是示範幾何，並非文獻量測值。
+  const platformH = 0.2, topShoulderAboveSurface = 0.58;
+  const handH = P.elevation === 'hands' ? platformH : 0;
+  const footH = P.elevation === 'feet' ? platformH : 0;
   const ankle = [0.14, BODY.ankleH + footH, -1.0];
-  const shoulderY = handH + lerp(0.58, 0.27, e);
+  // 最低點肩部高於手部支撐面 27 cm；腕關節中心高於支撐面 8 cm，也屬示範幾何。
+  const shoulderY = handH + lerp(topShoulderAboveSurface, 0.27, e);
   const bodyReach = BODY.Lt + BODY.Ls + BODY.Ltr - 0.02;
   const shoulderZ = (y) => ankle[2] + Math.sqrt(bodyReach ** 2 - (y - ankle[1]) ** 2);
   const shoulder = [0, shoulderY, shoulderZ(shoulderY)];
@@ -3118,7 +3121,14 @@ function pushupPose(P, e) {
     pose.ok = false; pose.conflict = '腳尖與骨盆距離超出腿長';
   }
   const S = toWorld(pose, shoulderLocal(pose.girdle));
-  const H = [0.167 * P.grip, handH + 0.08, shoulderZ(handH + 0.58) + P.handFwd + 0.04];
+  // 用撐起時的實際肩關節中心當手位零點；手掌全程固定，不隨肩關節前後移動。
+  const topShoulder = [0, handH + topShoulderAboveSurface, shoulderZ(handH + topShoulderAboveSurface)];
+  const topU = norm(sub(topShoulder, [0, ankle[1], ankle[2]]));
+  const topHip = sub(topShoulder, mul(topU, BODY.Ltr));
+  topHip[1] += P.pelvis;
+  const topFrame = trunkFrame(topHip, topU);
+  const topS = toWorld(topFrame, shoulderLocal({ ret: rad(-6), elev: rad(-4) }));
+  const H = [0.167 * P.grip, handH + 0.08, topS[2] + P.handFwd];
   const a = rad(P.flare);
   if (!armChain(pose, S, H, [Math.sin(a), 0, -Math.cos(a)])) {
     pose.ok = false; pose.conflict = '手掌與肩膀距離超出手臂長';

@@ -71,7 +71,7 @@ export const CATALOG = [
   { id: 'pulldown', name: '滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'pro' }, alias: ['lat pulldown', 'pulldown'] },
   { id: 'pulldown-sup', name: '反握滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'sup', grip: 1.1 }, alias: ['chin', 'underhand'] },
   { id: 'pullup', name: '引體向上（正握）', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'pro', width: 1.35 }, alias: ['pull-up'] },
-  { id: 'pullup-wide', name: '寬握引體向上', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'pro-wide', width: 1.8 }, alias: ['wide pull-up'] },
+  { id: 'pullup-wide', name: '寬握引體向上', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'pro', width: 1.8 }, alias: ['wide pull-up'] },
   { id: 'chinup', name: '反手引體向上', cat: 'vpull', equip: 'bodyweight', lift: 'pullup', set: { grip: 'sup', width: 1.1 }, alias: ['chin-up'] },
   { id: 'assist-pullup', name: '輔助引體機', cat: 'vpull', equip: 'machine', lift: 'assistpullup', set: { grip: 'pro', width: 1.35 }, alias: ['assisted pull-up'] },
   { id: 'assist-chinup', name: '輔助反手引體機', cat: 'vpull', equip: 'machine', lift: 'assistpullup', set: { grip: 'sup', width: 1.1 }, alias: ['assisted chin-up'] },

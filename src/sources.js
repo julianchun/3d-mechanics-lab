@@ -13,6 +13,7 @@ export const COMMON_ASSUMPTIONS = [
 const REFS = {
   cogley2005: { authors: 'Cogley RM et al.', year: 2005, title: 'Comparison of muscle activation using various hand positions during the push-up exercise', venue: 'J Strength Cond Res, 19(3):628–633', url: 'https://pubmed.ncbi.nlm.nih.gov/16095413/', tag: 'PubMed 16095413' },
   suprak2011: { authors: 'Suprak DN, Dawes J, Stephenson MD', year: 2011, title: 'The effect of position on the percentage of body mass supported during traditional and modified push-up variants', venue: 'J Strength Cond Res, 25(2):497–503', url: 'https://pubmed.ncbi.nlm.nih.gov/20179649/', tag: 'PubMed 20179649' },
+  suprak2013: { authors: 'Suprak DN et al.', year: 2013, title: 'Scapular Kinematics and Shoulder Elevation in a Traditional Push-Up', venue: 'J Athl Train, 48(6):826–835', url: 'https://pubmed.ncbi.nlm.nih.gov/23952043/', tag: 'PubMed 23952043' },
   dickie2017: { authors: 'Dickie JA et al.', year: 2017, title: 'Electromyographic analysis of muscle activation during pull-up variations', venue: 'J Electromyogr Kinesiol, 32:30–36', url: 'https://pubmed.ncbi.nlm.nih.gov/28011412/', tag: 'PubMed 28011412' },
   mckenzie2022: { authors: 'McKenzie A et al.', year: 2022, title: 'Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?', venue: 'Int J Environ Res Public Health, 19(20):13211', url: 'https://doi.org/10.3390/ijerph192013211', tag: 'DOI' },
   escamilla1998: { authors: 'Escamilla RF et al.', year: 1998, title: 'Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises', venue: 'Med Sci Sports Exerc, 30(4):556–569', url: 'https://pubmed.ncbi.nlm.nih.gov/9565938/', tag: 'PubMed 9565938' },
@@ -108,12 +109,13 @@ export const SOURCES = {
   pushup: {
     assumptions: [
       '掌根與腳尖為兩個支撐點，依身體各節段重量與可選負重背心求垂直反力；假設沒有水平外力，兩處水平反力為零，因此不需摩擦。左右各自承擔一半，不允許手掌透過剛體槓互推。',
-      '軀幹與腿近乎一直線，骨盆可上下微調 4 cm；腳或手墊高 20 cm、手掌與胸口高度及關節軌跡為示範幾何假設。',
+      'Suprak 等人 2013 年傳統伏地挺身以手略寬於肩、手在肩部附近、最低點胸中段輕觸 10 cm 木塊；本模型參照此姿勢描述。預設手掌在撐起時肩關節後方 6 cm，使最低點前臂於側視約偏離垂直 8°；此 6 cm 與前臂角度是模型幾何假設，不是文獻量測值。',
+      '軀幹與腿近乎一直線，骨盆可上下微調 4 cm；腳或手墊高 20 cm、撐起與下放時肩部高於支撐面 58／27 cm、腕關節中心高於支撐面 8 cm，均為示範幾何假設。手位參數以撐起時的實際肩關節中心為零點。',
       '只分析肩、肘及肩胛力矩；不含肱骨內外旋自由度。肌肉活化為模型估計，不能直接當作 EMG。',
-    ], refs: ['suprak2011', 'cogley2005'],
+    ], refs: ['suprak2011', 'suprak2013', 'cogley2005'],
   },
-  'pushup-feet': { assumptions: ['腳尖墊高 20 cm，沿用伏地挺身的雙點垂直反力與零水平摩擦假設。'], refs: ['suprak2011', 'cogley2005'] },
-  'pushup-hands': { assumptions: ['手掌墊高 20 cm，沿用伏地挺身的雙點垂直反力與零水平摩擦假設。'], refs: ['suprak2011', 'cogley2005'] },
+  'pushup-feet': { assumptions: ['腳尖墊高 20 cm，沿用伏地挺身的手位、雙點垂直反力與零水平摩擦假設；墊高高度與所得前臂角度均未由文獻校準。'], refs: ['suprak2011', 'suprak2013', 'cogley2005'] },
+  'pushup-hands': { assumptions: ['手掌墊高 20 cm，沿用伏地挺身的手位、雙點垂直反力與零水平摩擦假設；墊高高度與所得前臂角度均未由文獻校準。'], refs: ['suprak2011', 'suprak2013', 'cogley2005'] },
   dips: {
     assumptions: [
       '雙手各握獨立平行槓，手部垂直反力合計承擔全身與腰掛負重；每幀水平調整身體位置，使含彎腿的質心投影落在握點支撐線。假設無水平外力，槓面無須摩擦，兩手不能透過剛體橫桿互推。',

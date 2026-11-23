@@ -42,21 +42,19 @@ const RANKS = {
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
-  ...[
-    ['pushup', '胸大肌峰值排名第四'], ['pushup-feet', '胸大肌未進前二'], ['pushup-hands', '胸大肌峰值排名第三'],
-    ['dips-upright', '胸大肌與三頭肌均未進前二'],
-  ].map(([id, current]) => ({
-    id, rule: 'rank:top2', kind: '新動作', current,
-    cause: '固定手部支撐下，現有肩部三軸力矩與肌肉分配把部分需求分給背闊肌、三角肌及肱三頭；缺少此動作的三維關節力矩驗證',
-    fix: '取得伏地挺身／雙槓撐體的同步三維運動學、測力與肌電資料，再核對肩部力矩分解，暫不調 MUSCLES',
-  })),
+  {
+    id: 'dips-upright', rule: 'rank:top2', kind: '新動作', current: '前兩名為 lat 1.51、pdelt 1.50；pecs 1.07 居第四，trilat 0.71 更低',
+    cause: '最低點手掌只在肩關節後方約 5.8 cm，肩前後軸力矩需求約 15 Nm；外展軸需求約 50 Nm、肩胛下壓需求約 103 Nm，背闊肌與後三角因此居前。肘伸需求峰值約 42 Nm，與主要單關節三頭肌估計約 50–52 Nm 有效能力同量級；三頭長頭另跨肩分擔，外側／內側頭峰值僅 0.71。胸大肌偏低亦與窄握臥推的既有模型限制同源',
+    fix: '取得直立雙槓撐體的三維關節力矩、手部反力與肌電資料，核對肩胛下壓與肩肘肌群能力；暫不調 MUSCLES',
+  },
   ...Object.entries({
-    pushup: ['trilat'], 'pushup-feet': ['trilat'], 'pushup-hands': ['trilat'],
     dips: ['pecs', 'lat', 'mdelt'], 'dips-upright': ['pecs', 'lat', 'pdelt', 'trilong'],
     pullup: ['lat'], 'pullup-wide': ['pecs', 'lat'], chinup: ['adelt', 'lat', 'bic', 'brach', 'mdelt'],
   }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
     id, rule: `activation:${muscle}`, kind: '新動作', current: `${muscle} 的模型主動活化超過 1`,
-    cause: '全身重量由手部支撐，現有肌肉最大力及肩肘力臂估計不足以承受部分姿勢的準靜態力矩；未以自體重量動作測力資料校準',
+    cause: muscle === 'lat' && ['dips', 'dips-upright', 'pullup', 'pullup-wide'].includes(id)
+      ? `每手承受約 368 N；${id.startsWith('dips') ? '撐體' : '引體'}的肩胛下壓需求峰值約 ${id === 'dips' ? 98 : id === 'dips-upright' ? 103 : id === 'pullup' ? 91 : 97} Nm，但現有模型肩胛下壓主要只有背闊肌（30 mm 力臂）與下斜方肌（35 mm 力臂）。以相同 75 kg 配重重算既有滑輪下拉，scElev 約 108 Nm、背闊肌 a 約 1.69，也會超載；屬共用肩胛能力限制`
+      : '手部承受全身重量，對應肩肘需求超過目前未以自體重量動作校準的肌肉力臂與最大力估計',
     fix: '以量測的手部反力與關節力矩驗證姿勢及負荷，再檢討共用肌肉模型，暫不手調常數',
   }))),
   {
