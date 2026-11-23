@@ -25,6 +25,8 @@ const RANKS = {
   row: { within: { lat: 4, midtrap: 4 } }, 'row-sup': { within: { lat: 4, midtrap: 4 } },
   'cable-row': { within: { lat: 4, midtrap: 4 } }, 'cable-row-wide': { within: { lat: 4, midtrap: 4 } },
   curl: { first: ['bic', 'brach'] }, 'reverse-curl': { first: ['bic', 'brach'] },
+  'lat-raise': { first: ['mdelt', 'supsp'] },
+  'db-curl': { first: ['bic'] }, 'hammer-curl': { first: ['brach', 'bic'] },
   pushdown: { first: ['trilat', 'trilong'] }, 'leg-ext': { first: ['vasti'] },
   'calf-raise-standing': { first: ['gas', 'sol'] }, 'calf-raise-seated': { first: ['sol'], above: [['sol', 'gas']] },
   'hip-abduction': { first: ['gmed'] }, 'hip-adduction': { first: ['addl', 'addmag'] },
@@ -44,6 +46,11 @@ const KNOWN_ISSUES = [
     id: 'db-press', rule: 'rank:top2', kind: '新動作', current: '坐姿啞鈴肩推前兩名為中三角（0.45）與上斜方（0.45），前三角（0.40）居第三',
     cause: '啞鈴於肩胛平面（elbowFwd=30° 前偏，即離矢狀面 60°）兩側下放、不受槓鈴迫使雙手往前繞過下巴，肩外展（shSide≈32 Nm）高於肩屈（shFwd≈23 Nm），且手臂外側承重造成胸鎖關節上提需求（scElev≈56 Nm）偏高',
     fix: '待以 OpenSim 肩帶模型與肩推三軸肌電／運動學資料檢核肩胛平面推舉分攤，暫不手調模型參數',
+  },
+  {
+    id: 'hammer-curl', rule: 'rank:first', kind: '新動作', current: '錘式彎舉前三角肌（0.75）高於肱二頭肌（0.59）與肱肌／肱橈肌（0.51）',
+    cause: '沿用既有對握偏好（pref.bic × 1.0）後，二頭肌分擔下降、單關節肱肌／肱橈肌上升，導致二頭肌對抗前臂重力的肩屈貢獻減少、肩前舉穩定集中到前三角肌（與既有反手彎舉 reverse-curl 同源）',
+    fix: '待統一校準上臂貼身彎舉的肩前舉穩定模型並拆分肱肌與肱橈肌後再檢核，暫不加特例',
   },
   {
     id: 'reverse-deck', rule: 'activation:pdelt', kind: '新動作', current: '預設 40 kg 配重時後三角肌需求超過最大主動活化',

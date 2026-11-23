@@ -698,6 +698,38 @@ export const LIFTS = {
     ],
     standardNote: '背貼微後傾椅背（約 82°），手肘置於肩胛平面（略往前約 30°），下放到耳側至肩旁、前臂接近垂直，向上微內聚推至接近伸直。',
   },
+  latraise: {
+    name: '啞鈴側平舉', topLabel: '舉到頂點', bottomLabel: '雙手垂下',
+    viewCenter: [0, 0.95, 0], viewScale: 1.25,
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
+    pose: latRaisePose, loads: dumbbellLoads,
+    moving: ['shSide', 'shFwd', 'scElev'],
+    params: [
+      { key: 'plane', label: '外展平面', type: 'select', options: [['scap', '肩胛平面（前偏 30°）'], ['coronal', '冠狀面（正兩側 0°）']], def: 'scap', joint: 'shoulder', mech: 'A' },
+      { key: 'elbowBend', label: '手肘微彎角度', left: '10°（近直臂）', right: '40°（較彎）', min: 10, max: 40, step: 1, def: 20, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'topHeight', label: '上舉高度', left: '70°（低於肩）', right: '105°（高於肩）', min: 70, max: 105, step: 1, def: 90, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'load', label: '每顆重量', left: '2 kg', right: '16 kg', min: 2, max: 16, step: 1, def: MACHINES.dumbbell.latRaiseKg, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefDM', label: '外展偏好', left: '偏三角肌中束', right: '偏上斜方', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['mdelt'], ['uptrap']] },
+    ],
+    standardNote: '站直、雙手持啞鈴垂於體側，手肘固定微彎約 15～25°，於肩胛平面（略向前約 30°）或冠狀面平舉至與肩同高（約 90°）。',
+  },
+  dbcurl: {
+    name: '啞鈴彎舉', topLabel: '頂點', bottomLabel: '手臂伸直',
+    viewCenter: [0, 0.88, 0.05], viewScale: 1.1,
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
+    pose: dbCurlPose, loads: dumbbellLoads,
+    moving: ['elbExt'],
+    // 沿用現有握法偏好機制：反握（sup）1.6×、對握／錘式（neutral）1.0×（同坐姿划船 V 把）
+    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.grip === 'neutral' ? 1.0 : 1.6; },
+    params: [
+      { key: 'grip', label: '握法', type: 'select', options: [['sup', '反握（掌心朝上）'], ['neutral', '錘式（掌心相對）']], def: 'sup', joint: 'hand', mech: 'A' },
+      { key: 'elbFwd', label: '上臂前移角度', left: '0°（貼身）', right: '35°（前移）', min: 0, max: 35, step: 1, def: 10, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'load', label: '每顆重量', left: '4 kg', right: '24 kg', min: 4, max: 24, step: 1, def: MACHINES.dumbbell.curlKg, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
+      { key: 'prefBB', label: '屈肘肌偏好', left: '偏二頭', right: '偏肱肌／肱橈肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['bic'], ['brach']] },
+    ],
+    standardNote: '站姿雙手各持啞鈴垂於體側（不需受直槓寬度限制），上臂貼身或頂點微前移，控制下放不借力後仰；反握偏二頭、錘式對握由二頭與肱肌／肱橈肌共同分擔。',
+  },
 };
 export const JOINT_NAMES = { equip: '器材', scap: '肩胛', hip: '髖', knee: '膝', ankle: '踝', lumbar: '下背', shoulder: '肩', elbow: '肘', hand: '握距', bar: '槓' };
 
@@ -2761,6 +2793,79 @@ function dbPressPose(P, e) {
   const fore = sub(pose.R.hand, pose.R.elbow);
   const tilt = deg(Math.acos(clamp(fore[1] / len(fore), -1, 1)));
   if (e > 0.65 && tilt > 26) pose.warn.push('前臂偏離垂直 ' + Math.round(tilt) + '°');
+  return pose;
+}
+
+// ---------- 啞鈴側平舉 ----------
+// 手部路徑假設：站姿維持總重心在腳掌中段上方（barAxial = false），手臂由垂體側 14°（避開大腿）
+// 沿肩胛平面（前偏 30°）或冠狀面（0°）外展至 topHeight，肘微彎角度全程固定、前臂略朝前內側彎折。
+function latRaisePose(P, e) {
+  const t = 1 - e; // t = 0 垂手、1 舉到頂點
+  const plFwd = P.plane === 'scap' ? rad(30) : rad(0);
+  const elev = rad(lerp(14, P.topHeight, t));
+  const ef = rad(P.elbowBend);
+  const girdle = {
+    ret: rad(lerp(0, 6, t)),
+    elev: rad(lerp(-4, lerp(8, 22, clamp((P.topHeight - 70) / 35, 0, 1)), t)),
+  };
+  const pose = standingHands(P, {
+    kap: rad(5), lean: rad(3), girdle, barW: (2 * P.load) / BODY.mass, barAxial: false,
+    pole: (tf, r) => r.pole,
+    barAt: (tf, S) => {
+      const latDir = add(mul(tf.lat, Math.cos(plFwd)), mul(tf.f, Math.sin(plFwd)));
+      const bendDir = add(mul(tf.f, Math.cos(plFwd)), mul(tf.lat, -Math.sin(plFwd)));
+      const ud = add(mul(tf.u, -Math.cos(elev)), mul(latDir, Math.sin(elev)));
+      const E = add(S, mul(ud, BODY.Lu));
+      const fd = add(mul(ud, Math.cos(ef)), mul(bendDir, Math.sin(ef)));
+      const H = add(E, mul(fd, BODY.Lf));
+      return { bar: H, elbow: E, pole: neg(bendDir), gripAxis: neg(bendDir) };
+    },
+  });
+  if (!pose.armOk) { pose.ok = false; pose.conflict = '手臂姿勢超出可及範圍'; }
+  const gripAxis = pose.r.gripAxis;
+  pose.R.grip = pose.R.hand;
+  pose.gripAxis = gripAxis;
+  pose.barStyle = 'none';
+  pose.barAxial = false;
+  pose.dumbbells = pairDumbbells(pose.R.hand, gripAxis, P.load);
+  pose.armJoints = ['shoulder', 'elbow'];
+  if (P.topHeight > 95 && e < 0.25) pose.warn.push('上舉超過水平（' + Math.round(P.topHeight) + '°）：上斜方肌參與增加，留意肩峰下空間');
+  return pose;
+}
+
+// ---------- 啞鈴彎舉（反握／錘式）----------
+// 手部路徑假設：站姿兩手各自垂於大腿兩側（上臂微外開 8° 避開髖部，不受直槓手距限制），
+// 屈肘由 18° 至 135°，上臂依 elbFwd 於頂點前移；錘式對握時啞鈴軸隨前臂垂直於矢狀面且掌心朝內。
+function dbCurlPose(P, e) {
+  const t = 1 - e;
+  const as = rad(P.elbFwd) * t;
+  const ef = rad(lerp(18, 135, t));
+  const neutral = P.grip === 'neutral';
+  const pose = standingHands(P, {
+    kap: rad(4), lean: 0, girdle: { ret: rad(8), elev: rad(-4) },
+    barW: (2 * P.load) / BODY.mass, barAxial: false,
+    pole: (tf, r) => r.pole,
+    barAt: (tf, S) => {
+      const down = mul(tf.u, -1);
+      const ud = norm(add(add(mul(down, Math.cos(as)), mul(tf.f, Math.sin(as))), mul(tf.lat, 0.14)));
+      const n = add(mul(tf.u, Math.sin(as)), mul(tf.f, Math.cos(as))); // 垂直 ud 且指向前上方
+      const E = add(S, mul(ud, BODY.Lu));
+      const fd = norm(add(mul(ud, Math.cos(ef)), mul(n, Math.sin(ef))));
+      const H = add(E, mul(fd, BODY.Lf));
+      const gripAxis = neutral ? norm(cross(fd, [-1, 0, 0])) : [1, 0, 0];
+      return { bar: H, elbow: E, pole: neg(n), gripAxis };
+    },
+  });
+  if (!pose.armOk) { pose.ok = false; pose.conflict = '手臂姿勢超出可及範圍'; }
+  const gripAxis = pose.r.gripAxis;
+  pose.supinated = !neutral;
+  pose.R.grip = pose.R.hand;
+  pose.gripAxis = gripAxis;
+  pose.barStyle = 'none';
+  pose.barAxial = false;
+  pose.dumbbells = pairDumbbells(pose.R.hand, gripAxis, P.load);
+  pose.armJoints = ['shoulder', 'elbow'];
+  if (P.elbFwd > 25 && e < 0.3) pose.warn.push('頂點手肘往前帶較多：前臂接近垂直時屈肘張力下降');
   return pose;
 }
 

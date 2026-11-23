@@ -90,6 +90,10 @@ const REFS = {
   kinoshita2023_calf: { authors: 'Kinoshita M et al.', year: 2023, title: 'Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training', venue: 'Front Physiol, 14:1272106', url: 'https://pubmed.ncbi.nlm.nih.gov/38156065/', tag: 'PubMed 38156065' },
   paz2021_calf: { authors: 'Paz GA et al.', year: 2021, title: 'Myoelectric activity of the gastrocnemius during plantar flexion in a standing versus seated position and with a neutral or dorsiflexed ankle: A pilot study', venue: 'J Bodyw Mov Ther', url: 'https://pubmed.ncbi.nlm.nih.gov/33992275/', tag: 'PubMed 33992275' },
   farias2017: { authors: 'Farias DA et al.', year: 2017, title: 'Maximal strength performance and muscle activation for the bench press and triceps extension exercises adopting dumbbell, barbell, and machine modalities over multiple sets', venue: 'J Strength Cond Res, 31(7):1879–1887', url: 'https://pubmed.ncbi.nlm.nih.gov/27669189/', tag: 'PubMed 27669189' },
+  coratella2020: { authors: 'Coratella G et al.', year: 2020, title: 'An electromyographic analysis of lateral raise variations and frontal raise in competitive bodybuilders', venue: 'Int J Environ Res Public Health, 17(17):6015', url: 'https://pubmed.ncbi.nlm.nih.gov/32824894/', tag: 'PubMed 32824894' },
+  campos2020: { authors: 'Campos YAC et al.', year: 2020, title: 'Different shoulder exercises affect the activation of deltoid portions in resistance-trained individuals', venue: 'J Hum Kinet, 75:5–14', url: 'https://pubmed.ncbi.nlm.nih.gov/33312291/', tag: 'PubMed 33312291' },
+  reinold2007: { authors: 'Reinold MM et al.', year: 2007, title: 'Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises', venue: 'J Athl Train, 42(4):464–469', url: 'https://pubmed.ncbi.nlm.nih.gov/18174934/', tag: 'PubMed 18174934' },
+  coratella2023: { authors: 'Coratella G et al.', year: 2023, title: 'Biceps brachii and brachioradialis excitation in biceps curl exercise: different handgrips, different synergy', venue: 'Sports (Basel), 11(3):64', url: 'https://pubmed.ncbi.nlm.nih.gov/36976950/', tag: 'PubMed 36976950' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -457,6 +461,28 @@ export const SOURCES = {
     ],
     refs: ['kleiber2015', 'oliveira2009', 'marcolin2018'],
   },
+  'lat-raise': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴（無剛體槓互推），每幀維持系統總重心在腳掌中段上方。',
+      '手部路徑假設：從體側 14°（避開大腿）沿肩胛平面（前偏 30°）或冠狀面（0°）外展至上舉高度，手肘固定微彎；模型不含肱骨內外旋自由度，無法區分內旋／外旋握法差異。',
+      '啞鈴尺寸與預設每顆 8 kg 為假設。',
+    ],
+    refs: ['coratella2020', 'campos2020', 'reinold2007', 'ackland2008'],
+  },
+  'db-curl': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴（無剛體槓互推），上臂微外開 8° 避開髖部，每幀維持系統總重心在腳掌中段上方。',
+      '反握二頭肌偏好沿用現有槓鈴彎舉機制（1.6×）；啞鈴尺寸與預設每顆 12 kg（雙手 24 kg）為假設。',
+    ],
+    refs: ['coratella2023', 'kleiber2015', 'oliveira2009', 'marcolin2018'],
+  },
+  'hammer-curl': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴採對握（掌心相對、啞鈴垂直於前臂），無剛體槓互推；每幀維持系統總重心在腳掌中段上方。',
+      '錘式對握沿用現有對握二頭肌偏好係數（1.0×，同坐姿划船 V 把），不另設單獨特例；註：模型 brach 為肱肌＋肱橈肌合併，啞鈴尺寸與預設每顆 12 kg 為假設。',
+    ],
+    refs: ['coratella2023', 'kleiber2015', 'marcolin2018'],
+  },
   shrug: {
     assumptions: [
       '站姿手臂垂直垂於大腿前，雙手透過剛體槓身可橫向互推／互拉，僅動肩胛上提／後收。',
@@ -498,6 +524,8 @@ const LIFT_FALLBACK_ID = {
   cablefly: 'cable-fly-mid',
   dbbench: 'db-bench',
   dbpress: 'db-press',
+  latraise: 'lat-raise',
+  dbcurl: 'db-curl',
 };
 
 export function getSourceInfo(lift, catalogId) {

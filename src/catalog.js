@@ -73,6 +73,9 @@ export const CATALOG = [
   { id: 'pushdown', name: '滑輪三頭下壓', cat: 'iso', equip: 'cable', lift: 'pushdown', set: {}, alias: ['pushdown', 'triceps'] },
   { id: 'curl', name: '槓鈴彎舉', cat: 'iso', equip: 'barbell', lift: 'curl', set: { supin: 'sup' }, alias: ['curl', 'biceps'] },
   { id: 'reverse-curl', name: '反手彎舉', cat: 'iso', equip: 'barbell', lift: 'curl', set: { supin: 'pro' }, alias: ['reverse curl'] },
+  { id: 'lat-raise', name: '啞鈴側平舉', cat: 'iso', equip: 'dumbbell', lift: 'latraise', set: {}, alias: ['lateral raise', 'side raise', '側平舉', '飛鳥'] },
+  { id: 'db-curl', name: '啞鈴彎舉', cat: 'iso', equip: 'dumbbell', lift: 'dbcurl', set: { grip: 'sup' }, alias: ['dumbbell curl', 'db curl', 'biceps'] },
+  { id: 'hammer-curl', name: '錘式彎舉', cat: 'iso', equip: 'dumbbell', lift: 'dbcurl', set: { grip: 'neutral' }, alias: ['hammer curl', '錘式', '對握彎舉'] },
   { id: 'shrug', name: '槓鈴聳肩', cat: 'iso', equip: 'barbell', lift: 'shrug', set: {}, alias: ['shrug', '斜方'] },
 ];
 
