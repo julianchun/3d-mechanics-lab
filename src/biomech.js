@@ -252,6 +252,19 @@ export const LIFTS = {
     ],
     standardNote: '握住兩側平行槓，腿在身後彎曲，前傾程度決定軀幹姿勢。',
   },
+  pullup: {
+    name: '引體向上', topLabel: '下巴過槓', bottomLabel: '手臂伸直',
+    viewCenter: [0, 1.35, 0], viewScale: 1.7,
+    ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
+    pose: pullupPose, loads: bodyweightLoads, reactions: handSupportReactions,
+    params: [
+      { key: 'grip', label: '握法', type: 'select', options: [['pro-wide', '正握寬距'], ['pro', '正握中距'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
+      { key: 'width', label: '握距（× 肩寬）', left: '1.0', right: '2.0', min: 1, max: 2, step: 0.05, def: 1.35, joint: 'hand', mech: 'A' },
+      { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
+      { key: 'load', label: '腰掛負重', left: '徒手', right: '25 kg', min: 0, max: 25, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
+    ],
+    standardNote: '從近乎伸直的懸垂姿勢拉到下巴過槓，雙手共同握住固定單槓。',
+  },
   squat: {
     name: '深蹲', bottomLabel: '最低點',
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
