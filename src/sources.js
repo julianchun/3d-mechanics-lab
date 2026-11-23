@@ -94,6 +94,9 @@ const REFS = {
   campos2020: { authors: 'Campos YAC et al.', year: 2020, title: 'Different shoulder exercises affect the activation of deltoid portions in resistance-trained individuals', venue: 'J Hum Kinet, 75:5–14', url: 'https://pubmed.ncbi.nlm.nih.gov/33312291/', tag: 'PubMed 33312291' },
   reinold2007: { authors: 'Reinold MM et al.', year: 2007, title: 'Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises', venue: 'J Athl Train, 42(4):464–469', url: 'https://pubmed.ncbi.nlm.nih.gov/18174934/', tag: 'PubMed 18174934' },
   coratella2023: { authors: 'Coratella G et al.', year: 2023, title: 'Biceps brachii and brachioradialis excitation in biceps curl exercise: different handgrips, different synergy', venue: 'Sports (Basel), 11(3):64', url: 'https://pubmed.ncbi.nlm.nih.gov/36976950/', tag: 'PubMed 36976950' },
+  schoenfeld2013: { authors: 'Schoenfeld B et al.', year: 2013, title: 'Effect of hand position on EMG activity of the posterior shoulder musculature during a horizontal abduction exercise', venue: 'J Strength Cond Res, 27(10):2644–2649', url: 'https://pubmed.ncbi.nlm.nih.gov/23538944/', tag: 'PubMed 23538944' },
+  franke2015: { authors: 'Franke RA et al.', year: 2015, title: 'Analysis of anterior, middle and posterior deltoid activation during single and multijoint exercises', venue: 'J Sports Med Phys Fitness, 55(7–8):714–721', url: 'https://pubmed.ncbi.nlm.nih.gov/24947920/', tag: 'PubMed 24947920' },
+  collins2021: { authors: 'Collins KS et al.', year: 2021, title: 'Differences in muscle activity and kinetics between the goblet squat and landmine squat in men and women', venue: 'J Strength Cond Res, 35(10):2661–2668', url: 'https://pubmed.ncbi.nlm.nih.gov/34341315/', tag: 'PubMed 34341315' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -121,6 +124,14 @@ export const SOURCES = {
       '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
     ],
     refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance'],
+  },
+  'goblet-squat': {
+    assumptions: [
+      '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.25）反映輕負重前抱式深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
+      '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
+      '啞鈴尺寸與預設單顆 20 kg 為假設。',
+    ],
+    refs: ['collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020'],
   },
   'smith-squat': {
     assumptions: [
@@ -275,6 +286,14 @@ export const SOURCES = {
     ],
     refs: ['ackland2008'],
     trendNote: '未查證同機型的反向蝴蝶機軌跡、凸輪與後三角肌電對照。',
+  },
+  'db-reverse-fly': {
+    assumptions: [
+      '俯身站姿（預設前傾 65°、膝微彎 22°），兩手各持獨立啞鈴（無剛體槓互推），每幀維持系統總重心在腳掌中段上方。',
+      '手部路徑假設：手臂在世界 XY 平面由胸前下方（外展 8°）水平外展至 86°，手肘維持固定微彎角度、對握（掌心相對→朝下）；模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 6 kg 為假設。',
+    ],
+    refs: ['schoenfeld2013', 'franke2015', 'ackland2008'],
   },
   'back-extension': {
     assumptions: [
@@ -526,6 +545,8 @@ const LIFT_FALLBACK_ID = {
   dbpress: 'db-press',
   latraise: 'lat-raise',
   dbcurl: 'db-curl',
+  dbreversefly: 'db-reverse-fly',
+  goblet: 'goblet-squat',
 };
 
 export function getSourceInfo(lift, catalogId) {

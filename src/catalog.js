@@ -23,6 +23,7 @@ export const CATALOG = [
   { id: 'squat-high', name: '深蹲（高槓）', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'high' }, alias: ['squat', 'high bar', '背蹲'] },
   { id: 'squat-low', name: '深蹲（低槓）', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'low' }, alias: ['squat', 'low bar', '背蹲'] },
   { id: 'front-squat', name: '前蹲', cat: 'squat', equip: 'barbell', lift: 'squat', set: { barPos: 'front' }, alias: ['front squat'] },
+  { id: 'goblet-squat', name: '高腳杯深蹲', cat: 'squat', equip: 'dumbbell', lift: 'goblet', set: {}, alias: ['goblet squat', '高腳杯', '酒杯深蹲'] },
   { id: 'smith-squat', name: '史密斯深蹲', cat: 'squat', equip: 'machine', lift: 'smith', set: {}, alias: ['smith'] },
   { id: 'leg-press', name: '45° 腿推機', cat: 'squat', equip: 'machine', lift: 'legpress', set: {}, alias: ['leg press'] },
   { id: 'hack-squat', name: '哈克深蹲機', cat: 'squat', equip: 'machine', lift: 'hacksquat', set: {}, alias: ['hack squat'] },
@@ -58,6 +59,7 @@ export const CATALOG = [
   { id: 'row-sup', name: '槓鈴划船（反握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'sup' }, alias: ['row', 'yates'] },
   { id: 'cable-row', name: '坐姿滑輪划船', cat: 'hpull', equip: 'cable', lift: 'cablerow', set: { grip: 'v' }, alias: ['cable row', 'seated row'] },
   { id: 'cable-row-wide', name: '坐姿滑輪划船（寬握）', cat: 'hpull', equip: 'cable', lift: 'cablerow', set: { grip: 'wide' }, alias: ['cable row', 'wide'] },
+  { id: 'db-reverse-fly', name: '俯身啞鈴反向飛鳥', cat: 'hpull', equip: 'dumbbell', lift: 'dbreversefly', set: {}, alias: ['reverse fly', 'rear delt fly', '反向飛鳥', '後三角飛鳥'] },
   // 垂直拉
   { id: 'uprow', name: '直立划船', cat: 'vpull', equip: 'barbell', lift: 'uprow', set: {}, alias: ['upright row'] },
   { id: 'pulldown', name: '滑輪下拉', cat: 'vpull', equip: 'cable', lift: 'pulldown', set: { supin: 'pro' }, alias: ['lat pulldown', 'pulldown'] },

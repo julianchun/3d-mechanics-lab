@@ -7,6 +7,7 @@ import { analyze, defaultParams } from '../src/biomech.js';
 // 臀橋已修正為肩線貼地支撐與地板連續反力模型，臀大肌為第一位（高於腰背伸肌）。
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
+  'goblet-squat': { first: ['vasti'] },
   'smith-squat': { top2: ['vasti'] }, 'leg-press': { top2: ['vasti'] },
   'hack-squat': { first: ['vasti'] },
   deadlift: { top3: ['erec', 'hams', 'gmax'] }, 'deficit-dl': { top3: ['erec', 'hams', 'gmax'] },
@@ -17,7 +18,7 @@ const RANKS = {
   'floor-press': { first: ['pecs'] }, 'db-bench': { first: ['pecs'] }, 'db-bench-incline': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
   'db-press': { top2: ['adelt'] },
   'pec-deck': { first: ['pecs', 'pecc'] },
-  'reverse-deck': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
+  'reverse-deck': { top2: ['pdelt'] }, 'db-reverse-fly': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
   'cable-fly-high': { first: ['pecs', 'pecc'] },
   'cable-fly-mid': { first: ['pecs', 'pecc'] },
   'cable-fly-low': { first: ['pecs', 'pecc'] },
@@ -51,6 +52,11 @@ const KNOWN_ISSUES = [
     id: 'hammer-curl', rule: 'rank:first', kind: '新動作', current: '錘式彎舉前三角肌（0.75）高於肱二頭肌（0.59）與肱肌／肱橈肌（0.51）',
     cause: '沿用既有對握偏好（pref.bic × 1.0）後，二頭肌分擔下降、單關節肱肌／肱橈肌上升，導致二頭肌對抗前臂重力的肩屈貢獻減少、肩前舉穩定集中到前三角肌（與既有反手彎舉 reverse-curl 同源）',
     fix: '待統一校準上臂貼身彎舉的肩前舉穩定模型並拆分肱肌與肱橈肌後再檢核，暫不加特例',
+  },
+  {
+    id: 'db-reverse-fly', rule: 'activation:pdelt', kind: '新動作', current: '預設每顆 6 kg 啞鈴於展開頂點時三角肌後束主動活化（1.15）超過 1.0',
+    cause: '近直臂（肘微彎 20°）水平外展約 58 cm 力臂承受 6 kg 啞鈴與手臂自重，現有三角肌後束有效最大力（675 N）與水平外展力臂（40 mm）不足以負擔全行程需求（與既有反向蝴蝶機 reverse-deck 同源）',
+    fix: '待以實測水平外展力矩與肩胛後收模型共同核對後三角有效最大力，暫不修改 MUSCLES 參數',
   },
   {
     id: 'reverse-deck', rule: 'activation:pdelt', kind: '新動作', current: '預設 40 kg 配重時後三角肌需求超過最大主動活化',
