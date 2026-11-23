@@ -13,6 +13,7 @@ export const CATEGORIES = [
 
 export const EQUIPMENT = [
   ['barbell', '槓鈴'],
+  ['dumbbell', '啞鈴'],
   ['machine', '器械'],
   ['cable', '滑輪'],
 ];
@@ -40,6 +41,8 @@ export const CATALOG = [
   { id: 'incline-bench', name: '上斜臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 30, grip: 1.6, flare: 52, touch: 0.6 }, alias: ['incline'] },
   { id: 'cg-bench', name: '窄握臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'bench', incline: 0, grip: 1.0, flare: 32, touch: 0.75 }, alias: ['close grip', 'cgbp'] },
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
+  { id: 'db-bench', name: '啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '0' }, alias: ['dumbbell bench', 'db bench', '啞鈴平板臥推'] },
+  { id: 'db-bench-incline', name: '上斜啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '30' }, alias: ['incline dumbbell press', 'incline db bench', '啞鈴上斜臥推'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
   { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
@@ -49,6 +52,7 @@ export const CATALOG = [
   { id: 'cable-fly-low', name: '滑輪夾胸（低位）', cat: 'hpush', equip: 'cable', lift: 'cablefly', set: { height: 'low' }, alias: ['cable fly', 'cable crossover', '飛鳥', '夾胸', '低滑輪'] },
   // 垂直推
   { id: 'ohp', name: '站姿肩推', cat: 'vpush', equip: 'barbell', lift: 'ohp', set: {}, alias: ['ohp', 'press', '肩推'] },
+  { id: 'db-press', name: '坐姿啞鈴肩推', cat: 'vpush', equip: 'dumbbell', lift: 'dbpress', set: {}, alias: ['dumbbell shoulder press', 'db press', '啞鈴肩推'] },
   // 水平拉
   { id: 'row', name: '槓鈴划船（正握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'pro' }, alias: ['row', 'bor'] },
   { id: 'row-sup', name: '槓鈴划船（反握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'sup' }, alias: ['row', 'yates'] },

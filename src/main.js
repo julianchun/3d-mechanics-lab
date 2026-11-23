@@ -116,15 +116,21 @@ const benchGroup = makeBench();
 // 硬舉用的墊高台（赤字）與墊塊（墊高拉）
 const PROP = new THREE.MeshStandardMaterial({ color: 0x9a8b72, roughness: 0.9 });
 const CABLE = new THREE.LineBasicMaterial({ color: 0x30343b });
+const DB_HANDLE = new THREE.MeshStandardMaterial({ color: 0x8c94a0, metalness: 0.7, roughness: 0.3 });
+const DB_HEAD = new THREE.MeshStandardMaterial({ color: 0x3a3f4a, metalness: 0.25, roughness: 0.55 });
+const DB_CYL = new THREE.CylinderGeometry(1, 1, 1, 14);
+const DB_HEX = new THREE.CylinderGeometry(1, 1, 1, 8);
+const _dbY = new THREE.Vector3(0, 1, 0);
+const _dbDir = new THREE.Vector3();
 function makeProps() {
   const g = new THREE.Group();
-  g.userData = { plat: new THREE.Mesh(UNIT, PROP), blkL: new THREE.Mesh(UNIT, PROP), blkR: new THREE.Mesh(UNIT, PROP), boxes: [], cables: [] };
+  g.userData = { plat: new THREE.Mesh(UNIT, PROP), blkL: new THREE.Mesh(UNIT, PROP), blkR: new THREE.Mesh(UNIT, PROP), boxes: [], cables: [], dumbbells: [] };
   g.add(g.userData.plat, g.userData.blkL, g.userData.blkR);
   scene.add(g);
   return g;
 }
 function updateProps(g, pose) {
-  const { plat, blkL, blkR, boxes, cables } = g.userData;
+  const { plat, blkL, blkR, boxes, cables, dumbbells } = g.userData;
   // 器械：pose.boxes = [{ c: 中心, s: 尺寸, rx/ry/rz: 轉角, mat: 'pad' | 'frame' | 'glass' }]
   const bl = pose.boxes || [];
   bl.forEach((bx, i) => {
@@ -135,6 +141,38 @@ function updateProps(g, pose) {
     m.visible = true;
   });
   for (let i = bl.length; i < boxes.length; i++) boxes[i].visible = false;
+  // 啞鈴：pose.dumbbells = [{ c: 握把中心, axis: 握把方向, kg: 每顆重量 }, ...]
+  const dbs = pose.dumbbells || [];
+  dbs.forEach((db, i) => {
+    let grp = dumbbells[i];
+    if (!grp) {
+      grp = new THREE.Group();
+      const handle = new THREE.Mesh(DB_CYL, DB_HANDLE);
+      const headA = new THREE.Mesh(DB_HEX, DB_HEAD);
+      const headB = new THREE.Mesh(DB_HEX, DB_HEAD);
+      grp.add(handle, headA, headB);
+      grp.userData = { handle, headA, headB };
+      dumbbells.push(grp);
+      g.add(grp);
+    }
+    const kg = db.kg ?? 12;
+    const hLen = MACHINES.dumbbell.handleLen;
+    const hR = MACHINES.dumbbell.handleR;
+    const headR = Math.min(0.115, Math.max(0.055, 0.052 + 0.0022 * kg));
+    const headW = Math.min(0.085, Math.max(0.032, 0.028 + 0.0018 * kg));
+    const { handle, headA, headB } = grp.userData;
+    handle.scale.set(hR, hLen, hR);
+    headA.scale.set(headR, headW, headR);
+    headB.scale.set(headR, headW, headR);
+    const off = (hLen + headW) / 2;
+    headA.position.set(0, off, 0);
+    headB.position.set(0, -off, 0);
+    grp.position.set(...db.c);
+    _dbDir.set(...db.axis).normalize();
+    grp.quaternion.setFromUnitVectors(_dbY, _dbDir);
+    grp.visible = true;
+  });
+  for (let i = dbs.length; i < dumbbells.length; i++) dumbbells[i].visible = false;
   // 鋼索：pose.cables = [[a, b], ...]
   const cl = pose.cables || [];
   cl.forEach(([a, b], i) => {

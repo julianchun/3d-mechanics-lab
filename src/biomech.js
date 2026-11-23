@@ -156,6 +156,19 @@ export const MACHINES = {
   machinepress: { seatY: 0.55, pivotY: 1.83, pivotZ: -0.16, loadKg: 40 }, // 假設：肩推機握把與轉軸
   calfraise: { stepY: 0.13, standingKg: 60, seatedKg: 45, padY: 0.64 }, // 假設：前腳掌台階與肩／膝墊配重
   hipabd: { seatY: 0.55, camArm: 0.22, padArm: 0.35, loadKg: 35 }, // 假設：髖外展／內收機槓桿
+  // 假設：啞鈴共用尺寸與預設每顆重量（未查得單一商用廠牌規格，依常見六角／包膠啞鈴估計）
+  dumbbell: {
+    handleLen: 0.13,                 // 假設：握把內距 13 cm
+    handleR: 0.016,                  // 假設：握把半徑 1.6 cm（直徑 32 mm）
+    benchKg: 22,                     // 假設：啞鈴臥推預設每顆 22 kg（雙手 44 kg，略輕於槓鈴臥推 60 kg）
+    pressKg: 14,                     // 假設：坐姿啞鈴肩推預設每顆 14 kg（雙手 28 kg，略輕於站姿槓鈴肩推 37.5 kg）
+    latRaiseKg: 8,                   // 假設：側平舉預設每顆 8 kg
+    curlKg: 12,                      // 假設：啞鈴彎舉預設每顆 12 kg（雙手 24 kg）
+    reverseFlyKg: 6,                 // 假設：俯身反向飛鳥預設每顆 6 kg
+    gobletKg: 20,                    // 假設：高腳杯深蹲預設單顆 20 kg
+    pressSeatY: 0.50,                // 假設：坐姿肩推椅座高 50 cm
+    pressBackReclineDeg: 8,          // 假設：坐姿肩推椅背微後傾 8°（82° 靠背）
+  },
 };
 
 export const PULLEY_RATIOS = [['1:1', '1:1（直拉）'], ['2:1', '2:1（減半）']];
@@ -653,6 +666,37 @@ export const LIFTS = {
       { key: 'prefUL', label: '胸大肌偏好', left: '偏上胸', right: '偏中下胸', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecc'], ['pecs']] },
     ],
     standardNote: '雙手各握獨立把手、手肘固定微彎約 20°～30°、軀幹微前傾對抗後方拉力；高位往下偏中下胸、中位均衡水平內收、低位往上偏上胸。',
+  },
+  dbbench: {
+    name: '啞鈴臥推', topLabel: '推直', bottomLabel: '下放最低點',
+    ground: false, supine: true, dofs: ['shFwd', 'shSide', 'elbExt'],
+    pose: dbBenchPose, loads: dumbbellLoads,
+    moving: ['shFwd', 'shSide', 'elbExt'],
+    params: [
+      { key: 'incline', label: '凳面角度', type: 'select', options: [['0', '平板 0°'], ['30', '上斜 30°']], def: '0', joint: 'equip', mech: 'A' },
+      { key: 'depth', label: '下放深度', left: '平胸（較淺）', right: '深拉伸', min: 0, max: 1, step: 0.01, def: 0.6, joint: 'shoulder', mech: 'A' },
+      { key: 'flare', label: '手肘外展角', left: '30°（較夾）', right: '80°（較開）', min: 30, max: 80, step: 1, def: 50, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'grip', label: '握法', type: 'select', options: [['pro', '正握'], ['neutral', '對握（掌心相對）']], def: 'pro', joint: 'hand', mech: 'A' },
+      { key: 'load', label: '每顆重量', left: '8 kg', right: '40 kg', min: 8, max: 40, step: 2, def: MACHINES.dumbbell.benchKg, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
+      { key: 'prefUL', label: '胸大肌偏好', left: '偏上胸', right: '偏中下胸', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecc'], ['pecs']] },
+    ],
+    standardNote: '雙手各自獨立承重（無剛體槓互推），下放時雙手可比槓鈴略外、略深，推起時向肩膀上方自然微收攏；手肘外展約 45～60°、前臂保持接近垂直。',
+  },
+  dbpress: {
+    name: '坐姿啞鈴肩推', topLabel: '推直', bottomLabel: '最低點',
+    viewCenter: [0, 1.12, 0.08], viewScale: 1.12,
+    seated: true, dofs: ['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
+    pose: dbPressPose, loads: dumbbellLoads,
+    moving: ['shFwd', 'shSide', 'elbExt', 'scElev'],
+    params: [
+      { key: 'grip', label: '握法', type: 'select', options: [['pro', '正握'], ['neutral', '對握（掌心相對）']], def: 'pro', joint: 'hand', mech: 'A' },
+      { key: 'elbowFwd', label: '手肘前移角', left: '0°（正兩側）', right: '60°（偏前方）', min: 0, max: 60, step: 1, def: 30, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'depth', label: '下放深度', left: '耳側（較淺）', right: '肩旁（較深）', min: 0, max: 1, step: 0.01, def: 0.6, joint: 'shoulder', mech: 'A' },
+      { key: 'load', label: '每顆重量', left: '6 kg', right: '30 kg', min: 6, max: 30, step: 2, def: MACHINES.dumbbell.pressKg, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefAP', label: '肩屈肌偏好', left: '偏前三角', right: '偏上胸', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['adelt'], ['pecc']] },
+    ],
+    standardNote: '背貼微後傾椅背（約 82°），手肘置於肩胛平面（略往前約 30°），下放到耳側至肩旁、前臂接近垂直，向上微內聚推至接近伸直。',
   },
 };
 export const JOINT_NAMES = { equip: '器材', scap: '肩胛', hip: '髖', knee: '膝', ankle: '踝', lumbar: '下背', shoulder: '肩', elbow: '肘', hand: '握距', bar: '槓' };
@@ -1260,7 +1304,7 @@ function ohpPose(P, e) {
 
 // 站姿、槓在手上（彎舉、聳肩、直立划船）：腳到肩繞踝前後傾，讓系統重心停在腳掌中段
 // kap = 膝彎曲、lean = 軀幹相對大腿前傾（負 = 後仰）；barAt(tf, S, hip, knee) 回傳 { bar, elbow? }（bar 的 x = 握點）
-function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.02 }) {
+function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.02, barAxial = true }) {
   const w = 0.14, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
@@ -1290,7 +1334,7 @@ function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.
   legChain(pose, A, toe, r.hip);
   pose.R.knee = r.knee;
   const ok = armChain(pose, r.S, r.bar, typeof pole === 'function' ? pole(r.tf, r) : pole);
-  pose.barAxial = true;
+  pose.barAxial = barAxial;
   pose.bar = [0, r.bar[1], r.bar[2]];
   pose.barW = barW;
   pose.armOk = ok;
@@ -2607,6 +2651,119 @@ function hipAbdPose(P, e) {
   return pose;
 }
 
+// ================= 啞鈴動作（F 階段）=================
+// 共用視覺輔助：由右手握把中心與方向產生左右對稱兩顆啞鈴
+function pairDumbbells(c, axis, kg) {
+  const a = norm(axis);
+  return [
+    { c, axis: a, kg },
+    { c: [-c[0], c[1], c[2]], axis: [-a[0], a[1], a[2]], kg },
+  ];
+}
+
+// ---------- 啞鈴臥推（平板／上斜 30°）----------
+// 手部路徑假設：無剛體槓約束，下放時雙手依手肘外展角落在胸兩側並可低於胸面（深度可調），
+// 且前臂維持接近垂直（手腕疊在手肘正上方）；推起過程前半段保持寬距以維持前臂垂直，接近鎖死時才自然微內聚（頂點寬度 40 cm，兩顆啞鈴不碰撞）。
+function dbBenchPose(P, e) {
+  const pose = { R: {}, warn: [], ok: true, supine: true };
+  const inc = rad(Number(P.incline) || 0), ci = Math.cos(inc), si = Math.sin(inc);
+  const rot = (v) => [v[0], v[1] * ci - v[2] * si, v[1] * si + v[2] * ci];
+  const u = rot(norm(sub([0, 0.53, 0], [0, 0.5, 0.5])));
+  pose.girdle = { ret: rad(18), elev: rad(-6) };
+  const dl = shoulderLocal(pose.girdle);
+  const Sy = 0.53 + 0.45 * si;
+  const t0 = trunkFrame([0, 0.5, 0.5], u);
+  const S0 = toWorld(t0, dl);
+  const tf = trunkFrame(add([0, 0.5, 0.5], [0, Sy - S0[1], -S0[2]]), u);
+  Object.assign(pose, tf);
+  const S = toWorld(tf, dl);
+  const neutral = P.grip === 'neutral';
+  // 下放最低點：依外展角決定自然手寬，並使底端與中段前臂維持接近垂直（不像槓鈴受限於固定握距）
+  const flareT = clamp((P.flare - 30) / 50, 0, 1);
+  const xBot = lerp(0.32, 0.40, flareT) - (neutral ? 0.025 : 0);
+  const xTop = 0.22; // 頂點雙手微內聚（間距 44 cm，兩顆啞鈴不碰撞且推起中段前臂不向內倒）
+  // 底端高度：啞鈴可比槓鈴略低（槓鈴觸胸 h ≈ 0.165 m；啞鈴可依深度降到胸側 h ≈ 0.17→0.10 m）
+  const hBot = lerp(0.175, 0.105, P.depth);
+  const [, dyT, zt] = rot([0, hBot, lerp(0.12, 0.08, clamp(inc / rad(30), 0, 1))]);
+  const yBot = Sy + dyT;
+  const zLock = lerp(0.02, zt, 0.45);
+  const R = 0.978 * (BODY.Lu + BODY.Lf);
+  const yTop = Sy + Math.sqrt(Math.max(0.05, R * R - (xTop - S[0]) ** 2 - zLock ** 2));
+  // 推起弧線：下段與中段維持較寬（手疊在肘上方），接近頂點才向肩上方內聚
+  const x = lerp(xTop, xBot, Math.pow(e, 0.42));
+  const H = [x, lerp(yTop, yBot, e), lerp(zLock, zt, Math.pow(e, 0.75))];
+  const a = rad(P.flare);
+  const pole = norm(rot([Math.sin(a), -0.25, Math.cos(a)]));
+  const ok = armChain(pose, S, H, pole);
+  if (!ok) { pose.ok = false; pose.conflict = '此深度與手肘角度超出雙臂可及範圍'; }
+  const gripAxis = neutral ? [0, 0, 1] : [1, 0, 0];
+  pose.R.grip = pose.R.hand;
+  pose.gripAxis = gripAxis;
+  pose.bar = [0, pose.R.hand[1], pose.R.hand[2]];
+  pose.barStyle = 'none';
+  pose.barAxial = false;
+  pose.barW = (2 * P.load) / BODY.mass;
+  pose.dumbbells = pairDumbbells(pose.R.hand, gripAxis, P.load);
+  // 靜態下肢與臥推椅
+  legChain(pose, [0.25, BODY.ankleH, 1.0], [0, 0, 1], add(tf.Pc, [BODY.hipHalf, 0, 0]));
+  pose.R.knee = ik2(pose.R.hip, pose.R.ankle, BODY.Lt, BODY.Ls, [0, 1, 0.3]).mid;
+  pose.R.toe = [0.27, 0.02, 1.17]; pose.R.heel = [0.25, 0.02, 0.95];
+  pose.bench = { incline: inc, Pc: tf.Pc, u, f: tf.f };
+  const fore = sub(pose.R.hand, pose.R.elbow);
+  const tilt = deg(Math.acos(clamp(fore[1] / len(fore), -1, 1)));
+  if (e > 0.6 && tilt > 28) pose.warn.push('前臂偏離垂直 ' + Math.round(tilt) + '°');
+  return pose;
+}
+
+// ---------- 坐姿啞鈴肩推 ----------
+// 手部路徑假設：坐於微後傾 8°（82°）椅背，下放時手肘位於肩胛／前移平面（elbowFwd）且前臂接近垂直；
+// 推起過程下中段維持手在手肘上方，接近頂點才自然微內聚至肩膀上方（頂點寬度 42 cm，不需繞過下巴）。
+function dbPressPose(P, e) {
+  const M = MACHINES.dumbbell;
+  const recl = rad(M.pressBackReclineDeg);
+  const pose = seatedBase(-recl, M.pressSeatY, 0.48);
+  const tf = pose;
+  pose.girdle = { ret: rad(lerp(2, 10, e)), elev: rad(lerp(13, -2, e)) };
+  const S = toWorld(tf, shoulderLocal(pose.girdle));
+  const ang = rad(P.elbowFwd);
+  const neutral = P.grip === 'neutral';
+  const rBot = BODY.Lu * lerp(0.86, 0.78, P.depth) - (neutral ? 0.02 : 0);
+  const bot = [S[0] + Math.cos(ang) * rBot, S[1] + lerp(0.22, 0.10, P.depth), S[2] + Math.sin(ang) * rBot + 0.03];
+  const xTop = 0.21, zTop = S[2] + 0.06;
+  const R = 0.972 * (BODY.Lu + BODY.Lf);
+  const top = [xTop, S[1] + Math.sqrt(Math.max(0.05, R * R - (xTop - S[0]) ** 2 - (zTop - S[2]) ** 2)), zTop];
+  const ey = Math.pow(e, 1.15);
+  const ex = Math.pow(e, 0.55); // 下中段保持手疊在手肘上方，頂端再收攏
+  const H = [lerp(top[0], bot[0], ex), lerp(top[1], bot[1], ey), lerp(top[2], bot[2], ey)];
+  const pole = norm([Math.cos(ang), -0.95, Math.sin(ang)]);
+  const ok = armChain(pose, S, H, pole);
+  if (!ok) { pose.ok = false; pose.conflict = '手臂長度無法達到此肩推位置'; }
+  const gripAxis = neutral ? [0, 0, 1] : [1, 0, 0];
+  pose.R.grip = pose.R.hand;
+  pose.gripAxis = gripAxis;
+  pose.bar = [0, pose.R.hand[1], pose.R.hand[2]];
+  pose.barStyle = 'none';
+  pose.barAxial = false;
+  pose.barW = (2 * P.load) / BODY.mass;
+  pose.dumbbells = pairDumbbells(pose.R.hand, gripAxis, P.load);
+  pose.armJoints = ['shoulder', 'elbow'];
+  // 坐姿肩推椅（座墊＋微後傾椅背＋支架）
+  const seatTop = M.pressSeatY - 0.08;
+  const backC = add(add(tf.Pc, mul(tf.u, 0.34)), mul(tf.f, -0.14));
+  const backPostTop = add(add(tf.Pc, mul(tf.u, 0.22)), mul(tf.f, -0.175));
+  pose.boxes = [
+    box([0, seatTop - 0.04, 0.08], [0.36, 0.08, 0.42]), // 座墊
+    boxAlong(backC, tf.u, [0.30, 0.78, 0.07]), // 微後傾椅背
+    box([0, 0.025, -0.02], [0.46, 0.05, 0.68], 0, 'frame'), // 底座
+    box([0, (seatTop - 0.08) / 2, 0.08], [0.10, seatTop - 0.08, 0.14], 0, 'frame'), // 座椅支柱
+    box([0, backPostTop[1] / 2, backPostTop[2]], [0.09, backPostTop[1], 0.07], 0, 'frame'), // 椅背支柱
+  ];
+  const fore = sub(pose.R.hand, pose.R.elbow);
+  const tilt = deg(Math.acos(clamp(fore[1] / len(fore), -1, 1)));
+  if (e > 0.65 && tilt > 26) pose.warn.push('前臂偏離垂直 ' + Math.round(tilt) + '°');
+  return pose;
+}
+
 export function solvePose(lift, P, e) {
   const pose = LIFTS[lift].pose(P, e);
   pose.lift = lift;
@@ -2654,6 +2811,17 @@ function handBarLoads(pose, P, W, out) {
 function benchLoads(pose, P, W, out) {
   out.push({ p: pose.R.hand, F: [0, -(pose.barW * W) / 2, 0], region: 'fore' });
   if (P.pullApart > 0) out.push({ p: pose.R.hand, F: [-P.pullApart * 0.12 * W, 0, 0], region: 'fore' });
+}
+
+// 啞鈴共用負重：兩手各自承受自己那顆啞鈴的重力，不套用剛體槓 minimizeAxialMoment（barAxial = false）。
+// 作用點在握把中心（pose.dbLoadPt || pose.R.grip || pose.R.hand）；
+// 雙啞鈴時 pose.barW = 2 × 每顆重 / BODY.mass，右半身受力 = 每顆重 × G；
+// 單顆雙手捧（高腳杯深蹲）時 pose.barW = 啞鈴重 / BODY.mass，右半身受力一半。
+function dumbbellLoads(pose, P, W, out) {
+  const p = pose.dbLoadPt || pose.R.grip || pose.R.hand;
+  const region = pose.dbRegion || 'fore';
+  out.push({ p, F: [0, -(pose.barW * W) / 2, 0], region });
+  if (pose.dbForceLine !== false) pose.forceLine = { p, d: [0, -1, 0], is3d: true };
 }
 
 function coronalFootForce(hip, cop, verticalForce) {

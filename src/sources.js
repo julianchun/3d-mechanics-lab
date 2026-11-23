@@ -89,6 +89,7 @@ const REFS = {
   paz2022_hipabd: { authors: 'de Almeida Paz I et al.', year: 2022, title: 'Hip abduction machine is better than free weights to target the gluteus medius while minimizing tensor fascia latae activation', venue: 'J Bodyw Mov Ther, 30:160–167', url: 'https://pubmed.ncbi.nlm.nih.gov/35500965/', tag: 'PubMed 35500965' },
   kinoshita2023_calf: { authors: 'Kinoshita M et al.', year: 2023, title: 'Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training', venue: 'Front Physiol, 14:1272106', url: 'https://pubmed.ncbi.nlm.nih.gov/38156065/', tag: 'PubMed 38156065' },
   paz2021_calf: { authors: 'Paz GA et al.', year: 2021, title: 'Myoelectric activity of the gastrocnemius during plantar flexion in a standing versus seated position and with a neutral or dorsiflexed ankle: A pilot study', venue: 'J Bodyw Mov Ther', url: 'https://pubmed.ncbi.nlm.nih.gov/33992275/', tag: 'PubMed 33992275' },
+  farias2017: { authors: 'Farias DA et al.', year: 2017, title: 'Maximal strength performance and muscle activation for the bench press and triceps extension exercises adopting dumbbell, barbell, and machine modalities over multiple sets', venue: 'J Strength Cond Res, 31(7):1879–1887', url: 'https://pubmed.ncbi.nlm.nih.gov/27669189/', tag: 'PubMed 27669189' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
@@ -220,6 +221,30 @@ export const SOURCES = {
     refs: ['floorpress2026'],
     noStudy: true,
     trendNote: '尚無直接比較動態地板臥推與平板臥推之同儕審查肌電／逆動力學研究。',
+  },
+  'db-bench': {
+    assumptions: [
+      '仰臥於平板臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
+      '手部路徑假設：下放時雙手依手肘外展角落在胸兩側並可低於胸面，推起時向肩膀上方微內聚（頂點間距 36 cm）；對握與正握僅改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸（握把內距 13 cm、直徑 32 mm）與預設每顆 22 kg（雙手 44 kg）為假設。',
+    ],
+    refs: ['saeterbakken2011', 'welsch2005', 'farias2017', 'rodriguezridao2020'],
+  },
+  'db-bench-incline': {
+    assumptions: [
+      '仰臥於上斜 30° 臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
+      '手部路徑假設與平板啞鈴臥推相同並隨椅背旋轉 30°；不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 22 kg（雙手 44 kg）為假設。',
+    ],
+    refs: ['lauver2016', 'rodriguezridao2020', 'saeterbakken2011', 'farias2017'],
+  },
+  'db-press': {
+    assumptions: [
+      '坐姿背靠微後傾 8°（82°）椅背（座高 50 cm），椅墊與椅背承擔身體重量，不算地面反作用力；兩手各自獨立承重（無剛體槓互推）。',
+      '手部路徑假設：下放時手肘位於肩胛／前移平面且前臂接近垂直，推起時沿微內聚弧線推至肩膀上方（頂點間距 36 cm）；正握與對握改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 14 kg（雙手 28 kg）為假設。',
+    ],
+    refs: ['saeterbakken2013'],
   },
   'chest-press': {
     assumptions: [
@@ -471,6 +496,8 @@ const LIFT_FALLBACK_ID = {
   calfraise: 'calf-raise-standing',
   hipabd: 'hip-abduction',
   cablefly: 'cable-fly-mid',
+  dbbench: 'db-bench',
+  dbpress: 'db-press',
 };
 
 export function getSourceInfo(lift, catalogId) {
