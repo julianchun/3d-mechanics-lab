@@ -17,6 +17,7 @@ const RANKS = {
   bench: { first: ['pecs'] }, 'incline-bench': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'cg-bench': { top3: ['trilat'] },
   'floor-press': { first: ['pecs'] }, 'db-bench': { first: ['pecs'] }, 'db-bench-incline': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
   pushup: { top2: ['pecs'] }, 'pushup-feet': { top2: ['pecs'] }, 'pushup-hands': { top2: ['pecs'] },
+  dips: { top2: ['pecs', 'trilat'] }, 'dips-upright': { top2: ['pecs', 'trilat'] },
   'db-press': { top2: ['adelt'] },
   'pec-deck': { first: ['pecs', 'pecc'] },
   'reverse-deck': { top2: ['pdelt'] }, 'db-reverse-fly': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
@@ -41,6 +42,7 @@ const RANKS = {
 const KNOWN_ISSUES = [
   ...[
     ['pushup', '胸大肌峰值排名第四'], ['pushup-feet', '胸大肌未進前二'], ['pushup-hands', '胸大肌峰值排名第三'],
+    ['dips-upright', '胸大肌與三頭肌均未進前二'],
   ].map(([id, current]) => ({
     id, rule: 'rank:top2', kind: '新動作', current,
     cause: '固定手部支撐下，現有肩部三軸力矩與肌肉分配把部分需求分給背闊肌、三角肌及肱三頭；缺少此動作的三維關節力矩驗證',
@@ -48,6 +50,7 @@ const KNOWN_ISSUES = [
   })),
   ...Object.entries({
     pushup: ['trilat'], 'pushup-feet': ['trilat'], 'pushup-hands': ['trilat'],
+    dips: ['pecs', 'lat', 'mdelt'], 'dips-upright': ['pecs', 'lat', 'pdelt', 'trilong'],
   }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
     id, rule: `activation:${muscle}`, kind: '新動作', current: `${muscle} 的模型主動活化超過 1`,
     cause: '全身重量由手部支撐，現有肌肉最大力及肩肘力臂估計不足以承受部分姿勢的準靜態力矩；未以自體重量動作測力資料校準',
@@ -186,7 +189,7 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   checked++;
 }
 // 自體重量支撐力須承擔整體重量；輔助膝墊減少的是實際手部反力。
-for (const c of CATALOG.filter((item) => ['pushup'].includes(item.lift))) {
+for (const c of CATALOG.filter((item) => ['pushup', 'dips'].includes(item.lift))) {
   const P = { ...defaultParams(c.lift), ...c.set };
   for (let i = 0; i <= N; i++) {
     const pose = analyze(c.lift, P, i / N).pose;

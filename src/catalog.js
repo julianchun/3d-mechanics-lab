@@ -58,6 +58,8 @@ export const CATALOG = [
   // 垂直推
   { id: 'ohp', name: '站姿肩推', cat: 'vpush', equip: 'barbell', lift: 'ohp', set: {}, alias: ['ohp', 'press', '肩推'] },
   { id: 'db-press', name: '坐姿啞鈴肩推', cat: 'vpush', equip: 'dumbbell', lift: 'dbpress', set: {}, alias: ['dumbbell shoulder press', 'db press', '啞鈴肩推'] },
+  { id: 'dips', name: '雙槓撐體', cat: 'vpush', equip: 'bodyweight', lift: 'dips', set: { lean: 15 }, alias: ['dips', 'parallel bar dips'] },
+  { id: 'dips-upright', name: '直立雙槓撐體', cat: 'vpush', equip: 'bodyweight', lift: 'dips', set: { lean: 0 }, alias: ['upright dips'] },
   // 水平拉
   { id: 'row', name: '槓鈴划船（正握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'pro' }, alias: ['row', 'bor'] },
   { id: 'row-sup', name: '槓鈴划船（反握）', cat: 'hpull', equip: 'barbell', lift: 'row', set: { supin: 'sup' }, alias: ['row', 'yates'] },

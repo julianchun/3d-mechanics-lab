@@ -240,6 +240,18 @@ export const LIFTS = {
     ],
     standardNote: '掌根壓穩、腳尖著地，軀幹與腿維持一直線，下放到胸口接近地面。',
   },
+  dips: {
+    name: '雙槓撐體', topLabel: '撐起', bottomLabel: '下放',
+    viewCenter: [0, 1.0, 0], viewScale: 1.45,
+    ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
+    pose: dipsPose, loads: bodyweightLoads, reactions: handSupportReactions,
+    params: [
+      { key: 'lean', label: '軀幹前傾', left: '直立', right: '前傾', min: 0, max: 30, step: 1, def: 15, joint: 'hip', mech: 'A', unit: '°' },
+      { key: 'depth', label: '下放深度', left: '較淺', right: '較深', min: 0, max: 1, step: 0.05, def: 0.6, joint: 'shoulder', mech: 'A' },
+      { key: 'load', label: '腰掛負重', left: '徒手', right: '30 kg', min: 0, max: 30, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
+    ],
+    standardNote: '握住兩側平行槓，腿在身後彎曲，前傾程度決定軀幹姿勢。',
+  },
   squat: {
     name: '深蹲', bottomLabel: '最低點',
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
@@ -3045,6 +3057,24 @@ function gobletPose(P, e) {
   return pose;
 }
 
+// 自體重量動作的全身矢狀面重心。各項係數與 forcesOf 使用同一份節段質量。
+function bodyweightCenter(pose, P, assist = 0) {
+  const R = pose.R;
+  const points = [
+    [add(R.ankle, mul(pose.toeDir, 0.06)), MF.foot],
+    [lerpV(R.knee, R.ankle, 0.433), MF.shank],
+    [lerpV(R.hip, R.knee, 0.433), MF.thigh],
+    [add(pose.Pc, mul(pose.u, 0.3)), MF.trunk / 2],
+    [lerpV(R.shoulder, R.elbow, 0.436), MF.upper],
+    [lerpV(R.elbow, R.hand, 0.55), MF.fore],
+    [pose.loadPt, (P.load || 0) / (2 * BODY.mass)],
+    [pose.kneePad || R.knee, -assist / (2 * BODY.mass)],
+  ];
+  const mass = points.reduce((s, [, m]) => s + m, 0);
+  const z = points.reduce((s, [p, m]) => s + p[2] * m, 0) / mass;
+  return { mass, z };
+}
+
 function pushupPose(P, e) {
   const handH = P.elevation === 'hands' ? 0.2 : 0;
   const footH = P.elevation === 'feet' ? 0.2 : 0;
@@ -3077,6 +3107,87 @@ function pushupPose(P, e) {
   if (handH) pose.boxes.push(box([0, handH / 2, H[2]], [0.7, handH, 0.4], 0, 'frame'));
   return pose;
 }
+
+// 固定握點後，沿前後方向平移軀幹與腿，再用同一節段質量求重心落在握點支撐線。
+function suspendedPose(P, e, type) {
+  const dip = type === 'dips', assisted = type === 'assistpullup';
+  const handY = dip ? 1.18 : 2.35;
+  const handX = dip ? 0.32 : 0.167 * P.width;
+  const handZ = 0;
+  const lean = rad(P.lean) * (dip ? 1 : -1);
+  const shoulderY = dip ? lerp(1.58, 1.31 - 0.08 * P.depth, e) : lerp(2.17, 1.77, e);
+  const make = (shift) => {
+    const u = [0, Math.cos(lean), Math.sin(lean)];
+    const hip = [0, shoulderY - BODY.Ltr * u[1], shift];
+    const pose = { R: {}, warn: [], ok: true, ...trunkFrame(hip, u) };
+    pose.girdle = { ret: rad(dip ? lerp(-5, 9, e) : lerp(10, -5, e)), elev: rad(dip ? -5 : lerp(-8, 16, e)) };
+    const S = toWorld(pose, shoulderLocal(pose.girdle));
+    const H = [handX, handY, handZ];
+    // 跪墊時小腿折在身後；徒手懸垂則雙膝微彎、腳離地。
+    if (assisted) {
+      // 輔助機的膝墊固定在握點略前方；膝蓋落在固定墊上，髖與踝由腿長決定。
+      const kneeZ = 0.05, dz = kneeZ - hip[2];
+      const kneeY = hip[1] - Math.sqrt(Math.max(0.01, BODY.Lt ** 2 - dz ** 2));
+      const ankle = [0.14, kneeY - Math.sqrt(BODY.Ls ** 2 - 0.12 ** 2), kneeZ - 0.12];
+      pose.R.hip = [BODY.hipHalf, hip[1], hip[2]];
+      pose.R.knee = [0.12, kneeY, kneeZ]; pose.R.ankle = ankle;
+      pose.R.toe = [ankle[0], ankle[1] - 0.048, ankle[2] - 0.19];
+      pose.R.heel = [ankle[0], ankle[1] - 0.048, ankle[2] + 0.06];
+      pose.toeDir = [0, 0, -1];
+      if (Math.abs(dz) >= BODY.Lt) { pose.ok = false; pose.conflict = '骨盆與固定膝墊距離超出大腿長'; }
+    } else {
+      const ankle = [0.14, hip[1] - (dip ? 0.52 : 0.7), hip[2] - (dip ? 0.28 : 0.18)];
+      if (!legChain(pose, ankle, [0, 0, -1], [BODY.hipHalf, hip[1], hip[2]])) {
+        pose.ok = false; pose.conflict = '腿部姿勢超出可達範圍';
+      }
+    }
+    const pole = dip ? [1, 0, -0.25] : P.grip === 'sup' ? [0.5, 0, 1] : [1, 0, 0.1];
+    if (!armChain(pose, S, H, pole)) {
+      pose.ok = false; pose.conflict = '手臂長度無法到達固定握點';
+    }
+    pose.loadPt = [BODY.hipHalf / 2, hip[1], hip[2]];
+    if (assisted) pose.kneePad = pose.R.knee;
+    return pose;
+  };
+  let lo = -0.45, hi = 0.45;
+  for (let i = 0; i < 34; i++) {
+    const mid = (lo + hi) / 2;
+    const p = make(mid);
+    if (bodyweightCenter(p, P, assisted ? P.assist : 0).z > handZ) hi = mid;
+    else lo = mid;
+  }
+  const pose = make((lo + hi) / 2);
+  if (Math.abs(bodyweightCenter(pose, P, assisted ? P.assist : 0).z - handZ) > 0.025) {
+    pose.warn.push('重心未落在手部支撐線，懸垂姿勢不穩');
+  }
+  pose.handContact = pose.R.hand;
+  pose.bar = [0, handY, handZ];
+  pose.barW = (P.load || 0) / BODY.mass;
+  pose.armJoints = ['shoulder', 'elbow'];
+  if (dip) {
+    pose.barStyle = 'none';
+    pose.boxes = [
+      ...[-1, 1].map((s) => box([s * handX, handY, -0.04], [0.055, 0.055, 0.85], 0, 'frame')),
+      ...[-1, 1].map((s) => box([s * handX, handY / 2, -0.34], [0.065, handY, 0.065], 0, 'frame')),
+    ];
+  } else {
+    pose.bar = [0, handY, handZ]; pose.barStyle = { len: Math.max(1.2, 2 * handX + 0.18) };
+    pose.supinated = P.grip === 'sup';
+    pose.boxes = [
+      ...[-1, 1].map((s) => box([s * 0.75, handY / 2, -0.4], [0.055, handY, 0.055], 0, 'frame')),
+      ...[-1, 1].map((s) => box([s * 0.75, 0.025, -0.4], [0.35, 0.05, 0.5], 0, 'frame')),
+      ...[-1, 1].map((s) => box([s * 0.75, handY, -0.2], [0.055, 0.055, 0.45], 0, 'frame')),
+    ];
+    if (assisted) {
+      pose.boxes.push(box([0, pose.R.knee[1] - 0.065, pose.R.knee[2]], [0.46, 0.1, 0.34]));
+      pose.boxes.push(box([0, (pose.R.knee[1] - 0.1) / 2, -0.4], [0.09, pose.R.knee[1] - 0.1, 0.09], 0, 'frame'));
+      pose.boxes.push(box([0, pose.R.knee[1] - 0.1, -0.175], [0.09, 0.06, 0.45], 0, 'frame'));
+    }
+  }
+  return pose;
+}
+function dipsPose(P, e) { return suspendedPose(P, e, 'dips'); }
+function pullupPose(P, e) { return suspendedPose(P, e, P.assist === undefined ? 'pullup' : 'assistpullup'); }
 
 export function solvePose(lift, P, e) {
   const pose = LIFTS[lift].pose(P, e);
@@ -3143,6 +3254,17 @@ function pushupReactions(pose, P, W, out) {
   const hand = [0, handFy, 0], foot = [0, footFy, 0];
   out.push({ p: pose.handContact, F: hand, region: 'fore' }, { p: pose.footContact, F: foot, region: 'foot' });
   pose.support = { hand, foot }; pose.cop = pose.footContact;
+  pose.forceLine = { p: pose.handContact, d: [0, 1, 0], is3d: true };
+}
+
+function handSupportReactions(pose, P, W, out) {
+  // 單一手部支撐線：姿勢求解已使含負重、膝墊的總重心與固定握點同一 Z。
+  // 雙槓各手獨立承重；引體的剛體單槓另容許雙手沿槓互推／互拉。
+  const Fy = -out.reduce((s, f) => s + f.F[1], 0);
+  const F = [0, Fy, 0];
+  if (pose.barStyle !== 'none') minimizeAxialMoment(pose, F, Fy * 0.5);
+  out.push({ p: pose.handContact, F, region: 'fore' });
+  pose.support = { hand: F, knee: P.assist ? [0, P.assist * G / 2, 0] : null };
   pose.forceLine = { p: pose.handContact, d: [0, 1, 0], is3d: true };
 }
 
