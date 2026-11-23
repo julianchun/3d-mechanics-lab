@@ -1,6 +1,6 @@
 // 清單預設姿勢的生理合理性驗收；每條肌肉只比較主動活化 a，避免被動張力與顯示截斷掩蓋超載。
 import { CATALOG } from '../src/catalog.js';
-import { analyze, defaultParams } from '../src/biomech.js';
+import { analyze, defaultParams, BODY } from '../src/biomech.js';
 
 // 排名用畫面顯示的 s（主動活化加被動份額）；超載門檻只用未截斷的 a。
 // 文獻趨勢見 docs/references.md；同一肌肉的不同動作峰值不等於跨肌肉 EMG 百分比。
@@ -16,6 +16,7 @@ const RANKS = {
   'back-extension': { top3: ['erec', 'hams', 'gmax'] },
   bench: { first: ['pecs'] }, 'incline-bench': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'cg-bench': { top3: ['trilat'] },
   'floor-press': { first: ['pecs'] }, 'db-bench': { first: ['pecs'] }, 'db-bench-incline': { first: ['pecs', 'adelt'], allTop3: ['pecs', 'adelt'] }, 'chest-press': { top3: ['pecs'] }, ohp: { top2: ['adelt'] },
+  pushup: { top2: ['pecs'] }, 'pushup-feet': { top2: ['pecs'] }, 'pushup-hands': { top2: ['pecs'] },
   'db-press': { top2: ['adelt'] },
   'pec-deck': { first: ['pecs', 'pecc'] },
   'reverse-deck': { top2: ['pdelt'] }, 'db-reverse-fly': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
@@ -38,6 +39,20 @@ const RANKS = {
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  ...[
+    ['pushup', '胸大肌峰值排名第四'], ['pushup-feet', '胸大肌未進前二'], ['pushup-hands', '胸大肌峰值排名第三'],
+  ].map(([id, current]) => ({
+    id, rule: 'rank:top2', kind: '新動作', current,
+    cause: '固定手部支撐下，現有肩部三軸力矩與肌肉分配把部分需求分給背闊肌、三角肌及肱三頭；缺少此動作的三維關節力矩驗證',
+    fix: '取得伏地挺身／雙槓撐體的同步三維運動學、測力與肌電資料，再核對肩部力矩分解，暫不調 MUSCLES',
+  })),
+  ...Object.entries({
+    pushup: ['trilat'], 'pushup-feet': ['trilat'], 'pushup-hands': ['trilat'],
+  }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
+    id, rule: `activation:${muscle}`, kind: '新動作', current: `${muscle} 的模型主動活化超過 1`,
+    cause: '全身重量由手部支撐，現有肌肉最大力及肩肘力臂估計不足以承受部分姿勢的準靜態力矩；未以自體重量動作測力資料校準',
+    fix: '以量測的手部反力與關節力矩驗證姿勢及負荷，再檢討共用肌肉模型，暫不手調常數',
+  }))),
   {
     id: 'db-bench-incline', rule: 'rank:first', kind: '新動作', current: '上斜 30° 啞鈴臥推底端三角肌中束（0.74）高於前三角肌（0.57）與胸大肌（0.36）',
     cause: '上斜 30° 下放至較深拉伸端（depth=0.6）時上臂低於肩線且向外展開，重力於肩外展軸（shSide）需求上升，使現有中三角外展分攤於底端超過前三角與胸大肌（類似上斜槓鈴臥推底端 mdelt=0.64）',
@@ -169,6 +184,18 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
     }
   }
   checked++;
+}
+// 自體重量支撐力須承擔整體重量；輔助膝墊減少的是實際手部反力。
+for (const c of CATALOG.filter((item) => ['pushup'].includes(item.lift))) {
+  const P = { ...defaultParams(c.lift), ...c.set };
+  for (let i = 0; i <= N; i++) {
+    const pose = analyze(c.lift, P, i / N).pose;
+    const hand = pose.support.hand[1], foot = pose.support.foot?.[1] || 0, knee = pose.support.knee?.[1] || 0;
+    const expected = (BODY.mass + (P.load || 0)) * 9.81 / 2;
+    if (Math.abs(hand + foot + knee - expected) > 1e-5 || pose.warn.some((w) => w.includes('重心未落在手部支撐線'))) {
+      errors.push(`${c.id} e=${(i / N).toFixed(3)} 支撐與重心未平衡`); break;
+    }
+  }
 }
 // 掃過站距 0～1 的每個介面刻度；股廣肌群須全程維持第一位。
 for (let i = 0; i <= 100; i++) {

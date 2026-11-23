@@ -225,6 +225,21 @@ function ik2(root, target, L1, L2, pole) {
 // ---------- 動作定義 ----------
 // mech：A 改姿勢／軌跡、B 等長用力、C 協同肌偏好
 export const LIFTS = {
+  pushup: {
+    name: '伏地挺身', topLabel: '撐起', bottomLabel: '胸口接近地面',
+    viewCenter: [0, 0.42, 0], viewScale: 1.55,
+    ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
+    pose: pushupPose, loads: bodyweightLoads, reactions: pushupReactions,
+    params: [
+      { key: 'grip', label: '手距（× 肩寬）', left: '窄', right: '寬', min: 0.8, max: 1.8, step: 0.05, def: 1.2, joint: 'hand', mech: 'A' },
+      { key: 'flare', label: '手肘外展角', left: '貼近身體', right: '向兩側', min: 20, max: 80, step: 1, def: 45, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'handFwd', label: '手掌前後位置', left: '肩後方', right: '肩前方', min: -0.1, max: 0.15, step: 0.01, def: 0.04, joint: 'hand', mech: 'A', unit: ' m' },
+      { key: 'elevation', label: '墊高位置', type: 'select', options: [['flat', '平地'], ['feet', '腳墊高'], ['hands', '手墊高']], def: 'flat', joint: 'equip', mech: 'A' },
+      { key: 'pelvis', label: '骨盆位置', left: '稍下沉', right: '稍上翹', min: -0.04, max: 0.04, step: 0.01, def: 0, joint: 'hip', mech: 'A', unit: ' m' },
+      { key: 'load', label: '負重背心', left: '徒手', right: '30 kg', min: 0, max: 30, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
+    ],
+    standardNote: '掌根壓穩、腳尖著地，軀幹與腿維持一直線，下放到胸口接近地面。',
+  },
   squat: {
     name: '深蹲', bottomLabel: '最低點',
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
@@ -3030,6 +3045,39 @@ function gobletPose(P, e) {
   return pose;
 }
 
+function pushupPose(P, e) {
+  const handH = P.elevation === 'hands' ? 0.2 : 0;
+  const footH = P.elevation === 'feet' ? 0.2 : 0;
+  const ankle = [0.14, BODY.ankleH + footH, -1.0];
+  const shoulderY = handH + lerp(0.58, 0.27, e);
+  const bodyReach = BODY.Lt + BODY.Ls + BODY.Ltr - 0.02;
+  const shoulderZ = (y) => ankle[2] + Math.sqrt(bodyReach ** 2 - (y - ankle[1]) ** 2);
+  const shoulder = [0, shoulderY, shoulderZ(shoulderY)];
+  const u = norm(sub(shoulder, [0, ankle[1], ankle[2]]));
+  const hip = sub(shoulder, mul(u, BODY.Ltr));
+  hip[1] += P.pelvis;
+  const pose = { R: {}, warn: [], ok: true, ...trunkFrame(hip, u) };
+  pose.girdle = { ret: rad(lerp(-6, 8, e)), elev: rad(-4) };
+  if (!legChain(pose, ankle, [0, 0, -1], [BODY.hipHalf, hip[1], hip[2]])) {
+    pose.ok = false; pose.conflict = '腳尖與骨盆距離超出腿長';
+  }
+  const S = toWorld(pose, shoulderLocal(pose.girdle));
+  const H = [0.167 * P.grip, handH + 0.08, shoulderZ(handH + 0.58) + P.handFwd + 0.04];
+  const a = rad(P.flare);
+  if (!armChain(pose, S, H, [Math.sin(a), 0, -Math.cos(a)])) {
+    pose.ok = false; pose.conflict = '手掌與肩膀距離超出手臂長';
+  }
+  pose.handContact = [H[0], handH + 0.02, H[2]];
+  pose.footContact = [pose.R.toe[0], footH + 0.02, pose.R.toe[2]];
+  pose.loadPt = add(pose.Pc, mul(pose.u, 0.25));
+  pose.bar = [0, H[1], H[2]]; pose.barStyle = 'none'; pose.barW = P.load / BODY.mass;
+  pose.armJoints = ['shoulder', 'elbow'];
+  pose.boxes = [];
+  if (footH) pose.boxes.push(box([0, footH / 2, pose.footContact[2]], [0.5, footH, 0.4], 0, 'frame'));
+  if (handH) pose.boxes.push(box([0, handH / 2, H[2]], [0.7, handH, 0.4], 0, 'frame'));
+  return pose;
+}
+
 export function solvePose(lift, P, e) {
   const pose = LIFTS[lift].pose(P, e);
   pose.lift = lift;
@@ -3077,6 +3125,25 @@ function handBarLoads(pose, P, W, out) {
 function benchLoads(pose, P, W, out) {
   out.push({ p: pose.R.hand, F: [0, -(pose.barW * W) / 2, 0], region: 'fore' });
   if (P.pullApart > 0) out.push({ p: pose.R.hand, F: [-P.pullApart * 0.12 * W, 0, 0], region: 'fore' });
+}
+
+function bodyweightLoads(pose, P, W, out) {
+  if (P.load > 0) out.push({ p: pose.loadPt, F: [0, -P.load * G / 2, 0], region: pose.loadRegion || 'trunk' });
+  if (P.assist > 0) out.push({ p: pose.kneePad, F: [0, P.assist * G / 2, 0], region: 'thigh', ext: true });
+}
+
+function pushupReactions(pose, P, W, out) {
+  // 假設掌根、腳尖的水平接觸力皆為零：外力僅有重力，所以不需摩擦。
+  // 由腳尖取矩求手反力，再用垂直力平衡求腳反力；左右各承擔一半。
+  const footZ = pose.footContact[2], handZ = pose.handContact[2];
+  const totalFy = out.reduce((s, f) => s + f.F[1], 0);
+  const moment = -out.reduce((s, f) => s + (f.p[2] - footZ) * f.F[1], 0);
+  const handFy = moment / (handZ - footZ), footFy = -totalFy - handFy;
+  if (handFy < 0 || footFy < 0) pose.warn.push('手或腳會離開支撐面');
+  const hand = [0, handFy, 0], foot = [0, footFy, 0];
+  out.push({ p: pose.handContact, F: hand, region: 'fore' }, { p: pose.footContact, F: foot, region: 'foot' });
+  pose.support = { hand, foot }; pose.cop = pose.footContact;
+  pose.forceLine = { p: pose.handContact, d: [0, 1, 0], is3d: true };
 }
 
 // 啞鈴共用負重：兩手各自承受自己那顆啞鈴的重力，不套用剛體槓 minimizeAxialMoment（barAxial = false）。

@@ -16,6 +16,7 @@ export const EQUIPMENT = [
   ['dumbbell', '啞鈴'],
   ['machine', '器械'],
   ['cable', '滑輪'],
+  ['bodyweight', '自體重量'],
 ];
 
 export const CATALOG = [
@@ -44,6 +45,9 @@ export const CATALOG = [
   { id: 'floor-press', name: '地板臥推', cat: 'hpush', equip: 'barbell', lift: 'bench', set: { surface: 'floor', incline: 0, grip: 1.6, flare: 45, touch: 0.6 }, alias: ['floor press'] },
   { id: 'db-bench', name: '啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '0' }, alias: ['dumbbell bench', 'db bench', '啞鈴平板臥推'] },
   { id: 'db-bench-incline', name: '上斜啞鈴臥推', cat: 'hpush', equip: 'dumbbell', lift: 'dbbench', set: { incline: '30' }, alias: ['incline dumbbell press', 'incline db bench', '啞鈴上斜臥推'] },
+  { id: 'pushup', name: '伏地挺身', cat: 'hpush', equip: 'bodyweight', lift: 'pushup', set: { elevation: 'flat' }, alias: ['push-up', 'push up'] },
+  { id: 'pushup-feet', name: '下斜伏地挺身', cat: 'hpush', equip: 'bodyweight', lift: 'pushup', set: { elevation: 'feet' }, alias: ['decline push-up'] },
+  { id: 'pushup-hands', name: '上斜伏地挺身', cat: 'hpush', equip: 'bodyweight', lift: 'pushup', set: { elevation: 'hands' }, alias: ['incline push-up'] },
   { id: 'chest-press', name: '坐姿胸推機', cat: 'hpush', equip: 'machine', lift: 'chestpress', set: {}, alias: ['chest press'] },
   { id: 'pec-deck', name: '蝴蝶機', cat: 'hpush', equip: 'machine', lift: 'pecdeck', set: {}, alias: ['pec deck', 'fly', '夾胸'] },
   { id: 'reverse-deck', name: '反向蝴蝶機', cat: 'hpull', equip: 'machine', lift: 'reversedeck', set: {}, alias: ['reverse pec deck', '後三角飛鳥'] },
