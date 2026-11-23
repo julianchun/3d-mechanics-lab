@@ -129,6 +129,10 @@ export const SOURCES = {
   },
   'pullup-wide': { assumptions: ['正握寬距 1.8× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
   chinup: { assumptions: ['反握 1.1× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
+  'assist-pullup': {
+    assumptions: ['雙膝跪在機台墊上，膝墊向上推力等於所選輔助公斤數乘重力加速度；手部反力等於全身重量減膝墊推力。每幀以身體重量、腰掛負重與膝墊力求重心落在手部支撐線；機台柱高與墊尺寸為未查證估計。', '其餘握槓與肩肘肩胛分析同引體向上。'], refs: ['dickie2017'], trendNote: '輔助重量的單調檢查為模型內部物理檢查，未找到直接比較各配重輔助引體機全身 EMG 的研究。',
+  },
+  'assist-chinup': { assumptions: ['反握 1.1× 肩寬、膝墊向上輔助；其餘支撐平衡同輔助引體機。'], refs: ['dickie2017'] },
   'squat-high': {
     assumptions: [
       '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
@@ -543,7 +547,7 @@ export const SOURCES = {
 
 // 當參數被使用者自訂、對不上清單變化式時，依 lift 對應預設來源鍵
 const LIFT_FALLBACK_ID = {
-  pushup: 'pushup', dips: 'dips', pullup: 'pullup',
+  pushup: 'pushup', dips: 'dips', pullup: 'pullup', assistpullup: 'assist-pullup',
   squat: 'squat-high',
   deadlift: 'deadlift',
   rdl: 'rdl',

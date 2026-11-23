@@ -19,6 +19,7 @@ const RANKS = {
   pushup: { top2: ['pecs'] }, 'pushup-feet': { top2: ['pecs'] }, 'pushup-hands': { top2: ['pecs'] },
   dips: { top2: ['pecs', 'trilat'] }, 'dips-upright': { top2: ['pecs', 'trilat'] },
   pullup: { top2: ['lat'] }, 'pullup-wide': { top2: ['lat'] }, chinup: { top2: ['lat', 'bic'] },
+  'assist-pullup': { top2: ['lat'] }, 'assist-chinup': { top2: ['lat'] },
   'db-press': { top2: ['adelt'] },
   'pec-deck': { first: ['pecs', 'pecc'] },
   'reverse-deck': { top2: ['pdelt'] }, 'db-reverse-fly': { top2: ['pdelt'] }, 'machine-press': { top2: ['adelt'] },
@@ -191,7 +192,7 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   checked++;
 }
 // 自體重量支撐力須承擔整體重量；輔助膝墊減少的是實際手部反力。
-for (const c of CATALOG.filter((item) => ['pushup', 'dips', 'pullup'].includes(item.lift))) {
+for (const c of CATALOG.filter((item) => ['pushup', 'dips', 'pullup', 'assistpullup'].includes(item.lift))) {
   const P = { ...defaultParams(c.lift), ...c.set };
   for (let i = 0; i <= N; i++) {
     const pose = analyze(c.lift, P, i / N).pose;
@@ -200,6 +201,19 @@ for (const c of CATALOG.filter((item) => ['pushup', 'dips', 'pullup'].includes(i
     if (Math.abs(hand + foot + knee - expected) > 1e-5 || pose.warn.some((w) => w.includes('重心未落在手部支撐線'))) {
       errors.push(`${c.id} e=${(i / N).toFixed(3)} 支撐與重心未平衡`); break;
     }
+  }
+}
+// 同一握距與姿勢掃描 0～60 kg；全行程肌肉主動活化總量應隨膝墊輔助增加而下降。
+for (const grip of ['pro', 'sup']) {
+  let previous = Infinity;
+  for (let assist = 0; assist <= 60; assist += 5) {
+    const P = { ...defaultParams('assistpullup'), grip, width: grip === 'sup' ? 1.1 : 1.35, assist };
+    let total = 0;
+    for (let i = 0; i <= N; i++) {
+      total += Object.values(analyze('assistpullup', P, i / N).mus).reduce((s, m) => s + m.a, 0);
+    }
+    if (!(total < previous)) errors.push(`assistpullup ${grip} 輔助 ${assist} kg 時活化總量未單調下降`);
+    previous = total;
   }
 }
 // 掃過站距 0～1 的每個介面刻度；股廣肌群須全程維持第一位。
