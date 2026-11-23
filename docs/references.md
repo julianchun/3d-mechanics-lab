@@ -500,3 +500,14 @@
 - **器械肩推**：[Saeterbakken & Fimland 2013](https://pubmed.ncbi.nlm.nih.gov/23096062/) 比較肩推身體姿勢及負重型式；未量本模型固定握把軌跡。
 - **站姿／坐姿提踵**：[Kinoshita et al. 2023](https://pubmed.ncbi.nlm.nih.gov/38156065/) 於 12 週訓練發現站姿腓腸肌肥大高於坐姿、比目魚肌增長相近；其圖 1 的 OpenSim 推算顯示同一踝角下站姿腓腸肌操作長度較長，此一長度方向列入模型趨勢檢查。肌肥大結果不能直接當成即時肌電或模型活化驗證。[Paz et al. 2021](https://pubmed.ncbi.nlm.nih.gov/33992275/) 的小樣本肌電研究指出站坐姿與踝部被動拉伸條件交互影響腓腸肌兩頭，未支持簡單的「站姿 EMG 一定高於坐姿」規則。
 - **臀外展／內收機**：[de Almeida Paz et al. 2022](https://pubmed.ncbi.nlm.nih.gov/35500965/) 量外展機與兩種徒手外展的臀中肌、闊筋膜張肌肌電；未研究內收機或前傾差異。模型沒有臀大肌上束獨立肌束，無法驗證前傾參與趨勢。
+
+---
+
+### 42–49. F 階段第一批啞鈴動作
+
+- **啞鈴臥推（平板／上斜 30°）**：[Saeterbakken et al. 2011](https://pubmed.ncbi.nlm.nih.gov/21225489/) 與 [Welsch et al. 2005](https://pubmed.ncbi.nlm.nih.gov/15903389/) 顯示 1RM／6RM 下啞鈴與槓鈴臥推之胸大肌峰值肌電相近（啞鈴 1RM 約輕 14–17%）；[Farias et al. 2017](https://pubmed.ncbi.nlm.nih.gov/27669189/) 於多組 10RM 觀察到啞鈴臥推胸大肌 sEMG 高於槓鈴。上斜 30° vs 平板 0° 趨勢間接參考 [Rodríguez-Ridao et al. 2020](https://doi.org/10.3390/ijerph17197339) 與 [Lauver et al. 2016](https://pubmed.ncbi.nlm.nih.gov/25799093/)。
+- **坐姿啞鈴肩推**：[Saeterbakken & Fimland 2013](https://pubmed.ncbi.nlm.nih.gov/23096062/) 比較站姿／坐姿 × 槓鈴／啞鈴肩推，顯示站姿較坐姿誘發更高前三角肌 sEMG，槓鈴較啞鈴誘發更高肱三頭肌 sEMG。
+- **啞鈴側平舉**：[Campos et al. 2020](https://pubmed.ncbi.nlm.nih.gov/33312291/) 顯示側平舉三角肌中束 sEMG 顯著高於臥推與飛鳥；[Coratella et al. 2020](https://pubmed.ncbi.nlm.nih.gov/32824894/) 比較不同肱骨旋轉與屈肘變化式之三角肌 sEMG；[Reinold et al. 2007](https://pubmed.ncbi.nlm.nih.gov/18174934/) 探討肩胛平面外展中棘上肌與三角肌活化。
+- **啞鈴彎舉／錘式彎舉**：[Coratella et al. 2023](https://pubmed.ncbi.nlm.nih.gov/36976950/) 直接比較反握、對握（錘式）與正握彎舉，顯示向心期反握肱二頭肌 sEMG 顯著高於對握（約 +12%），對握前三角肌穩定活化顯著高於反握（約 +9%）；亦參考 [Kleiber et al. 2015](https://pubmed.ncbi.nlm.nih.gov/26300781/) 與 [Marcolin et al. 2018](https://pubmed.ncbi.nlm.nih.gov/30013836/)。
+- **俯身啞鈴反向飛鳥**：[Schoenfeld et al. 2013](https://pubmed.ncbi.nlm.nih.gov/23538944/) 比較水平外展時對握與正握對後三角與棘下肌 sEMG 之影響；[Franke et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24947920/) 比較反向飛鳥與多關節拉類動作之後三角活化；肩部力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)。
+- **高腳杯深蹲**：[Collins et al. 2021](https://pubmed.ncbi.nlm.nih.gov/34341315/) 比較高腳杯深蹲與地雷管深蹲之肌電與地面反作用力，證實高腳杯深蹲具高股四頭肌活化與較高垂直負荷；前側負重使軀幹較背蹲直立間接參考 [Yavuz et al. 2015](https://pubmed.ncbi.nlm.nih.gov/25630691/) 與 [Krzyszkowski & Kipp 2020](https://pubmed.ncbi.nlm.nih.gov/32544021/)。

@@ -1,18 +1,18 @@
 {
   "modelVersion": "0.7.2",
   "summary": {
-    "total": 47,
-    "pass": 44,
+    "total": 56,
+    "pass": 53,
     "fail": 3,
     "byEvidence": {
       "direct": {
-        "total": 27,
-        "pass": 25,
+        "total": 32,
+        "pass": 30,
         "fail": 2
       },
       "indirect": {
-        "total": 15,
-        "pass": 15,
+        "total": 19,
+        "pass": 19,
         "fail": 0
       },
       "inference": {
@@ -229,6 +229,18 @@
         "expected": "深屈端 > 淺屈端",
         "ref": "Escamilla 1998 (PMID 9565938); Escamilla 2001 (PMID 11194098)",
         "model": "深屈端 = 117.6 N·m vs 淺屈端 = 9.2 N·m"
+      },
+      {
+        "index": 56,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "高腳杯深蹲 vs 高槓深蹲",
+        "compare": "高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角",
+        "expected": "高腳杯 < 高槓（較直立）",
+        "ref": "Yavuz 2015 (PMID 25630691，前側負重深蹲軀幹前傾角顯著小於背蹲，間接對應高腳杯深蹲); Collins 2021 (PMID 34341315)",
+        "model": "高腳杯 = 37.5 ° vs 高槓 = 46.6 °"
       }
     ],
     "smith-squat": [
@@ -649,6 +661,18 @@
         "expected": "平板臥推 > 蝴蝶機",
         "ref": "Rocha Júnior, Gentil et al. 2007 (DOI 10.1590/S1517-86922007000100012，實測臥推三頭肌 EMG 顯著高於蝴蝶機)",
         "model": "平板臥推 = 0.471 a vs 蝴蝶機 = 0.000 a"
+      },
+      {
+        "index": 50,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "啞鈴側平舉 vs 平板臥推",
+        "compare": "啞鈴側平舉 vs 平板臥推 — 三角肌中束活化",
+        "expected": "側平舉 > 平板臥推",
+        "ref": "Campos et al. 2020 (PMID 33312291，側平舉三角肌中束 sEMG 顯著高於臥推)",
+        "model": "側平舉 = 0.650 a vs 平板臥推 = 0.265 a"
       }
     ],
     "cg-bench": [
@@ -1069,6 +1093,214 @@
         "expected": "站姿腓腸肌較長",
         "ref": "Kinoshita et al. 2023 (PMID 38156065，OpenSim 圖 1 顯示站姿腓腸肌操作長度高於坐姿；屬文獻中的模型推算，非即時肌電)",
         "model": "站姿 = 1.015 l vs 坐姿 = 0.930 l"
+      }
+    ],
+    "db-curl": [
+      {
+        "index": 48,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "啞鈴彎舉（反握 vs 錘式）",
+        "compare": "反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化",
+        "expected": "反握 > 錘式對握",
+        "ref": "Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)",
+        "model": "反握 = 0.764 a vs 錘式對握 = 0.587 a"
+      },
+      {
+        "index": 49,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "啞鈴彎舉（錘式 vs 反握）",
+        "compare": "錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化",
+        "expected": "錘式對握 > 反握",
+        "ref": "Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)",
+        "model": "錘式對握 = 0.751 a vs 反握 = 0.712 a"
+      }
+    ],
+    "hammer-curl": [
+      {
+        "index": 48,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "啞鈴彎舉（反握 vs 錘式）",
+        "compare": "反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化",
+        "expected": "反握 > 錘式對握",
+        "ref": "Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)",
+        "model": "反握 = 0.764 a vs 錘式對握 = 0.587 a"
+      },
+      {
+        "index": 49,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "啞鈴彎舉（錘式 vs 反握）",
+        "compare": "錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化",
+        "expected": "錘式對握 > 反握",
+        "ref": "Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)",
+        "model": "錘式對握 = 0.751 a vs 反握 = 0.712 a"
+      }
+    ],
+    "lat-raise": [
+      {
+        "index": 50,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "啞鈴側平舉 vs 平板臥推",
+        "compare": "啞鈴側平舉 vs 平板臥推 — 三角肌中束活化",
+        "expected": "側平舉 > 平板臥推",
+        "ref": "Campos et al. 2020 (PMID 33312291，側平舉三角肌中束 sEMG 顯著高於臥推)",
+        "model": "側平舉 = 0.650 a vs 平板臥推 = 0.265 a"
+      }
+    ],
+    "ohp": [
+      {
+        "index": 51,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
+        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 肱三頭肌活化",
+        "expected": "站姿槓鈴 > 坐姿啞鈴",
+        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，槓鈴肩推肱三頭肌 sEMG 顯著高於啞鈴肩推)",
+        "model": "站姿槓鈴 = 0.623 a vs 坐姿啞鈴 = 0.292 a"
+      },
+      {
+        "index": 52,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
+        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 前三角肌活化",
+        "expected": "站姿槓鈴 > 坐姿啞鈴",
+        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，站姿肩推前三角肌 sEMG 顯著高於坐姿)",
+        "model": "站姿槓鈴 = 0.615 a vs 坐姿啞鈴 = 0.397 a"
+      }
+    ],
+    "db-press": [
+      {
+        "index": 51,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
+        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 肱三頭肌活化",
+        "expected": "站姿槓鈴 > 坐姿啞鈴",
+        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，槓鈴肩推肱三頭肌 sEMG 顯著高於啞鈴肩推)",
+        "model": "站姿槓鈴 = 0.623 a vs 坐姿啞鈴 = 0.292 a"
+      },
+      {
+        "index": 52,
+        "pass": true,
+        "tie": false,
+        "evidence": "direct",
+        "evidenceLabel": "文獻直接量到",
+        "exercise": "站姿槓鈴肩推 vs 坐姿啞鈴肩推",
+        "compare": "站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 前三角肌活化",
+        "expected": "站姿槓鈴 > 坐姿啞鈴",
+        "ref": "Saeterbakken & Fimland 2013 (PMID 23096062，站姿肩推前三角肌 sEMG 顯著高於坐姿)",
+        "model": "站姿槓鈴 = 0.615 a vs 坐姿啞鈴 = 0.397 a"
+      }
+    ],
+    "db-bench-incline": [
+      {
+        "index": 53,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
+        "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
+        "expected": "上斜 30° > 平板 0°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上斜 30° 前三角高於平板，間接支持啞鈴上斜趨勢)",
+        "model": "上斜 30° = 0.586 a vs 平板 0° = 0.457 a"
+      },
+      {
+        "index": 54,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（平板 0° vs 上斜 30°）",
+        "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
+        "expected": "平板 0° > 上斜 30°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)",
+        "model": "平板 0° = 0.536 a vs 上斜 30° = 0.365 a"
+      },
+      {
+        "index": 55,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
+        "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
+        "expected": "上斜 30° > 平板 0°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093，槓鈴上斜 30° 上胸高於平板，間接支持啞鈴上斜趨勢)",
+        "model": "上斜 30° = 0.203 a vs 平板 0° = 0.189 a"
+      }
+    ],
+    "db-bench": [
+      {
+        "index": 53,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
+        "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
+        "expected": "上斜 30° > 平板 0°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上斜 30° 前三角高於平板，間接支持啞鈴上斜趨勢)",
+        "model": "上斜 30° = 0.586 a vs 平板 0° = 0.457 a"
+      },
+      {
+        "index": 54,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（平板 0° vs 上斜 30°）",
+        "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
+        "expected": "平板 0° > 上斜 30°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)",
+        "model": "平板 0° = 0.536 a vs 上斜 30° = 0.365 a"
+      },
+      {
+        "index": 55,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "啞鈴臥推（上斜 30° vs 平板 0°）",
+        "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
+        "expected": "上斜 30° > 平板 0°",
+        "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093，槓鈴上斜 30° 上胸高於平板，間接支持啞鈴上斜趨勢)",
+        "model": "上斜 30° = 0.203 a vs 平板 0° = 0.189 a"
+      }
+    ],
+    "goblet-squat": [
+      {
+        "index": 56,
+        "pass": true,
+        "tie": false,
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
+        "exercise": "高腳杯深蹲 vs 高槓深蹲",
+        "compare": "高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角",
+        "expected": "高腳杯 < 高槓（較直立）",
+        "ref": "Yavuz 2015 (PMID 25630691，前側負重深蹲軀幹前傾角顯著小於背蹲，間接對應高腳杯深蹲); Collins 2021 (PMID 34341315)",
+        "model": "高腳杯 = 37.5 ° vs 高槓 = 46.6 °"
       }
     ]
   }

@@ -720,6 +720,128 @@ const CHECKS = [
       return { labelA: '站姿', valA: a, labelB: '坐姿', valB: b, unit: 'l', pass: a > b };
     },
   },
+  // ---------- 26. 啞鈴彎舉：反握 vs 錘式對握 ----------
+  {
+    ids: ['db-curl', 'hammer-curl'],
+    exercise: '啞鈴彎舉（反握 vs 錘式）',
+    compare: '反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化',
+    ref: 'Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)',
+    evidence: 'direct',
+    expected: '反握 > 錘式對握',
+    run() {
+      const a = peakMus('dbcurl', P('dbcurl', { grip: 'sup' }), 'bic', 'a');
+      const b = peakMus('dbcurl', P('dbcurl', { grip: 'neutral' }), 'bic', 'a');
+      return { labelA: '反握', valA: a, labelB: '錘式對握', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['hammer-curl', 'db-curl'],
+    exercise: '啞鈴彎舉（錘式 vs 反握）',
+    compare: '錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化',
+    ref: 'Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)',
+    evidence: 'direct',
+    expected: '錘式對握 > 反握',
+    run() {
+      const a = peakMus('dbcurl', P('dbcurl', { grip: 'neutral' }), 'adelt', 'a');
+      const b = peakMus('dbcurl', P('dbcurl', { grip: 'sup' }), 'adelt', 'a');
+      return { labelA: '錘式對握', valA: a, labelB: '反握', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 27. 啞鈴側平舉 vs 平板臥推 ----------
+  {
+    ids: ['lat-raise', 'bench'],
+    exercise: '啞鈴側平舉 vs 平板臥推',
+    compare: '啞鈴側平舉 vs 平板臥推 — 三角肌中束活化',
+    ref: 'Campos et al. 2020 (PMID 33312291，側平舉三角肌中束 sEMG 顯著高於臥推)',
+    evidence: 'direct',
+    expected: '側平舉 > 平板臥推',
+    run() {
+      const a = peakMus('latraise', P('latraise'), 'mdelt', 'a');
+      const b = peakMus('bench', P('bench'), 'mdelt', 'a');
+      return { labelA: '側平舉', valA: a, labelB: '平板臥推', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 28. 站姿槓鈴肩推 vs 坐姿啞鈴肩推 ----------
+  {
+    ids: ['ohp', 'db-press'],
+    exercise: '站姿槓鈴肩推 vs 坐姿啞鈴肩推',
+    compare: '站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 肱三頭肌活化',
+    ref: 'Saeterbakken & Fimland 2013 (PMID 23096062，槓鈴肩推肱三頭肌 sEMG 顯著高於啞鈴肩推)',
+    evidence: 'direct',
+    expected: '站姿槓鈴 > 坐姿啞鈴',
+    run() {
+      const a = peakMus('ohp', P('ohp'), 'trilat', 'a');
+      const b = peakMus('dbpress', P('dbpress'), 'trilat', 'a');
+      return { labelA: '站姿槓鈴', valA: a, labelB: '坐姿啞鈴', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['ohp', 'db-press'],
+    exercise: '站姿槓鈴肩推 vs 坐姿啞鈴肩推',
+    compare: '站姿槓鈴肩推 vs 坐姿啞鈴肩推 — 前三角肌活化',
+    ref: 'Saeterbakken & Fimland 2013 (PMID 23096062，站姿肩推前三角肌 sEMG 顯著高於坐姿)',
+    evidence: 'direct',
+    expected: '站姿槓鈴 > 坐姿啞鈴',
+    run() {
+      const a = peakMus('ohp', P('ohp'), 'adelt', 'a');
+      const b = peakMus('dbpress', P('dbpress'), 'adelt', 'a');
+      return { labelA: '站姿槓鈴', valA: a, labelB: '坐姿啞鈴', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 29. 啞鈴臥推：上斜 30° vs 平板 0° ----------
+  {
+    ids: ['db-bench-incline', 'db-bench'],
+    exercise: '啞鈴臥推（上斜 30° vs 平板 0°）',
+    compare: '上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上斜 30° 前三角高於平板，間接支持啞鈴上斜趨勢)',
+    evidence: 'indirect',
+    expected: '上斜 30° > 平板 0°',
+    run() {
+      const a = peakMus('dbbench', P('dbbench', { incline: '30' }), 'adelt', 'a');
+      const b = peakMus('dbbench', P('dbbench', { incline: '0' }), 'adelt', 'a');
+      return { labelA: '上斜 30°', valA: a, labelB: '平板 0°', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['db-bench', 'db-bench-incline'],
+    exercise: '啞鈴臥推（平板 0° vs 上斜 30°）',
+    compare: '平板 0° vs 上斜 30° — 中下胸 (pecs) 活化',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)',
+    evidence: 'indirect',
+    expected: '平板 0° > 上斜 30°',
+    run() {
+      const a = peakMus('dbbench', P('dbbench', { incline: '0' }), 'pecs', 'a');
+      const b = peakMus('dbbench', P('dbbench', { incline: '30' }), 'pecs', 'a');
+      return { labelA: '平板 0°', valA: a, labelB: '上斜 30°', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  {
+    ids: ['db-bench-incline', 'db-bench'],
+    exercise: '啞鈴臥推（上斜 30° vs 平板 0°）',
+    compare: '上斜 30° vs 平板 0° — 上胸 (pecc) 活化',
+    ref: 'Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339); Lauver 2016 (PMID 25799093，槓鈴上斜 30° 上胸高於平板，間接支持啞鈴上斜趨勢)',
+    evidence: 'indirect',
+    expected: '上斜 30° > 平板 0°',
+    run() {
+      const a = peakMus('dbbench', P('dbbench', { incline: '30' }), 'pecc', 'a');
+      const b = peakMus('dbbench', P('dbbench', { incline: '0' }), 'pecc', 'a');
+      return { labelA: '上斜 30°', valA: a, labelB: '平板 0°', valB: b, unit: 'a', pass: a > b };
+    },
+  },
+  // ---------- 30. 高腳杯深蹲 vs 高槓背蹲：軀幹前傾角 ----------
+  {
+    ids: ['goblet-squat', 'squat-high'],
+    exercise: '高腳杯深蹲 vs 高槓深蹲',
+    compare: '高腳杯深蹲 vs 高槓背蹲 — 最低點軀幹前傾角',
+    ref: 'Yavuz 2015 (PMID 25630691，前側負重深蹲軀幹前傾角顯著小於背蹲，間接對應高腳杯深蹲); Collins 2021 (PMID 34341315)',
+    evidence: 'indirect',
+    expected: '高腳杯 < 高槓（較直立）',
+    run() {
+      const a = (atE('goblet', P('goblet'), 1).pose.phi * 180) / Math.PI;
+      const b = (atE('squat', P('squat', { barPos: 'high' }), 1).pose.phi * 180) / Math.PI;
+      return { labelA: '高腳杯', valA: a, labelB: '高槓', valB: b, unit: '°', pass: a < b };
+    },
+  },
 ];
 
 const writeStatus = process.argv.includes('--write-status');
