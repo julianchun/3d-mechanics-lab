@@ -1,0 +1,34 @@
+{
+  "id": "gullett-2009",
+  "source": {
+    "authors": "Gullett JC, Tillman MD, Gutierrez GM, Chow JW",
+    "year": 2009,
+    "title": "A biomechanical comparison of back and front squats in healthy trained individuals",
+    "doi": "10.1519/JSC.0b013e31818546bb",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19002072/",
+    "fullTextUrl": "https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf"
+  },
+  "participants": {
+    "n": 15,
+    "sex": "9 男、6 女",
+    "training": "前後蹲各至少一年、每週至少一次",
+    "massKg": { "mean": 69.7, "sd": 6.2 },
+    "heightM": { "mean": 1.712, "sd": 0.064 }
+  },
+  "protocol": "各自 1RM 的 70%，背蹲平均 61.8±18.6 kg、前蹲平均 48.5±14.1 kg；約肩寬站距、大腿到平行；右腳測力板，取向心與離心最大淨膝伸力矩。兩條件的絕對槓重不同。",
+  "model": "BODY=75 kg、1.75 m；槓重固定 75 kg，無法分別設成研究的 61.8/48.5 kg。stance=0.30 約 38.6 cm、depth=0.55 預設接近平行；模型全行程正力矩峰值除以 75 kg。負重差及準靜態限制會使直接誤差含系統偏差。",
+  "conditions": [
+    {
+      "id": "back", "catalogId": "squat-high", "params": { "barPos": "high", "stance": 0.3, "depth": 0.55 }, "referenceLoadKg": 61.8,
+      "measurements": [
+        { "id": "peak-knee", "layer": "moments", "metric": "kneeExtensionMoment", "sample": { "type": "peak" }, "reference": { "mean": 1, "sd": 0.4, "unit": "Nm/kg", "definition": "向心與離心最大淨膝伸力矩，除以受試者體重" }, "normalization": "mass", "evidence": "text", "location": "Results, Kinetic Data, p. 287（Figure 3 後）", "tolerance": { "absolute": 0.5, "unit": "Nm/kg" } }
+      ]
+    },
+    {
+      "id": "front", "catalogId": "front-squat", "params": { "barPos": "front", "stance": 0.3, "depth": 0.55 }, "referenceLoadKg": 48.5,
+      "measurements": [
+        { "id": "peak-knee", "layer": "moments", "metric": "kneeExtensionMoment", "sample": { "type": "peak" }, "reference": { "mean": 0.7, "sd": 0.2, "unit": "Nm/kg", "definition": "向心與離心最大淨膝伸力矩，除以受試者體重" }, "normalization": "mass", "evidence": "text", "location": "Results, Kinetic Data, p. 287（Figure 3 後）", "tolerance": { "absolute": 0.4, "unit": "Nm/kg" } }
+      ]
+    }
+  ]
+}

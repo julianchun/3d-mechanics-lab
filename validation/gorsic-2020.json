@@ -1,0 +1,41 @@
+{
+  "id": "gorsic-2020",
+  "source": {
+    "authors": "Goršič M, Rochelle LE, Layer JS, Smith DT, Novak D, Dai B",
+    "year": 2020,
+    "title": "Biomechanical comparisons of back and front squats with a straight bar and four squats with a transformer bar",
+    "doi": "10.1080/14763141.2020.1832563",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+  },
+  "participants": {
+    "n": 18,
+    "sex": "10 男、8 女",
+    "training": "至少 6 個月前後蹲經驗，每週至少 2 次共 2 小時力量訓練",
+    "massKg": { "mean": 72.6, "sd": 11.4 },
+    "heightM": { "mean": 1.75, "sd": 0.09 }
+  },
+  "protocol": "直槓前蹲與背蹲，兩者用同一絕對重量：前蹲 1RM 的 70%；腳跟與髖同寬，鞋跟 3 cm，平行深度標記；下降與上升各 2 s。表 2 為上升期股骨對垂直 70° 位置，並非全行程峰值。論文未列平均槓重公斤數。",
+  "model": "BODY=75 kg、1.75 m；槓重固定 75 kg（1× BW），無法重現研究的 70% 前蹲 1RM 或鞋跟。stance=0.10 嘗試對應髖寬，depth=0.80 使行程經過股骨 70°；用模型幾何搜尋同一股骨角，力矩除以 75×1.75。研究 3D 逆動力學取雙側平均；模型單側。",
+  "conditions": [
+    {
+      "id": "straight-back", "catalogId": "squat-high", "params": { "barPos": "high", "stance": 0.1, "depth": 0.8 }, "referenceLoadKg": null,
+      "measurements": [
+        { "id": "trunk", "layer": "kinematics", "metric": "trunkInclination", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 37.9, "sd": 6.4, "unit": "deg", "definition": "上軀幹 Cardan 角相對全球垂直，前傾為正" }, "evidence": "table", "location": "Table 2, straight-bar back, ascending", "tolerance": { "absolute": 12, "unit": "deg" } },
+        { "id": "lumbar", "layer": "moments", "metric": "lumbarExtensionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 1.53, "sd": 0.25, "unit": "Nm/(kg*m)", "definition": "骨盆嵴高度之下背內部伸展淨力矩" }, "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar back, ascending", "tolerance": { "absolute": 0.35, "unit": "Nm/(kg*m)" } },
+        { "id": "hip", "layer": "moments", "metric": "hipExtensionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 0.93, "sd": 0.15, "unit": "Nm/(kg*m)", "definition": "單側髖伸內部淨力矩，左右平均" }, "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar back, ascending", "tolerance": { "absolute": 0.3, "unit": "Nm/(kg*m)" } },
+        { "id": "knee", "layer": "moments", "metric": "kneeExtensionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": -0.67, "sd": 0.15, "unit": "Nm/(kg*m)", "definition": "單側膝伸內部淨力矩，論文以負號表示，左右平均" }, "referenceTransform": "absolute", "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar back, ascending", "tolerance": { "absolute": 0.3, "unit": "Nm/(kg*m)" } },
+        { "id": "ankle", "layer": "moments", "metric": "anklePlantarflexionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 0.28, "sd": 0.11, "unit": "Nm/(kg*m)", "definition": "單側踝蹠屈內部淨力矩，左右平均" }, "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar back, ascending", "tolerance": { "absolute": 0.2, "unit": "Nm/(kg*m)" } }
+      ]
+    },
+    {
+      "id": "straight-front", "catalogId": "front-squat", "params": { "barPos": "front", "stance": 0.1, "depth": 0.8 }, "referenceLoadKg": null,
+      "measurements": [
+        { "id": "trunk", "layer": "kinematics", "metric": "trunkInclination", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 40.6, "sd": 5.7, "unit": "deg", "definition": "上軀幹 Cardan 角相對全球垂直，前傾為正" }, "evidence": "table", "location": "Table 2, straight-bar front, ascending", "tolerance": { "absolute": 12, "unit": "deg" } },
+        { "id": "lumbar", "layer": "moments", "metric": "lumbarExtensionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 1.64, "sd": 0.27, "unit": "Nm/(kg*m)", "definition": "骨盆嵴高度之下背內部伸展淨力矩" }, "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar front, ascending", "tolerance": { "absolute": 0.35, "unit": "Nm/(kg*m)" } },
+        { "id": "hip", "layer": "moments", "metric": "hipExtensionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 0.89, "sd": 0.14, "unit": "Nm/(kg*m)", "definition": "單側髖伸內部淨力矩，左右平均" }, "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar front, ascending", "tolerance": { "absolute": 0.3, "unit": "Nm/(kg*m)" } },
+        { "id": "knee", "layer": "moments", "metric": "kneeExtensionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": -0.7, "sd": 0.15, "unit": "Nm/(kg*m)", "definition": "單側膝伸內部淨力矩，論文以負號表示，左右平均" }, "referenceTransform": "absolute", "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar front, ascending", "tolerance": { "absolute": 0.3, "unit": "Nm/(kg*m)" } },
+        { "id": "ankle", "layer": "moments", "metric": "anklePlantarflexionMoment", "sample": { "type": "parallelThigh", "targetDeg": 70 }, "reference": { "mean": 0.25, "sd": 0.11, "unit": "Nm/(kg*m)", "definition": "單側踝蹠屈內部淨力矩，左右平均" }, "normalization": "massHeight", "evidence": "table", "location": "Table 2, straight-bar front, ascending", "tolerance": { "absolute": 0.2, "unit": "Nm/(kg*m)" } }
+      ]
+    }
+  ]
+}
