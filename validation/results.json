@@ -8,6 +8,7 @@
     "definitionMismatch": 12,
     "exploratory": 3,
     "consistencyCheck": 4,
+    "assumptionSensitivePass": 1,
     "sources": 4
   },
   "comparisons": [
@@ -42,7 +43,14 @@
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 2, straight-bar back, ascending",
-      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+      "assumptionSensitive": {
+        "parameter": "HEEL_SHANK_SHARE",
+        "passRange": [
+          0.3054,
+          1
+        ]
+      }
     },
     {
       "id": "gorsic-2020/straight-back/pelvis-descent",
@@ -174,7 +182,14 @@
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 2, straight-bar back, ascending",
-      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+      "assumptionSensitive": {
+        "parameter": "HEEL_SHANK_SHARE",
+        "passRange": [
+          0.866,
+          1
+        ]
+      }
     },
     {
       "id": "gorsic-2020/straight-back/knee",
@@ -405,7 +420,14 @@
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 2, straight-bar front, ascending",
-      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+      "assumptionSensitive": {
+        "parameter": "HEEL_SHANK_SHARE",
+        "passRange": [
+          0.847,
+          1
+        ]
+      }
     },
     {
       "id": "gorsic-2020/straight-front/knee",

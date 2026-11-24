@@ -23,3 +23,5 @@
 `comparisonRole` 預設 `comparable`；也可為 `definition-mismatch`、`exploratory`、`consistency-check`。只有 `comparable` 用 `|model − reference| ≤ tolerance.absolute` 判定 `pass`／`fail`。Hutchison 動態 30% 1RM 的三筆為探索性；Larsen 膝角與深度高度相關，四筆只作一致性檢查。這些筆仍保留量測值與來源，但不進通過率。文獻 SD 僅供展示，不自動放寬門檻。
 
 `results.summary.total` 是全部筆數；`count=pass+fail` 是可比較筆數；另列 `definitionMismatch`、`exploratory`、`consistencyCheck`。`src/validation-status.json` 各清單項目、各層使用相同算法，層級狀態只由可比較筆數決定：有失敗為 `failed`、全通過仍因條件限制為 `partial`；零筆可比較時為 `definition-mismatch`、`exploratory` 或 `unvalidated`。肌肉層仍只有定性趨勢，不代表肌力已驗證。
+
+`npm run test:heel-sweep` 將鞋跟足板角分給小腿前傾的 `HEEL_SHANK_SHARE` 暫時設為 0、0.25、0.5、0.75、1；此指令不寫入產品或驗證產物。對有鞋跟且可比較的項目，再以 0.01 網格偵測 0–1 間通過／失敗翻轉，二分求邊界。翻轉項於 `results.comparisons[]` 加 `assumptionSensitive: { "parameter": "HEEL_SHANK_SHARE", "passRange": [起點, 終點] }`，端點取四位小數；`passRange` 表示此比例下通過原門檻，不代表生理有效範圍。`summary.assumptionSensitivePass` 與 `src/validation-status.json` 有可比較項目的層級同名欄位為目前 0.5 預設下，會受此假設翻轉的通過數。

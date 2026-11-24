@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BAR_RATIO, BODY, MODEL_VERSION, analyze, defaultParams, solvePose } from '../src/biomech.js';
+import { BAR_RATIO, BODY, HEEL_SHANK_SHARE, MODEL_VERSION, analyze, defaultParams, solvePose, withHeelShankShareForValidation } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 import trendStatus from '../src/trend-status.json' with { type: 'json' };
 
@@ -12,8 +12,8 @@ const resultsPath = path.join(validationDir, 'results.json');
 const statusPath = path.join(root, 'src/validation-status.json');
 const figurePath = path.join(root, 'docs/validation/squat-curves.svg');
 const mode = process.argv[2] ?? '';
-if (!['', '--check', '--write-status'].includes(mode) || process.argv.length > 3) {
-  throw new Error('用法：node tools/validate-sim.mjs [--check|--write-status]');
+if (!['', '--check', '--write-status', '--heel-share-sweep'].includes(mode) || process.argv.length > 3) {
+  throw new Error('用法：node tools/validate-sim.mjs [--check|--write-status|--heel-share-sweep]');
 }
 
 const deg = (v) => v * 180 / Math.PI;
@@ -134,7 +134,7 @@ function referenceValue(measure) {
 const filenames = fs.readdirSync(validationDir).filter((f) => f.endsWith('.json') && f !== 'results.json').sort();
 if (!filenames.length) throw new Error('validation/ 沒有文獻資料');
 const entries = new Map(CATALOG.map((c) => [c.id, c]));
-const comparisons = [], ids = new Set();
+const comparisons = [], ids = new Set(), heelContexts = new Map();
 const sources = filenames.map((f) => JSON.parse(fs.readFileSync(path.join(validationDir, f), 'utf8')));
 for (const source of sources) {
   if (!source.id || !source.source?.url || !source.participants || !source.protocol || !source.model || !Array.isArray(source.conditions)) throw new Error(`${source.id ?? '?'} 資料格式不完整`);
@@ -159,6 +159,9 @@ for (const source of sources) {
       const comparableDefinition = category !== 'definition-mismatch';
       const error = comparableDefinition ? actual.value - reference : null;
       const withinTolerance = comparableDefinition ? Math.abs(error) <= measure.tolerance.absolute + 1e-8 : null;
+      if (category === 'comparable' && params.heelHeight > 0) {
+        heelContexts.set(id, { measure, params, loadRatio: condition.loadRatio, reference });
+      }
       comparisons.push({
         id, catalogId: condition.catalogId, layer: measure.layer, metric: measure.metric,
         sample: measure.sample, modelParams: condition.params, modelLoadRatio: condition.loadRatio ?? BAR_RATIO.squat, modelE: actual.atE,
@@ -174,6 +177,48 @@ for (const source of sources) {
   }
 }
 
+// 只重算有鞋跟且可比較的條件。狀態翻轉以 0–1 的 0.01 網格偵測，邊界再二分；
+// 研究值、容許範圍及產品預設值在整個掃描中均固定。
+const shares = [0, 0.25, HEEL_SHANK_SHARE, 0.75, 1];
+function heelResult(context, share) {
+  return withHeelShankShareForValidation(share, () =>
+    withSquatLoad(context.loadRatio, () => modelValue(context.measure, context.params)));
+}
+function heelPass(context, share) {
+  return Math.abs(heelResult(context, share).value - context.reference) <= context.measure.tolerance.absolute + 1e-8;
+}
+const sweep = shares.map((share) => {
+  const changed = new Map([...heelContexts].map(([id, context]) => [id, heelResult(context, share)]));
+  const pass = comparisons.filter((c) => c.category === 'comparable' &&
+    (changed.has(c.id) ? Math.abs(changed.get(c.id).value - c.reference) <= c.tolerance + 1e-8 : c.pass)).length;
+  return { share, pass, changed };
+});
+for (const comparison of comparisons) {
+  const context = heelContexts.get(comparison.id);
+  if (!context) continue;
+  const grid = Array.from({ length: 101 }, (_, i) => heelPass(context, i / 100));
+  if (grid.every((pass) => pass === grid[0])) continue;
+  let start = grid[0] ? 0 : null;
+  const ranges = [];
+  for (let i = 1; i < grid.length; i++) {
+    if (grid[i] === grid[i - 1]) continue;
+    let lo = (i - 1) / 100, hi = i / 100;
+    for (let step = 0; step < 24; step++) {
+      const mid = (lo + hi) / 2;
+      if (heelPass(context, mid) === grid[i - 1]) lo = mid;
+      else hi = mid;
+    }
+    // 四位小數端點必須本身通過；向通過側收斂，避免四捨五入落在失敗側。
+    const boundary = grid[i] ? round(Math.ceil(hi * 10000) / 10000) : round(Math.floor(lo * 10000) / 10000);
+    if (grid[i]) start = boundary;
+    else { ranges.push([start, boundary]); start = null; }
+  }
+  if (start !== null) ranges.push([start, 1]);
+  if (ranges.length !== 1) throw new Error(`${comparison.id} 的通過範圍不連續，須擴充 passRange 格式`);
+  if (!ranges.every(([from, to]) => heelPass(context, from) && heelPass(context, to))) throw new Error(`${comparison.id} 的 passRange 端點未通過`);
+  comparison.assumptionSensitive = { parameter: 'HEEL_SHANK_SHARE', passRange: ranges[0] };
+}
+
 function counts(items) {
   const pass = items.filter((c) => c.status === 'pass').length;
   const fail = items.filter((c) => c.status === 'fail').length;
@@ -182,6 +227,7 @@ function counts(items) {
     definitionMismatch: items.filter((c) => c.status === 'definition-mismatch').length,
     exploratory: items.filter((c) => c.status === 'exploratory').length,
     consistencyCheck: items.filter((c) => c.status === 'consistency-check').length,
+    assumptionSensitivePass: items.filter((c) => c.status === 'pass' && c.assumptionSensitive).length,
   };
 }
 const summary = { ...counts(comparisons), sources: sources.length };
@@ -190,9 +236,11 @@ const byId = Object.fromEntries(CATALOG.map((entry) => {
   const make = (layer) => {
     const items = comparisons.filter((c) => c.catalogId === entry.id && c.layer === layer);
     const stats = counts(items);
+    const { assumptionSensitivePass, ...baseStats } = stats;
     return {
       status: stats.count ? (stats.fail ? 'failed' : 'partial') : stats.definitionMismatch ? 'definition-mismatch' : stats.exploratory ? 'exploratory' : 'unvalidated',
-      ...stats,
+      ...baseStats,
+      ...(stats.count ? { assumptionSensitivePass } : {}),
       links: items.length ? ['docs/validation/squat.md', ...new Set(items.map((c) => c.source))] : [],
     };
   };
@@ -280,8 +328,28 @@ if (mode === '--write-status') {
     if (!fs.existsSync(filename) || fs.readFileSync(filename, 'utf8') !== expected) throw new Error(`${path.relative(root, filename)} 缺少或與重算不一致；請執行 npm run test:validation`);
   }
 }
-if (mode !== '--check') {
-  console.log(`數值驗證：可比較 ${summary.count} 筆，PASS ${summary.pass}，FAIL ${summary.fail}；定義不一致 ${summary.definitionMismatch}、探索性 ${summary.exploratory}、一致性檢查 ${summary.consistencyCheck}；門檻未變`);
+if (mode === '--heel-share-sweep') {
+  const keys = ['gorsic-2020/straight-back/trunk', 'gorsic-2020/straight-back/hip', 'gorsic-2020/straight-front/hip'];
+  console.log('| 小腿前傾比例 | 背蹲軀幹 ° | 背蹲髖伸 Nm/(kg·m) | 前蹲髖伸 Nm/(kg·m) | 可比較通過 |');
+  console.log('|---:|---:|---:|---:|---:|');
+  for (const row of sweep) {
+    const cells = keys.map((id) => {
+      const c = comparisons.find((item) => item.id === id);
+      const value = row.changed.get(id).value;
+      return `${value.toFixed(c.metric === 'trunkInclination' ? 2 : 3)} ${Math.abs(value - c.reference) <= c.tolerance + 1e-8 ? '通過' : '失敗'}`;
+    });
+    console.log(`| ${row.share} | ${cells.join(' | ')} | ${row.pass}/${summary.count} |`);
+  }
+  console.log(`假設敏感：${comparisons.filter((c) => c.assumptionSensitive).length} 筆；預設 ${HEEL_SHANK_SHARE} 的敏感通過 ${summary.assumptionSensitivePass} 筆`);
+  for (const c of comparisons.filter((item) => item.assumptionSensitive)) console.log(`${c.id}: passRange ${c.assumptionSensitive.passRange.join('–')}`);
+  for (const id of ['gorsic-2020/straight-back/lumbar', 'gorsic-2020/straight-front/lumbar']) {
+    const c = comparisons.find((item) => item.id === id);
+    const values = sweep.map((row) => row.changed.get(id).value);
+    const passed = values.filter((value) => Math.abs(value - c.reference) <= c.tolerance + 1e-8).length;
+    console.log(`${id}: ${Math.min(...values).toFixed(4)}–${Math.max(...values).toFixed(4)}，${passed}/${shares.length} 通過`);
+  }
+} else if (mode !== '--check') {
+  console.log(`數值驗證：可比較 ${summary.count} 筆，PASS ${summary.pass}，FAIL ${summary.fail}；假設敏感通過 ${summary.assumptionSensitivePass} 筆；定義不一致 ${summary.definitionMismatch}、探索性 ${summary.exploratory}、一致性檢查 ${summary.consistencyCheck}；門檻未變`);
   console.log('比對 ID'.padEnd(39), '模型'.padStart(9), '文獻'.padStart(9), '誤差'.padStart(9), '容許'.padStart(9), '結果');
   const cell = (v) => v === null ? '—'.padStart(9) : v.toFixed(2).padStart(9);
   for (const c of comparisons) console.log(c.id.padEnd(39), cell(c.model), cell(c.reference), cell(c.error), cell(c.tolerance), c.status);

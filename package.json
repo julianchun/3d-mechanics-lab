@@ -12,6 +12,7 @@
     "review": "node tools/review-sheet.mjs",
     "test:trends": "node tests/trends.mjs",
     "test:validation": "node tools/validate-sim.mjs --write-status",
+    "test:heel-sweep": "node tools/validate-sim.mjs --heel-share-sweep",
     "trends:json": "node tests/trends.mjs --write-status"
   },
   "keywords": [],

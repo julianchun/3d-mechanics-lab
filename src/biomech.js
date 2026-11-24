@@ -4,6 +4,20 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 
 export const MODEL_VERSION = '0.7.3';
 const G = 9.81;
+// 示範假設：足板角有一半用於小腿前傾；此比例沒有同條件實測值。
+export const HEEL_SHANK_SHARE = 0.5;
+let heelShankShare = HEEL_SHANK_SHARE;
+// 僅供同步驗證重算；每次還原，產品路徑仍使用上方預設值。
+export function withHeelShankShareForValidation(share, run) {
+  if (!Number.isFinite(share) || share < 0 || share > 1) throw new Error('鞋跟小腿分配比例須介於 0 與 1');
+  const original = heelShankShare;
+  try {
+    heelShankShare = share;
+    return run();
+  } finally {
+    heelShankShare = original;
+  }
+}
 
 export const BODY = {
   // 依 BodyParts3D 骨骼比例，縮放到身高 175 cm
@@ -1028,9 +1042,10 @@ function applySquatHeel(pose, foot) {
   if (!foot) return;
   pose.R.heel = foot.heel; pose.R.toe = foot.tip;
   pose.toeDir = foot.dir; pose.footUp = foot.up;
-  // 左右腳跟各有墊片；鞋內傾斜足板由腳掌骨架呈現，墊片上緣托住腳跟。
-  const c = [foot.heel[0], foot.h / 2, foot.heel[2]];
-  pose.boxes = [-1, 1].map((side) => box([side * c[0], c[1], c[2]], [0.10, foot.h, 0.075], 0, 'frame'));
+  // 顯示用墊片包含鞋底的 2 cm 高度，頂面貼齊腳跟骨架；地面接觸及力矩均不變。
+  const visualHeight = foot.heel[1];
+  const c = [foot.heel[0], visualHeight / 2, foot.heel[2]];
+  pose.boxes = [-1, 1].map((side) => box([side * c[0], c[1], c[2]], [0.10, visualHeight, 0.075], 0, 'frame'));
 }
 
 // ---------- 肩帶（肩胛骨＋鎖骨）----------
@@ -1100,8 +1115,8 @@ function squatPose(P, e) {
   const domShift = (low ? 0.08 : front ? -0.08 : 0) + 0.35 * (P.stance - 0.3);
   const domEff = clamp(P.dom + domShift, 0, 1);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
-  // 示範假設：鞋跟帶來的足板角增量，一半分給膝前移，一半保留為踝背屈需求下降；未依驗證研究擬合。
-  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * 0.5 * e;
+  // 示範假設：鞋跟足板角按具名比例分給小腿前傾，其餘降低相對腳掌的踝背屈需求。
+  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * heelShankShare * e;
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
@@ -3068,7 +3083,7 @@ function gobletPose(P, e) {
   const domShift = -0.08 + 0.35 * (P.stance - 0.3);
   const domEff = clamp(P.dom + domShift, 0, 1);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
-  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * 0.5 * e;
+  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * heelShankShare * e;
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
