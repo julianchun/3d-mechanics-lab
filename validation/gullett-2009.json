@@ -57,7 +57,7 @@
         }
       ],
       "loadRatio": 0.886657,
-      "conditionDerivation": "方法：61.8 kg 是此式 70% 1RM 的平均試驗槓重；除以研究平均體重 69.7 kg 得 0.887×體重。約肩寬用 stance=0.30；大腿平行以模型 γ底=70°+48°×0.55=96.4° 作略低水平的近似。峰值取全行程。"
+      "conditionDerivation": "方法：61.8 kg 是此式 70% 1RM 的平均試驗槓重；除以研究平均體重 69.7 kg 得 0.887×體重。約肩寬用 stance=0.30；大腿平行以模型 γ底=70°+48°×0.55=96.4° 作略低水平的近似。峰值取全行程。 鞋跟高度未報，模型保留 heelHeight=0 預設；鞋類條件未對齊。"
     },
     {
       "id": "front",
@@ -92,12 +92,13 @@
         }
       ],
       "loadRatio": 0.695839,
-      "conditionDerivation": "方法：48.5 kg 是此式 70% 1RM 的平均試驗槓重；除以研究平均體重 69.7 kg 得 0.696×體重。約肩寬用 stance=0.30；大腿平行以模型 γ底=70°+48°×0.55=96.4° 作略低水平的近似。峰值取全行程。"
+      "conditionDerivation": "方法：48.5 kg 是此式 70% 1RM 的平均試驗槓重；除以研究平均體重 69.7 kg 得 0.696×體重。約肩寬用 stance=0.30；大腿平行以模型 γ底=70°+48°×0.55=96.4° 作略低水平的近似。峰值取全行程。 鞋跟高度未報，模型保留 heelHeight=0 預設；鞋類條件未對齊。"
     }
   ],
   "sourceQuality": {
     "rating": "caution",
     "reason": "前蹲膝伸峰值 0.70 Nm/kg 與 Goršič 相近負重的定點膝矩約 1.2 Nm/kg 相差約 1.7 倍，兩者事件、參考座標與受試者不同，不能直接裁定哪篇錯。原文用三台攝影機做 3D 重建，不能稱研究整體為 2D；只取膝部結果，節段質量與慣量依平均參數估計。",
     "source": "https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf"
-  }
+  },
+  "footwear": "未報告鞋型、鞋跟高度或赤腳；模型維持預設平底（heelHeight=0），不能視為研究確認平底。"
 }
