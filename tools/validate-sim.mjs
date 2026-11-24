@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BODY, MODEL_VERSION, analyze, defaultParams, solvePose } from '../src/biomech.js';
+import { BAR_RATIO, BODY, MODEL_VERSION, analyze, defaultParams, solvePose } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 import trendStatus from '../src/trend-status.json' with { type: 'json' };
 
@@ -65,14 +65,42 @@ function sampleE(type, sample, params) {
   throw new Error(`未支援 sample.type：${type}`);
 }
 
+function withSquatLoad(loadRatio, run) {
+  if (loadRatio === null) return run();
+  if (!Number.isFinite(loadRatio) || loadRatio <= 0) throw new Error(`無效 loadRatio：${loadRatio}`);
+  const original = BAR_RATIO.squat;
+  try {
+    BAR_RATIO.squat = loadRatio;
+    return run();
+  } finally {
+    BAR_RATIO.squat = original;
+  }
+}
+
+function peakEndE(sample, params) {
+  if (sample.endKneeFlexionDeg === undefined) return 1;
+  const target = sample.endKneeFlexionDeg;
+  if (!Number.isFinite(target) || target <= 0 || target >= 180) throw new Error('endKneeFlexionDeg 無效');
+  const at = (e) => angles(solvePose('squat', params, e)).kneeFlexion;
+  if (!(at(0) <= target && target <= at(1))) throw new Error(`模型行程未經過方法膝角 ${target}°`);
+  let lo = 0, hi = 1;
+  for (let i = 0; i < 32; i++) {
+    const mid = (lo + hi) / 2;
+    if (at(mid) < target) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
 function modelValue(measure, params) {
   const { metric, sample } = measure;
   let value, atE;
   if (sample.type === 'peak') {
     if (!momentDof[metric]) throw new Error(`${metric} 不支援 peak`);
     value = -Infinity;
+    const endE = peakEndE(sample, params);
     for (let i = 0; i <= 400; i++) {
-      const e = i / 400, raw = analyze('squat', params, e).dem[momentDof[metric]];
+      const e = endE * i / 400, raw = analyze('squat', params, e).dem[momentDof[metric]];
       if (raw > value) { value = raw; atE = e; }
     }
   } else {
@@ -113,6 +141,7 @@ for (const source of sources) {
     if (!entry || entry.lift !== 'squat') throw new Error(`未知深蹲清單項目：${condition.catalogId}`);
     const params = { ...defaultParams('squat'), ...entry.set, ...condition.params };
     if (params.barPos !== entry.set.barPos) throw new Error(`${condition.catalogId} 槓位與清單不符`);
+    if (!condition.conditionDerivation || !Object.hasOwn(condition, 'loadRatio')) throw new Error(`${source.id}/${condition.id} 缺少條件推導或負重`);
     for (const measure of condition.measurements) {
       const id = `${source.id}/${condition.id}/${measure.id}`;
       if (ids.has(id)) throw new Error(`重複比對 ID：${id}`);
@@ -121,28 +150,46 @@ for (const source of sources) {
       if (!['table', 'text', 'figureDigitized', 'datasetComputed'].includes(measure.evidence) || !measure.location) throw new Error(`${id} 出處不完整`);
       if (!(measure.tolerance?.absolute >= 0) || measure.tolerance.unit !== measure.reference.unit) throw new Error(`${id} 容許範圍無效`);
       const reference = referenceValue(measure);
-      const actual = modelValue(measure, params);
-      const error = actual.value - reference;
+      const actual = withSquatLoad(condition.loadRatio, () => modelValue(measure, params));
+      const category = measure.comparisonRole ?? 'comparable';
+      if (!['comparable', 'definition-mismatch', 'exploratory', 'consistency-check'].includes(category)) throw new Error(`${id} 比對類別無效`);
+      const comparableDefinition = category !== 'definition-mismatch';
+      const error = comparableDefinition ? actual.value - reference : null;
+      const withinTolerance = comparableDefinition ? Math.abs(error) <= measure.tolerance.absolute + 1e-8 : null;
       comparisons.push({
         id, catalogId: condition.catalogId, layer: measure.layer, metric: measure.metric,
-        sample: measure.sample, modelParams: condition.params, modelE: actual.atE,
-        model: actual.value, reference: round(reference), referenceSd: measure.reference.sd,
-        unit: measure.reference.unit, error: round(error), tolerance: measure.tolerance.absolute,
-        pass: Math.abs(error) <= measure.tolerance.absolute + 1e-8,
+        sample: measure.sample, modelParams: condition.params, modelLoadRatio: condition.loadRatio ?? BAR_RATIO.squat, modelE: actual.atE,
+        model: actual.value, reference: comparableDefinition ? round(reference) : null,
+        referenceRaw: measure.reference.mean, referenceSd: measure.reference.sd,
+        unit: measure.reference.unit, error: comparableDefinition ? round(error) : null, tolerance: measure.tolerance.absolute,
+        category, status: category === 'comparable' ? (withinTolerance ? 'pass' : 'fail') : category,
+        pass: category === 'comparable' ? withinTolerance : null, withinTolerance,
+        sourceQuality: source.sourceQuality ?? null,
         evidence: measure.evidence, location: measure.location, source: source.source.url,
       });
     }
   }
 }
 
-const summary = { total: comparisons.length, pass: comparisons.filter((c) => c.pass).length, fail: comparisons.filter((c) => !c.pass).length, sources: sources.length };
+function counts(items) {
+  const pass = items.filter((c) => c.status === 'pass').length;
+  const fail = items.filter((c) => c.status === 'fail').length;
+  return {
+    total: items.length, count: pass + fail, pass, fail,
+    definitionMismatch: items.filter((c) => c.status === 'definition-mismatch').length,
+    exploratory: items.filter((c) => c.status === 'exploratory').length,
+    consistencyCheck: items.filter((c) => c.status === 'consistency-check').length,
+  };
+}
+const summary = { ...counts(comparisons), sources: sources.length };
 const results = { modelVersion: MODEL_VERSION, summary, comparisons };
 const byId = Object.fromEntries(CATALOG.map((entry) => {
   const make = (layer) => {
     const items = comparisons.filter((c) => c.catalogId === entry.id && c.layer === layer);
+    const stats = counts(items);
     return {
-      status: items.length ? (items.some((c) => !c.pass) ? 'failed' : 'partial') : 'unvalidated',
-      count: items.length, pass: items.filter((c) => c.pass).length, fail: items.filter((c) => !c.pass).length,
+      status: stats.count ? (stats.fail ? 'failed' : 'partial') : stats.definitionMismatch ? 'definition-mismatch' : stats.exploratory ? 'exploratory' : 'unvalidated',
+      ...stats,
       links: items.length ? ['docs/validation/squat.md', ...new Set(items.map((c) => c.source))] : [],
     };
   };
@@ -164,7 +211,7 @@ const serialize = (o) => JSON.stringify(o, null, 2) + '\n';
 function makeFigure() {
   const panels = [
     { title: '最低點：軀幹前傾角', unit: '度', metric: 'trunkInclination', source: 'larsen-2021', ids: ['high-narrow', 'low-narrow'] },
-    { title: '最低點：膝屈角', unit: '度', metric: 'kneeFlexion', source: 'larsen-2021', ids: ['high-narrow', 'low-narrow'] },
+    { title: '最低點：膝屈角（一致性檢查）', unit: '度', metric: 'kneeFlexion', source: 'larsen-2021', ids: ['high-narrow', 'low-narrow'] },
     { title: '平行位置：髖伸力矩', unit: 'Nm/(kg·m)', metric: 'hipExtensionMoment', source: 'gorsic-2020', ids: ['straight-back', 'straight-front'] },
     { title: '平行位置：膝伸力矩', unit: 'Nm/(kg·m)', metric: 'kneeExtensionMoment', source: 'gorsic-2020', ids: ['straight-back', 'straight-front'] },
   ];
@@ -183,11 +230,11 @@ function makeFigure() {
       const condition = source.conditions.find((c) => c.id === id);
       const params = { ...defaultParams('squat'), ...condition.params };
       const comparison = comparisons.find((c) => c.id.startsWith(`${panel.source}/${id}/`) && c.metric === panel.metric);
-      const series = Array.from({ length: 101 }, (_, i) => {
+      const series = withSquatLoad(condition.loadRatio, () => Array.from({ length: 101 }, (_, i) => {
         const r = analyze('squat', params, i / 100);
         let value = momentDof[panel.metric] ? r.dem[momentDof[panel.metric]] / (BODY.mass * 1.75) : angles(r.pose)[panel.metric];
         return value;
-      });
+      }));
       return { id, color: colors[j], comparison, series };
     });
     const vals = lines.flatMap((l) => [...l.series, l.comparison.reference - l.comparison.tolerance, l.comparison.reference + l.comparison.tolerance]);
@@ -231,7 +278,8 @@ if (mode === '--write-status') {
   }
 }
 if (mode !== '--check') {
-  console.log(`數值驗證：${summary.total} 筆，PASS ${summary.pass}，FAIL ${summary.fail}；失敗只記錄，不改門檻`);
+  console.log(`數值驗證：可比較 ${summary.count} 筆，PASS ${summary.pass}，FAIL ${summary.fail}；定義不一致 ${summary.definitionMismatch}、探索性 ${summary.exploratory}、一致性檢查 ${summary.consistencyCheck}；門檻未變`);
   console.log('比對 ID'.padEnd(39), '模型'.padStart(9), '文獻'.padStart(9), '誤差'.padStart(9), '容許'.padStart(9), '結果');
-  for (const c of comparisons) console.log(c.id.padEnd(39), c.model.toFixed(2).padStart(9), c.reference.toFixed(2).padStart(9), c.error.toFixed(2).padStart(9), c.tolerance.toFixed(2).padStart(9), c.pass ? 'PASS' : 'FAIL');
-} else console.log(`validation-status.json 與 results.json 一致：${summary.pass}/${summary.total} PASS`);
+  const cell = (v) => v === null ? '—'.padStart(9) : v.toFixed(2).padStart(9);
+  for (const c of comparisons) console.log(c.id.padEnd(39), cell(c.model), cell(c.reference), cell(c.error), cell(c.tolerance), c.status);
+} else console.log(`validation-status.json 與 results.json 一致：${summary.pass}/${summary.count} PASS（可比較）`);

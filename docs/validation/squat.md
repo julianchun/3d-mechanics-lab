@@ -1,89 +1,94 @@
-# 深蹲數值驗證試點
+# 深蹲數值比對：T16b 方法修正
 
-2026-11-24；產品版本 0.7.2。容許範圍與研究數值先於比對提交（`0df5506`、`cb666ff`）；以下結果由 `npm run test:validation` 產生，沒有回頭調門檻或產品數值。機器可讀逐筆結果在 [`validation/results.json`](../../validation/results.json)，全清單三層狀態在 [`src/validation-status.json`](../../src/validation-status.json)。
+2026-11-24，產品版本 0.7.2。研究數值與容許誤差事先固定於 `0df5506`、`cb666ff`；依研究方法修正條件於 `f88f525` 單獨提交後，才重新計算。產品模型及回歸基準未修改。逐筆機器結果在 [`validation/results.json`](../../validation/results.json)，全清單層級狀態在 [`src/validation-status.json`](../../src/validation-status.json)。
 
-## 研究與對應條件
+## 研究條件與推導
 
-| 來源 | 受試者與條件 | 模型對應 | 主要差異 |
-|---|---|---|---|
-| [Larsen 等，2021，*Effects of Stance Width and Barbell Placement on Kinematics, Kinetics, and Myoelectric Activity in Back Squats*，DOI 10.3389/fspor.2021.719013，表 1–3](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/) | 18 人（9 男 9 女），休閒阻力訓練；76.2±11.1 kg、1.73±0.086 m；各條件 3RM：高槓窄／寬 99.2／92.9 kg，低槓窄／寬 102.5／95.6 kg；窄 31.7±2.7 cm、寬 59.8±5.1 cm，髖頂低於膝。取第三次向心最低槓位 v0。 | `squat-high`、`squat-low`，stance=0.14／0.80，depth=0.90；模型 75 kg、1.75 m、固定 75 kg 槓。 | 研究負重隨條件不同，模型不能改；模型深度只預先近似，未依實測膝角調整。表 2 低槓寬站列 95.6 kg，摘要列 97.1 kg，採表值。 |
-| [Goršič 等，2020 線上發表，*Biomechanical comparisons of back and front squats with a straight bar and four squats with a transformer bar*，DOI 10.1080/14763141.2020.1832563，表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/) | 18 人（10 男 8 女），前後蹲經驗 ≥6 個月；72.6±11.4 kg、1.75±0.09 m；前後蹲用相同絕對負重＝前蹲 1RM 的 70%，髖寬站距、3 cm 鞋跟、平行深度；取上升期股骨對垂直 70° 的姿勢。 | `squat-high`、`front-squat`，stance=0.10，depth=0.80；程式搜尋相同的矢狀面股骨角。髖／膝／踝單側力矩除 75 kg × 1.75 m，對研究雙側平均；中央腰背力矩將右半身輸出乘 2 再正規化。 | 論文未報平均槓重公斤數；模型固定 75 kg 且無鞋跟參數；模型軀幹和骨盆是單一剛體。表 2 是**定點力矩**，不是峰值。 |
-| [Gullett 等，2009，*A biomechanical comparison of back and front squats in healthy trained individuals*，DOI 10.1519/JSC.0b013e31818546bb，結果 p. 287](https://pubmed.ncbi.nlm.nih.gov/19002072/)（[全文 PDF](https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf)） | 15 人（9 男 6 女），前後蹲經驗 ≥1 年；69.7±6.2 kg、1.712±0.064 m；各自 70% 1RM，背蹲 61.8±18.6 kg、前蹲 48.5±14.1 kg；約肩寬、到大腿平行；最大淨膝伸力矩。 | `squat-high`、`front-squat`，stance=0.30、depth=0.55；模型峰值除 75 kg。 | 模型兩式均固定 75 kg，研究使用不同重量；研究的動態峰值含慣性。 |
-| [Hutchison 與 Caterisano，2019，*Comparison of Peak Ground Reaction Force, Joint Kinetics and Kinematics, and Muscle Activity Between a Flexible and Steel Barbell During the Back Squat Exercise*，DOI 10.2478/hukin-2019-0059，表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/) | 10 名男性大學美式足球選手；89.4±17.1 kg、1.82±0.074 m；鋼槓 30% 背蹲 1RM、每分鐘 52 次節拍，膝屈最低至少 80°；取向心期髖／膝／踝峰值。 | `squat-high`，預設 stance=0.30、depth=0.55；直接比較 Nm。 | 負重、慣性、體型及側別未對齊，只是**探索性**峰值對照。站距與平均槓重公斤數未報。正文摘要的髖力矩與表 2 不一致，採表 2。 |
+| 研究 | 方法與本次設定 | 尚未對齊的條件 |
+|---|---|---|
+| [Larsen 等，2021，表 1–3](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/) | 18 人，四種槓位與站距各做 3RM。依 IPF 髖頂低於膝且腿後側觸帶，取模型大腿略低水平約 95°：`γ底=70°+48°×depth`，所以 `depth=(95−70)/48≈0.52`；四式同用。站距取研究腳跟距 31.7／59.8 cm 對應模型 `stance=0.14／0.80`。槓重依表 2：99.2、92.9、102.5、95.6 kg，分別除研究平均體重 76.2 kg 輸入。 | 95° 是將 IPF 外觀規則轉成股骨中心線角的近似；帶高及髖部外形未知。摘要把低槓寬站寫 97.1 kg，表 2 為 95.6 kg，依表值。 |
+| [Goršič 等，2020／2024，方法與表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/) | 18 人，前／背蹲同用前蹲 1RM 的 70%；原文報 1RM 91.2±31.5 kg，個人 1RM/體重平均 1.2±0.3，故取 `0.70×1.2=0.84×體重`。兩者都在上升期股骨對垂直 70° 處抽樣；站距用髖寬近似，最低點約略低水平。 | 91.2×0.70=63.84 kg，若再除群體平均 72.6 kg 得 0.88；與個人比值平均 0.84 不同，不能混作相同統計量。原文用 3 cm 鞋跟，模型無此參數。 |
+| [Gullett 等，2009，方法與結果](https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf) | 15 人，各式 70% 1RM；背蹲 61.8 kg／69.7 kg ≈0.887×體重，前蹲 48.5／69.7≈0.696×體重。約肩寬、大腿平行；模型 `stance=0.30`、`depth=0.55`（大腿約 96.4°），取全行程最大正膝力矩。 | 研究動態峰值含慣性；模型準靜態。 |
+| [Hutchison 與 Caterisano，2019，方法與表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/) | 10 名美式足球員，鋼槓 30% 個人 1RM、每分鐘 52 次、膝屈最低須 >80°；表 2 觀察平均 89±8°。比較器按方法下限把峰值搜尋止於模型首次達 80° 的姿勢，**未用 89° 反推深度**。 | 平均 1RM 公斤數及站距未報，保留負重未知；80° 是方案下限而非受試者實際 89°，因此只能探索。單塊測力板量到 1077 N 整體反力，配合雙側標記，表 2 力矩推定為雙腿合計，模型單側乘 2；原文未明示合計方式。 |
 
-研究數值全為表格或正文**原值**，無圖讀值；29 筆表格值、2 筆正文值。未知條件維持「未報告」，沒有反推。每筆完整條件與證據位置見 `validation/*.json`。
+每一條件的詳細來源推導在 `validation/*.json` 的 `conditionDerivation`。暫時負重覆寫只作用於驗證器，運算結束即還原 `BAR_RATIO.squat`。
 
-## 比對方法與曲線
+## 計數方法
 
-姿勢行程 `e=0` 是頂點，`e=1` 是最低點。髖角用大腿相對模型軀幹的屈曲角，膝角伸直為 0°，軀幹角對垂直。Larsen 表 3 踝內角以 90° 站立為零點，換算為背屈角（原值減 90°）；該研究的三維 Cardan 軸序與模型幾何角不完全等價。Goršič 表 2 膝力矩負號轉正，以內部膝伸需求量比較。峰值取 401 個等距姿勢點中最大的**正**力矩。研究標準差展示個體差異；通過與否只由預先固定的絕對誤差門檻決定。
+31 筆原始參考值中，16 筆定義可比較：**9 通過、7 失敗**。另有 8 筆 `definition-mismatch`、3 筆 `exploratory`、4 筆 `consistency-check`，均不進分母。T16 的 9/31 是把不相容定義及動態探索一起計數，不能當作模型準確率；本次 9/16 也只是預設門檻下的比對摘要，不能當作預測精度。`pass` 僅依事先固定的絕對誤差門檻；文獻 SD 只用於呈現。
 
 ![模型曲線與研究定點數值](squat-curves.svg)
 
-圖中曲線是模型完整行程，研究僅提供圖示位置的平均 ± SD；淡色棒是事先設定的容許範圍。不能把研究定點外推成全行程實測曲線。研究的時間正規化曲線與模型位置行程也不能直接一對一配對；動態中的蹲起速度和慣性模型未涵蓋。
+曲線為準靜態模型的姿勢行程；研究只有特定事件值。圖中的膝角面板是深度一致性檢查，不計入通過率。模型位置比例 `e` 不能等同研究時間比例。
 
-## 逐筆結果
+## 逐筆修正前後
 
-正誤差表示模型值較大。31 筆中 9 通過、22 失敗；運動學 3/18 通過、關節力矩 6/13 通過。Hutchison 三筆的寬探索性門檻及 Gullett 的負重差使「通過」不能解讀為獨立驗證成功。Goršič 腰背兩筆先按其中央整體力矩定義換算模型半身輸出；容許誤差未變，兩筆均失敗。
+數值欄為模型值／當時狀態；文獻平均保留原文值（Larsen 踝角仍為原始內角），各行單位見機器結果；定義不可比的行不計算差距。容許誤差全程未改。
 
-| 研究／條件 | 指標 | 模型 | 文獻平均 ± SD | 誤差 | 門檻 | 結果 |
-|---|---|---:|---:|---:|---:|---|
-| gorsic-2020／straight-back | 軀幹前傾 (deg) | 56.39 | 37.90 ± 6.4 | 18.49 | ±12 | 失敗 |
-| gorsic-2020／straight-back | 腰背伸力矩 (Nm/(kg*m)) | 2.90 | 1.53 ± 0.25 | 1.37 | ±0.35 | 失敗 |
-| gorsic-2020／straight-back | 髖伸力矩 (Nm/(kg*m)) | 1.65 | 0.93 ± 0.15 | 0.72 | ±0.3 | 失敗 |
-| gorsic-2020／straight-back | 膝伸力矩 (Nm/(kg*m)) | 0.46 | 0.67 ± 0.15 | -0.21 | ±0.3 | 通過 |
-| gorsic-2020／straight-back | 踝蹠屈力矩 (Nm/(kg*m)) | 0.37 | 0.28 ± 0.11 | 0.09 | ±0.2 | 通過 |
-| gorsic-2020／straight-front | 軀幹前傾 (deg) | 41.22 | 40.60 ± 5.7 | 0.62 | ±12 | 通過 |
-| gorsic-2020／straight-front | 腰背伸力矩 (Nm/(kg*m)) | 2.89 | 1.64 ± 0.27 | 1.25 | ±0.35 | 失敗 |
-| gorsic-2020／straight-front | 髖伸力矩 (Nm/(kg*m)) | 1.60 | 0.89 ± 0.14 | 0.71 | ±0.3 | 失敗 |
-| gorsic-2020／straight-front | 膝伸力矩 (Nm/(kg*m)) | 0.50 | 0.70 ± 0.15 | -0.20 | ±0.3 | 通過 |
-| gorsic-2020／straight-front | 踝蹠屈力矩 (Nm/(kg*m)) | 0.37 | 0.25 ± 0.11 | 0.12 | ±0.2 | 通過 |
-| gullett-2009／back | 膝伸力矩 (Nm/kg) | 1.57 | 1.00 ± 0.4 | 0.57 | ±0.5 | 失敗 |
-| gullett-2009／front | 膝伸力矩 (Nm/kg) | 1.68 | 0.70 ± 0.2 | 0.98 | ±0.4 | 失敗 |
-| hutchison-2019／steel-back | 髖伸力矩 (Nm) | 202.74 | 324.00 ± 52 | -121.26 | ±100 | 失敗 |
-| hutchison-2019／steel-back | 膝伸力矩 (Nm) | 117.56 | 157.00 ± 34 | -39.44 | ±70 | 通過 |
-| hutchison-2019／steel-back | 踝蹠屈力矩 (Nm) | 46.89 | 90.00 ± 24 | -43.11 | ±50 | 通過 |
-| larsen-2021／high-narrow | 軀幹前傾 (deg) | 42.05 | 46.70 ± 2.9 | -4.65 | ±10 | 通過 |
-| larsen-2021／high-narrow | 髖屈 (deg) | 155.25 | 111.00 ± 7.2 | 44.25 | ±12 | 失敗 |
-| larsen-2021／high-narrow | 膝屈 (deg) | 143.40 | 126.40 ± 4.7 | 17.00 | ±12 | 失敗 |
-| larsen-2021／high-narrow | 踝背屈 (deg) | 31.12 | 16.00 ± 4.5 | 15.12 | ±12 | 失敗 |
-| larsen-2021／high-wide | 軀幹前傾 (deg) | 32.03 | 46.00 ± 3.4 | -13.97 | ±10 | 失敗 |
-| larsen-2021／high-wide | 髖屈 (deg) | 145.23 | 110.40 ± 4.5 | 34.83 | ±12 | 失敗 |
-| larsen-2021／high-wide | 膝屈 (deg) | 133.85 | 119.30 ± 6.4 | 14.55 | ±12 | 失敗 |
-| larsen-2021／high-wide | 踝背屈 (deg) | 28.80 | 8.60 ± 5.9 | 20.20 | ±12 | 失敗 |
-| larsen-2021／low-narrow | 軀幹前傾 (deg) | 52.91 | 56.70 ± 2.5 | -3.79 | ±10 | 通過 |
-| larsen-2021／low-narrow | 髖屈 (deg) | 166.11 | 110.50 ± 6.6 | 55.61 | ±12 | 失敗 |
-| larsen-2021／low-narrow | 膝屈 (deg) | 141.52 | 122.70 ± 5 | 18.82 | ±12 | 失敗 |
-| larsen-2021／low-narrow | 踝背屈 (deg) | 29.18 | 16.30 ± 5 | 12.88 | ±12 | 失敗 |
-| larsen-2021／low-wide | 軀幹前傾 (deg) | 41.78 | 53.00 ± 4.4 | -11.22 | ±10 | 失敗 |
-| larsen-2021／low-wide | 髖屈 (deg) | 154.98 | 111.90 ± 4.8 | 43.08 | ±12 | 失敗 |
-| larsen-2021／low-wide | 膝屈 (deg) | 132.38 | 120.30 ± 5.8 | 12.08 | ±12 | 失敗 |
-| larsen-2021／low-wide | 踝背屈 (deg) | 26.68 | 10.50 ± 6.3 | 16.18 | ±12 | 失敗 |
+| 研究／條件／指標 | T16 模型／狀態 | T16b 模型／狀態 | 文獻原值 | 容許 |
+|---|---:|---:|---:|---:|
+| `gorsic-2020/straight-back/trunk` | 56.39／失敗 | 54.76／失敗 | 37.90 | ±12 |
+| `gorsic-2020/straight-back/lumbar` | 2.90／失敗 | 2.51／失敗 | 1.53 | ±0.35 |
+| `gorsic-2020/straight-back/hip` | 1.65／失敗 | 1.43／失敗 | 0.93 | ±0.3 |
+| `gorsic-2020/straight-back/knee` | 0.46／通過 | 0.49／通過 | -0.67 | ±0.3 |
+| `gorsic-2020/straight-back/ankle` | 0.37／通過 | 0.34／通過 | 0.28 | ±0.2 |
+| `gorsic-2020/straight-front/trunk` | 41.22／通過 | 39.58／通過 | 40.60 | ±12 |
+| `gorsic-2020/straight-front/lumbar` | 2.89／失敗 | 2.49／失敗 | 1.64 | ±0.35 |
+| `gorsic-2020/straight-front/hip` | 1.60／失敗 | 1.38／失敗 | 0.89 | ±0.3 |
+| `gorsic-2020/straight-front/knee` | 0.50／通過 | 0.53／通過 | -0.70 | ±0.3 |
+| `gorsic-2020/straight-front/ankle` | 0.37／通過 | 0.34／通過 | 0.25 | ±0.2 |
+| `gullett-2009/back/peak-knee` | 1.57／失敗 | 1.48／通過 | 1.00 | ±0.5 |
+| `gullett-2009/front/peak-knee` | 1.68／失敗 | 1.41／失敗 | 0.70 | ±0.4 |
+| `hutchison-2019/steel-back/peak-hip` | 202.74／失敗 | 384.68／探索性 | 324.00 | ±100 |
+| `hutchison-2019/steel-back/peak-knee` | 117.56／通過 | 123.88／探索性 | 157.00 | ±70 |
+| `hutchison-2019/steel-back/peak-ankle` | 46.89／通過 | 93.77／探索性 | 90.00 | ±50 |
+| `larsen-2021/high-narrow/trunk` | 42.05／通過 | 46.28／通過 | 46.70 | ±10 |
+| `larsen-2021/high-narrow/hip` | 155.25／失敗 | 141.24／定義不可比 | 111.00 | ±12 |
+| `larsen-2021/high-narrow/knee` | 143.40／失敗 | 125.88／一致性檢查 | 126.40 | ±12 |
+| `larsen-2021/high-narrow/ankle` | 31.12／失敗 | 31.12／定義不可比 | 106.00 | ±12 |
+| `larsen-2021/high-wide/trunk` | 32.03／失敗 | 35.01／失敗 | 46.00 | ±10 |
+| `larsen-2021/high-wide/hip` | 145.23／失敗 | 129.97／定義不可比 | 110.40 | ±12 |
+| `larsen-2021/high-wide/knee` | 133.85／失敗 | 121.55／一致性檢查 | 119.30 | ±12 |
+| `larsen-2021/high-wide/ankle` | 28.80／失敗 | 28.80／定義不可比 | 98.60 | ±12 |
+| `larsen-2021/low-narrow/trunk` | 52.91／通過 | 58.86／通過 | 56.70 | ±10 |
+| `larsen-2021/low-narrow/hip` | 166.11／失敗 | 153.82／定義不可比 | 110.50 | ±12 |
+| `larsen-2021/low-narrow/knee` | 141.52／失敗 | 123.95／一致性檢查 | 122.70 | ±12 |
+| `larsen-2021/low-narrow/ankle` | 29.18／失敗 | 29.18／定義不可比 | 106.30 | ±12 |
+| `larsen-2021/low-wide/trunk` | 41.78／失敗 | 45.76／通過 | 53.00 | ±10 |
+| `larsen-2021/low-wide/hip` | 154.98／失敗 | 140.72／定義不可比 | 111.90 | ±12 |
+| `larsen-2021/low-wide/knee` | 132.38／失敗 | 119.70／一致性檢查 | 120.30 | ±12 |
+| `larsen-2021/low-wide/ankle` | 26.68／失敗 | 26.68／定義不可比 | 100.50 | ±12 |
 
-## 三層結論
+## 比對設定問題（已修正）
 
-| 清單項目 | 運動學 | 關節力矩 | 肌肉分工 |
+- Larsen 舊 `depth=0.90` 讓大腿角達 113.2°，比 IPF 操作規則的略低水平近似深很多；修為 0.52 後，四個模型膝角為 125.88°、121.55°、123.95°、119.70°，接近表 3 的 126.4°、119.3°、122.7°、120.3°。這是**事後一致性檢查**，不能把四筆算成獨立通過。
+- Goršič 原先誤寫「平均負重未報」。試驗的百分比、前蹲 1RM 與相對體重強度已報；本次以 0.84×體重比較。Gullett 兩式分別輸入 0.887、0.696×體重。Larsen 四式按研究 3RM 輸入。產品預設仍為 1.0×體重。
+- Hutchison 的單側模型輸出按**推定**雙腿合計乘 2，且只掃描到研究方法給的膝屈 80° 下限。這三筆列探索性，不計成通過或失敗。
+
+## 定義不可比
+
+Larsen 四筆髖屈採骨盆—大腿 Cardan 角；模型只有軀幹—大腿角、沒有獨立骨盆，故不能直接比。四筆踝角沒有站立參考，以 90° 中立轉換的假設未經證實，也不能直接比。前者需新增骨盆自由度或取可同定義的原始標記；後者需站立參考，或預先定義並改比窄／寬站之間的角度變化量。[Larsen 方法與表 3](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)
+
+## 真正的模型差異
+
+- Goršič 股骨 70° 定點：背蹲軀幹前傾 54.76°，研究 37.9°，多 16.86°，超出 ±12°。前蹲軀幹 39.58° 對 40.6°，顯示後述前蹲力矩偏差不能歸因於前傾角。[Goršič 表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)
+- 在負重對齊後，背／前蹲髖伸力矩 1.43／1.38，研究 0.93／0.89；中央腰背伸 2.51／2.49，研究 1.53／1.64，單位均為 Nm/(kg·m)。比例約 1.5–1.6，四筆仍超原門檻。[Goršič 表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)
+- Larsen 高槓寬站軀幹 35.01°，研究 46.0°，模型偏直立 10.99°，略超 ±10°。模型原有註記指出寬站股骨外展縮短矢狀投影，固定壓力中心後使軀幹偏直立；這是待驗證的幾何假設。[Larsen 表 3](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)、[模型註記](../../src/biomech.js)
+
+髖與腰背力矩偏高的**有出處待檢假設**：Goršič 用分開的軀幹／骨盆參考座標及 de Leva 節段參數，且作者指出合併軀幹與骨盆會改變角度解讀；本模型只有單一剛體軀幹與估計節段質量，可能改變質心及力矩分配。原研究亦指出負重前後位置會改變槓到腰背與髖的力臂，模型的固定槓相對軀幹位置值得量測核對。研究以逆動力學處理 2 秒上升期，本模型準靜態沒有慣性項，但定點速度／加速度未報，不能推定這是全部約 1.5 倍差距的原因。[Goršič 方法、討論](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)
+
+## 不確定
+
+- Gullett 前蹲膝伸峰值模型 1.41、研究 0.70 Nm/kg，仍超 ±0.40。背蹲 1.48 對 1.00 進入 ±0.50。標為**來源可疑**：Gullett 前蹲 0.70 Nm/kg 與 Goršič 前蹲定點約 `0.70×1.75≈1.23 Nm/kg` 相差約 1.7 倍，但事件、受試者與軸定義不同，不能裁定哪一方錯。Gullett 原文用了三台攝影機與 3D 重建，不能概括為「2D 研究」；節段質量與慣量確實由平均參數估計。[Gullett 方法與結果](https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf)、[Goršič 表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)
+- Hutchison 三筆雙側推定、未知平均公斤負重、80° 方法下限對 89° 觀察均值、快速動態對準靜態，使其全部維持 `exploratory`。改換後模型髖／膝／踝為 384.68／123.88／93.77 Nm，研究 324／157／90 Nm；不將容許範圍內數值計成通過。[Hutchison 方法與表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/)
+- 低槓目前只有兩筆可比較軀幹角且通過，缺同定義的定點力矩；前蹲的單筆軀幹角通過，不能外推到全行程。其他 60 個清單項目無本試點的數值比較。肌肉活化與模型分配指標也不同，不得稱已數值驗證。
+
+## 清單層級狀態
+
+| 清單項目 | 運動學 | 力矩 | 肌肉分工 |
 |---|---|---|---|
-| 高槓 `squat-high` | **failed**；1/9 通過 | **failed**；4/8 通過 | **failed**；定性趨勢 7/8 通過，寬站距臀大肌活化方向失敗。僅屬模型估計。 |
-| 低槓 `squat-low` | **failed**；1/8 通過 | **unvalidated**；未取得可直接對齊且已量化的低槓峰值資料 | **partial**；定性趨勢 1/1 通過，僅屬模型估計。 |
-| 前蹲 `front-squat` | **partial**；1/1 通過，但缺最低點髖／膝／踝數值 | **failed**；2/5 通過 | **unvalidated**；現有趨勢腳本沒有前蹲肌肉分工的直接檢查。 |
+| 高槓 | `failed`，1/3 可比較；另 4 定義不可比、2 一致性檢查 | `failed`，3/5；另 3 探索性 | `failed`，定性趨勢 7/8 |
+| 低槓 | `partial`，2/2；另 4 定義不可比、2 一致性檢查 | `unvalidated` | `partial`，定性趨勢 1/1 |
+| 前蹲 | `partial`，1/1 | `failed`，2/5 | `unvalidated` |
 
-本試點沒有任何層達 `validated`。其他 60 個清單項目的三層均為 `unvalidated`。肌肉活化 `a` 與負荷 `s` 是最佳化分配結果，不等於肌電 %MVIC 或肌肉實測力；不能用定性趨勢通過來代替數值校準。現有 [`tests/trends.mjs`](../../tests/trends.mjs) 高槓在寬站距臀大肌活化比較失敗，與 [`src/biomech.js`](../../src/biomech.js) 原有的寬站姿股骨矢狀投影限制相符。
-
-## 失敗原因假設與資料限制
-
-1. **最低點角度與深度**：Larsen 高槓窄站膝屈 126.4°，模型 143.4°；髖屈 111°，模型 155.25°。`depth=0.90` 是比對前選定，沒有使實際膝角與研究相同。研究髖角相對骨盆的 Cardan 定義，模型以軀幹作參考且沒有獨立骨盆姿勢，可能再擴大髖角差。先核對骨盆與髖角定義及實際膝深，再判斷姿勢求解是否需修正。[Larsen 等，方法與表 3](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)
-2. **寬站軀幹**：Larsen 高槓窄／寬站軀幹 46.7°／46.0°，模型 42.05°／32.03°，寬站過度直立。現有姿勢求解註記指出，股骨外展縮短矢狀投影，固定壓力中心後會把軀幹拉直並降低髖伸需求；此為待查的幾何假設，不能從定性排序推認已校準。[Larsen 等，表 3](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)、[Lahti 等，2019，DOI 10.1111/sms.13305，方法與表 3](https://jyx.jyu.fi/bitstream/handle/123456789/60648/lahtietal2018scandinavianjournalofmedicine26scienceinsports.pdf?sequence=1)
-3. **平行位置髖／腰背伸力矩偏高**：Goršič 背／前蹲髖伸 0.93／0.89 Nm/(kg·m)，模型 1.65／1.60；中央腰背伸 1.53／1.64，模型右半身換成整體後為 2.90／2.89。模型 75 kg 槓重與研究未知的 70% 前蹲 1RM 絕對重量不一定相同；軀幹／骨盆分段、足壓中心及下肢幾何亦可能影響分配。研究本身是動態逆動力學；需要負重與壓力中心對齊的資料才能分辨原因。[Goršič 等，方法及表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)
-4. **峰值對照限制**：Gullett 前蹲模型膝伸峰值 1.68 Nm/kg，研究 0.7；研究前蹲平均槓重 48.5 kg，模型 75 kg，不能把 0.98 Nm/kg 的差全部歸因於力矩公式。Hutchison 的 30% 1RM 快速蹲與準靜態 75 kg 槓設定差距更大，而且表 2 側別未明；其 2 筆「通過」只反映探索門檻寬。[Gullett 等，結果](https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf)、[Hutchison 等，方法及表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/)
-5. **槓位、站距、深度、負重的效應**：本試點能直接檢查高／低槓與窄／寬站在最低點的角度，以及同負重前／背蹲在平行位置的定點力矩。Larsen 研究的低槓與高槓使用各自 3RM，無法把槓位效應和負重效應完全分離。現有產品 `BAR_RATIO.squat=1.0`，沒有使用者可設的深蹲槓重；因此無法驗證文獻的負重反應。深度／站距對力矩的量化資料仍需加入，例如 Lahti 表 3 的 70%／85% 1RM 站距比較；須先查明其**雙側力矩加總**與本工具單側輸出的換算，並預先固定門檻。[Larsen 等，方法](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)、[Lahti 等，方法](https://jyx.jyu.fi/bitstream/handle/123456789/60648/lahtietal2018scandinavianjournalofmedicine26scienceinsports.pdf?sequence=1)
-
-以上是有來源支持的**待檢假設**，不是對產品數值的校正。本任務沒有修改姿勢、負重、肌肉或肩力臂。
-
-## 公開資料集評估
-
-| 資料 | 深蹲與測力 | 授權／取得 | 本次決定 |
-|---|---|---|---|
-| [AddBiomechanics 1.0](https://www.addbiomechanics.org/download_data.html) | 官方資料頁列有 squat 類別，包含光學標記、地面反力與逆動力學關節力矩；核心資料來自 15 個既有資料源。 | 資料為 [CC BY 4.0](https://addbiomechanics.org/data_sharing_mission.html)，下載時須保留各資料集 `LICENSE.txt` 的上傳者署名。官方頁面提供整包核心資料下載，未在該頁提供可核對槓重、槓位的單筆試驗索引。 | 可供**徒手蹲的運動學／力矩形狀**後續比較；尚未確認含負重槓鈴蹲、檔名及受試條件，故本次不納入數值參考，也未下載大包資料。 |
-| [OpenCap](https://doi.org/10.1371/journal.pcbi.1011462) | 官方[運動學／動力學範例](https://github.com/opencap-org/opencap-processing/blob/main/example_kinetics.py)支援 squat 分段與估算地面反力／力矩；其原始研究報角度、反力、力矩的精度評估。 | [程式庫](https://github.com/opencap-org/opencap-processing)為 Apache 2.0；這不等於可下載的個別受試者資料也有相同授權。範例資料以登入後的 session ID 下載。 | 尚未找到可核對授權及負重條件的公開、可逐筆下載之槓鈴深蹲 session；本次不納入。 |
-
-下一步先取得與模型負重、深度及站距相同的原始試驗；若採 AddBiomechanics 徒手蹲，先記錄 `b3d` 檔名、版本、受試者、試驗標籤、原始授權與力矩軸方向，再以相同姿勢相位做曲線比較。現有 `e` 是位置比例，不能直接等同文獻的時間百分比。硬舉可從已查的 3D 逆動力學研究盤點數值；臥推須另找含肩、肘力矩與同負重條件的開放原始數據。
+層級狀態只由可比較的數值筆數計算；肌肉層另顯示定性檢查，不能視為實測肌力驗證。後續需取得匹配槓位、負重、深度、骨盆標記與左右側別的原始試驗，才可縮小剩餘不確定性。

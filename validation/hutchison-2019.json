@@ -45,7 +45,7 @@
             "mean": 324,
             "sd": 52,
             "unit": "Nm",
-            "definition": "鋼槓向心期髖關節最大矢狀面內部淨力矩，側別未明"
+            "definition": "鋼槓向心期髖關節最大矢狀面內部淨力矩，依單塊測力板整體反力及雙側標記推定為雙腿合計；原文未明確標示"
           },
           "evidence": "table",
           "location": "Table 2, Steel Bar, Hip Maximum Moment",
@@ -53,7 +53,9 @@
             "absolute": 100,
             "unit": "Nm"
           },
-          "limitations": "探索性門檻約兩倍表列 SD；負重、慣性與側別未對齊"
+          "limitations": "雙腿合計為原文方法及 1077 N 地面反力的推定，未有明示；30% 1RM 的平均公斤數未知，動態峰值不能與準靜態模型直接驗證。",
+          "comparisonRole": "exploratory",
+          "modelFactor": 2
         },
         {
           "id": "peak-knee",
@@ -67,7 +69,7 @@
             "mean": 157,
             "sd": 34,
             "unit": "Nm",
-            "definition": "鋼槓向心期膝關節最大矢狀面內部淨力矩，側別未明"
+            "definition": "鋼槓向心期膝關節最大矢狀面內部淨力矩，依單塊測力板整體反力及雙側標記推定為雙腿合計；原文未明確標示"
           },
           "evidence": "table",
           "location": "Table 2, Steel Bar, Knee Maximum Moment",
@@ -75,7 +77,9 @@
             "absolute": 70,
             "unit": "Nm"
           },
-          "limitations": "探索性門檻約兩倍表列 SD；負重、慣性與側別未對齊"
+          "limitations": "雙腿合計為原文方法及 1077 N 地面反力的推定，未有明示；30% 1RM 的平均公斤數未知，動態峰值不能與準靜態模型直接驗證。",
+          "comparisonRole": "exploratory",
+          "modelFactor": 2
         },
         {
           "id": "peak-ankle",
@@ -89,7 +93,7 @@
             "mean": 90,
             "sd": 24,
             "unit": "Nm",
-            "definition": "鋼槓向心期踝關節最大矢狀面內部淨力矩，側別未明"
+            "definition": "鋼槓向心期踝關節最大矢狀面內部淨力矩，依單塊測力板整體反力及雙側標記推定為雙腿合計；原文未明確標示"
           },
           "evidence": "table",
           "location": "Table 2, Steel Bar, Ankle Maximum Moment",
@@ -97,7 +101,9 @@
             "absolute": 50,
             "unit": "Nm"
           },
-          "limitations": "探索性門檻約兩倍表列 SD；負重、慣性與側別未對齊"
+          "limitations": "雙腿合計為原文方法及 1077 N 地面反力的推定，未有明示；30% 1RM 的平均公斤數未知，動態峰值不能與準靜態模型直接驗證。",
+          "comparisonRole": "exploratory",
+          "modelFactor": 2
         }
       ],
       "loadRatio": null,

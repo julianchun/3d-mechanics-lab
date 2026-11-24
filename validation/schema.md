@@ -1,24 +1,25 @@
 # 數值驗證資料格式
 
-`validation/*.json` 中除產物 `results.json` 外，每檔是一篇已核對的原始研究。所有容許誤差先於執行 `npm run test:validation` 固定並單獨提交。比對失敗只記錄，不調整門檻或產品數值。
+`validation/*.json`（不含產物 `results.json`）每檔對應一篇已核對的原始研究。研究數值與容許誤差已先於 T16 的比對提交（`0df5506`、`cb666ff`）；T16b 依研究方法修正條件的提交為 `f88f525`，早於重新比對。容許誤差未修改；不因結果調整產品數值。
 
-## 欄位
+## 研究與條件
 
-- `id`：研究代碼；`source`：作者、年份、完整標題、DOI／PubMed 與可讀全文連結。
-- `participants`：人數、性別、訓練程度、平均體重與身高；未報告時填 `null` 並在 `limitations` 說明。
-- `protocol`：負重、站距、槓位、深度、動作期與量測方式。未報告的 %1RM 或 %BW 不反推。
-- `model`：模型 `BODY`（75 kg、1.75 m）及與研究不同的條件／正規化限制。
-- `conditions[]`：`catalogId` 必須存在；`params` 是相對於 `defaultParams('squat')` 的覆寫，包含槓位、站距和深度。`referenceLoadKg` 為該條件研究負重，未知填 `null`。
-- `measurements[]`：每筆 `id`、三層之一的 `layer`、`metric`、`sample`、`reference`（平均、SD、單位、原文角度或力矩定義）、`evidence`（`table`、`text`、`figureDigitized`、`datasetComputed`）、`location`、`tolerance`（預設的絕對誤差上限，與比較值同單位）。`reference.sd` 未提供時填 `null`。`limitations` 記錄比較限制。
+- `id`、`source`、`participants`、`protocol`：研究識別、可查來源、受試者與方法。來源查不到的設定記錄未知。
+- `sourceQuality`：來源品質註記，不改變數值或門檻。Gullett 2009 的跨研究膝力矩差距列為審閱警訊；其原文採三台攝影機作 3D 重建，不能把整篇稱為 2D。
+- `model`：本次模型設定與限制。`conditions[].catalogId` 須為深蹲清單項目；`params` 是 `defaultParams('squat')` 的覆寫。
+- `conditions[].conditionDerivation`：由研究方案推導深度、站距、負重與事件位置，不得用被比較的研究結果反推。`referenceLoadKg` 為報告或推算的公斤數；`loadRatio` 為槓重相對模型體重的比例。比對器僅在重算當下暫時覆寫 `BAR_RATIO.squat`，並在運算後還原。未知比例填 `null`，採模型原本預設值但不得視為條件已對齊。
+- `measurements[]`：每筆指標、`sample`、`reference` 平均值／SD／原始定義、`evidence` 類型與 `location`、預先設定的 `tolerance`；`limitations` 寫明不能對齊之處。
 
-## 本試點可計算的量
+## 指標與換算
 
-`trunkInclination` = 軀幹長軸相對垂直的前傾角，度；`hipFlexion` = 大腿相對軀幹的屈曲角，度；`kneeFlexion` = 大腿與小腿方向的屈曲角，伸直為 0°；`ankleDorsiflexion` = 小腿相對垂直的背屈角，平足站立為 0°。Larsen 表 3 的踝角以小腿與腳的內角表達，本資料保留原值，計算時用 `referenceTransform: "minus90"` 換為背屈角。其三維 Cardan 軸序與模型幾何角不完全相同，因此列入測量定義的不確定性。
+`trunkInclination` 為軀幹對垂直前傾角；`hipFlexion` 為模型軀幹—大腿角；`kneeFlexion` 伸直為 0°；`ankleDorsiflexion` 為小腿對垂直背屈角。Larsen 髖屈為骨盆—大腿 Cardan 角，模型沒有骨盆自由度；其踝角欠缺站立參考，原先的 `minus90` 換算未經證實。這八筆標記 `definition-mismatch`，產物不輸出差距或通過判定。需有骨盆自由度及踝角站立參考；踝角亦可改比站距間的變化量。
 
-`hipExtensionMoment`、`kneeExtensionMoment`、`anklePlantarflexionMoment`、`lumbarExtensionMoment` 為模型右半身內部淨力矩，Nm。`normalization: "massHeight"` 除以 75 kg × 1.75 m，得 Nm/(kg·m)；`"mass"` 除以 75 kg，得 Nm/kg。研究若報負膝伸力矩，以 `referenceTransform: "absolute"` 轉為正的需求量。這只消除體重／身高單位差異，不消除槓重、體型、速度及器材差異。
+`hipExtensionMoment`、`kneeExtensionMoment`、`anklePlantarflexionMoment`、`lumbarExtensionMoment` 為模型右半身內部淨力矩，單位 Nm。`normalization: "massHeight"` 除以模型 75 kg × 1.75 m；`"mass"` 除以 75 kg。研究以負號報膝伸需求時，`referenceTransform: "absolute"` 取絕對值。Goršič 中央腰背力矩是整體量，`modelFactor: 2`；其髖／膝／踝為左右平均，不倍乘。Hutchison 表 2 未明示側別，但原文用單塊測力板記錄約 1077 N 整體反力並追蹤雙腿；三筆力矩**推定**為雙腿合計，`modelFactor: 2`，側別仍列不確定。
 
-`modelFactor` 僅在研究的力矩是**整體軀幹**、而模型輸出是右半身時使用。Goršič 表 2 的腰背力矩為骨盆嵴中點的單一整體力矩，故兩筆設 `modelFactor: 2`；其髖／膝／踝力矩已是雙側平均，維持單側模型值。此為比對定義換算，不更動任何容許誤差。
+`sample.type` 可為：`bottom`（`e=1`）、`parallelThigh`（在模型路徑尋找方法定義的股骨對垂直角）、`peak`（401 點最大正力矩）。`peak.endKneeFlexionDeg` 限制峰值搜尋到模型首次達方法膝屈下限的位置，供 Hutchison 的 >80° 條件；其表 2 膝角平均 89°只作描述，沒有用來設定深度。模型是準靜態，不能驗證動態加速度與時間曲線。
 
-`sample.type`：`bottom` 取 `e=1`；`parallelThigh` 在 `e∈[0,1]` 找大腿對垂直角達 `targetDeg` 的點（上升期的對應姿勢）；`peak` 在 401 個等距行程點找最大正力矩。模型為準靜態，下降與上升期輸出相同，不能驗證加速度造成的峰值或時間曲線。
+## 狀態與計數
 
-比對：`error = model − transformedReference`；`pass = |error| ≤ tolerance.absolute`。文獻 SD 只作呈現，不自動放寬門檻。`partial` 表示已有比對、全數通過但研究條件仍不匹配或證據不足；`failed` 表示至少一筆不通過。未有數值比對的層為 `unvalidated`；本試點肌肉分工只沿用定性趨勢並標示「模型估計」，不能給 `validated`。
+`comparisonRole` 預設 `comparable`；也可為 `definition-mismatch`、`exploratory`、`consistency-check`。只有 `comparable` 用 `|model − reference| ≤ tolerance.absolute` 判定 `pass`／`fail`。Hutchison 動態 30% 1RM 的三筆為探索性；Larsen 膝角與深度高度相關，四筆只作一致性檢查。這些筆仍保留量測值與來源，但不進通過率。文獻 SD 僅供展示，不自動放寬門檻。
+
+`results.summary.total` 是全部筆數；`count=pass+fail` 是可比較筆數；另列 `definitionMismatch`、`exploratory`、`consistencyCheck`。`src/validation-status.json` 各清單項目、各層使用相同算法，層級狀態只由可比較筆數決定：有失敗為 `failed`、全通過仍因條件限制為 `partial`；零筆可比較時為 `definition-mismatch`、`exploratory` 或 `unvalidated`。肌肉層仍只有定性趨勢，不代表肌力已驗證。

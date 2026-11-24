@@ -71,7 +71,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
         },
         {
           "id": "knee",
@@ -91,7 +93,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
         },
         {
           "id": "ankle",
@@ -112,7 +116,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
         }
       ],
       "loadRatio": 1.301837,
@@ -166,7 +172,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
         },
         {
           "id": "knee",
@@ -186,7 +194,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
         },
         {
           "id": "ankle",
@@ -207,7 +217,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
         }
       ],
       "loadRatio": 1.21916,
@@ -261,7 +273,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
         },
         {
           "id": "knee",
@@ -281,7 +295,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
         },
         {
           "id": "ankle",
@@ -302,7 +318,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
         }
       ],
       "loadRatio": 1.345144,
@@ -356,7 +374,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
         },
         {
           "id": "knee",
@@ -376,7 +396,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
         },
         {
           "id": "ankle",
@@ -397,7 +419,9 @@
           "tolerance": {
             "absolute": 12,
             "unit": "deg"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
         }
       ],
       "loadRatio": 1.254593,
