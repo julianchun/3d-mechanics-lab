@@ -1,0 +1,113 @@
+{
+  "id": "hutchison-2019",
+  "source": {
+    "authors": "Hutchison RE, Caterisano A",
+    "year": 2019,
+    "title": "Comparison of Peak Ground Reaction Force, Joint Kinetics and Kinematics, and Muscle Activity Between a Flexible and Steel Barbell During the Back Squat Exercise",
+    "doi": "10.2478/hukin-2019-0059",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/"
+  },
+  "participants": {
+    "n": 10,
+    "sex": "全男",
+    "training": "NCAA 第一級大學美式足球選手，熟悉鋼槓與彈性槓深蹲",
+    "massKg": {
+      "mean": 89.4,
+      "sd": 17.1
+    },
+    "heightM": {
+      "mean": 1.82,
+      "sd": 0.074
+    }
+  },
+  "protocol": "鋼槓（不取彈性槓）30% 背蹲 1RM，10 次依每分鐘 52 下節拍執行；膝最低點屈角至少 80°，向心期自 C7 最低到最高點取峰。站距、平均槓重公斤數未報告。表 2 數值與本文摘要的髖力矩數值不一致，以表 2 為本筆來源。",
+  "model": "BODY=75 kg、1.75 m；原文僅有鋼槓 30% 個人 1RM，未報可求平均公斤數的 1RM，故負重比例未知，暫保留產品 1×體重並列探索性。站距未報，用預設 0.30；方法要求最低點膝屈大於 80°，比較工具將峰值取樣限制到模型首次達 80° 的姿勢；表 2 觀察均值 89°只作一致性資訊，不用來反推深度。",
+  "conditions": [
+    {
+      "id": "steel-back",
+      "catalogId": "squat-high",
+      "params": {
+        "barPos": "high",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "referenceLoadKg": null,
+      "measurements": [
+        {
+          "id": "peak-hip",
+          "layer": "moments",
+          "metric": "hipExtensionMoment",
+          "sample": {
+            "type": "peak",
+            "endKneeFlexionDeg": 80
+          },
+          "reference": {
+            "mean": 324,
+            "sd": 52,
+            "unit": "Nm",
+            "definition": "鋼槓向心期髖關節最大矢狀面內部淨力矩，依單塊測力板整體反力及雙側標記推定為雙腿合計；原文未明確標示"
+          },
+          "evidence": "table",
+          "location": "Table 2, Steel Bar, Hip Maximum Moment",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "limitations": "雙腿合計為原文方法及 1077 N 地面反力的推定，未有明示；30% 1RM 的平均公斤數未知，動態峰值不能與準靜態模型直接驗證。",
+          "comparisonRole": "exploratory",
+          "modelFactor": 2
+        },
+        {
+          "id": "peak-knee",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "peak",
+            "endKneeFlexionDeg": 80
+          },
+          "reference": {
+            "mean": 157,
+            "sd": 34,
+            "unit": "Nm",
+            "definition": "鋼槓向心期膝關節最大矢狀面內部淨力矩，依單塊測力板整體反力及雙側標記推定為雙腿合計；原文未明確標示"
+          },
+          "evidence": "table",
+          "location": "Table 2, Steel Bar, Knee Maximum Moment",
+          "tolerance": {
+            "absolute": 70,
+            "unit": "Nm"
+          },
+          "limitations": "雙腿合計為原文方法及 1077 N 地面反力的推定，未有明示；30% 1RM 的平均公斤數未知，動態峰值不能與準靜態模型直接驗證。",
+          "comparisonRole": "exploratory",
+          "modelFactor": 2
+        },
+        {
+          "id": "peak-ankle",
+          "layer": "moments",
+          "metric": "anklePlantarflexionMoment",
+          "sample": {
+            "type": "peak",
+            "endKneeFlexionDeg": 80
+          },
+          "reference": {
+            "mean": 90,
+            "sd": 24,
+            "unit": "Nm",
+            "definition": "鋼槓向心期踝關節最大矢狀面內部淨力矩，依單塊測力板整體反力及雙側標記推定為雙腿合計；原文未明確標示"
+          },
+          "evidence": "table",
+          "location": "Table 2, Steel Bar, Ankle Maximum Moment",
+          "tolerance": {
+            "absolute": 50,
+            "unit": "Nm"
+          },
+          "limitations": "雙腿合計為原文方法及 1077 N 地面反力的推定，未有明示；30% 1RM 的平均公斤數未知，動態峰值不能與準靜態模型直接驗證。",
+          "comparisonRole": "exploratory",
+          "modelFactor": 2
+        }
+      ],
+      "loadRatio": null,
+      "conditionDerivation": "研究方法規定鋼槓 30% 個人 1RM、膝屈最低點 >80°，但未報平均 1RM kg 或站距；不以表 2 的 89° 結果反推深度。模型以 stance=0.30 與 depth=0.55 建立路徑，峰值搜尋止於首次達方法門檻 80° 的姿勢；這只是最低深度界線，故比對維持探索性。"
+    }
+  ]
+}

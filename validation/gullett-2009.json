@@ -1,0 +1,103 @@
+{
+  "id": "gullett-2009",
+  "source": {
+    "authors": "Gullett JC, Tillman MD, Gutierrez GM, Chow JW",
+    "year": 2009,
+    "title": "A biomechanical comparison of back and front squats in healthy trained individuals",
+    "doi": "10.1519/JSC.0b013e31818546bb",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19002072/",
+    "fullTextUrl": "https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf"
+  },
+  "participants": {
+    "n": 15,
+    "sex": "9 男、6 女",
+    "training": "前後蹲各至少一年、每週至少一次",
+    "massKg": {
+      "mean": 69.7,
+      "sd": 6.2
+    },
+    "heightM": {
+      "mean": 1.712,
+      "sd": 0.064
+    }
+  },
+  "protocol": "各自 1RM 的 70%，背蹲平均 61.8±18.6 kg、前蹲平均 48.5±14.1 kg；約肩寬站距、大腿到平行；右腳測力板，取向心與離心最大淨膝伸力矩。兩條件的絕對槓重不同。",
+  "model": "BODY=75 kg、1.75 m；比較時按各條件平均槓重/69.7 kg 暫時輸入負重比例，不改產品預設。stance=0.30 近肩寬，depth=0.55 令模型大腿最低點約 96.4°（略低水平）；模型全行程正力矩峰值除 75 kg。",
+  "conditions": [
+    {
+      "id": "back",
+      "catalogId": "squat-high",
+      "params": {
+        "barPos": "high",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "referenceLoadKg": 61.8,
+      "measurements": [
+        {
+          "id": "peak-knee",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 1,
+            "sd": 0.4,
+            "unit": "Nm/kg",
+            "definition": "向心與離心最大淨膝伸力矩，除以受試者體重"
+          },
+          "normalization": "mass",
+          "evidence": "text",
+          "location": "Results, Kinetic Data, p. 287（Figure 3 後）",
+          "tolerance": {
+            "absolute": 0.5,
+            "unit": "Nm/kg"
+          }
+        }
+      ],
+      "loadRatio": 0.886657,
+      "conditionDerivation": "方法：61.8 kg 是此式 70% 1RM 的平均試驗槓重；除以研究平均體重 69.7 kg 得 0.887×體重。約肩寬用 stance=0.30；大腿平行以模型 γ底=70°+48°×0.55=96.4° 作略低水平的近似。峰值取全行程。"
+    },
+    {
+      "id": "front",
+      "catalogId": "front-squat",
+      "params": {
+        "barPos": "front",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "referenceLoadKg": 48.5,
+      "measurements": [
+        {
+          "id": "peak-knee",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.7,
+            "sd": 0.2,
+            "unit": "Nm/kg",
+            "definition": "向心與離心最大淨膝伸力矩，除以受試者體重"
+          },
+          "normalization": "mass",
+          "evidence": "text",
+          "location": "Results, Kinetic Data, p. 287（Figure 3 後）",
+          "tolerance": {
+            "absolute": 0.4,
+            "unit": "Nm/kg"
+          }
+        }
+      ],
+      "loadRatio": 0.695839,
+      "conditionDerivation": "方法：48.5 kg 是此式 70% 1RM 的平均試驗槓重；除以研究平均體重 69.7 kg 得 0.696×體重。約肩寬用 stance=0.30；大腿平行以模型 γ底=70°+48°×0.55=96.4° 作略低水平的近似。峰值取全行程。"
+    }
+  ],
+  "sourceQuality": {
+    "rating": "caution",
+    "reason": "前蹲膝伸峰值 0.70 Nm/kg 與 Goršič 相近負重的定點膝矩約 1.2 Nm/kg 相差約 1.7 倍，兩者事件、參考座標與受試者不同，不能直接裁定哪篇錯。原文用三台攝影機做 3D 重建，不能稱研究整體為 2D；只取膝部結果，節段質量與慣量依平均參數估計。",
+    "source": "https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf"
+  }
+}

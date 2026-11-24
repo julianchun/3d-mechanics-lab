@@ -1,0 +1,2185 @@
+{
+  "modelVersion": "0.7.2",
+  "summary": {
+    "total": 31,
+    "count": 16,
+    "pass": 9,
+    "fail": 7,
+    "definitionMismatch": 8,
+    "exploratory": 3,
+    "consistencyCheck": 4,
+    "sources": 4
+  },
+  "byId": {
+    "squat-high": {
+      "kinematics": {
+        "status": "failed",
+        "total": 9,
+        "count": 3,
+        "pass": 1,
+        "fail": 2,
+        "definitionMismatch": 4,
+        "exploratory": 0,
+        "consistencyCheck": 2,
+        "links": [
+          "docs/validation/squat.md",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+        ]
+      },
+      "moments": {
+        "status": "failed",
+        "total": 8,
+        "count": 5,
+        "pass": 3,
+        "fail": 2,
+        "definitionMismatch": 0,
+        "exploratory": 3,
+        "consistencyCheck": 0,
+        "links": [
+          "docs/validation/squat.md",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+          "https://pubmed.ncbi.nlm.nih.gov/19002072/",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/"
+        ]
+      },
+      "muscles": {
+        "status": "failed",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 8,
+        "qualitativePass": 7,
+        "qualitativeFail": 1,
+        "links": [
+          "docs/validation/squat.md",
+          "docs/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
+      }
+    },
+    "squat-low": {
+      "kinematics": {
+        "status": "partial",
+        "total": 8,
+        "count": 2,
+        "pass": 2,
+        "fail": 0,
+        "definitionMismatch": 4,
+        "exploratory": 0,
+        "consistencyCheck": 2,
+        "links": [
+          "docs/validation/squat.md",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+        ]
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "partial",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 1,
+        "qualitativePass": 1,
+        "qualitativeFail": 0,
+        "links": [
+          "docs/validation/squat.md",
+          "docs/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
+      }
+    },
+    "front-squat": {
+      "kinematics": {
+        "status": "partial",
+        "total": 1,
+        "count": 1,
+        "pass": 1,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": [
+          "docs/validation/squat.md",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+        ]
+      },
+      "moments": {
+        "status": "failed",
+        "total": 5,
+        "count": 5,
+        "pass": 2,
+        "fail": 3,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": [
+          "docs/validation/squat.md",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+          "https://pubmed.ncbi.nlm.nih.gov/19002072/"
+        ]
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": [],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
+      }
+    },
+    "goblet-squat": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "smith-squat": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "leg-press": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "hack-squat": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "deadlift": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "deficit-dl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "block-pull": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "sumo": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "rdl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "good-morning": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "hip-thrust": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "back-extension": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "glute-bridge": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "bench": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "incline-bench": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "cg-bench": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "floor-press": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "db-bench": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "db-bench-incline": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pushup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pushup-feet": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pushup-hands": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "chest-press": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pec-deck": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "reverse-deck": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "machine-press": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "cable-fly-high": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "cable-fly-mid": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "cable-fly-low": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "ohp": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "db-press": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "dips": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "dips-upright": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "row": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "row-sup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "cable-row": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "cable-row-wide": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "db-reverse-fly": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "uprow": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pulldown": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pulldown-sup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pullup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pullup-wide": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "chinup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "assist-pullup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "assist-chinup": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "leg-ext": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "calf-raise-standing": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "calf-raise-seated": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "hip-abduction": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "hip-adduction": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "leg-curl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "lying-leg-curl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "pushdown": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "curl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "reverse-curl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "lat-raise": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "db-curl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "hammer-curl": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    },
+    "shrug": {
+      "kinematics": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "moments": {
+        "status": "unvalidated",
+        "total": 0,
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "definitionMismatch": 0,
+        "exploratory": 0,
+        "consistencyCheck": 0,
+        "links": []
+      },
+      "muscles": {
+        "status": "unvalidated",
+        "count": 0,
+        "pass": 0,
+        "fail": 0,
+        "qualitativeCount": 0,
+        "qualitativePass": 0,
+        "qualitativeFail": 0,
+        "links": []
+      }
+    }
+  }
+}

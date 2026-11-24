@@ -1,0 +1,431 @@
+{
+  "id": "larsen-2021",
+  "source": {
+    "authors": "Larsen S, Kristiansen E, Helms E, van den Tillaar R",
+    "year": 2021,
+    "title": "Effects of Stance Width and Barbell Placement on Kinematics, Kinetics, and Myoelectric Activity in Back Squats",
+    "doi": "10.3389/fspor.2021.719013",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+  },
+  "participants": {
+    "n": 18,
+    "sex": "9 男、9 女",
+    "training": "休閒阻力訓練；男性偏好深蹲至少 1.5× 體重 1RM，女性至少 1×；三次熟悉訓練",
+    "massKg": {
+      "mean": 76.2,
+      "sd": 11.1
+    },
+    "heightM": {
+      "mean": 1.73,
+      "sd": 0.086
+    }
+  },
+  "protocol": "各條件各自 3RM；窄站距為 0.7× 肩峰距，寬站距 1.7×；深度為髖頂低於膝，腿後側碰水平帶；取第三次向心最低槓位 v0。表 1 站距窄 31.7±2.7 cm、寬 59.8±5.1 cm；低槓離 C7 7.4±1.8 cm。",
+  "model": "BODY=75 kg、1.75 m；站距依表 1 換算。depth 由 IPF 髖頂低於膝的操作界線取大腿略過水平約 95°；模型最低點矢狀面大腿角 = 70° + 48°×depth，故 depth=(95−70)/48≈0.52。槓重按各條件 3RM/研究平均體重暫時輸入，不改產品預設。",
+  "conditions": [
+    {
+      "id": "high-narrow",
+      "catalogId": "squat-high",
+      "params": {
+        "barPos": "high",
+        "stance": 0.14,
+        "depth": 0.52
+      },
+      "referenceLoadKg": 99.2,
+      "measurements": [
+        {
+          "id": "trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 46.7,
+            "sd": 2.9,
+            "unit": "deg",
+            "definition": "torso 相對實驗室座標；前傾角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar narrow",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "hip",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 111,
+            "sd": 7.2,
+            "unit": "deg",
+            "definition": "髖屈 Cardan 角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar narrow",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
+        },
+        {
+          "id": "knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 126.4,
+            "sd": 4.7,
+            "unit": "deg",
+            "definition": "膝屈 Cardan 角，伸直 0°"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar narrow",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
+        },
+        {
+          "id": "ankle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 106,
+            "sd": 4.5,
+            "unit": "deg",
+            "definition": "表列 ankle plantar flexion 內角；以 90° 站立角為零點"
+          },
+          "referenceTransform": "minus90",
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar narrow",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
+        }
+      ],
+      "loadRatio": 1.301837,
+      "conditionDerivation": "方法為 IPF 髖頂低於膝且腿後側觸帶；取大腿略低於水平約 95° 作共同操作近似，模型 γ底=70°+48°×depth，故 depth=(95−70)/48≈0.52；未使用表 3 膝角設定深度。站距由表 1 腳跟距和模型 w=0.13+0.21×stance 換算。負重比例=表 2 此條件 3RM ÷ 76.2 kg 研究平均體重；低槓寬站依表 2 的 95.6 kg。"
+    },
+    {
+      "id": "high-wide",
+      "catalogId": "squat-high",
+      "params": {
+        "barPos": "high",
+        "stance": 0.8,
+        "depth": 0.52
+      },
+      "referenceLoadKg": 92.9,
+      "measurements": [
+        {
+          "id": "trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 46,
+            "sd": 3.4,
+            "unit": "deg",
+            "definition": "torso 相對實驗室座標；前傾角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar wide",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "hip",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 110.4,
+            "sd": 4.5,
+            "unit": "deg",
+            "definition": "髖屈 Cardan 角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar wide",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
+        },
+        {
+          "id": "knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 119.3,
+            "sd": 6.4,
+            "unit": "deg",
+            "definition": "膝屈 Cardan 角，伸直 0°"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar wide",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
+        },
+        {
+          "id": "ankle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 98.6,
+            "sd": 5.9,
+            "unit": "deg",
+            "definition": "表列 ankle plantar flexion 內角；以 90° 站立角為零點"
+          },
+          "referenceTransform": "minus90",
+          "evidence": "table",
+          "location": "Table 3, v0, high-bar wide",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
+        }
+      ],
+      "loadRatio": 1.21916,
+      "conditionDerivation": "方法為 IPF 髖頂低於膝且腿後側觸帶；取大腿略低於水平約 95° 作共同操作近似，模型 γ底=70°+48°×depth，故 depth=(95−70)/48≈0.52；未使用表 3 膝角設定深度。站距由表 1 腳跟距和模型 w=0.13+0.21×stance 換算。負重比例=表 2 此條件 3RM ÷ 76.2 kg 研究平均體重；低槓寬站依表 2 的 95.6 kg。"
+    },
+    {
+      "id": "low-narrow",
+      "catalogId": "squat-low",
+      "params": {
+        "barPos": "low",
+        "stance": 0.14,
+        "depth": 0.52
+      },
+      "referenceLoadKg": 102.5,
+      "measurements": [
+        {
+          "id": "trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 56.7,
+            "sd": 2.5,
+            "unit": "deg",
+            "definition": "torso 相對實驗室座標；前傾角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar narrow",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "hip",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 110.5,
+            "sd": 6.6,
+            "unit": "deg",
+            "definition": "髖屈 Cardan 角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar narrow",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
+        },
+        {
+          "id": "knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 122.7,
+            "sd": 5,
+            "unit": "deg",
+            "definition": "膝屈 Cardan 角，伸直 0°"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar narrow",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
+        },
+        {
+          "id": "ankle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 106.3,
+            "sd": 5,
+            "unit": "deg",
+            "definition": "表列 ankle plantar flexion 內角；以 90° 站立角為零點"
+          },
+          "referenceTransform": "minus90",
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar narrow",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
+        }
+      ],
+      "loadRatio": 1.345144,
+      "conditionDerivation": "方法為 IPF 髖頂低於膝且腿後側觸帶；取大腿略低於水平約 95° 作共同操作近似，模型 γ底=70°+48°×depth，故 depth=(95−70)/48≈0.52；未使用表 3 膝角設定深度。站距由表 1 腳跟距和模型 w=0.13+0.21×stance 換算。負重比例=表 2 此條件 3RM ÷ 76.2 kg 研究平均體重；低槓寬站依表 2 的 95.6 kg。"
+    },
+    {
+      "id": "low-wide",
+      "catalogId": "squat-low",
+      "params": {
+        "barPos": "low",
+        "stance": 0.8,
+        "depth": 0.52
+      },
+      "referenceLoadKg": 95.6,
+      "measurements": [
+        {
+          "id": "trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 53,
+            "sd": 4.4,
+            "unit": "deg",
+            "definition": "torso 相對實驗室座標；前傾角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar wide",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "hip",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 111.9,
+            "sd": 4.8,
+            "unit": "deg",
+            "definition": "髖屈 Cardan 角"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar wide",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究髖屈為骨盆—大腿 Cardan 角；模型是軀幹—大腿，缺骨盆自由度。"
+        },
+        {
+          "id": "knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 120.3,
+            "sd": 5.8,
+            "unit": "deg",
+            "definition": "膝屈 Cardan 角，伸直 0°"
+          },
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar wide",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "IPF 深度條件已獨立設定；膝角與深度高度相關，僅作一致性檢查。"
+        },
+        {
+          "id": "ankle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 100.5,
+            "sd": 6.3,
+            "unit": "deg",
+            "definition": "表列 ankle plantar flexion 內角；以 90° 站立角為零點"
+          },
+          "referenceTransform": "minus90",
+          "evidence": "table",
+          "location": "Table 3, v0, low-bar wide",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "研究未提供站立基準；以 90° 中立轉成背屈角無法查證。"
+        }
+      ],
+      "loadRatio": 1.254593,
+      "conditionDerivation": "方法為 IPF 髖頂低於膝且腿後側觸帶；取大腿略低於水平約 95° 作共同操作近似，模型 γ底=70°+48°×depth，故 depth=(95−70)/48≈0.52；未使用表 3 膝角設定深度。站距由表 1 腳跟距和模型 w=0.13+0.21×stance 換算。負重比例=表 2 此條件 3RM ÷ 76.2 kg 研究平均體重；低槓寬站依表 2 的 95.6 kg。"
+    }
+  ]
+}
