@@ -36,7 +36,7 @@ function angles(pose) {
     trunkInclination: deg(pose.phi),
     hipFlexion: deg(Math.atan2(dot(thigh, pose.f), dot(thigh, downTrunk))),
     kneeFlexion: deg(Math.acos(clamp(dot(norm(thigh), norm(shank))))),
-    ankleDorsiflexion: deg(Math.atan2(dot(upShank, pose.toeDir), upShank[1])),
+    ankleDorsiflexion: deg(Math.atan2(dot(upShank, pose.toeDir), pose.footUp ? dot(upShank, pose.footUp) : upShank[1])),
   };
 }
 

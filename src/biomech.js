@@ -288,6 +288,7 @@ export const LIFTS = {
       { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.45, joint: 'hip', mech: 'A' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.3, joint: 'ankle', mech: 'A' },
+      { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
       { key: 'barPos', label: '槓位', type: 'select', options: [['high', '高槓'], ['low', '低槓'], ['front', '前槓（前蹲）']], def: 'high', joint: 'bar', mech: 'A' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
@@ -475,6 +476,7 @@ export const LIFTS = {
     params: [
       { key: 'railAngle', label: '滑軌角度', type: 'select', options: MACHINES.smith.railDegOptions, def: MACHINES.smith.railDegDefault, joint: 'equip', mech: 'A' },
       { key: 'feetFwd', label: '腳在槓前方', left: '0（同自由深蹲）', right: '30 cm', min: 0, max: 0.3, step: 0.01, def: 0.12, joint: 'ankle', mech: 'A', fmt: 'cm' },
+      { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'torso', label: '最低點軀幹前傾', left: '0°（直立）', right: '45°', min: 0, max: 45, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'ankle', mech: 'B' },
@@ -808,6 +810,7 @@ export const LIFTS = {
       { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.25, joint: 'hip', mech: 'A' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'A' },
+      { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
       { key: 'load', label: '啞鈴重量', left: '8 kg', right: '40 kg', min: 8, max: 40, step: 2, def: MACHINES.dumbbell.gobletKg, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
@@ -1008,6 +1011,28 @@ function legChain(pose, A, toe, hip, extra = {}) {
   return leg.ok;
 }
 
+// 前腳掌固定在原站位；腳跟墊高 h 後，足底從跟到趾長 25 cm，繞前腳掌傾斜。
+// 踝在足底法線上 4.8 cm；外鞋底／墊片接觸地面，地面反力仍作用於 y=0。
+function squatHeelFoot(P, flatA, toe) {
+  const h = clamp(Number(P.heelHeight ?? 0), 0, 4) / 100;
+  if (!h) return null;
+  const a = Math.asin(h / 0.25), sn = Math.sin(a), cs = Math.cos(a);
+  const dir = [toe[0] * cs, -sn, toe[2] * cs];
+  const up = [toe[0] * sn, cs, toe[2] * sn];
+  const tip = add(flatA, add(mul(toe, 0.19), [0, -BODY.ankleH + 0.02, 0]));
+  const ankle = add(sub(tip, mul(dir, 0.19)), mul(up, BODY.ankleH - 0.02));
+  return { h, a, ankle, heel: sub(tip, mul(dir, 0.25)), tip, dir, up };
+}
+
+function applySquatHeel(pose, foot) {
+  if (!foot) return;
+  pose.R.heel = foot.heel; pose.R.toe = foot.tip;
+  pose.toeDir = foot.dir; pose.footUp = foot.up;
+  // 左右腳跟各有墊片；鞋內傾斜足板由腳掌骨架呈現，墊片上緣托住腳跟。
+  const c = [foot.heel[0], foot.h / 2, foot.heel[2]];
+  pose.boxes = [-1, 1].map((side) => box([side * c[0], c[1], c[2]], [0.10, foot.h, 0.075], 0, 'frame'));
+}
+
 // ---------- 肩帶（肩胛骨＋鎖骨）----------
 // 軀幹局部座標：x = 外側、y = 沿軀幹向上、z = 前方，原點 = 骨盆中心；數值來自 BodyParts3D
 export const GIRDLE = { scj: [0.0151, 0.5243, 0.0583], sh: [BODY.shHalf, BODY.Ltr, 0] };
@@ -1074,8 +1099,11 @@ function squatPose(P, e) {
   //   已知限制：在固定腳掌中段 cop.z=0 且膝對齊腳尖下，股骨外展使矢狀面投影縮短約 33%，導致寬站距模型軀幹反較直立約 16° 且矢狀面髖伸力矩下降，與 Escamilla 2001（軀幹角無顯著差異、寬站距髖伸力矩較高）存在矛盾。
   const domShift = (low ? 0.08 : front ? -0.08 : 0) + 0.35 * (P.stance - 0.3);
   const domEff = clamp(P.dom + domShift, 0, 1);
-  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e), gam = rad(lerp(70, 118, P.depth)) * e;
-  const A = [w, BODY.ankleH, -0.07];
+  const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
+  // 示範假設：鞋跟帶來的足板角增量，一半分給膝前移，一半保留為踝背屈需求下降；未依驗證研究擬合。
+  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * 0.5 * e;
+  const gam = rad(lerp(70, 118, P.depth)) * e;
+  const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
   for (let i = 0; i < 4; i++) {
     const Ky = A[1] + Ls * Math.cos(thS), Kz = A[2] + Ls * Math.sin(thS);
@@ -1110,6 +1138,7 @@ function squatPose(P, e) {
   const comz = (phi) => {
     const { tf, bar, arm } = build(phi);
     const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, wrist: arm.R.wrist, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u, toeDir: toe };
+    if (foot) applySquatHeel(pz, foot);
     return systemComZ(pz, bar, BAR_RATIO.squat);
   };
   let phi;
@@ -1124,6 +1153,7 @@ function squatPose(P, e) {
   Object.assign(pose, tf);
   pose.phi = phi;
   legChain(pose, A, toe, pose.R.hip);
+  applySquatHeel(pose, foot);
   pose.R.knee = K; // 以平面解的膝位置為準
   pose.girdle = girdle;
   Object.assign(pose.R, arm.R);
@@ -1897,7 +1927,8 @@ function smithPose(P, e) {
   const railDir = [0, Math.cos(a), -Math.sin(a)];
   const railN = [0, Math.sin(a), Math.cos(a)];
   const railZAt = (y) => M.railZ0 - (y - M.railRefY) * Math.tan(a);
-  const A = [w, BODY.ankleH, M.railZ0 - 0.07 + P.feetFwd];
+  const flatA = [w, BODY.ankleH, M.railZ0 - 0.07 + P.feetFwd];
+  const foot = squatHeelFoot(P, flatA, toe), A = foot?.ankle || flatA;
   const kap = rad(lerp(4, lerp(70, 125, P.depth), e));
   const phi = rad(lerp(3, P.torso, e));
   const u = [0, Math.cos(phi), Math.sin(phi)];
@@ -1915,6 +1946,7 @@ function smithPose(P, e) {
   Object.assign(pose, r.tf);
   pose.phi = phi;
   legChain(pose, A, toe, r.hip);
+  applySquatHeel(pose, foot);
   pose.R.knee = r.knee;
   pose.girdle = { ret: rad(15), elev: 0 };
   const S = toWorld(r.tf, shoulderLocal(pose.girdle));
@@ -1928,6 +1960,7 @@ function smithPose(P, e) {
   const yMid = (0.025 + M.railHeight) / 2, zMid = (zBot + zTop) / 2;
   const railLen = (M.railHeight - 0.025) / Math.cos(a);
   pose.boxes = [
+    ...(pose.boxes || []),
     ...[-1, 1].flatMap((sx) => [
       boxAlong([sx * M.railHalfSpan, yMid, zMid], railDir, [0.045, railLen, 0.045], 'glass'),
       boxAlong([sx * M.railHalfSpan, r.bar[1], r.bar[2]], railDir, [0.075, 0.14, 0.075], 'frame'), // 滑套軸承
@@ -3034,8 +3067,10 @@ function gobletPose(P, e) {
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const domShift = -0.08 + 0.35 * (P.stance - 0.3);
   const domEff = clamp(P.dom + domShift, 0, 1);
-  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e), gam = rad(lerp(70, 118, P.depth)) * e;
-  const A = [w, BODY.ankleH, -0.07];
+  const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
+  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * 0.5 * e;
+  const gam = rad(lerp(70, 118, P.depth)) * e;
+  const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
   for (let i = 0; i < 4; i++) {
     const Ky = A[1] + Ls * Math.cos(thS), Kz = A[2] + Ls * Math.sin(thS);
@@ -3067,6 +3102,7 @@ function gobletPose(P, e) {
   const comz = (phi) => {
     const { tf, dbC, arm } = build(phi);
     const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u, toeDir: toe };
+    if (foot) applySquatHeel(pz, foot);
     return systemComZ(pz, dbC, dbW);
   };
   let phi;
@@ -3082,6 +3118,7 @@ function gobletPose(P, e) {
   Object.assign(pose, tf);
   pose.phi = phi;
   legChain(pose, A, toe, pose.R.hip);
+  applySquatHeel(pose, foot);
   pose.R.knee = K;
   pose.girdle = girdle;
   Object.assign(pose.R, arm.R);
