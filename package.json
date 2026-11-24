@@ -1,6 +1,6 @@
 {
   "name": "3d-mechanics-lab",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "重訓動作的 3D 生物力學教學工具：姿勢、關節力矩、肌肉受力",
   "scripts": {
     "test": "node tests/validate.mjs && node tests/shoulder.mjs && node tests/plausibility.mjs && node tests/regress.mjs && node tests/trends.mjs --check && node tools/validate-sim.mjs --check",
@@ -12,6 +12,7 @@
     "review": "node tools/review-sheet.mjs",
     "test:trends": "node tests/trends.mjs",
     "test:validation": "node tools/validate-sim.mjs --write-status",
+    "test:heel-sweep": "node tools/validate-sim.mjs --heel-share-sweep",
     "trends:json": "node tests/trends.mjs --write-status"
   },
   "keywords": [],

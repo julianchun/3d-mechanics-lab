@@ -1,26 +1,28 @@
 {
-  "modelVersion": "0.7.2",
+  "modelVersion": "0.7.3",
   "summary": {
-    "total": 31,
+    "total": 35,
     "count": 16,
-    "pass": 9,
-    "fail": 7,
-    "definitionMismatch": 8,
+    "pass": 10,
+    "fail": 6,
+    "definitionMismatch": 12,
     "exploratory": 3,
     "consistencyCheck": 4,
+    "assumptionSensitivePass": 1,
     "sources": 4
   },
   "byId": {
     "squat-high": {
       "kinematics": {
         "status": "failed",
-        "total": 9,
+        "total": 11,
         "count": 3,
-        "pass": 1,
-        "fail": 2,
-        "definitionMismatch": 4,
+        "pass": 2,
+        "fail": 1,
+        "definitionMismatch": 6,
         "exploratory": 0,
         "consistencyCheck": 2,
+        "assumptionSensitivePass": 1,
         "links": [
           "docs/validation/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
@@ -36,6 +38,7 @@
         "definitionMismatch": 0,
         "exploratory": 3,
         "consistencyCheck": 0,
+        "assumptionSensitivePass": 0,
         "links": [
           "docs/validation/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
@@ -68,6 +71,7 @@
         "definitionMismatch": 4,
         "exploratory": 0,
         "consistencyCheck": 2,
+        "assumptionSensitivePass": 0,
         "links": [
           "docs/validation/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
@@ -102,13 +106,14 @@
     "front-squat": {
       "kinematics": {
         "status": "partial",
-        "total": 1,
+        "total": 3,
         "count": 1,
         "pass": 1,
         "fail": 0,
-        "definitionMismatch": 0,
+        "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
+        "assumptionSensitivePass": 0,
         "links": [
           "docs/validation/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
@@ -123,6 +128,7 @@
         "definitionMismatch": 0,
         "exploratory": 0,
         "consistencyCheck": 0,
+        "assumptionSensitivePass": 0,
         "links": [
           "docs/validation/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",

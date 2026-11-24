@@ -24,6 +24,7 @@ const REFS = {
   bryanton2012: { authors: 'Bryanton MA et al.', year: 2012, title: 'Effect of squat depth and barbell load on relative muscular effort in squatting', venue: 'J Strength Cond Res, 26(10):2820–2828', url: 'https://pubmed.ncbi.nlm.nih.gov/22797000/', tag: 'PubMed 22797000' },
   kubo2019: { authors: 'Kubo K, Ikebukuro T, Yata H', year: 2019, title: 'Effects of squat training with different depths on lower limb muscle volumes', venue: 'Eur J Appl Physiol, 119(9):1933–1942', url: 'https://pubmed.ncbi.nlm.nih.gov/31230110/', tag: 'PubMed 31230110' },
   illmeier2023: { authors: 'Illmeier G, Rechberger JS', year: 2023, title: 'The limitations of anterior knee displacement during different barbell squat techniques: A comprehensive review', venue: 'J Clin Med, 12(8):2955', url: 'https://pubmed.ncbi.nlm.nih.gov/37109294/', tag: 'PubMed 37109294' },
+  lu2022heel: { authors: 'Lu Z et al.', year: 2022, title: 'Effect of Heel Lift Insoles on Lower Extremity Muscle Activation and Joint Work during Barbell Squats', venue: 'Bioengineering, 9(7):301', url: 'https://doi.org/10.3390/bioengineering9070301', tag: 'DOI' },
   vandentillaar2020: { authors: 'van den Tillaar R, Knutli TR, Larsen S', year: 2020, title: 'The effects of barbell placement on kinematics and muscle activation around the sticking region in squats', venue: 'Front Sports Act Living, 2:604177', url: 'https://pubmed.ncbi.nlm.nih.gov/33345183/', tag: 'PubMed 33345183' },
   glassbrook2017: { authors: 'Glassbrook DJ et al.', year: 2017, title: 'A review of the biomechanical differences between the high-bar and low-bar back-squat', venue: 'J Strength Cond Res, 31(9):2618–2634', url: 'https://pubmed.ncbi.nlm.nih.gov/28570490/', tag: 'PubMed 28570490' },
   glassbrook2019: { authors: 'Glassbrook DJ et al.', year: 2019, title: 'The high-bar and low-bar back-squats: A biomechanical analysis', venue: 'J Strength Cond Res, 33(Suppl 1):S1–S18', url: 'https://doi.org/10.1519/JSC.0000000000001836', tag: 'DOI' },
@@ -140,40 +141,45 @@ export const SOURCES = {
       '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
       '站距小腿角項：寬站距（stance = 0.9）小腿較窄站距（0.1）直立 6.7°（依 Escamilla et al. 2001, PMID 11404665 量測 5–9°）；已知限制：在固定腳掌中段重心下，寬站距股骨矢狀投影縮短使模型軀幹反少傾約 16° 且髖伸力矩下降（與該文獻軀幹無差異、髖力矩較高之結果矛盾），且缺少髖外旋與臀大肌上束外展力臂。',
       '額狀面地面反作用力假設通過髖關節（外推膝蓋參數則額外施加橫向分力）；槓重 1.0× 體重為示範負重假設，僅分析下肢與腰椎自由度。',
+      '鞋跟墊高以腳跟相對前腳掌的高度差（cm）表示；足底長 25 cm、踝高出足底 4.8 cm，前腳掌固定、腳跟旋起。腳掌角為 arcsin(高度/25 cm)，踝背屈量的是小腿相對腳掌，不是相對地面；壓力中心仍在地面鞋底接觸面。自由深蹲示範假設將足板角增量各半分給小腿前傾增加與踝背屈需求減少，沒有依驗證研究擬合個人策略。Lu 等 2022 的獨立試驗支持墊高鞋跟可降低踝背屈，但不能證明各半比例。',
     ],
-    refs: ['escamilla1998', 'escamilla2001_sq', 'escamilla2001_stance', 'escamilla2001_var', 'paoli2009', 'bryanton2012', 'kubo2019', 'illmeier2023'],
+    refs: ['escamilla1998', 'escamilla2001_sq', 'escamilla2001_stance', 'escamilla2001_var', 'paoli2009', 'bryanton2012', 'kubo2019', 'illmeier2023', 'lu2022heel'],
   },
   'squat-low': {
     assumptions: [
       '低槓位置下移至三角肌後束（較高槓低 8 cm、靠後 3.5 cm），另加入下肢策略偏移（domShift = +0.08，依 van den Tillaar 2020、Murawa 2020、Glassbrook 2017、Illmeier & Rechberger 2023 反推，使最低點小腿較高槓直立約 1.9°、軀幹多前傾約 12.3°）。',
       '站姿總重心（含實際三維手臂位置）維持在腳掌中段上方；站距小腿角項與額狀面地面反作用力假設同高槓深蹲。',
       '槓重為 1.0× 體重示範假設，與高槓同負重下比較力臂差異。',
+      '鞋跟墊高的足板、踝角與地面接觸假設同高槓深蹲。',
     ],
-    refs: ['glassbrook2017', 'glassbrook2019', 'murawa2020', 'vandentillaar2020', 'illmeier2023', 'escamilla2001_stance'],
+    refs: ['glassbrook2017', 'glassbrook2019', 'murawa2020', 'vandentillaar2020', 'illmeier2023', 'escamilla2001_stance', 'lu2022heel'],
   },
   'front-squat': {
     assumptions: [
       '前槓架在三角肌前束上方（軀幹軸前方 11 cm），另加入下肢策略偏移（domShift = -0.08，依 Illmeier & Rechberger 2023、Yavuz 2015、Russell & Phillips 1989 反推，使最低點軀幹較高槓直立約 15.8°、小腿微多前傾約 1.9°）。',
       '站姿總重心以實際三維手臂（前架式前伸手肘）位置計入平衡，維持在腳掌中段上方；站距小腿角項與額狀面反作用力假設同背蹲。',
       '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
+      '鞋跟墊高的足板、踝角與地面接觸假設同高槓深蹲。',
     ],
-    refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance'],
+    refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance', 'lu2022heel'],
   },
   'goblet-squat': {
     assumptions: [
       '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.25，無單一實測出處之預設假設，較背蹲預設 0.45 更偏膝主導）反映前側負重深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
       '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
       '啞鈴尺寸與預設單顆 20 kg 為假設。',
+      '鞋跟墊高沿用自由深蹲的足板、踝角、地面接觸與小腿前傾分配假設；Lu 等的槓鈴深蹲研究未直接驗證高腳杯深蹲。',
     ],
-    refs: ['collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020'],
+    refs: ['collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020', 'lu2022heel'],
   },
   'smith-squat': {
     assumptions: [
       '雙接觸點反作用力（腳底＋滑軌法向反作用力），假設線性軸承滑軌無摩擦（μ = 0）且可推可拉。',
       '軌道傾角提供 0°（垂直）與 ±7°（Hammer Strength 官方規格）；示範總負重（0.9× 體重）為假設。',
       '腳底壓力中心由「用力點」參數決定，重心不必落在腳掌正上方。',
+      '鞋跟墊高採相同的 25 cm 足底傾斜幾何；腳與槓受滑軌約束，由幾何求小腿角，不另套用自由深蹲的各半策略；壓力中心在 y=0 的外鞋底接觸面。',
     ],
-    refs: ['schwanbeck2009', 'lifefitness_smith'],
+    refs: ['schwanbeck2009', 'lifefitness_smith', 'lu2022heel'],
   },
   'leg-press': {
     assumptions: [

@@ -12,7 +12,7 @@
 
 ## 指標與換算
 
-`trunkInclination` 為軀幹對垂直前傾角；`hipFlexion` 為模型軀幹—大腿角；`kneeFlexion` 伸直為 0°；`ankleDorsiflexion` 為小腿對垂直背屈角。Larsen 髖屈為骨盆—大腿 Cardan 角，模型沒有骨盆自由度；其踝角欠缺站立參考，原先的 `minus90` 換算未經證實。這八筆標記 `definition-mismatch`，產物不輸出差距或通過判定。需有骨盆自由度及踝角站立參考；踝角亦可改比站距間的變化量。
+`trunkInclination` 為軀幹對垂直前傾角；`hipFlexion` 為模型軀幹—大腿角；`kneeFlexion` 伸直為 0°；`ankleDorsiflexion` 為小腿相對腳掌的背屈角，平底時等於小腿對垂直的前傾角。`pelvisAnteriorTilt` 為 Goršič 表 2 的骨盆前傾，模型沒有骨盆自由度，所以四筆均為 `definition-mismatch`、模型值為 `null`；預記 12° 容許範圍供未來模型使用，本次不判定。Larsen 髖屈為骨盆—大腿 Cardan 角，模型沒有骨盆自由度；其踝角欠缺站立參考，原先的 `minus90` 換算未經證實。這八筆也標記 `definition-mismatch`，產物不輸出差距或通過判定。需有骨盆自由度及踝角站立參考；踝角亦可改比站距間的變化量。
 
 `hipExtensionMoment`、`kneeExtensionMoment`、`anklePlantarflexionMoment`、`lumbarExtensionMoment` 為模型右半身內部淨力矩，單位 Nm。`normalization: "massHeight"` 除以模型 75 kg × 1.75 m；`"mass"` 除以 75 kg。研究以負號報膝伸需求時，`referenceTransform: "absolute"` 取絕對值。Goršič 中央腰背力矩是整體量，`modelFactor: 2`；其髖／膝／踝為左右平均，不倍乘。Hutchison 表 2 未明示側別，但原文用單塊測力板記錄約 1077 N 整體反力並追蹤雙腿；三筆力矩**推定**為雙腿合計，`modelFactor: 2`，側別仍列不確定。
 
@@ -23,3 +23,5 @@
 `comparisonRole` 預設 `comparable`；也可為 `definition-mismatch`、`exploratory`、`consistency-check`。只有 `comparable` 用 `|model − reference| ≤ tolerance.absolute` 判定 `pass`／`fail`。Hutchison 動態 30% 1RM 的三筆為探索性；Larsen 膝角與深度高度相關，四筆只作一致性檢查。這些筆仍保留量測值與來源，但不進通過率。文獻 SD 僅供展示，不自動放寬門檻。
 
 `results.summary.total` 是全部筆數；`count=pass+fail` 是可比較筆數；另列 `definitionMismatch`、`exploratory`、`consistencyCheck`。`src/validation-status.json` 各清單項目、各層使用相同算法，層級狀態只由可比較筆數決定：有失敗為 `failed`、全通過仍因條件限制為 `partial`；零筆可比較時為 `definition-mismatch`、`exploratory` 或 `unvalidated`。肌肉層仍只有定性趨勢，不代表肌力已驗證。
+
+`npm run test:heel-sweep` 將鞋跟足板角分給小腿前傾的 `HEEL_SHANK_SHARE` 暫時設為 0、0.25、0.5、0.75、1；此指令不寫入產品或驗證產物。對有鞋跟且可比較的項目，再以 0.01 網格偵測 0–1 間通過／失敗翻轉，二分求邊界。翻轉項於 `results.comparisons[]` 加 `assumptionSensitive: { "parameter": "HEEL_SHANK_SHARE", "passRange": [起點, 終點] }`，端點取四位小數；`passRange` 表示此比例下通過原門檻，不代表生理有效範圍。`summary.assumptionSensitivePass` 與 `src/validation-status.json` 有可比較項目的層級同名欄位為目前 0.5 預設下，會受此假設翻轉的通過數。
