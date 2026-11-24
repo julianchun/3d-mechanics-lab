@@ -56,6 +56,52 @@
           }
         },
         {
+          "id": "pelvis-descent",
+          "layer": "kinematics",
+          "metric": "pelvisAnteriorTilt",
+          "sample": {
+            "type": "parallelThigh",
+            "targetDeg": 70
+          },
+          "reference": {
+            "mean": 28.1,
+            "sd": 8.1,
+            "unit": "deg",
+            "definition": "骨盆相對實驗室座標的前傾角；研究的下降／上升期分開報告"
+          },
+          "evidence": "table",
+          "location": "Table 2, straight-bar back, descending",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型軀幹為單一剛體，沒有獨立骨盆角；保留原文供未來骨盆自由度驗證。12° 是預先記錄的未來比較門檻，本次不判定。"
+        },
+        {
+          "id": "pelvis-ascent",
+          "layer": "kinematics",
+          "metric": "pelvisAnteriorTilt",
+          "sample": {
+            "type": "parallelThigh",
+            "targetDeg": 70
+          },
+          "reference": {
+            "mean": 29.4,
+            "sd": 8.2,
+            "unit": "deg",
+            "definition": "骨盆相對實驗室座標的前傾角；研究的下降／上升期分開報告"
+          },
+          "evidence": "table",
+          "location": "Table 2, straight-bar back, ascending",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型軀幹為單一剛體，沒有獨立骨盆角；保留原文供未來骨盆自由度驗證。12° 是預先記錄的未來比較門檻，本次不判定。"
+        },
+        {
           "id": "lumbar",
           "layer": "moments",
           "metric": "lumbarExtensionMoment",
@@ -180,6 +226,52 @@
             "absolute": 12,
             "unit": "deg"
           }
+        },
+        {
+          "id": "pelvis-descent",
+          "layer": "kinematics",
+          "metric": "pelvisAnteriorTilt",
+          "sample": {
+            "type": "parallelThigh",
+            "targetDeg": 70
+          },
+          "reference": {
+            "mean": 20.1,
+            "sd": 6.1,
+            "unit": "deg",
+            "definition": "骨盆相對實驗室座標的前傾角；研究的下降／上升期分開報告"
+          },
+          "evidence": "table",
+          "location": "Table 2, straight-bar front, descending",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型軀幹為單一剛體，沒有獨立骨盆角；保留原文供未來骨盆自由度驗證。12° 是預先記錄的未來比較門檻，本次不判定。"
+        },
+        {
+          "id": "pelvis-ascent",
+          "layer": "kinematics",
+          "metric": "pelvisAnteriorTilt",
+          "sample": {
+            "type": "parallelThigh",
+            "targetDeg": 70
+          },
+          "reference": {
+            "mean": 21.0,
+            "sd": 6.8,
+            "unit": "deg",
+            "definition": "骨盆相對實驗室座標的前傾角；研究的下降／上升期分開報告"
+          },
+          "evidence": "table",
+          "location": "Table 2, straight-bar front, ascending",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型軀幹為單一剛體，沒有獨立骨盆角；保留原文供未來骨盆自由度驗證。12° 是預先記錄的未來比較門檻，本次不判定。"
         },
         {
           "id": "lumbar",

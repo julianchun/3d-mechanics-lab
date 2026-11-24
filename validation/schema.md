@@ -12,7 +12,7 @@
 
 ## 指標與換算
 
-`trunkInclination` 為軀幹對垂直前傾角；`hipFlexion` 為模型軀幹—大腿角；`kneeFlexion` 伸直為 0°；`ankleDorsiflexion` 為小腿對垂直背屈角。Larsen 髖屈為骨盆—大腿 Cardan 角，模型沒有骨盆自由度；其踝角欠缺站立參考，原先的 `minus90` 換算未經證實。這八筆標記 `definition-mismatch`，產物不輸出差距或通過判定。需有骨盆自由度及踝角站立參考；踝角亦可改比站距間的變化量。
+`trunkInclination` 為軀幹對垂直前傾角；`hipFlexion` 為模型軀幹—大腿角；`kneeFlexion` 伸直為 0°；`ankleDorsiflexion` 為小腿相對腳掌的背屈角，平底時等於小腿對垂直的前傾角。`pelvisAnteriorTilt` 為 Goršič 表 2 的骨盆前傾，模型沒有骨盆自由度，所以四筆均為 `definition-mismatch`、模型值為 `null`；預記 12° 容許範圍供未來模型使用，本次不判定。Larsen 髖屈為骨盆—大腿 Cardan 角，模型沒有骨盆自由度；其踝角欠缺站立參考，原先的 `minus90` 換算未經證實。這八筆也標記 `definition-mismatch`，產物不輸出差距或通過判定。需有骨盆自由度及踝角站立參考；踝角亦可改比站距間的變化量。
 
 `hipExtensionMoment`、`kneeExtensionMoment`、`anklePlantarflexionMoment`、`lumbarExtensionMoment` 為模型右半身內部淨力矩，單位 Nm。`normalization: "massHeight"` 除以模型 75 kg × 1.75 m；`"mass"` 除以 75 kg。研究以負號報膝伸需求時，`referenceTransform: "absolute"` 取絕對值。Goršič 中央腰背力矩是整體量，`modelFactor: 2`；其髖／膝／踝為左右平均，不倍乘。Hutchison 表 2 未明示側別，但原文用單塊測力板記錄約 1077 N 整體反力並追蹤雙腿；三筆力矩**推定**為雙腿合計，`modelFactor: 2`，側別仍列不確定。
 

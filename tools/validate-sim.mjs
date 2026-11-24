@@ -23,7 +23,7 @@ const norm = (v) => { const l = Math.hypot(...v); return v.map((x) => x / l); };
 const clamp = (v) => Math.max(-1, Math.min(1, v));
 const round = (v) => Number(v.toFixed(4));
 const metricLayer = {
-  trunkInclination: 'kinematics', hipFlexion: 'kinematics', kneeFlexion: 'kinematics', ankleDorsiflexion: 'kinematics',
+  trunkInclination: 'kinematics', pelvisAnteriorTilt: 'kinematics', hipFlexion: 'kinematics', kneeFlexion: 'kinematics', ankleDorsiflexion: 'kinematics',
   hipExtensionMoment: 'moments', kneeExtensionMoment: 'moments', anklePlantarflexionMoment: 'moments', lumbarExtensionMoment: 'moments',
 };
 const momentDof = { hipExtensionMoment: 'hipExt', kneeExtensionMoment: 'kneeExt', anklePlantarflexionMoment: 'ankPF', lumbarExtensionMoment: 'trunkExt' };
@@ -94,6 +94,8 @@ function peakEndE(sample, params) {
 
 function modelValue(measure, params) {
   const { metric, sample } = measure;
+  // 模型沒有獨立骨盆；保留文獻定點，但不虛構骨盆角模型值。
+  if (metric === 'pelvisAnteriorTilt') return { value: null, atE: round(sampleE(sample.type, sample, params)) };
   let value, atE;
   if (sample.type === 'peak') {
     if (!momentDof[metric]) throw new Error(`${metric} 不支援 peak`);
@@ -147,6 +149,7 @@ for (const source of sources) {
       if (ids.has(id)) throw new Error(`重複比對 ID：${id}`);
       ids.add(id);
       if (metricLayer[measure.metric] !== measure.layer) throw new Error(`${id} 指標或層級不符`);
+      if (measure.metric === 'pelvisAnteriorTilt' && measure.comparisonRole !== 'definition-mismatch') throw new Error(`${id} 骨盆角只能標為 definition-mismatch`);
       if (!['table', 'text', 'figureDigitized', 'datasetComputed'].includes(measure.evidence) || !measure.location) throw new Error(`${id} 出處不完整`);
       if (!(measure.tolerance?.absolute >= 0) || measure.tolerance.unit !== measure.reference.unit) throw new Error(`${id} 容許範圍無效`);
       const reference = referenceValue(measure);

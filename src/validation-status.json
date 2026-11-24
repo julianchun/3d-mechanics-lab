@@ -1,11 +1,11 @@
 {
   "modelVersion": "0.7.3",
   "summary": {
-    "total": 31,
+    "total": 35,
     "count": 16,
     "pass": 10,
     "fail": 6,
-    "definitionMismatch": 8,
+    "definitionMismatch": 12,
     "exploratory": 3,
     "consistencyCheck": 4,
     "sources": 4
@@ -14,11 +14,11 @@
     "squat-high": {
       "kinematics": {
         "status": "failed",
-        "total": 9,
+        "total": 11,
         "count": 3,
         "pass": 2,
         "fail": 1,
-        "definitionMismatch": 4,
+        "definitionMismatch": 6,
         "exploratory": 0,
         "consistencyCheck": 2,
         "links": [
@@ -102,11 +102,11 @@
     "front-squat": {
       "kinematics": {
         "status": "partial",
-        "total": 1,
+        "total": 3,
         "count": 1,
         "pass": 1,
         "fail": 0,
-        "definitionMismatch": 0,
+        "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
         "links": [
