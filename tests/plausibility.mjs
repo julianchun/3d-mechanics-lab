@@ -48,7 +48,7 @@ const KNOWN_ISSUES = [
     fix: '取得直立雙槓撐體的三維關節力矩、手部反力與肌電資料，核對肩胛下壓與肩肘肌群能力；暫不調 MUSCLES',
   },
   ...Object.entries({
-    dips: ['pecs', 'lat', 'mdelt'], 'dips-upright': ['pecs', 'lat', 'pdelt', 'trilong'],
+    dips: ['pecs', 'lat', 'mdelt'], 'dips-upright': ['pecs', 'lat', 'pdelt'],
     pullup: ['lat'], 'pullup-wide': ['pecs', 'lat'], chinup: ['adelt', 'lat', 'bic', 'brach', 'mdelt'],
   }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
     id, rule: `activation:${muscle}`, kind: '新動作', current: `${muscle} 的模型主動活化超過 1`,
@@ -117,6 +117,12 @@ const KNOWN_ISSUES = [
     cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；Seth 路徑的中斜方等效力臂直接替換又使已通過的划船排名失敗',
     fix: '以 OpenSim 逐點驗證肩胛兩軸力矩與中斜方路徑，再校準功能群能力',
   })),
+  {
+    id: 'cable-row', rule: 'rank:midtrap:top4', kind: '節段參數修改後退步',
+    current: '前四名為 erec、brach、lat、mdelt；中斜方肌跌出前四',
+    cause: 'de Leva 節段質量與手臂質心更新後，握把附近的手臂重力矩與肩胛後收需求改變；原先接近門檻的中斜方肌排名下降',
+    fix: '取得滑輪划船肩胛後收力矩與肌肉活化的獨立量測，再檢核肩胛力臂及器械阻力曲線',
+  },
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));
 if (known.size !== KNOWN_ISSUES.length) throw new Error('KNOWN_ISSUES 有重複的動作與規則');

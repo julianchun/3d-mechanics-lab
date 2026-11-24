@@ -1,4 +1,6 @@
-# 深蹲數值比對：T16b 方法修正
+# 深蹲數值比對：T16b 方法修正（歷史基線）
+
+> **目前模型 0.7.3（T17）**：節段質量與質心已依 de Leva 1996 修正；可比較項仍為 9/16 通過，逐筆新值與全部 63 項回歸變化見[節段參數修改影響](segment-impact.md)，修改前的力矩拆解見[診斷報告](squat-diagnosis.md)。下文的 T16b 表格保留修改前結果；連結的 `validation/results.json` 與圖為目前模型重算值。
 
 2026-11-24，產品版本 0.7.2。研究數值與容許誤差事先固定於 `0df5506`、`cb666ff`；依研究方法修正條件於 `f88f525` 單獨提交後，才重新計算。產品模型及回歸基準未修改。逐筆機器結果在 [`validation/results.json`](../../validation/results.json)，全清單層級狀態在 [`src/validation-status.json`](../../src/validation-status.json)。
 

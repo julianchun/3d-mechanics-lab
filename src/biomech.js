@@ -2,7 +2,7 @@
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 
-export const MODEL_VERSION = '0.7.2';
+export const MODEL_VERSION = '0.7.3';
 const G = 9.81;
 
 export const BODY = {
@@ -10,8 +10,10 @@ export const BODY = {
   mass: 75, Ls: 0.394, Lt: 0.44, Ltr: 0.518, Lu: 0.287, Lf: 0.332,
   hipHalf: 0.09, shHalf: 0.167, ankleH: 0.068,
 };
-const MF = { foot: 0.0145, shank: 0.0465, thigh: 0.1, upper: 0.028, fore: 0.022 };
-MF.trunk = 1 - 2 * (MF.foot + MF.shank + MF.thigh + MF.upper + MF.fore);
+// de Leva 1996 表 4，男性節段質量（全身比例）；頭頸與手各自計入，不把殘差塞進軀幹。
+// DOI: 10.1016/0021-9290(95)00178-6；節段標記與本骨架的對應見 docs/validation/squat-diagnosis.md。
+const MF = { head: 0.0694, trunk: 0.4346, upper: 0.0271, fore: 0.0162, hand: 0.0061,
+  thigh: 0.1416, shank: 0.0433, foot: 0.0137 };
 // 負重比例（× 體重）：
 // - 臀推 1.70、臀橋 1.83：參考 Contreras et al. 2015（PMID 26214739；10RM 臀推／背蹲比 87.4／53.2 kg ≈ 1.64×，注意 1.64× 為臀推相對背蹲之負重比，非體重倍數）
 //   與 Kennedy et al. 2024（PMID 35586943；5RM 臀推 143.6 kg ≈ 1.71× 體重、臀橋 154.3 kg ≈ 1.83× 體重，體重 84.3 kg）。
@@ -1107,7 +1109,7 @@ function squatPose(P, e) {
   // 以實際三維手臂質心計算系統重心（避免前蹲前伸手肘在忽略手臂位置時使壓力中心前移約 1.2 cm、高估髖伸力矩）
   const comz = (phi) => {
     const { tf, bar, arm } = build(phi);
-    const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u };
+    const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, wrist: arm.R.wrist, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u, toeDir: toe };
     return systemComZ(pz, bar, BAR_RATIO.squat);
   };
   let phi;
@@ -1296,14 +1298,30 @@ function bisect(g, lo, hi, n = 34) {
   for (let i = 0; i < n; i++) { const m = (lo + hi) / 2; if (g(m) > 0) hi = m; else lo = m; }
   return (lo + hi) / 2;
 }
+// de Leva 表 4：質心自各節段起點往終點。軀幹 SUPR→MIDH 換成骨盆→肩線；
+// 頭頸 VERT→MIDG 的標記骨架未分出，以現有頭部球體的頂端／下顎代理點（肩上 0.34／0.14 m）映射。
+// 手腕在一般動作由肘→手端 74.6% 估計；深蹲折腕姿勢則使用實際求得的腕點。
+function segmentPoints(pose) {
+  const R = pose.R;
+  const toe = pose.toeDir || [0, 0, 1];
+  const foot = R.heel && R.toe ? lerpV(R.heel, R.toe, 0.4415) : add(R.ankle, mul(toe, -0.06 + 0.25 * 0.4415));
+  const wrist = R.wrist || lerpV(R.elbow, R.hand, 0.746);
+  return [
+    [foot, MF.foot, 'foot'],
+    [lerpV(R.knee, R.ankle, 0.4395), MF.shank, 'shank'],
+    [lerpV(R.hip, R.knee, 0.4095), MF.thigh, 'thigh'],
+    [add(pose.Pc, mul(pose.u, BODY.Ltr * 0.5514)), MF.trunk / 2, 'trunk'],
+    [add(pose.Pc, mul(pose.u, BODY.Ltr + 0.34 - 0.20 * 0.5976)), MF.head / 2, 'trunk'],
+    [lerpV(R.shoulder, R.elbow, 0.5772), MF.upper, 'upper'],
+    [lerpV(R.elbow, wrist, 0.4574), MF.fore, 'fore'],
+    [lerpV(wrist, R.hand, 0.79), MF.hand, 'fore'],
+  ];
+}
+
 // 系統重心 z（雙側；手臂各自計入，槓在 bar）
 function systemComZ(pose, bar, barW) {
-  const R = pose.R;
-  const parts = [
-    [2 * MF.foot, R.ankle[2] + 0.06], [2 * MF.shank, lerp(R.knee[2], R.ankle[2], 0.433)], [2 * MF.thigh, lerp(R.hip[2], R.knee[2], 0.433)],
-    [MF.trunk, pose.Pc[2] + pose.u[2] * 0.3], [2 * MF.upper, lerp(R.shoulder[2], R.elbow[2], 0.436)], [2 * MF.fore, lerp(R.elbow[2], R.hand[2], 0.55)],
-    [barW, bar[2]],
-  ];
+  const parts = segmentPoints(pose).map(([p, m]) => [2 * m, p[2]]);
+  parts.push([barW, bar[2]]);
   let m = 0, z = 0;
   for (const [mi, zi] of parts) { m += mi; z += mi * zi; }
   return z / m;
@@ -1336,7 +1354,7 @@ function rowPose(P, e) {
   // 每一幀都讓系統重心停在腳掌中段（槓往身上拉時，髖會跟著往前一點）
   const com = (th) => {
     const r = at(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: lerpV(r.S, r.bar, 0.5), hand: r.bar }, Pc: r.tf.Pc, u }, r.bar, BAR_RATIO.row);
+    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: lerpV(r.S, r.bar, 0.5), hand: r.bar }, Pc: r.tf.Pc, u, toeDir: toe }, r.bar, BAR_RATIO.row);
   };
   const r = at(bisect((th) => com(th) - bz, rad(-10), rad(30)));
   const { tf, S, hang, bar } = r;
@@ -1395,7 +1413,7 @@ function ohpPose(P, e) {
   };
   const com = (th) => {
     const r = build(th);
-    const pose = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar }, Pc: r.tf.Pc, u: r.tf.u };
+    const pose = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar }, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
     pose.R.elbow = lerpV(r.S, r.bar, 0.45);
     return systemComZ(pose, r.bar, BAR_RATIO.ohp);
   };
@@ -1435,7 +1453,7 @@ function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.
   };
   const com = (th) => {
     const r = build(th);
-    const pz = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar, elbow: r.elbow || lerpV(r.S, r.bar, 0.5) }, Pc: r.tf.Pc, u: r.tf.u };
+    const pz = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar, elbow: r.elbow || lerpV(r.S, r.bar, 0.5) }, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
     const cz = systemComZ(pz, r.bar, barW);
     if (!ext) return cz;
     // 滑輪等外力（單位：體重）：壓力中心 = 力矩平衡（重量總和 = 1 + barW）
@@ -1555,14 +1573,16 @@ function goodMorningPose(P, e) {
     const { knee, hip } = legs(th);
     const tf = trunkFrame([0, hip[1], hip[2]], u);
     const bar = add(add(tf.Pc, mul(u, Lb)), mul(tf.f, -ob));
-    return { knee, hip, tf, bar };
+    const S = toWorld(tf, shoulderLocal({ ret: rad(15), elev: 0 }));
+    const B = [handX, bar[1], bar[2]];
+    const arm = { R: {} };
+    if (low) armChainBent(arm, S, B, norm(add(add(mul(tf.f, -0.6), mul(tf.u, -1)), [0.6, 0, 0])), SQ_WRIST.low, tf.u);
+    else armChainBent(arm, S, B, norm(add(mul(tf.f, -1), mul(tf.u, -1))), SQ_WRIST.high, tf.u);
+    return { knee, hip, tf, bar, arm };
   };
   const comz = (th) => {
     const r = build(th);
-    const W = BAR_RATIO.goodmorning, mt = MF.trunk + 2 * (MF.upper + MF.fore);
-    const tr = add(r.tf.Pc, mul(u, 0.3));
-    const parts = [[W, r.bar[2]], [mt, tr[2]], [2 * MF.thigh, lerp(r.hip[2], r.knee[2], 0.433)], [2 * MF.shank, lerp(r.knee[2], A[2], 0.433)], [2 * MF.foot, A[2] + 0.06]];
-    return parts.reduce((s, [m, z]) => s + m * z, 0) / parts.reduce((s, [m]) => s + m, 0);
+    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, ...r.arm.R }, Pc: r.tf.Pc, u, toeDir: toe }, r.bar, BAR_RATIO.goodmorning);
   };
   const r = build(bisect((th) => comz(th), rad(-20), rad(30)));
   const pose = { R: {}, warn: [], ok: true };
@@ -1571,10 +1591,8 @@ function goodMorningPose(P, e) {
   legChain(pose, A, toe, r.hip);
   pose.R.knee = r.knee;
   pose.girdle = { ret: rad(15), elev: 0 };
-  const S = toWorld(r.tf, shoulderLocal(pose.girdle));
-  const B = [handX, r.bar[1], r.bar[2]];
-  if (low) armChainBent(pose, S, B, norm(add(add(mul(r.tf.f, -0.6), mul(r.tf.u, -1)), [0.6, 0, 0])), SQ_WRIST.low, r.tf.u);
-  else armChainBent(pose, S, B, norm(add(mul(r.tf.f, -1), mul(r.tf.u, -1))), SQ_WRIST.high, r.tf.u);
+  Object.assign(pose.R, r.arm.R);
+  pose.armPole = r.arm.armPole;
   pose.bar = r.bar;
   pose.barW = BAR_RATIO.goodmorning;
   pose.barOnBack = true;
@@ -2984,7 +3002,7 @@ function dbReverseFlyPose(P, e) {
   };
   const com = (th) => {
     const r = at(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: r.E, hand: r.H }, Pc: r.tf.Pc, u }, r.H, barW);
+    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: r.E, hand: r.H }, Pc: r.tf.Pc, u, toeDir: toe }, r.H, barW);
   };
   const r = at(bisect((th) => com(th) - bz, rad(-15), rad(30)));
   const pose = { R: {}, warn: [], ok: true };
@@ -3048,7 +3066,7 @@ function gobletPose(P, e) {
   pose.R.hip = [BODY.hipHalf, Hy, Hz]; pose.R.knee = K; pose.R.ankle = A;
   const comz = (phi) => {
     const { tf, dbC, arm } = build(phi);
-    const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u };
+    const pz = { R: { hip: pose.R.hip, knee: K, ankle: A, shoulder: arm.R.shoulder, elbow: arm.R.elbow, hand: arm.R.hand }, Pc: tf.Pc, u: tf.u, toeDir: toe };
     return systemComZ(pz, dbC, dbW);
   };
   let phi;
@@ -3087,12 +3105,7 @@ function gobletPose(P, e) {
 function bodyweightCenter(pose, P, assist = 0) {
   const R = pose.R;
   const points = [
-    [add(R.ankle, mul(pose.toeDir, 0.06)), MF.foot],
-    [lerpV(R.knee, R.ankle, 0.433), MF.shank],
-    [lerpV(R.hip, R.knee, 0.433), MF.thigh],
-    [add(pose.Pc, mul(pose.u, 0.3)), MF.trunk / 2],
-    [lerpV(R.shoulder, R.elbow, 0.436), MF.upper],
-    [lerpV(R.elbow, R.hand, 0.55), MF.fore],
+    ...segmentPoints(pose).map(([p, m]) => [p, m]),
     [pose.loadPt, (P.load || 0) / (2 * BODY.mass)],
     [pose.kneePad || R.knee, -assist / (2 * BODY.mass)],
   ];
@@ -3326,13 +3339,10 @@ function forcesOf(pose, P, lift) {
   const wt = (p, frac, region) => out.push({ p, F: [0, -frac * W, 0], region });
   // 半身（右側）；seated：坐在器械上，身體重量照算，但由椅墊／靠墊支撐（不算地面反作用力）
   if (L.ground || L.seated) {
-    wt(add(R.ankle, mul(pose.toeDir, 0.06)), MF.foot, 'foot');
-    wt(lerpV(R.knee, R.ankle, 0.433), MF.shank, 'shank');
-    wt(lerpV(R.hip, R.knee, 0.433), MF.thigh, 'thigh');
-    wt(add(pose.Pc, mul(pose.u, 0.3)), MF.trunk / 2, 'trunk');
+    for (const [p, m, region] of segmentPoints(pose)) wt(p, m, region);
+  } else {
+    for (const [p, m, region] of segmentPoints(pose)) if (region === 'upper' || region === 'fore') wt(p, m, region);
   }
-  wt(lerpV(R.shoulder, R.elbow, 0.436), MF.upper, 'upper');
-  wt(lerpV(R.elbow, R.hand, 0.55), MF.fore, 'fore');
   L.loads(pose, P, W, out);
   if (L.reactions) L.reactions(pose, P, W, out);
   else if (L.ground) {
