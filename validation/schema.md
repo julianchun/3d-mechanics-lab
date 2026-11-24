@@ -1,6 +1,6 @@
 # 數值驗證資料格式
 
-`validation/*.json`（不含 `schema.md`）每檔是一篇已核對的原始研究。所有容許誤差先於執行 `npm run test:validation` 固定並單獨提交。比對失敗只記錄，不調整門檻或產品數值。
+`validation/*.json` 中除產物 `results.json` 外，每檔是一篇已核對的原始研究。所有容許誤差先於執行 `npm run test:validation` 固定並單獨提交。比對失敗只記錄，不調整門檻或產品數值。
 
 ## 欄位
 
@@ -16,6 +16,8 @@
 `trunkInclination` = 軀幹長軸相對垂直的前傾角，度；`hipFlexion` = 大腿相對軀幹的屈曲角，度；`kneeFlexion` = 大腿與小腿方向的屈曲角，伸直為 0°；`ankleDorsiflexion` = 小腿相對垂直的背屈角，平足站立為 0°。Larsen 表 3 的踝角以小腿與腳的內角表達，本資料保留原值，計算時用 `referenceTransform: "minus90"` 換為背屈角。其三維 Cardan 軸序與模型幾何角不完全相同，因此列入測量定義的不確定性。
 
 `hipExtensionMoment`、`kneeExtensionMoment`、`anklePlantarflexionMoment`、`lumbarExtensionMoment` 為模型右半身內部淨力矩，Nm。`normalization: "massHeight"` 除以 75 kg × 1.75 m，得 Nm/(kg·m)；`"mass"` 除以 75 kg，得 Nm/kg。研究若報負膝伸力矩，以 `referenceTransform: "absolute"` 轉為正的需求量。這只消除體重／身高單位差異，不消除槓重、體型、速度及器材差異。
+
+`modelFactor` 僅在研究的力矩是**整體軀幹**、而模型輸出是右半身時使用。Goršič 表 2 的腰背力矩為骨盆嵴中點的單一整體力矩，故兩筆設 `modelFactor: 2`；其髖／膝／踝力矩已是雙側平均，維持單側模型值。此為比對定義換算，不更動任何容許誤差。
 
 `sample.type`：`bottom` 取 `e=1`；`parallelThigh` 在 `e∈[0,1]` 找大腿對垂直角達 `targetDeg` 的點（上升期的對應姿勢）；`peak` 在 401 個等距行程點找最大正力矩。模型為準靜態，下降與上升期輸出相同，不能驗證加速度造成的峰值或時間曲線。
 

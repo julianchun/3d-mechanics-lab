@@ -1,0 +1,796 @@
+{
+  "modelVersion": "0.7.2",
+  "summary": {
+    "total": 31,
+    "pass": 9,
+    "fail": 22,
+    "sources": 4
+  },
+  "comparisons": [
+    {
+      "id": "gorsic-2020/straight-back/trunk",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 56.3943,
+      "reference": 37.9,
+      "referenceSd": 6.4,
+      "unit": "deg",
+      "error": 18.4943,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 2, straight-bar back, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-back/lumbar",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "lumbarExtensionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 2.9007,
+      "reference": 1.53,
+      "referenceSd": 0.25,
+      "unit": "Nm/(kg*m)",
+      "error": 1.3707,
+      "tolerance": 0.35,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 2, straight-bar back, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-back/hip",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 1.6462,
+      "reference": 0.93,
+      "referenceSd": 0.15,
+      "unit": "Nm/(kg*m)",
+      "error": 0.7162,
+      "tolerance": 0.3,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 2, straight-bar back, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-back/knee",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 0.4576,
+      "reference": 0.67,
+      "referenceSd": 0.15,
+      "unit": "Nm/(kg*m)",
+      "error": -0.2124,
+      "tolerance": 0.3,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, straight-bar back, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-back/ankle",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 0.3726,
+      "reference": 0.28,
+      "referenceSd": 0.11,
+      "unit": "Nm/(kg*m)",
+      "error": 0.0926,
+      "tolerance": 0.2,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, straight-bar back, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-front/trunk",
+      "catalogId": "front-squat",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "front",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 41.2221,
+      "reference": 40.6,
+      "referenceSd": 5.7,
+      "unit": "deg",
+      "error": 0.6221,
+      "tolerance": 12,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, straight-bar front, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-front/lumbar",
+      "catalogId": "front-squat",
+      "layer": "moments",
+      "metric": "lumbarExtensionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "front",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 2.8946,
+      "reference": 1.64,
+      "referenceSd": 0.27,
+      "unit": "Nm/(kg*m)",
+      "error": 1.2546,
+      "tolerance": 0.35,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 2, straight-bar front, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-front/hip",
+      "catalogId": "front-squat",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "front",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 1.6023,
+      "reference": 0.89,
+      "referenceSd": 0.14,
+      "unit": "Nm/(kg*m)",
+      "error": 0.7123,
+      "tolerance": 0.3,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 2, straight-bar front, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-front/knee",
+      "catalogId": "front-squat",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "front",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 0.5007,
+      "reference": 0.7,
+      "referenceSd": 0.15,
+      "unit": "Nm/(kg*m)",
+      "error": -0.1993,
+      "tolerance": 0.3,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, straight-bar front, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gorsic-2020/straight-front/ankle",
+      "catalogId": "front-squat",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "parallelThigh",
+        "targetDeg": 70
+      },
+      "modelParams": {
+        "barPos": "front",
+        "stance": 0.1,
+        "depth": 0.8
+      },
+      "modelE": 0.6458,
+      "model": 0.3725,
+      "reference": 0.25,
+      "referenceSd": 0.11,
+      "unit": "Nm/(kg*m)",
+      "error": 0.1225,
+      "tolerance": 0.2,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, straight-bar front, ascending",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+    },
+    {
+      "id": "gullett-2009/back/peak-knee",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "modelE": 1,
+      "model": 1.5675,
+      "reference": 1,
+      "referenceSd": 0.4,
+      "unit": "Nm/kg",
+      "error": 0.5675,
+      "tolerance": 0.5,
+      "pass": false,
+      "evidence": "text",
+      "location": "Results, Kinetic Data, p. 287（Figure 3 後）",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/19002072/"
+    },
+    {
+      "id": "gullett-2009/front/peak-knee",
+      "catalogId": "front-squat",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "barPos": "front",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "modelE": 1,
+      "model": 1.6772,
+      "reference": 0.7,
+      "referenceSd": 0.2,
+      "unit": "Nm/kg",
+      "error": 0.9772,
+      "tolerance": 0.4,
+      "pass": false,
+      "evidence": "text",
+      "location": "Results, Kinetic Data, p. 287（Figure 3 後）",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/19002072/"
+    },
+    {
+      "id": "hutchison-2019/steel-back/peak-hip",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "modelE": 0.775,
+      "model": 202.7388,
+      "reference": 324,
+      "referenceSd": 52,
+      "unit": "Nm",
+      "error": -121.2612,
+      "tolerance": 100,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 2, Steel Bar, Hip Maximum Moment",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/"
+    },
+    {
+      "id": "hutchison-2019/steel-back/peak-knee",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "modelE": 1,
+      "model": 117.5621,
+      "reference": 157,
+      "referenceSd": 34,
+      "unit": "Nm",
+      "error": -39.4379,
+      "tolerance": 70,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, Steel Bar, Knee Maximum Moment",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/"
+    },
+    {
+      "id": "hutchison-2019/steel-back/peak-ankle",
+      "catalogId": "squat-high",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.3,
+        "depth": 0.55
+      },
+      "modelE": 0,
+      "model": 46.8859,
+      "reference": 90,
+      "referenceSd": 24,
+      "unit": "Nm",
+      "error": -43.1141,
+      "tolerance": 50,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 2, Steel Bar, Ankle Maximum Moment",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/"
+    },
+    {
+      "id": "larsen-2021/high-narrow/trunk",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 42.0527,
+      "reference": 46.7,
+      "referenceSd": 2.9,
+      "unit": "deg",
+      "error": -4.6473,
+      "tolerance": 10,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-narrow/hip",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 155.2527,
+      "reference": 111,
+      "referenceSd": 7.2,
+      "unit": "deg",
+      "error": 44.2527,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-narrow/knee",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 143.4038,
+      "reference": 126.4,
+      "referenceSd": 4.7,
+      "unit": "deg",
+      "error": 17.0038,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-narrow/ankle",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 31.12,
+      "reference": 16,
+      "referenceSd": 4.5,
+      "unit": "deg",
+      "error": 15.12,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-wide/trunk",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 32.0309,
+      "reference": 46,
+      "referenceSd": 3.4,
+      "unit": "deg",
+      "error": -13.9691,
+      "tolerance": 10,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-wide/hip",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 145.2309,
+      "reference": 110.4,
+      "referenceSd": 4.5,
+      "unit": "deg",
+      "error": 34.8309,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-wide/knee",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 133.855,
+      "reference": 119.3,
+      "referenceSd": 6.4,
+      "unit": "deg",
+      "error": 14.555,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/high-wide/ankle",
+      "catalogId": "squat-high",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "high",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 28.8046,
+      "reference": 8.6,
+      "referenceSd": 5.9,
+      "unit": "deg",
+      "error": 20.2046,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, high-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-narrow/trunk",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 52.9084,
+      "reference": 56.7,
+      "referenceSd": 2.5,
+      "unit": "deg",
+      "error": -3.7916,
+      "tolerance": 10,
+      "pass": true,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-narrow/hip",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 166.1084,
+      "reference": 110.5,
+      "referenceSd": 6.6,
+      "unit": "deg",
+      "error": 55.6084,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-narrow/knee",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 141.5233,
+      "reference": 122.7,
+      "referenceSd": 5,
+      "unit": "deg",
+      "error": 18.8233,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-narrow/ankle",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.14,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 29.1777,
+      "reference": 16.3,
+      "referenceSd": 5,
+      "unit": "deg",
+      "error": 12.8777,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar narrow",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-wide/trunk",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 41.78,
+      "reference": 53,
+      "referenceSd": 4.4,
+      "unit": "deg",
+      "error": -11.22,
+      "tolerance": 10,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-wide/hip",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 154.98,
+      "reference": 111.9,
+      "referenceSd": 4.8,
+      "unit": "deg",
+      "error": 43.08,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-wide/knee",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 132.3813,
+      "reference": 120.3,
+      "referenceSd": 5.8,
+      "unit": "deg",
+      "error": 12.0813,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "larsen-2021/low-wide/ankle",
+      "catalogId": "squat-low",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "barPos": "low",
+        "stance": 0.8,
+        "depth": 0.9
+      },
+      "modelE": 1,
+      "model": 26.6784,
+      "reference": 10.5,
+      "referenceSd": 6.3,
+      "unit": "deg",
+      "error": 16.1784,
+      "tolerance": 12,
+      "pass": false,
+      "evidence": "table",
+      "location": "Table 3, v0, low-bar wide",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    }
+  ]
+}
