@@ -38,17 +38,19 @@ function loadPlaywright() {
 }
 
 function parseArgs(argv) {
-  const opts = { url: null, port: DEFAULT_PORT, publish: false, resume: false };
+  const opts = { url: null, port: DEFAULT_PORT, publish: false, resume: false, only: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--publish') opts.publish = true;
     else if (a === '--resume') opts.resume = true;
     else if (a === '--url' && argv[i + 1]) opts.url = argv[++i];
     else if (a.startsWith('--url=')) opts.url = a.slice(6);
+    else if (a === '--only' && argv[i + 1]) opts.only = new Set(argv[++i].split(','));
+    else if (a.startsWith('--only=')) opts.only = new Set(a.slice(7).split(','));
     else if (a === '--port' && argv[i + 1]) opts.port = Number(argv[++i]);
     else if (a.startsWith('--port=')) opts.port = Number(a.slice(7));
     else if (a === '-h' || a === '--help') {
-      console.log('用法: node tools/review-sheet.mjs [--url <URL>] [--port 5191] [--publish] [--resume]');
+      console.log('用法: node tools/review-sheet.mjs [--url <URL>] [--port 5191] [--only <清單ID,清單ID>] [--publish] [--resume]');
       process.exit(0);
     } else {
       throw new Error(`未知參數：${a}`);
@@ -380,7 +382,8 @@ async function waitFrames(page, n = 4) {
 
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
-  const items = CATALOG.filter((c) => !c.planned);
+  const items = CATALOG.filter((c) => !c.planned && (!opts.only || opts.only.has(c.id)));
+  if (opts.only && items.length !== opts.only.size) throw new Error('截圖清單含未知或尚未實作的 ID');
   fs.mkdirSync(IMG_DIR, { recursive: true });
 
 
@@ -441,6 +444,7 @@ async function main() {
       { key: 'top-side', t: 0, view: 'side', label: '頂點・側面' },
       { key: 'bot-side', t: 0.5, view: 'side', label: '最低點・側面' },
       { key: 'bot-oblique', t: 0.5, view: 'oblique', label: '最低點・斜角' },
+      { key: 'bot-rear', t: 0.5, view: 'head', label: '最低點・正後方' },
     ];
 
     const rows = [];
@@ -463,12 +467,17 @@ async function main() {
       for (const spec of SHOT_SPECS) {
         const filename = `${entry.id}-${spec.key}.png`;
         if (missing.includes(spec)) {
-          await page.evaluate(({ t, view }) => {
+          await page.evaluate(({ t, view, rear }) => {
             const m = window.__mm;
             m.state.playing = false;
             m.state.t = t;
             m.setView(view);
-          }, { t: spec.t, view: spec.view });
+            if (rear) {
+              const c = m.controls.target;
+              m.camera.position.set(c.x, c.y + 0.12, c.z - 3.1);
+              m.controls.update();
+            }
+          }, { t: spec.t, view: spec.view, rear: spec.key === 'bot-rear' });
           // 等待 2 幀確保 WebGL 畫面以新姿勢與新視角完成繪製
           await waitFrames(page, 2);
           await canvas.screenshot({ path: path.join(IMG_DIR, filename) });
@@ -496,7 +505,7 @@ async function main() {
       generatedAt: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
     });
     fs.writeFileSync(path.join(REVIEW_DIR, 'index.html'), html, 'utf8');
-    console.log(`已輸出：${path.relative(ROOT, REVIEW_DIR)}/index.html（共 ${rows.length} 個動作，${rows.length * 3} 張圖）`);
+    console.log(`已輸出：${path.relative(ROOT, REVIEW_DIR)}/index.html（共 ${rows.length} 個動作，${rows.length * SHOT_SPECS.length} 張圖）`);
 
     if (opts.publish) {
       const dest = path.join(ROOT, 'dist', 'review');

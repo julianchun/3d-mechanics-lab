@@ -11,6 +11,11 @@ export const COMMON_ASSUMPTIONS = [
 
 // 已查證之參考文獻庫（所有條目均取自 docs/references.md 與 docs/machine-data.md）
 const REFS = {
+  cogley2005: { authors: 'Cogley RM et al.', year: 2005, title: 'Comparison of muscle activation using various hand positions during the push-up exercise', venue: 'J Strength Cond Res, 19(3):628–633', url: 'https://pubmed.ncbi.nlm.nih.gov/16095413/', tag: 'PubMed 16095413' },
+  suprak2011: { authors: 'Suprak DN, Dawes J, Stephenson MD', year: 2011, title: 'The effect of position on the percentage of body mass supported during traditional and modified push-up variants', venue: 'J Strength Cond Res, 25(2):497–503', url: 'https://pubmed.ncbi.nlm.nih.gov/20179649/', tag: 'PubMed 20179649' },
+  suprak2013: { authors: 'Suprak DN et al.', year: 2013, title: 'Scapular Kinematics and Shoulder Elevation in a Traditional Push-Up', venue: 'J Athl Train, 48(6):826–835', url: 'https://pubmed.ncbi.nlm.nih.gov/23952043/', tag: 'PubMed 23952043' },
+  dickie2017: { authors: 'Dickie JA et al.', year: 2017, title: 'Electromyographic analysis of muscle activation during pull-up variations', venue: 'J Electromyogr Kinesiol, 32:30–36', url: 'https://pubmed.ncbi.nlm.nih.gov/28011412/', tag: 'PubMed 28011412' },
+  mckenzie2022: { authors: 'McKenzie A et al.', year: 2022, title: 'Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?', venue: 'Int J Environ Res Public Health, 19(20):13211', url: 'https://doi.org/10.3390/ijerph192013211', tag: 'DOI' },
   escamilla1998: { authors: 'Escamilla RF et al.', year: 1998, title: 'Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises', venue: 'Med Sci Sports Exerc, 30(4):556–569', url: 'https://pubmed.ncbi.nlm.nih.gov/9565938/', tag: 'PubMed 9565938' },
   escamilla2001_sq: { authors: 'Escamilla RF', year: 2001, title: 'Knee biomechanics of the dynamic squat exercise', venue: 'Med Sci Sports Exerc, 33(1):127–141', url: 'https://pubmed.ncbi.nlm.nih.gov/11194098/', tag: 'PubMed 11194098' },
   escamilla2001_stance: { authors: 'Escamilla RF et al.', year: 2001, title: 'A three-dimensional biomechanical analysis of the squat during varying stance widths', venue: 'Med Sci Sports Exerc, 33(6):984–998', url: 'https://pubmed.ncbi.nlm.nih.gov/11404665/', tag: 'PubMed 11404665' },
@@ -85,10 +90,51 @@ const REFS = {
   lee2019: { authors: 'Lee HM', year: 2019, title: 'Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing', venue: 'J Hand Ther, 32(1):71–79', url: 'https://pubmed.ncbi.nlm.nih.gov/28943236/', tag: 'PubMed 28943236' },
   ackland2008: { authors: 'Ackland DC, Pak P, Richardson M, Pandy MG', year: 2008, title: 'Moment arms of the muscles crossing the anatomical shoulder', venue: 'J Anat, 213(4):383–390', url: 'https://pubmed.ncbi.nlm.nih.gov/18691376/', tag: 'PubMed 18691376' },
   signorile2017: { authors: 'Signorile JF et al.', year: 2017, title: 'Differences in muscle activation and kinematics between cable-based and selectorized weight training', venue: 'J Strength Cond Res, 31(2):313–322', url: 'https://pubmed.ncbi.nlm.nih.gov/28129277/', tag: 'PubMed 28129277' },
+  andersen2021_backext: { authors: 'Andersen V et al.', year: 2021, title: 'Comparison of Muscle Activity in Three Single-Joint, Hip Extension Exercises in Resistance-Trained Women', venue: 'J Sports Sci Med, 20(2):181–186', url: 'https://pubmed.ncbi.nlm.nih.gov/33948095/', tag: 'PubMed 33948095' },
+  paz2022_hipabd: { authors: 'de Almeida Paz I et al.', year: 2022, title: 'Hip abduction machine is better than free weights to target the gluteus medius while minimizing tensor fascia latae activation', venue: 'J Bodyw Mov Ther, 30:160–167', url: 'https://pubmed.ncbi.nlm.nih.gov/35500965/', tag: 'PubMed 35500965' },
+  kinoshita2023_calf: { authors: 'Kinoshita M et al.', year: 2023, title: 'Triceps surae muscle hypertrophy is greater after standing versus seated calf-raise training', venue: 'Front Physiol, 14:1272106', url: 'https://pubmed.ncbi.nlm.nih.gov/38156065/', tag: 'PubMed 38156065' },
+  paz2021_calf: { authors: 'Paz GA et al.', year: 2021, title: 'Myoelectric activity of the gastrocnemius during plantar flexion in a standing versus seated position and with a neutral or dorsiflexed ankle: A pilot study', venue: 'J Bodyw Mov Ther', url: 'https://pubmed.ncbi.nlm.nih.gov/33992275/', tag: 'PubMed 33992275' },
+  farias2017: { authors: 'Farias DA et al.', year: 2017, title: 'Maximal strength performance and muscle activation for the bench press and triceps extension exercises adopting dumbbell, barbell, and machine modalities over multiple sets', venue: 'J Strength Cond Res, 31(7):1879–1887', url: 'https://pubmed.ncbi.nlm.nih.gov/27669189/', tag: 'PubMed 27669189' },
+  coratella2020: { authors: 'Coratella G et al.', year: 2020, title: 'An electromyographic analysis of lateral raise variations and frontal raise in competitive bodybuilders', venue: 'Int J Environ Res Public Health, 17(17):6015', url: 'https://pubmed.ncbi.nlm.nih.gov/32824894/', tag: 'PubMed 32824894' },
+  campos2020: { authors: 'Campos YAC et al.', year: 2020, title: 'Different shoulder exercises affect the activation of deltoid portions in resistance-trained individuals', venue: 'J Hum Kinet, 75:5–14', url: 'https://pubmed.ncbi.nlm.nih.gov/33312291/', tag: 'PubMed 33312291' },
+  reinold2007: { authors: 'Reinold MM et al.', year: 2007, title: 'Electromyographic analysis of the supraspinatus and deltoid muscles during 3 common rehabilitation exercises', venue: 'J Athl Train, 42(4):464–469', url: 'https://pubmed.ncbi.nlm.nih.gov/18174934/', tag: 'PubMed 18174934' },
+  coratella2023: { authors: 'Coratella G et al.', year: 2023, title: 'Biceps brachii and brachioradialis excitation in biceps curl exercise: different handgrips, different synergy', venue: 'Sports (Basel), 11(3):64', url: 'https://pubmed.ncbi.nlm.nih.gov/36976950/', tag: 'PubMed 36976950' },
+  schoenfeld2013: { authors: 'Schoenfeld B et al.', year: 2013, title: 'Effect of hand position on EMG activity of the posterior shoulder musculature during a horizontal abduction exercise', venue: 'J Strength Cond Res, 27(10):2644–2649', url: 'https://pubmed.ncbi.nlm.nih.gov/23302754/', tag: 'PubMed 23302754' },
+  franke2015: { authors: 'Franke RA et al.', year: 2015, title: 'Analysis of anterior, middle and posterior deltoid activation during single and multijoint exercises', venue: 'J Sports Med Phys Fitness, 55(7–8):714–721', url: 'https://pubmed.ncbi.nlm.nih.gov/24947920/', tag: 'PubMed 24947920' },
+  collins2021: { authors: 'Collins KS et al.', year: 2021, title: 'Differences in muscle activity and kinetics between the goblet squat and landmine squat in men and women', venue: 'J Strength Cond Res, 35(10):2661–2668', url: 'https://pubmed.ncbi.nlm.nih.gov/34341315/', tag: 'PubMed 34341315' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
 export const SOURCES = {
+  pushup: {
+    assumptions: [
+      '掌根與腳尖為兩個支撐點，依身體各節段重量與可選負重背心求垂直反力；假設沒有水平外力，兩處水平反力為零，因此不需摩擦。左右各自承擔一半，不允許手掌透過剛體槓互推。',
+      'Suprak 等人 2013 年傳統伏地挺身以手略寬於肩、手在肩部附近、最低點胸中段輕觸 10 cm 木塊；本模型參照此姿勢描述。預設手掌在撐起時肩關節後方 6 cm，使最低點前臂於側視約偏離垂直 8°；此 6 cm 與前臂角度是模型幾何假設，不是文獻量測值。',
+      '軀幹與腿近乎一直線，骨盆可上下微調 4 cm；腳或手墊高 20 cm、撐起與下放時肩部高於支撐面 58／27 cm、腕關節中心高於支撐面 8 cm，均為示範幾何假設。手位參數以撐起時的實際肩關節中心為零點。',
+      '只分析肩、肘及肩胛力矩；不含肱骨內外旋自由度。肌肉活化為模型估計，不能直接當作 EMG。',
+    ], refs: ['suprak2011', 'suprak2013', 'cogley2005'],
+  },
+  'pushup-feet': { assumptions: ['腳尖墊高 20 cm，沿用伏地挺身的手位、雙點垂直反力與零水平摩擦假設；墊高高度與所得前臂角度均未由文獻校準。'], refs: ['suprak2011', 'suprak2013', 'cogley2005'] },
+  'pushup-hands': { assumptions: ['手掌墊高 20 cm，沿用伏地挺身的手位、雙點垂直反力與零水平摩擦假設；墊高高度與所得前臂角度均未由文獻校準。'], refs: ['suprak2011', 'suprak2013', 'cogley2005'] },
+  dips: {
+    assumptions: [
+      '雙手各握獨立平行槓，手部垂直反力合計承擔全身與腰掛負重；每幀水平調整身體位置，使含彎腿的質心投影落在握點支撐線。假設無水平外力，槓面無須摩擦，兩手不能透過剛體橫桿互推。',
+      '槓高 1.18 m、腿於身後彎曲與下放路徑為示範幾何假設；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
+    ], refs: ['mckenzie2022'], trendNote: '文獻比較的是椅上、雙槓與吊環撐體，未查到直立與前傾雙槓撐體之直接 EMG 比較，故不加前傾趨勢。',
+  },
+  'dips-upright': { assumptions: ['軀幹前傾設為 0°，雙槓支撐、腿部重心平衡與示範幾何同雙槓撐體。'], refs: ['mckenzie2022'], trendNote: '未查到同負重下直立與前傾雙槓撐體的直接 EMG 比較。' },
+  pullup: {
+    assumptions: [
+      '雙手握固定剛體單槓，手部向上反力等於全身與腰掛負重；每幀調整身體前後位置使質心落在握點支撐線。左右各承擔一半，允許兩手沿單槓互推／互拉以減少肩肘橫向力矩（上限為單手反力一半）。',
+      '槓高 2.35 m、近伸直懸垂到下巴過槓及膝微彎為示範幾何假設；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
+    ], refs: ['dickie2017'], trendNote: 'Dickie 等人的正握與反握比較未發現背闊肌或二頭肌全行程峰值的明確差異；不加該方向的趨勢。',
+  },
+  'pullup-wide': { assumptions: ['正握寬距 1.8× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
+  chinup: { assumptions: ['反握 1.1× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
+  'assist-pullup': {
+    assumptions: ['雙膝跪在機台墊上，膝墊向上推力等於所選輔助公斤數乘重力加速度；手部反力等於全身重量減膝墊推力。每幀以身體重量、腰掛負重與膝墊力求重心落在手部支撐線；機台柱高與墊尺寸為未查證估計。', '其餘握槓與肩肘肩胛分析同引體向上。'], refs: ['dickie2017'], trendNote: '輔助重量的單調檢查為模型內部物理檢查，未找到直接比較各配重輔助引體機全身 EMG 的研究。',
+  },
+  'assist-chinup': { assumptions: ['反握 1.1× 肩寬、膝墊向上輔助；其餘支撐平衡同輔助引體機。'], refs: ['dickie2017'] },
   'squat-high': {
     assumptions: [
       '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
@@ -112,6 +158,14 @@ export const SOURCES = {
       '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
     ],
     refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance'],
+  },
+  'goblet-squat': {
+    assumptions: [
+      '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.25，無單一實測出處之預設假設，較背蹲預設 0.45 更偏膝主導）反映前側負重深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
+      '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
+      '啞鈴尺寸與預設單顆 20 kg 為假設。',
+    ],
+    refs: ['collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020'],
   },
   'smith-squat': {
     assumptions: [
@@ -217,6 +271,31 @@ export const SOURCES = {
     noStudy: true,
     trendNote: '尚無直接比較動態地板臥推與平板臥推之同儕審查肌電／逆動力學研究。',
   },
+  'db-bench': {
+    assumptions: [
+      '仰臥於平板臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
+      '手部路徑假設：下放時雙手依手肘外展角落在胸兩側並可低於胸面，推起時向肩膀上方微內聚（頂點間距 36 cm）；對握與正握僅改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸（握把內距 13 cm、直徑 32 mm）與預設每顆 22 kg（雙手 44 kg）為假設。',
+    ],
+    refs: ['saeterbakken2011', 'welsch2005', 'farias2017', 'rodriguezridao2020'],
+  },
+  'db-bench-incline': {
+    assumptions: [
+      '仰臥於上斜 30° 臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
+      '手部路徑假設與平板啞鈴臥推相同並隨椅背旋轉 30°；不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 22 kg（雙手 44 kg）為假設。',
+    ],
+    refs: ['lauver2016', 'rodriguezridao2020', 'saeterbakken2011', 'farias2017'],
+  },
+  'db-press': {
+    assumptions: [
+      '坐姿背靠微後傾 8°（82°）椅背（座高 50 cm），椅墊與椅背承擔身體重量，不算地面反作用力；兩手各自獨立承重（無剛體槓互推）。',
+      '手部路徑假設：下放時手肘位於肩胛／前移平面且前臂接近垂直，推起時沿微內聚弧線推至肩膀上方（頂點間距 36 cm）；正握與對握改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 14 kg（雙手 28 kg）為假設。',
+    ],
+    refs: ['saeterbakken2013'],
+    trendNote: 'Saeterbakken & Fimland 2013 (PMID 23096062) 比較站姿／坐姿 × 槓鈴／啞鈴肩推，本模型目前僅有站姿槓鈴與坐姿啞鈴、無法對齊同姿勢或同器材比較，故未列入自動化趨勢比對。',
+  },
   'chest-press': {
     assumptions: [
       '坐姿器械：椅背承擔身體重量，不算地面反作用力；僅分析肩屈伸、肩水平內收與肘伸展。',
@@ -234,6 +313,75 @@ export const SOURCES = {
       '機械臂半徑（握把 54 cm／前臂墊 29 cm）、等效凸輪基準力臂（22 cm）、溫和鐘型凸輪曲線表與預設配重（45 kg）皆為假設（未查得單一商用機台實測凸輪表）。',
     ],
     refs: ['rochajunior2007', 'welsch2005', 'solstad2020', 'ackland2008'],
+  },
+  'reverse-deck': {
+    assumptions: [
+      '面向胸墊坐姿，雙側握把各沿水平圓弧向外打開；胸墊承受握把向前的水平合力，座墊承受垂直重量。',
+      '握把半徑 52 cm、等效凸輪力臂 22 cm、預設配重 40 kg 與胸墊位置都是未查證假設；後三角與肩胛肌順位為模型估計，沒有直接機型測力。',
+    ],
+    refs: ['ackland2008'],
+    trendNote: '未查證同機型的反向蝴蝶機軌跡、凸輪與後三角肌電對照。',
+  },
+  'db-reverse-fly': {
+    assumptions: [
+      '俯身站姿（預設前傾 65°、膝微彎 22°），兩手各持獨立啞鈴（無剛體槓互推），每幀維持系統總重心在腳掌中段上方。',
+      '手部路徑假設：手臂在世界 XY 平面由胸前下方（外展 8°）水平外展至 86°，手肘維持固定微彎角度、對握（掌心相對→朝下）；模型不含肱骨內外旋自由度。',
+      '啞鈴尺寸與預設每顆 6 kg 為假設。',
+    ],
+    refs: ['schoenfeld2013', 'franke2015', 'ackland2008'],
+  },
+  'back-extension': {
+    assumptions: [
+      '45° 羅馬椅以大腿墊向上、腳踝墊向下的雙接觸力維持準靜態平衡；髖與軀幹共用單一剛體軀幹近似。',
+      '髖高 92 cm、踝墊位置、胸前槓片 10 kg 及墊高調整均為未查證假設。墊高只影響畫面與肌肉操作長度，不改變髖／腰背力矩分配；圓背僅以整段軀幹角度及肌肉長度代理，未逐節模擬腰椎，不能用來推算髖與腰背之間的真實負荷轉移。',
+      '若腳踝墊所需反力方向超出單向接觸假設，模型會將反力截為零並顯示支撐力矩未平衡警告。',
+    ],
+    refs: ['andersen2021_backext'],
+    trendNote: '已有羅馬椅與其他髖伸動作肌電比較；墊高與圓背的定量影響尚無直接可用對照。',
+  },
+  'hack-squat': {
+    assumptions: [
+      '背墊沿假設 45° 軌道滑動，肩墊承擔滑台與掛片；軌道法向反作用力與傾斜腳踏板壓力中心共同平衡。腳底反力的額狀面分量按站姿共用幾何設定，使力線通過髖關節，並非實測踏板剪力。',
+      '滑軌 45°、腳板 12°、總配重 80 kg、軌道長 185 cm 與機架寬度都是未查證假設；忽略滑軌摩擦。',
+    ],
+    refs: ['escamilla1998'],
+    trendNote: 'Escamilla 1998 提供深蹲與腿推比較，並非本哈克深蹲機的直接量測。',
+  },
+  'machine-press': {
+    assumptions: [
+      '坐姿背靠椅背，雙手握把沿固定的上推軌跡移動；座墊與靠背承擔身體重量。',
+      '握把行程 47 cm、預設軌跡向前 8°、配重 40 kg、轉軸與座椅尺寸都是未查證假設；正握／中立握只改握把方向，模型沒有肱骨內外旋自由度。',
+    ],
+    refs: ['saeterbakken2013'],
+    trendNote: 'Saeterbakken 2013 比較肩推姿勢及負重型式，沒有驗證此固定軌跡器械。',
+  },
+  'calf-raise-standing': {
+    assumptions: [
+      '站姿膝近伸直，前腳掌固定在 13 cm 台階；腳跟下放與踮起繞前腳掌轉動，肩墊向下施加負重。',
+      '肩墊配重 60 kg、台階高度與行程角度為未查證假設；腓腸肌與比目魚肌的模型活化不可直接視為 EMG。',
+    ],
+    refs: ['kinoshita2023_calf', 'paz2021_calf'],
+  },
+  'calf-raise-seated': {
+    assumptions: [
+      '坐姿膝約 90°，前腳掌踩台階，膝上墊負重由前腳掌反力支撐；座墊承擔軀幹重量。',
+      '膝墊配重 45 kg、台階尺寸與行程角度為未查證假設；Kinoshita 2023 比較的是 12 週肌肥大，不能當作即時肌電順位。',
+    ],
+    refs: ['kinoshita2023_calf', 'paz2021_calf'],
+  },
+  'hip-abduction': {
+    assumptions: [
+      '坐姿大腿在水平面外展，以膝外側墊阻力沿左右方向施力；椅墊承擔身體重量。',
+      '槓桿半徑 35 cm、等效凸輪力臂 22 cm、配重 35 kg 均為未查證假設；模型沒有臀大肌上束獨立肌束，前傾趨勢未驗證。',
+    ],
+    refs: ['paz2022_hipabd'],
+  },
+  'hip-adduction': {
+    assumptions: [
+      '坐姿大腿在水平面內收，以膝內側墊阻力沿左右方向施力；椅墊承擔身體重量。',
+      '槓桿半徑 35 cm、等效凸輪力臂 22 cm、配重 35 kg 均為未查證假設；目前未查證本機型的內收肌束肌電對照。',
+    ],
+    refs: [], noStudy: true,
   },
   'cable-fly-high': {
     assumptions: [
@@ -367,6 +515,28 @@ export const SOURCES = {
     ],
     refs: ['kleiber2015', 'oliveira2009', 'marcolin2018'],
   },
+  'lat-raise': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴（無剛體槓互推），每幀維持系統總重心在腳掌中段上方。',
+      '手部路徑假設：從體側 14°（避開大腿）沿肩胛平面（前偏 30°）或冠狀面（0°）外展至上舉高度，手肘固定微彎；模型不含肱骨內外旋自由度，無法區分內旋／外旋握法差異。',
+      '啞鈴尺寸與預設每顆 8 kg 為假設。',
+    ],
+    refs: ['coratella2020', 'campos2020', 'reinold2007', 'ackland2008'],
+  },
+  'db-curl': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴（無剛體槓互推），上臂微外開 8° 避開髖部，每幀維持系統總重心在腳掌中段上方。',
+      '反握二頭肌偏好沿用現有槓鈴彎舉機制（1.6×）；啞鈴尺寸與預設每顆 12 kg（雙手 24 kg）為假設。',
+    ],
+    refs: ['coratella2023', 'kleiber2015', 'oliveira2009', 'marcolin2018'],
+  },
+  'hammer-curl': {
+    assumptions: [
+      '站姿兩手各持獨立啞鈴採對握（掌心相對、啞鈴垂直於前臂），無剛體槓互推；每幀維持系統總重心在腳掌中段上方。',
+      '錘式對握沿用現有對握二頭肌偏好係數（1.0×，同坐姿划船 V 把），不另設單獨特例；註：模型 brach 為肱肌＋肱橈肌合併，啞鈴尺寸與預設每顆 12 kg 為假設。',
+    ],
+    refs: ['coratella2023', 'kleiber2015', 'marcolin2018'],
+  },
   shrug: {
     assumptions: [
       '站姿手臂垂直垂於大腿前，雙手透過剛體槓身可橫向互推／互拉，僅動肩胛上提／後收。',
@@ -379,6 +549,7 @@ export const SOURCES = {
 
 // 當參數被使用者自訂、對不上清單變化式時，依 lift 對應預設來源鍵
 const LIFT_FALLBACK_ID = {
+  pushup: 'pushup', dips: 'dips', pullup: 'pullup', assistpullup: 'assist-pullup',
   squat: 'squat-high',
   deadlift: 'deadlift',
   rdl: 'rdl',
@@ -399,7 +570,19 @@ const LIFT_FALLBACK_ID = {
   legcurl: 'leg-curl',
   chestpress: 'chest-press',
   pecdeck: 'pec-deck',
+  reversedeck: 'reverse-deck',
+  backext: 'back-extension',
+  hacksquat: 'hack-squat',
+  machinepress: 'machine-press',
+  calfraise: 'calf-raise-standing',
+  hipabd: 'hip-abduction',
   cablefly: 'cable-fly-mid',
+  dbbench: 'db-bench',
+  dbpress: 'db-press',
+  latraise: 'lat-raise',
+  dbcurl: 'db-curl',
+  dbreversefly: 'db-reverse-fly',
+  goblet: 'goblet-squat',
 };
 
 export function getSourceInfo(lift, catalogId) {

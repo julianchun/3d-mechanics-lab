@@ -1,6 +1,6 @@
 # 重訓動作生物力學與肌電圖文獻彙整
 
-本文件針對 [`src/catalog.js`](../src/catalog.js) 中**所有已實作動作**（共 37 項）整理同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
+本文件整理 [`src/catalog.js`](../src/catalog.js) 動作的同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
 
 > **驗證原則**：每筆引用均附已查證之 PubMed（PMID）或 DOI／原始出處連結；針對目前缺乏直接同儕審查動態研究之動作，明確標記「未找到」並說明替代參考方向。
 
@@ -256,11 +256,11 @@
   2. Rodríguez-Ridao D et al. (2020). *Effect of five bench inclinations on the electromyographic activity of the pectoralis major, anterior deltoid, and triceps brachii during the bench press exercise.* Int J Environ Res Public Health, 17(19):7339. [DOI](https://doi.org/10.3390/ijerph17197339)
 - **可比較量化結果**
   - Rodríguez-Ridao et al. (2020, 比較 0°、15°、30°、45°、60°)：
-    - **上胸（鎖骨部胸大肌）**：於 **30° 上斜**達最大 EMG（30° 與 45° 顯著高於 0° 平板）。
-    - **前三角肌**：隨角度遞增，於 60° 達最高（30°／45° 顯著高於 0°）。
+    - **上胸（鎖骨部胸大肌）**：於 **30° 上斜**達最大 EMG。
+    - **前三角肌**：隨角度遞增，於 **60° 達最高**（大於 45° 時顯著增加；平板 0° 時胸大肌與前三角活動相近）。
     - **中下胸（胸骨部）**：0° 平板高於 30°／45°／60°。
     - **三頭肌**：各角度之間相近。
-  - Lauver et al. (2016) 亦證實上斜 30°–45° 增加鎖骨部胸大肌與前三角肌活化、降低胸骨部比例。
+  - Lauver et al. (2016) 顯示上斜 30°–45° 降低胸骨部比例並增加前三角肌活化；但**鎖骨部（上胸）在整段向心期無顯著差異，僅於 26–50% 向心段呈現 30°／45° 高於 0° 平板**。
 - **可檢驗趨勢**
   - 30° 上斜臥推上胸（`pecc`）活化 > 0° 平板臥推（Rodríguez-Ridao 2020；Lauver 2016）。
   - 30° 上斜臥推前三角肌（`adelt`）活化 > 0° 平板臥推（Rodríguez-Ridao 2020）。
@@ -339,8 +339,8 @@
   1. Saeterbakken AH, Fimland MS. (2013). *Effects of body position and loading modality on muscle activity and strength in shoulder presses.* J Strength Cond Res, 27(7):1824–1831. [PubMed 23096062](https://pubmed.ncbi.nlm.nih.gov/23096062/) / [DOI](https://doi.org/10.1519/JSC.0b013e318276b873)
 - **可比較量化結果**
   - Saeterbakken & Fimland (2013, 比較站姿／坐姿 × 槓鈴／啞鈴 4 種肩推 1RM 與 EMG)：
-    - **站姿**比坐姿需要更高全身穩定度，**三角肌（前、中、後束）**肌電活動顯著較高。
-    - 槓鈴肩推之**肱三頭肌與肱二頭肌**活動高於啞鈴肩推，且可舉起之 1RM 重量高於站姿啞鈴。
+    - **前三角肌**：槓鈴低於啞鈴（站姿 −15%、坐姿 −11%）；坐姿 vs 站姿啞鈴僅呈趨勢（p = 0.070）。
+    - **肱三頭肌**：槓鈴高於啞鈴僅在**站姿槓鈴 vs 站姿啞鈴**成立，且槓鈴可舉起之 1RM 高於站姿啞鈴。
 - **可檢驗趨勢**
   - 站姿肩推主要動肌為**前三角肌（`adelt`）、肱三頭肌（`trilat`）與上斜方肌（`uptrap`）**；軀幹過度後仰（`lean` 增加）會使推舉方向偏向水平／上斜，使上胸（`pecc`）參與增加且下背負荷上升。
 
@@ -491,3 +491,32 @@
   - Pizzari et al. (2014)：比較標準 0° 外展聳肩與改良 30° 外展上旋聳肩，顯示改良聳肩能進一步提高上斜方肌與下斜方肌活動；標準聳肩則以上斜方肌為絕對主導。
 - **可檢驗趨勢**
   - 槓鈴聳肩中，上斜方肌（`uptrap`）為顯著最高活化之肩胛／上肢動肌（Andersen 2008）；軀幹前傾（`lean` 增加）時，抵抗重力方向朝向肩胛後收，使中斜方肌（`midtrap`）參與上升。
+
+### 34–41. E 階段器械與自體重量動作
+
+- **反向蝴蝶機**：肩關節肌肉力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)；未查證同機型握把阻力、凸輪曲線或直接肌電比較。
+- **45° 背伸展**：[Andersen et al. 2021](https://pubmed.ncbi.nlm.nih.gov/33948095/) 比較羅馬椅、羅馬尼亞硬舉與坐姿背伸機的臀大肌、股二頭肌、豎脊肌肌電。研究未比較墊子高度，因此不建立墊高趨勢檢查。
+- **哈克深蹲機**：目前僅以 [Escamilla et al. 1998](https://pubmed.ncbi.nlm.nih.gov/9565938/) 的深蹲與腿推閉鎖鏈資料間接說明膝伸肌需求；未查證此哈克機軌道或肌電。
+- **器械肩推**：[Saeterbakken & Fimland 2013](https://pubmed.ncbi.nlm.nih.gov/23096062/) 比較肩推身體姿勢及負重型式；未量本模型固定握把軌跡。
+- **站姿／坐姿提踵**：[Kinoshita et al. 2023](https://pubmed.ncbi.nlm.nih.gov/38156065/) 於 12 週訓練發現站姿腓腸肌肥大高於坐姿、比目魚肌增長相近；其圖 1 的 OpenSim 推算顯示同一踝角下站姿腓腸肌操作長度較長，此一長度方向列入模型趨勢檢查。肌肥大結果不能直接當成即時肌電或模型活化驗證。[Paz et al. 2021](https://pubmed.ncbi.nlm.nih.gov/33992275/) 的小樣本肌電研究指出站坐姿與踝部被動拉伸條件交互影響腓腸肌兩頭，未支持簡單的「站姿 EMG 一定高於坐姿」規則。
+- **臀外展／內收機**：[de Almeida Paz et al. 2022](https://pubmed.ncbi.nlm.nih.gov/35500965/) 量外展機與兩種徒手外展的臀中肌、闊筋膜張肌肌電；未研究內收機或前傾差異。模型沒有臀大肌上束獨立肌束，無法驗證前傾參與趨勢。
+
+---
+
+### 42–49. F 階段第一批啞鈴動作
+
+- **啞鈴臥推（平板／上斜 30°）**：[Saeterbakken et al. 2011](https://pubmed.ncbi.nlm.nih.gov/21225489/) 與 [Welsch et al. 2005](https://pubmed.ncbi.nlm.nih.gov/15903389/) 顯示 1RM／6RM 下啞鈴與槓鈴臥推之胸大肌峰值肌電相近（啞鈴 1RM 約輕 14–17%）；[Farias et al. 2017](https://pubmed.ncbi.nlm.nih.gov/27669189/) 於多組 10RM 觀察到啞鈴臥推胸大肌 sEMG 高於槓鈴。上斜 30° vs 平板 0° 趨勢間接參考槓鈴研究：[Rodríguez-Ridao et al. 2020](https://doi.org/10.3390/ijerph17197339) 顯示上胸於 30° 達最高、中下胸於 0° 較高（前三角肌則於 60° 最高，平板時胸大肌與前三角活動相近，故未設上斜 30° > 平板前三角自動趨勢）；[Lauver et al. 2016](https://pubmed.ncbi.nlm.nih.gov/25799093/) 顯示上胸在整段向心期無顯著差異，僅於 26–50% 向心段 30°／45° 高於平板。
+- **坐姿啞鈴肩推**：[Saeterbakken & Fimland 2013](https://pubmed.ncbi.nlm.nih.gov/23096062/) 比較站姿／坐姿 × 槓鈴／啞鈴肩推，前三角肌為槓鈴低於啞鈴（站姿 −15%、坐姿 −11%），坐姿 vs 站姿啞鈴僅呈趨勢（p = 0.070）；三頭肌「槓鈴 > 啞鈴」僅在站姿槓鈴 vs 站姿啞鈴成立。因本模型僅有站姿槓鈴與坐姿啞鈴，無法對齊同姿勢或同器材比較，未列入自動趨勢檢驗。
+- **啞鈴側平舉**：[Campos et al. 2020](https://pubmed.ncbi.nlm.nih.gov/33312291/) 顯示側平舉三角肌中束 sEMG 顯著高於臥推與飛鳥；[Coratella et al. 2020](https://pubmed.ncbi.nlm.nih.gov/32824894/) 比較不同肱骨旋轉與屈肘變化式之三角肌 sEMG；[Reinold et al. 2007](https://pubmed.ncbi.nlm.nih.gov/18174934/) 探討肩胛平面外展中棘上肌與三角肌活化。
+- **啞鈴彎舉／錘式彎舉**：[Coratella et al. 2023](https://pubmed.ncbi.nlm.nih.gov/36976950/) 直接比較反握、對握（錘式）與正握彎舉，顯示向心期反握肱二頭肌 sEMG 顯著高於對握（約 +12%），對握前三角肌穩定活化顯著高於反握（約 +9%）；亦參考 [Kleiber et al. 2015](https://pubmed.ncbi.nlm.nih.gov/26300781/) 與 [Marcolin et al. 2018](https://pubmed.ncbi.nlm.nih.gov/30013836/)。
+- **俯身啞鈴反向飛鳥**：[Schoenfeld et al. 2013](https://pubmed.ncbi.nlm.nih.gov/23302754/)（J Strength Cond Res, 27(10):2644–2649；DOI 10.1519/JSC.0b013e318281e1e9，反向飛鳥機）比較水平外展時對握與正握對後三角與棘下肌 sEMG 之影響；[Franke et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24947920/) 比較反向飛鳥與多關節拉類動作之後三角活化；肩部力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)。
+- **高腳杯深蹲**：[Collins et al. 2021](https://pubmed.ncbi.nlm.nih.gov/34341315/) 比較高腳杯深蹲與地雷管深蹲之肌電與地面反作用力，證實高腳杯深蹲具高股四頭肌活化與較高垂直負荷；前側負重使軀幹較背蹲直立間接參考 [Yavuz et al. 2015](https://pubmed.ncbi.nlm.nih.gov/25630691/) 與 [Krzyszkowski & Kipp 2020](https://pubmed.ncbi.nlm.nih.gov/32544021/)。
+
+## 自體重量動作（T15）
+
+- **伏地挺身手距**：Cogley RM et al. (2005), *Comparison of muscle activation using various hand positions during the push-up exercise*, J Strength Cond Res 19(3):628–633. [PubMed 16095413](https://pubmed.ncbi.nlm.nih.gov/16095413/)。40 人各做一次肩寬、寬、窄手距伏地挺身；原文摘要指出**窄距高於寬距**的胸大肌及肱三頭肌 EMG。`tests/trends.mjs` 逐肌測相同方向；模型 0.8× 與 1.8× 肩寬僅是窄／寬的示範設定，不宣稱為原文量測距離。模型胸大肌方向相反，照實記為 FAIL。
+- **伏地挺身手部承重**：Suprak DN, Dawes J, Stephenson MD (2011), *The effect of position on the percentage of body mass supported during traditional and modified push-up variants*, J Strength Cond Res 25(2):497–503. [PubMed 20179649](https://pubmed.ncbi.nlm.nih.gov/20179649/)。傳統腳尖著地伏地挺身於撐起與下放靜態姿勢量手部反力，原文摘要指出下放時手部承重較高；趨勢檢查只比較相同傳統伏地挺身的兩個位置。
+- **伏地挺身手位與深度**：Suprak DN et al. (2013), *Scapular Kinematics and Shoulder Elevation in a Traditional Push-Up*, J Athl Train 48(6):826–835. [PubMed 23952043](https://pubmed.ncbi.nlm.nih.gov/23952043/)／[全文方法](https://pmc.ncbi.nlm.nih.gov/articles/PMC3867095/)。受試者手略寬於肩、放在肩部附近，最低點胸中段輕觸 10 cm 木塊。這篇未提供手掌相對肩關節的精確前後距離或前臂角度；模型預設撐起時手掌在肩關節後方 6 cm，讓最低點側視前臂接近垂直，數值屬幾何假設。20 cm 墊高、肩部高度及腕關節高度也只是示範設定。
+- **雙槓撐體**：McKenzie A et al. (2022), *Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?*, Int J Environ Res Public Health 19(20):13211. [DOI 10.3390/ijerph192013211](https://doi.org/10.3390/ijerph192013211)。研究比較椅上、雙槓和吊環撐體；雙槓相較椅上有較高胸大肌、前三角、三頭等峰值 EMG，並呈現軀幹前傾。**未比較雙槓的直立與前傾兩個條件**，因此不加入該方向的趨勢檢查。
+- **引體向上握法**：Dickie JA et al. (2017), *Electromyographic analysis of muscle activation during pull-up variations*, J Electromyogr Kinesiol 32:30–36. [PubMed 28011412](https://pubmed.ncbi.nlm.nih.gov/28011412/)。研究比較正握、反握、對握和繩索；摘要指出握法之間大多數全程峰值與平均肌電相近，特定顯著差異是正握相較對握的中斜方肌，而非正握與反握背闊肌／二頭肌的固定方向。因此未加正反握背闊肌／二頭肌趨勢。
+- **輔助引體機**：目前未查到可直接支援「輔助公斤數增加，各肌肉 EMG 逐級下降」的原始比較研究。膝墊輔助的單調檢查僅驗證模型內部的總主動活化與支撐力平衡，不標記為文獻趨勢。
