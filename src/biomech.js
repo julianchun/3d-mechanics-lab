@@ -600,6 +600,7 @@ export const LIFTS = {
     pose: pushdownPose, loads: cableLoads,
     moving: ['elbExt'],
     params: [
+      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳併站'], ['staggered', '前後腳']], def: 'parallel', joint: 'ankle', mech: 'A' },
       { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.pushdown.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'topFlex', label: '起點手肘角度', left: '80°', right: '130°', min: 80, max: 130, step: 1, def: 100, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'elbFwd', label: '手肘位置', left: '-10°（往後）', right: '30°（往前）', min: -10, max: 30, step: 1, def: 5, joint: 'shoulder', mech: 'A', unit: '°' },
@@ -763,6 +764,7 @@ export const LIFTS = {
     pose: cableFlyPose, loads: cableLoads,
     moving: ['shFwd', 'shSide', 'shRot'],
     params: [
+      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳併站'], ['staggered', '前後腳']], def: 'staggered', joint: 'ankle', mech: 'A' },
       { key: 'height', label: '滑輪高度', type: 'select', options: [['high', '高位（由上往下）'], ['mid', '中位（與肩同高）'], ['low', '低位（由下往上）']], def: MACHINES.cablefly.heightDefault, joint: 'equip', mech: 'A' },
       { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.cablefly.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'stretch', label: '起始外展（拉伸程度）', left: '60°（保守）', right: '100°（深拉伸）', min: 60, max: 100, step: 1, def: 82, joint: 'shoulder', mech: 'A', unit: '°' },
@@ -773,7 +775,7 @@ export const LIFTS = {
       { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
       { key: 'prefUL', label: '胸大肌偏好', left: '偏上胸', right: '偏中下胸', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecc'], ['pecs']] },
     ],
-    standardNote: '雙手各握獨立把手、手肘固定微彎約 20°～30°、軀幹微前傾對抗後方拉力；高位往下偏中下胸、中位均衡水平內收、低位往上偏上胸。',
+    standardNote: '雙手各握獨立把手、手肘固定微彎約 20°～30°、前後腳站穩並微前傾；高位往下偏中下胸、中位均衡水平內收、低位往上偏上胸。前後腳畫面為等效支撐示意，未計算左右腳分力。',
   },
   dbbench: {
     name: '啞鈴臥推', topLabel: '推直', bottomLabel: '下放最低點',
@@ -1618,6 +1620,17 @@ function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.
   pose.armOk = ok;
   pose.r = r;
   pose.shinTilt = Math.atan2(r.knee[2] - A[2], r.knee[1] - A[1]);
+  if (P.footStance === 'staggered') {
+    // 力學仍以左右對稱半身求解；畫面前後各錯開 10 cm，支撐面取兩腳外緣。
+    // 此等效支撐面不推算左右腳各自反力或不對稱的髖膝踝力矩。
+    const shifted = (dz) => {
+      const ankle = add(pose.R.ankle, [0, 0, dz]);
+      const knee = ik2(pose.R.hip, ankle, BODY.Lt, BODY.Ls, [0, 1, 0]).mid;
+      return { ankle, knee, heel: add(pose.R.heel, [0, 0, dz]), toe: add(pose.R.toe, [0, 0, dz]) };
+    };
+    pose.visualLegs = { R: shifted(0.10), L: shifted(-0.10) };
+    pose.supportSpan = [pose.visualLegs.L.heel[2], pose.visualLegs.R.toe[2]];
+  }
   return pose;
 }
 
@@ -2312,7 +2325,7 @@ function pushdownPose(P, e) {
       return { bar, elbow: E };
     },
   });
-  const extra = bisect((x) => rad(3) - make(x).shinTilt, 0, rad(40), 16);
+  const extra = P.footStance === 'staggered' ? 0 : bisect((x) => rad(3) - make(x).shinTilt, 0, rad(40), 16);
   const pose = make(extra);
   if (deg(extra) > 8) pose.warn.push('滑輪把手往上推：軀幹要再前傾約 ' + Math.round(deg(extra)) + '° 才站得穩（實務上常用前後腳站）');
   // 調整前臂視覺參考軸讓正握旋前角落在自然範圍內，五指包覆直槓
@@ -2643,7 +2656,7 @@ function cableFlyPose(P, e) {
     });
   };
   // 以行程中段決定整組動作一致的站姿前傾補充角，避免每幀軀幹上下晃動
-  const extra = bisect((x) => rad(12) - solveAt(0.5, x).shinTilt, 0, rad(24), 16);
+  const extra = P.footStance === 'staggered' ? 0 : bisect((x) => rad(12) - solveAt(0.5, x).shinTilt, 0, rad(24), 16);
   const pose = solveAt(e, extra);
   if (!pose.armOk) { pose.ok = false; pose.conflict = '手臂無法達到此夾胸位置'; }
   pose.dualCable = true;
@@ -2673,9 +2686,9 @@ function cableFlyPose(P, e) {
     [pulleyR, [px, th - 0.04, pz]],
     [pulleyL, [-px, th - 0.04, pz]],
   ];
-  if (deg(extra) > 4) {
+  if (P.footStance !== 'staggered' && deg(extra) > 4) {
     pose.warn.push('雙側鋼索往後拉：目前以雙腳併站、軀幹需額外前傾約 ' + Math.round(deg(extra)) + '° 平衡（實務上常用前後腳站姿）');
-  } else {
+  } else if (P.footStance !== 'staggered') {
     pose.warn.push('目前為雙腳併站模型，實務上建議前後腳分站以增加前後穩定度');
   }
   return pose;
@@ -3509,8 +3522,9 @@ function forcesOf(pose, P, lift) {
     const m = -SFy;
     const cop = [pose.R.ankle[0], fy, (Sz - Sy) / SFy];
     pose.cop = cop;
-    if (cop[2] < R.heel[2] - 0.02) pose.warn.push('重心落在腳跟後方，會往後倒');
-    else if (cop[2] > R.toe[2] + 0.02) pose.warn.push('重心落在腳尖前方，會往前倒');
+    const [rear, front] = pose.supportSpan || [R.heel[2], R.toe[2]];
+    if (cop[2] < rear - 0.02) pose.warn.push('重心落在腳跟後方，會往後倒');
+    else if (cop[2] > front + 0.02) pose.warn.push('重心落在腳尖前方，會往前倒');
     // 水平分量讓力線在額狀面通過髖關節（雙腳站立時髖外展力矩最小）
     const hip = pose.R.hip;
     const grf = [coronalFootForce(hip, cop, m), m, -SFz];

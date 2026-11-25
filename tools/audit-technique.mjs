@@ -59,10 +59,11 @@ for (const entry of active) {
   if (freeFootLifts.has(entry.lift)) {
     const samples = results.map(({ pose }) => {
       if (!pose.cop || !pose.R.heel || !pose.R.toe) throw new Error(`${entry.id} 缺少腳底接觸幾何`);
-      const mid = (pose.R.heel[2] + pose.R.toe[2]) / 2;
+      const [rear, front] = pose.supportSpan || [pose.R.heel[2], pose.R.toe[2]];
+      const mid = pose.supportSpan ? (pose.visualLegs.L.heel[2] + pose.visualLegs.L.toe[2] +
+        pose.visualLegs.R.heel[2] + pose.visualLegs.R.toe[2]) / 4 : (rear + front) / 2;
       return { delta: (pose.cop[2] - mid) * 100,
-        outside: pose.cop[2] < Math.min(pose.R.heel[2], pose.R.toe[2]) - 1e-9 ||
-          pose.cop[2] > Math.max(pose.R.heel[2], pose.R.toe[2]) + 1e-9 };
+        outside: pose.cop[2] < rear - 1e-9 || pose.cop[2] > front + 1e-9 };
     });
     cop = { max: samples.reduce((a, b) => Math.abs(a.delta) > Math.abs(b.delta) ? a : b).delta,
       outside: samples.some((x) => x.outside) };
@@ -80,8 +81,8 @@ for (const entry of active) {
   if (Number.isFinite(P.topHeight)) angleParts.push(`上舉設定 ${fmt(P.topHeight, 0)}°`);
   const reasons = [];
   if (badPose.length) reasons.push(`姿勢無法成立 ${badPose.length}/21 點`);
-  if (cop?.outside) reasons.push('壓力中心超出腳掌接觸範圍');
-  else if (cop && Math.abs(cop.max) > 5) reasons.push('壓力中心偏離中段超過 5 cm');
+  if (cop?.outside) reasons.push('壓力中心超出兩腳支撐範圍');
+  else if (cop && P.footStance !== 'staggered' && Math.abs(cop.max) > 5) reasons.push('壓力中心偏離中段超過 5 cm');
   if (missed.length) {
     const category = knownModel.has(entry.id) ? '已知肌肉模型問題' : '姿勢預設／肌肉模型待教練判定';
     reasons.push(`${category}：${missed.map((x) => x.name).join('、')}未進前三`);
@@ -101,7 +102,7 @@ for (const entry of active) {
     `${r.name} a=${peakText(r)}（全肌 #${r.rank}）`).join('；') || '—';
   const orderText = targetOrder ? `${orderFailed ? '未達' : '符合'}：${targetOrder.map((r) => `${r.name} #${r.rank}`).join(' → ')}` :
     ['deadlift', 'sumo'].includes(data.entries[entry.id]) ? `股四頭肌 a=${fmt(ranks.find((r) => r.name === '股四頭肌').peak, 2)}；參與門檻待教練決定` : '—';
-  rows.push(`| ${entry.name} | ${status} | ${cop ? `${cop.max >= 0 ? '+' : ''}${fmt(cop.max)} cm${cop.outside ? '（越界）' : ''}` : '不適用'} | ${targetText} | ${synergyText} | ${stableText} | ${orderText} | ${kneeText} | ${angleParts.join('；') || '—'} | ${esc(reasons.join('；') || '量化項目無提示')} |`);
+  rows.push(`| ${entry.name} | ${status} | ${cop ? `${cop.max >= 0 ? '+' : ''}${fmt(cop.max)} cm${P.footStance === 'staggered' ? '（兩腳中點）' : ''}${cop.outside ? '（越界）' : ''}` : '不適用'} | ${targetText} | ${synergyText} | ${stableText} | ${orderText} | ${kneeText} | ${angleParts.join('；') || '—'} | ${esc(reasons.join('；') || '量化項目無提示')} |`);
 }
 
 const lines = [

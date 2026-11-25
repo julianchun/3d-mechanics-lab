@@ -15,6 +15,20 @@ for (const c of CATALOG) {
   if (flags.length) bad++;
   console.log(`${c.id.padEnd(16)} ${flags.join(' ') || 'ok'} | ${top}`);
 }
+// 前後腳僅延展等效支撐面；壓力中心須落在兩腳外緣，併站仍採單腳接觸範圍。
+if (defaultParams('cablefly').footStance !== 'staggered' || defaultParams('pushdown').footStance !== 'parallel') {
+  console.log('滑輪站姿預設錯誤'); bad++;
+}
+for (const lift of ['cablefly', 'pushdown']) for (const e of [0, 0.5, 1]) {
+  const staggered = analyze(lift, { ...defaultParams(lift), footStance: 'staggered' }, e).pose;
+  const parallel = analyze(lift, { ...defaultParams(lift), footStance: 'parallel' }, e).pose;
+  const span = staggered.supportSpan;
+  if (!staggered.ok || !span || parallel.supportSpan || parallel.visualLegs ||
+      Math.abs(staggered.visualLegs.R.toe[2] - staggered.visualLegs.L.toe[2] - 0.20) > 1e-9 ||
+      staggered.cop[2] < span[0] || staggered.cop[2] > span[1]) {
+    console.log(`${lift} e=${e}: 前後腳支撐幾何錯誤`); bad++;
+  }
+}
 // 自由深蹲與高腳杯可分開設定膝路徑；舊的跟腳尖幾何仍可重現。
 for (const lift of ['squat', 'goblet']) {
   const P = defaultParams(lift);
