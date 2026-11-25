@@ -1521,10 +1521,15 @@ function rowPose(P, e) {
   };
   // 每一幀都讓系統重心停在腳掌中段（槓往身上拉時，髖會跟著往前一點）
   const com = (th) => {
-    const r = at(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: lerpV(r.S, r.bar, 0.5), hand: r.bar }, Pc: r.tf.Pc, u, toeDir: toe }, r.bar, BAR_RATIO.row);
+    const r = at(th), p = { R: {}, Pc: r.tf.Pc, u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    const fl = rad(P.flare);
+    const pole = norm(add(add(mul(r.tf.f, -Math.cos(fl)), mul(r.tf.lat, Math.sin(fl))), mul(r.tf.u, -0.3)));
+    armChain(p, r.S, r.bar, pole);
+    return systemComZ(p, r.bar, BAR_RATIO.row);
   };
-  const r = at(bisect((th) => com(th) - bz, rad(-10), rad(30)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = at(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-10), rad(30)));
   const { tf, S, hang, bar } = r;
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, tf);
