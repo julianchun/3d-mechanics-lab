@@ -20,6 +20,7 @@ const REFS = {
   escamilla2001_sq: { authors: 'Escamilla RF', year: 2001, title: 'Knee biomechanics of the dynamic squat exercise', venue: 'Med Sci Sports Exerc, 33(1):127–141', url: 'https://pubmed.ncbi.nlm.nih.gov/11194098/', tag: 'PubMed 11194098' },
   escamilla2001_stance: { authors: 'Escamilla RF et al.', year: 2001, title: 'A three-dimensional biomechanical analysis of the squat during varying stance widths', venue: 'Med Sci Sports Exerc, 33(6):984–998', url: 'https://pubmed.ncbi.nlm.nih.gov/11404665/', tag: 'PubMed 11404665' },
   escamilla2001_var: { authors: 'Escamilla RF et al.', year: 2001, title: 'Effects of technique variations on knee biomechanics during the squat and leg press', venue: 'Med Sci Sports Exerc, 33(9):1552–1566', url: 'https://pubmed.ncbi.nlm.nih.gov/11528346/', tag: 'PubMed 11528346' },
+  baumbach2014: { authors: 'Baumbach SF et al.', year: 2014, title: 'The influence of knee position on ankle dorsiflexion - a biometric study', venue: 'BMC Musculoskelet Disord, 15:246', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4118219/', tag: '原文表 2' },
   demers2018: { authors: 'Demers E et al.', year: 2018, title: 'The Effect of Stance Width and Anthropometrics on Joint Range of Motion in the Lower Extremities during a Back Squat', venue: 'Int J Exerc Sci, 11(1):764–775', url: 'https://intjexersci.com/files/ijes/vol11/iss1/9.pdf', tag: '原文圖 1' },
   gorsic2020: { authors: 'Goršič M et al.', year: 2020, title: 'Biomechanical comparisons of back and front squats with a straight bar and four squats with a transformer bar', venue: 'Sports Biomech, 23(2):166–181（2024 紙本；2020 線上）', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/', tag: '原文表 2' },
   larsen2021: { authors: 'Larsen S et al.', year: 2021, title: 'Effects of Stance Width and Barbell Placement on Kinematics, Kinetics, and Myoelectric Activity in Back Squats', venue: 'Front Sports Act Living, 3:719013', url: 'https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2021.719013/full', tag: '原文表 3' },
@@ -187,16 +188,18 @@ export const SOURCES = {
       '軌道傾角提供 0°（垂直）與 ±7°（Hammer Strength 官方規格）；示範總負重（0.9× 體重）為假設。',
       '腳底壓力中心由「用力點」參數決定，重心不必落在腳掌正上方。',
       '鞋跟墊高採相同的 25 cm 足底傾斜幾何；腳與槓受滑軌約束，由幾何求小腿角，不另套用自由深蹲的各半策略；壓力中心在 y=0 的外鞋底接觸面。',
+      '腳在槓前方預設 12 cm 為示範幾何，未找到可通用的史密斯腳位距離常模。預設踝背屈峰值約 37.7°，接近 Baumbach 等 2014 屈膝負重量測平均 39°；該研究不是史密斯深蹲研究，因此維持原預設。',
     ],
-    refs: ['schwanbeck2009', 'lifefitness_smith', 'lu2022heel'],
+    refs: ['schwanbeck2009', 'lifefitness_smith', 'lu2022heel', 'baumbach2014'],
   },
   'leg-press': {
     assumptions: [
       '坐姿器械：椅背與座墊承擔身體重量，不算地面反作用力。',
       '滑台只沿 45° 軌道方向出力；預設導軌摩擦 μ = 0 為準靜態參考（sin 45°），設定 μ 時代表向心階段的上限（sinθ + μcosθ），離心時為 sinθ − μcosθ。',
       '空滑台重量（預設 45 kg）、導軌摩擦係數範圍（0–0.15）與椅背角度範圍屬常見商用假設，未查得單一原廠實測值。',
+      '踏板高低預設 0.5 為中間示範位置，非研究指定的標準腳位。預設踝背屈峰值約 44.7°；把腳移高至 0.65 時約 39.8°、髖屈峰值由 141.4° 增至 146.3°。Da Silva 等 2008 支持高低腳位改變肌群參與，沒有證明中間位置不合理；Baumbach 等 2014 屈膝負重平均 39° 不能當作腿推腳位目標，故維持原預設。',
     ],
-    refs: ['escamilla1998', 'escamilla2001_var', 'dasilva2008'],
+    refs: ['escamilla1998', 'escamilla2001_var', 'dasilva2008', 'baumbach2014'],
   },
   deadlift: {
     assumptions: [
@@ -452,15 +455,17 @@ export const SOURCES = {
       '坐姿器械（腳踩踏板），不算地面反作用力；鋼索張力沿握把中心指向低滑輪（高 42 cm，典型範圍 35–45 cm）。',
       '雙手透過剛體握把可橫向互推／互拉（上限為單手拉力一半），以最小化肩肘總力矩。',
       '滑輪比 1:1（專用低拉機）或 2:1（多功能滑輪柱），實際手拉力＝配重片重量 ÷ 滑輪比；示範配重 56 kg 為假設。',
+      '腳踏點距骨盆前方 74 cm、高 32 cm 與膝屈峰值 49.6° 為示範幾何，未找到器材通用腳踏與膝角常模。踝背屈峰值 37.8° 與屈膝負重常模 39° 同量級，但坐姿踏板不等同站姿負重測試；因此維持原預設。',
     ],
-    refs: ['lehman2004', 'vasconcelos2023', 'padovan2025', 'fenwick2009', 'lifefitness_pwrplay', 'lifefitness_pulldown_row'],
+    refs: ['lehman2004', 'vasconcelos2023', 'padovan2025', 'fenwick2009', 'lifefitness_pwrplay', 'lifefitness_pulldown_row', 'baumbach2014'],
   },
   'cable-row-wide': {
     assumptions: [
       '坐姿器械，鋼索指向低滑輪（高 42 cm）；雙手透過寬握剛體橫桿可橫向互推／互拉。',
       '寬握正握時手肘外開角提高至 55° 且二頭肌偏好調降（0.6×）；滑輪比 1:1／2:1 與示範配重 56 kg 假設同窄握划船。',
+      '腳踏與膝角幾何同窄握坐姿滑輪划船；未找到器材通用角度常模，維持原預設。',
     ],
-    refs: ['vasconcelos2023', 'padovan2025', 'lehman2004', 'lifefitness_pwrplay', 'lifefitness_pulldown_row'],
+    refs: ['vasconcelos2023', 'padovan2025', 'lehman2004', 'lifefitness_pwrplay', 'lifefitness_pulldown_row', 'baumbach2014'],
   },
   uprow: {
     assumptions: [
@@ -510,12 +515,12 @@ export const SOURCES = {
   pushdown: {
     assumptions: [
       '站姿滑輪動作，含地面反作用力與重心平衡；滑輪向上拉手時自動微增軀幹前傾維持小腿穩定。',
+      '預設雙腳併站的壓力中心最大偏後約 4.4 cm，仍落在腳底；前後腳可選，但無證據要求此動作必須改為前後腳。前後腳僅用兩腳外緣作等效支撐範圍，不能推算左右腳分力。',
       '雙手透過剛體短槓可橫向互推／互拉；滑輪高 210 cm（對應多功能可調滑輪柱 210–240 cm）。',
       '滑輪比預設 2:1（多功能滑輪柱主流），可切 1:1；實際手拉力＝配重片重量 ÷ 滑輪比；示範配重 38 kg 為假設。',
     ],
     refs: ['maeo2023', 'hussain2020', 'lifefitness_pwrplay'],
     trendNote: '已有三頭長頭長度與下壓疲勞文獻參考，目前尚未列入自動化趨勢比對項目。',
-      '預設雙腳併站的壓力中心最大偏後約 4.4 cm，仍落在腳底；前後腳可選，但無證據要求此動作必須改為前後腳。前後腳僅用兩腳外緣作等效支撐範圍，不能推算左右腳分力。',
   },
   curl: {
     assumptions: [
