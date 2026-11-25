@@ -27,6 +27,7 @@
       "id": "steel-back",
       "catalogId": "squat-high",
       "params": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.3,
         "depth": 0.55

@@ -1,0 +1,38 @@
+{
+  "note": "目標是教練審閱的健美動作模式，不是實測肌電排名或增肌保證；來源見 docs/research/technique-principles.md 第二節。",
+  "patterns": {
+    "squat": { "source": "docs/research/technique-principles.md", "targets": [{"name": "股四頭肌", "ids": ["vasti", "rf"]}, {"name": "臀大肌", "ids": ["gmax"]}], "synergists": [], "stabilizers": [] },
+    "hinge": { "source": "docs/research/technique-principles.md", "targets": [{"name": "臀大肌", "ids": ["gmax"]}, {"name": "膕繩肌", "ids": ["hams"]}], "synergists": [], "stabilizers": [] },
+    "backext": { "source": "docs/research/technique-principles.md", "targets": [{"name": "髖伸肌", "ids": ["gmax", "hams"]}, {"name": "腰背伸肌", "ids": ["erec"]}], "synergists": [], "stabilizers": [] },
+    "chest": { "source": "docs/research/technique-principles.md", "targets": [{"name": "胸大肌", "ids": ["pecs", "pecc"]}], "synergists": [], "stabilizers": [] },
+    "closepress": { "source": "docs/research/technique-principles.md", "targets": [{"name": "肱三頭肌", "ids": ["trilat", "trilong"]}], "synergists": [], "stabilizers": [] },
+    "shoulderpress": { "source": "docs/research/technique-principles.md", "targets": [{"name": "三角肌前／中束", "ids": ["adelt", "mdelt"]}, {"name": "肱三頭肌", "ids": ["trilat", "trilong"]}], "synergists": [], "stabilizers": [] },
+    "dips": { "source": "docs/research/technique-principles.md", "targets": [{"name": "胸大肌", "ids": ["pecs", "pecc"]}, {"name": "肱三頭肌", "ids": ["trilat", "trilong"]}], "synergists": [], "stabilizers": [] },
+    "row": { "source": "docs/research/technique-principles.md", "targets": [{"name": "背闊肌", "ids": ["lat"]}, {"name": "中斜方／菱形肌", "ids": ["midtrap"]}], "synergists": [], "stabilizers": [] },
+    "rearfly": { "source": "docs/research/technique-principles.md", "targets": [{"name": "後三角肌", "ids": ["pdelt"]}], "synergists": [], "stabilizers": [] },
+    "pulldown": { "source": "docs/research/technique-principles.md", "targets": [{"name": "背闊肌", "ids": ["lat"]}], "synergists": [], "stabilizers": [] },
+    "uprow": { "source": "docs/research/technique-principles.md", "targets": [{"name": "三角肌中束／上斜方肌", "ids": ["mdelt", "uptrap"]}], "synergists": [], "stabilizers": [] },
+    "legext": { "source": "docs/research/technique-principles.md", "targets": [{"name": "股四頭肌", "ids": ["vasti", "rf"]}], "synergists": [], "stabilizers": [] },
+    "legcurl": { "source": "docs/research/technique-principles.md", "targets": [{"name": "膕繩肌", "ids": ["hams"]}], "synergists": [], "stabilizers": [] },
+    "calf": { "source": "docs/research/technique-principles.md", "targets": [{"name": "小腿後側", "ids": ["gas", "sol"]}], "synergists": [], "stabilizers": [] },
+    "hipabd": { "source": "docs/research/technique-principles.md", "targets": [{"name": "臀中肌", "ids": ["gmed"]}], "synergists": [], "stabilizers": [] },
+    "hipadd": { "source": "docs/research/technique-principles.md", "targets": [{"name": "內收肌", "ids": ["addmag", "addl"]}], "synergists": [], "stabilizers": [] },
+    "triceps": { "source": "docs/research/technique-principles.md", "targets": [{"name": "肱三頭肌", "ids": ["trilat", "trilong"]}], "synergists": [], "stabilizers": [] },
+    "curl": { "source": "docs/research/technique-principles.md", "targets": [{"name": "肘屈肌", "ids": ["bic", "brach"]}], "synergists": [], "stabilizers": [] },
+    "raise": { "source": "docs/research/technique-principles.md", "targets": [{"name": "三角肌中束", "ids": ["mdelt"]}], "synergists": [], "stabilizers": [] },
+    "shrug": { "source": "docs/research/technique-principles.md", "targets": [{"name": "上斜方肌", "ids": ["uptrap"]}], "synergists": [], "stabilizers": [] },
+    "deadlift": { "source": "docs/research/technique-principles.md", "targets": [{"name": "臀大肌", "ids": ["gmax"]}, {"name": "膕繩肌", "ids": ["hams"]}, {"name": "股四頭肌", "ids": ["vasti", "rf"]}], "synergists": [{"name": "內收大肌", "ids": ["addmag"]}], "stabilizers": [{"name": "腰背伸肌", "ids": ["erec"]}, {"name": "背闊肌", "ids": ["lat"]}, {"name": "上背肌群", "ids": ["midtrap", "uptrap"]}] },
+    "sumo": { "source": "docs/research/technique-principles.md", "targets": [{"name": "股四頭肌", "ids": ["vasti", "rf"]}, {"name": "臀大肌", "ids": ["gmax"]}, {"name": "膕繩肌", "ids": ["hams"]}], "synergists": [{"name": "內收大肌", "ids": ["addmag"]}], "stabilizers": [{"name": "腰背伸肌", "ids": ["erec"]}, {"name": "背闊肌", "ids": ["lat"]}, {"name": "上背肌群", "ids": ["midtrap", "uptrap"]}] },
+    "rdl": { "source": "docs/research/technique-principles.md", "targets": [{"name": "膕繩肌", "ids": ["hams"]}, {"name": "臀大肌", "ids": ["gmax"]}], "synergists": [{"name": "內收大肌", "ids": ["addmag"]}], "stabilizers": [{"name": "腰背伸肌", "ids": ["erec"]}, {"name": "背闊肌", "ids": ["lat"]}], "targetOrder": ["膕繩肌", "臀大肌"] }
+  },
+  "entries": {
+    "squat-high": "squat", "squat-low": "squat", "front-squat": "squat", "goblet-squat": "squat", "smith-squat": "squat", "leg-press": "squat", "hack-squat": "squat", "deadlift": "deadlift",
+    "deficit-dl": "deadlift", "block-pull": "deadlift", "sumo": "sumo", "rdl": "rdl", "good-morning": "hinge", "hip-thrust": "hinge", "back-extension": "backext", "glute-bridge": "hinge",
+    "bench": "chest", "incline-bench": "chest", "cg-bench": "closepress", "floor-press": "chest", "db-bench": "chest", "db-bench-incline": "chest", "pushup": "chest", "pushup-feet": "chest",
+    "pushup-hands": "chest", "chest-press": "chest", "pec-deck": "chest", "reverse-deck": "rearfly", "machine-press": "shoulderpress", "cable-fly-high": "chest", "cable-fly-mid": "chest", "cable-fly-low": "chest",
+    "ohp": "shoulderpress", "db-press": "shoulderpress", "dips": "dips", "dips-upright": "dips", "row": "row", "row-sup": "row", "cable-row": "row", "cable-row-wide": "row",
+    "db-reverse-fly": "rearfly", "uprow": "uprow", "pulldown": "pulldown", "pulldown-sup": "pulldown", "pullup": "pulldown", "pullup-wide": "pulldown", "chinup": "pulldown", "assist-pullup": "pulldown",
+    "assist-chinup": "pulldown", "leg-ext": "legext", "calf-raise-standing": "calf", "calf-raise-seated": "calf", "hip-abduction": "hipabd", "hip-adduction": "hipadd", "leg-curl": "legcurl", "lying-leg-curl": "legcurl",
+    "pushdown": "triceps", "curl": "curl", "reverse-curl": "curl", "lat-raise": "raise", "db-curl": "curl", "hammer-curl": "curl", "shrug": "shrug"
+  }
+}

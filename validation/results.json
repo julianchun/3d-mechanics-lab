@@ -3,12 +3,12 @@
   "summary": {
     "total": 35,
     "count": 16,
-    "pass": 9,
-    "fail": 7,
+    "pass": 13,
+    "fail": 3,
     "definitionMismatch": 12,
     "exploratory": 3,
     "consistencyCheck": 4,
-    "assumptionSensitivePass": 1,
+    "assumptionSensitivePass": 3,
     "sources": 4
   },
   "comparisons": [
@@ -22,6 +22,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -29,12 +30,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 43.1256,
+      "model": 44.1392,
       "reference": 37.9,
       "referenceRaw": 37.9,
       "referenceSd": 6.4,
       "unit": "deg",
-      "error": 5.2256,
+      "error": 6.2392,
       "tolerance": 12,
       "category": "comparable",
       "status": "pass",
@@ -55,6 +56,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -88,6 +90,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -121,6 +124,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -128,12 +132,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 2.0329,
+      "model": 2.0789,
       "reference": 1.53,
       "referenceRaw": 1.53,
       "referenceSd": 0.25,
       "unit": "Nm/(kg*m)",
-      "error": 0.5029,
+      "error": 0.5489,
       "tolerance": 0.35,
       "category": "comparable",
       "status": "fail",
@@ -154,6 +158,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -161,12 +166,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 1.1547,
+      "model": 1.1803,
       "reference": 0.93,
       "referenceRaw": 0.93,
       "referenceSd": 0.15,
       "unit": "Nm/(kg*m)",
-      "error": 0.2247,
+      "error": 0.2503,
       "tolerance": 0.3,
       "category": "comparable",
       "status": "pass",
@@ -179,7 +184,7 @@
       "assumptionSensitive": {
         "parameter": "HEEL_SHANK_SHARE",
         "passRange": [
-          0.0081,
+          0.1659,
           1
         ]
       }
@@ -194,6 +199,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -201,12 +207,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 0.7317,
+      "model": 0.666,
       "reference": 0.67,
       "referenceRaw": -0.67,
       "referenceSd": 0.15,
       "unit": "Nm/(kg*m)",
-      "error": 0.0617,
+      "error": -0.004,
       "tolerance": 0.3,
       "category": "comparable",
       "status": "pass",
@@ -227,6 +233,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -234,12 +241,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 0.3059,
+      "model": 0.306,
       "reference": 0.28,
       "referenceRaw": 0.28,
       "referenceSd": 0.11,
       "unit": "Nm/(kg*m)",
-      "error": 0.0259,
+      "error": 0.026,
       "tolerance": 0.2,
       "category": "comparable",
       "status": "pass",
@@ -260,6 +267,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -267,17 +275,17 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 27.7691,
+      "model": 28.7997,
       "reference": 40.6,
       "referenceRaw": 40.6,
       "referenceSd": 5.7,
       "unit": "deg",
-      "error": -12.8309,
+      "error": -11.8003,
       "tolerance": 12,
       "category": "comparable",
-      "status": "fail",
-      "pass": false,
-      "withinTolerance": false,
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 2, straight-bar front, ascending",
@@ -286,7 +294,7 @@
         "parameter": "HEEL_SHANK_SHARE",
         "passRange": [
           0,
-          0.3564
+          0.5352
         ]
       }
     },
@@ -300,6 +308,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -333,6 +342,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -366,6 +376,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -373,12 +384,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 2.0327,
+      "model": 2.0794,
       "reference": 1.64,
       "referenceRaw": 1.64,
       "referenceSd": 0.27,
       "unit": "Nm/(kg*m)",
-      "error": 0.3927,
+      "error": 0.4394,
       "tolerance": 0.35,
       "category": "comparable",
       "status": "fail",
@@ -391,7 +402,7 @@
       "assumptionSensitive": {
         "parameter": "HEEL_SHANK_SHARE",
         "passRange": [
-          0.6636,
+          0.8526,
           1
         ]
       }
@@ -406,6 +417,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -413,12 +425,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 1.1106,
+      "model": 1.1371,
       "reference": 0.89,
       "referenceRaw": 0.89,
       "referenceSd": 0.14,
       "unit": "Nm/(kg*m)",
-      "error": 0.2206,
+      "error": 0.2471,
       "tolerance": 0.3,
       "category": "comparable",
       "status": "pass",
@@ -427,7 +439,14 @@
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 2, straight-bar front, ascending",
-      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
+      "assumptionSensitive": {
+        "parameter": "HEEL_SHANK_SHARE",
+        "passRange": [
+          0.1397,
+          1
+        ]
+      }
     },
     {
       "id": "gorsic-2020/straight-front/knee",
@@ -439,6 +458,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -446,12 +466,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 0.7749,
+      "model": 0.7092,
       "reference": 0.7,
       "referenceRaw": -0.7,
       "referenceSd": 0.15,
       "unit": "Nm/(kg*m)",
-      "error": 0.0749,
+      "error": 0.0092,
       "tolerance": 0.3,
       "category": "comparable",
       "status": "pass",
@@ -472,6 +492,7 @@
         "targetDeg": 70
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
@@ -479,12 +500,12 @@
       },
       "modelLoadRatio": 0.84,
       "modelE": 0.7261,
-      "model": 0.3058,
+      "model": 0.3059,
       "reference": 0.25,
       "referenceRaw": 0.25,
       "referenceSd": 0.11,
       "unit": "Nm/(kg*m)",
-      "error": 0.0558,
+      "error": 0.0559,
       "tolerance": 0.2,
       "category": "comparable",
       "status": "pass",
@@ -504,23 +525,24 @@
         "type": "peak"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.3,
         "depth": 0.55
       },
       "modelLoadRatio": 0.886657,
       "modelE": 1,
-      "model": 1.6691,
+      "model": 1.2653,
       "reference": 1,
       "referenceRaw": 1,
       "referenceSd": 0.4,
       "unit": "Nm/kg",
-      "error": 0.6691,
+      "error": 0.2653,
       "tolerance": 0.5,
       "category": "comparable",
-      "status": "fail",
-      "pass": false,
-      "withinTolerance": false,
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
         "reason": "前蹲膝伸峰值 0.70 Nm/kg 與 Goršič 相近負重的定點膝矩約 1.2 Nm/kg 相差約 1.7 倍，兩者事件、參考座標與受試者不同，不能直接裁定哪篇錯。原文用三台攝影機做 3D 重建，不能稱研究整體為 2D；只取膝部結果，節段質量與慣量依平均參數估計。",
@@ -539,18 +561,19 @@
         "type": "peak"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.3,
         "depth": 0.55
       },
       "modelLoadRatio": 0.695839,
       "modelE": 1,
-      "model": 1.5823,
+      "model": 1.2188,
       "reference": 0.7,
       "referenceRaw": 0.7,
       "referenceSd": 0.2,
       "unit": "Nm/kg",
-      "error": 0.8823,
+      "error": 0.5188,
       "tolerance": 0.4,
       "category": "comparable",
       "status": "fail",
@@ -575,18 +598,19 @@
         "endKneeFlexionDeg": 80
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.3,
         "depth": 0.55
       },
       "modelLoadRatio": 1,
-      "modelE": 0.5692,
-      "model": 334.3134,
+      "modelE": 0.592,
+      "model": 353.7589,
       "reference": 324,
       "referenceRaw": 324,
       "referenceSd": 52,
       "unit": "Nm",
-      "error": 10.3134,
+      "error": 29.7589,
       "tolerance": 100,
       "category": "exploratory",
       "status": "exploratory",
@@ -607,18 +631,19 @@
         "endKneeFlexionDeg": 80
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.3,
         "depth": 0.55
       },
       "modelLoadRatio": 1,
-      "modelE": 0.5692,
-      "model": 149.657,
+      "modelE": 0.592,
+      "model": 113.8349,
       "reference": 157,
       "referenceRaw": 157,
       "referenceSd": 34,
       "unit": "Nm",
-      "error": -7.343,
+      "error": -43.1651,
       "tolerance": 70,
       "category": "exploratory",
       "status": "exploratory",
@@ -639,18 +664,19 @@
         "endKneeFlexionDeg": 80
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.3,
         "depth": 0.55
       },
       "modelLoadRatio": 1,
       "modelE": 0,
-      "model": 94.09,
+      "model": 94.0984,
       "reference": 90,
       "referenceRaw": 90,
       "referenceSd": 24,
       "unit": "Nm",
-      "error": 4.09,
+      "error": 4.0984,
       "tolerance": 50,
       "category": "exploratory",
       "status": "exploratory",
@@ -670,18 +696,19 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.301837,
       "modelE": 1,
-      "model": 41.2185,
+      "model": 42.6271,
       "reference": 46.7,
       "referenceRaw": 46.7,
       "referenceSd": 2.9,
       "unit": "deg",
-      "error": -5.4815,
+      "error": -4.0729,
       "tolerance": 10,
       "category": "comparable",
       "status": "pass",
@@ -701,13 +728,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.301837,
       "modelE": 1,
-      "model": 136.1785,
+      "model": 137.5871,
       "reference": null,
       "referenceRaw": 111,
       "referenceSd": 7.2,
@@ -732,18 +760,19 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.301837,
       "modelE": 1,
-      "model": 129.9261,
+      "model": 128.9747,
       "reference": 126.4,
       "referenceRaw": 126.4,
       "referenceSd": 4.7,
       "unit": "deg",
-      "error": 3.5261,
+      "error": 2.5747,
       "tolerance": 12,
       "category": "consistency-check",
       "status": "consistency-check",
@@ -763,13 +792,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.301837,
       "modelE": 1,
-      "model": 35.219,
+      "model": 33.9955,
       "reference": null,
       "referenceRaw": 106,
       "referenceSd": 4.5,
@@ -794,23 +824,24 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.21916,
       "modelE": 1,
-      "model": 31.5541,
+      "model": 43.1004,
       "reference": 46,
       "referenceRaw": 46,
       "referenceSd": 3.4,
       "unit": "deg",
-      "error": -14.4459,
+      "error": -2.8996,
       "tolerance": 10,
       "category": "comparable",
-      "status": "fail",
-      "pass": false,
-      "withinTolerance": false,
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 3, v0, high-bar wide",
@@ -825,13 +856,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.21916,
       "modelE": 1,
-      "model": 126.5141,
+      "model": 138.0604,
       "reference": null,
       "referenceRaw": 110.4,
       "referenceSd": 4.5,
@@ -856,18 +888,19 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.21916,
       "modelE": 1,
-      "model": 123.555,
+      "model": 117.9392,
       "reference": 119.3,
       "referenceRaw": 119.3,
       "referenceSd": 6.4,
       "unit": "deg",
-      "error": 4.255,
+      "error": -1.3608,
       "tolerance": 12,
       "category": "consistency-check",
       "status": "consistency-check",
@@ -887,13 +920,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.21916,
       "modelE": 1,
-      "model": 31.1729,
+      "model": 23.5133,
       "reference": null,
       "referenceRaw": 98.6,
       "referenceSd": 5.9,
@@ -918,18 +952,19 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.345144,
       "modelE": 1,
-      "model": 52.2407,
+      "model": 53.92,
       "reference": 56.7,
       "referenceRaw": 56.7,
       "referenceSd": 2.5,
       "unit": "deg",
-      "error": -4.4593,
+      "error": -2.78,
       "tolerance": 10,
       "category": "comparable",
       "status": "pass",
@@ -949,13 +984,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.345144,
       "modelE": 1,
-      "model": 147.2007,
+      "model": 148.88,
       "reference": null,
       "referenceRaw": 110.5,
       "referenceSd": 6.6,
@@ -980,18 +1016,19 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.345144,
       "modelE": 1,
-      "model": 128.0142,
+      "model": 127.0936,
       "reference": 122.7,
       "referenceRaw": 122.7,
       "referenceSd": 5,
       "unit": "deg",
-      "error": 5.3142,
+      "error": 4.3936,
       "tolerance": 12,
       "category": "consistency-check",
       "status": "consistency-check",
@@ -1011,13 +1048,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.14,
         "depth": 0.52
       },
       "modelLoadRatio": 1.345144,
       "modelE": 1,
-      "model": 33.2825,
+      "model": 32.0928,
       "reference": null,
       "referenceRaw": 106.3,
       "referenceSd": 5,
@@ -1042,23 +1080,24 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.254593,
       "modelE": 1,
-      "model": 41.5027,
+      "model": 54.541,
       "reference": 53,
       "referenceRaw": 53,
       "referenceSd": 4.4,
       "unit": "deg",
-      "error": -11.4973,
+      "error": 1.541,
       "tolerance": 10,
       "category": "comparable",
-      "status": "fail",
-      "pass": false,
-      "withinTolerance": false,
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
       "sourceQuality": null,
       "evidence": "table",
       "location": "Table 3, v0, low-bar wide",
@@ -1073,13 +1112,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.254593,
       "modelE": 1,
-      "model": 136.4627,
+      "model": 149.501,
       "reference": null,
       "referenceRaw": 111.9,
       "referenceSd": 4.8,
@@ -1104,18 +1144,19 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.254593,
       "modelE": 1,
-      "model": 121.7771,
+      "model": 116.3124,
       "reference": 120.3,
       "referenceRaw": 120.3,
       "referenceSd": 5.8,
       "unit": "deg",
-      "error": 1.4771,
+      "error": -3.9876,
       "tolerance": 12,
       "category": "consistency-check",
       "status": "consistency-check",
@@ -1135,13 +1176,14 @@
         "type": "bottom"
       },
       "modelParams": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.8,
         "depth": 0.52
       },
       "modelLoadRatio": 1.254593,
       "modelE": 1,
-      "model": 29.069,
+      "model": 21.7908,
       "reference": null,
       "referenceRaw": 100.5,
       "referenceSd": 6.3,

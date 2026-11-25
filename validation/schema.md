@@ -7,6 +7,7 @@
 - `id`、`source`、`participants`、`protocol`：研究識別、可查來源、受試者與方法。來源查不到的設定記錄未知。
 - `sourceQuality`：來源品質註記，不改變數值或門檻。Gullett 2009 的跨研究膝力矩差距列為審閱警訊；其原文採三台攝影機作 3D 重建，不能把整篇稱為 2D。
 - `model`：本次模型設定與限制。`conditions[].catalogId` 須為深蹲清單項目；`params` 是 `defaultParams('squat')` 的覆寫。
+- 四篇數值比對研究未報告可重建的膝蓋水平路徑；所有條件明列 `kneePath: "forward"`，採教練指定的產品預設。這是模型假設，並非研究條件或用比對結果校準的值。腳尖角仍由模型站距決定，研究角度未對齊。
 - `conditions[].conditionDerivation`：由研究方案推導深度、站距、負重與事件位置，不得用被比較的研究結果反推。`referenceLoadKg` 為報告或推算的公斤數；`loadRatio` 為槓重相對模型體重的比例。比對器僅在重算當下暫時覆寫 `BAR_RATIO.squat`，並在運算後還原。未知比例填 `null`，採模型原本預設值但不得視為條件已對齊。
 - `measurements[]`：每筆指標、`sample`、`reference` 平均值／SD／原始定義、`evidence` 類型與 `location`、預先設定的 `tolerance`；`limitations` 寫明不能對齊之處。
 

@@ -27,6 +27,7 @@
       "id": "straight-back",
       "catalogId": "squat-high",
       "params": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.1,
         "depth": 0.55,
@@ -199,6 +200,7 @@
       "id": "straight-front",
       "catalogId": "front-squat",
       "params": {
+        "kneePath": "forward",
         "barPos": "front",
         "stance": 0.1,
         "depth": 0.55,
