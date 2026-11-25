@@ -1554,7 +1554,7 @@ function ohpPose(P, e) {
   const w = 0.14, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
-  const bz = 0.02, gx = 0.2 * P.grip;
+  const gx = 0.2 * P.grip;
   const legs = fixedKneeLegs(A, w, rad(3));
   const lean = rad(P.lean) * (0.4 + 0.6 * e); // 槓經過臉時後仰最多，鎖死時身體回正一些
   const girdle = { ret: rad(lerp(0, 8, e)), elev: rad(lerp(4 + 14 * P.shrug, -2, e)) };
@@ -1585,12 +1585,14 @@ function ohpPose(P, e) {
     return { knee, hip, tf, S, bar, head };
   };
   const com = (th) => {
-    const r = build(th);
-    const pose = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar }, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
-    pose.R.elbow = lerpV(r.S, r.bar, 0.45);
-    return systemComZ(pose, r.bar, BAR_RATIO.ohp);
+    const r = build(th), p = { R: {}, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    const pole = norm(add(add(mul(r.tf.lat, Math.sin(a)), mul(r.tf.f, Math.cos(a))), mul(r.tf.u, -0.8)));
+    armChain(p, r.S, r.bar, pole);
+    return systemComZ(p, r.bar, BAR_RATIO.ohp);
   };
-  const r = build(bisect((th) => com(th) - bz, rad(-15), rad(15)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = build(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-15), rad(15)));
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, r.tf);
   pose.phi = r.tf.u[2] < 0 ? -Math.asin(-r.tf.u[2]) : Math.asin(r.tf.u[2]);
