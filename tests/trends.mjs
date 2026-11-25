@@ -1,4 +1,4 @@
-// 文獻趨勢自動檢查：比對 src/biomech.js 的模型輸出方向是否與 docs/references.md 文獻一致
+// 文獻趨勢自動檢查：比對 src/biomech.js 的模型輸出方向是否與 docs/research/references.md 文獻一致
 // 執行方式：
 //   npm run test:trends          → 印出完整 42 項檢查報告
 //   node tests/trends.mjs --write-status → 重新產生靜態狀態檔 src/trend-status.json

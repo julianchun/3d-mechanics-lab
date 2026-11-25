@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { add, sub, mul, norm, cross, dot, len, MUSCLES, BODY, GIRDLE, girdleMatrix, MODEL_VERSION } from './biomech.js';
+import { add, sub, mul, norm, cross, dot, len, MUSCLES, BODY, DEFAULT_BODY, girdleForBody, girdleMatrix, MODEL_VERSION } from './biomech.js';
 
 const T = (a) => new THREE.Vector3(a[0], a[1], a[2]);
 const mirror = (p) => [-p[0], p[1], p[2]];
@@ -238,9 +238,10 @@ export class Rig {
   }
 
   placeBones(pose, F, show) {
+    const body = pose.body || BODY;
     const V = (a) => new THREE.Vector3(a[0], a[1], a[2]);
-    const set = (arr, origin, lat, dir, ant, L) => {
-      _m.makeBasis(V(lat).multiplyScalar(L), V(dir).multiplyScalar(L), V(ant).multiplyScalar(L)).setPosition(V(origin));
+    const set = (arr, origin, lat, dir, ant, L, width = L) => {
+      _m.makeBasis(V(lat).multiplyScalar(width), V(dir).multiplyScalar(L), V(ant).multiplyScalar(L)).setPosition(V(origin));
       arr[0].matrix.copy(_m);
       if (arr[1]) arr[1].matrix.multiplyMatrices(MIRROR, _m);
       for (const m of arr) { m.matrixWorldNeedsUpdate = true; m.visible = show; }
@@ -269,7 +270,8 @@ export class Rig {
     // 腳：footUp = 腳底法線（往踝）；平踩地面時 = 正上方（腿推機、腿伸機時腳掌是斜的）
     const t = pose.toeDir, fu = pose.footUp || [0, 1, 0];
     set(this.boneMeshes.foot, pose.R.ankle, norm(cross(fu, t)), fu, t, len(sub(pose.R.knee, pose.R.ankle)));
-    set(this.boneMeshes.trunk, pose.Pc, [1, 0, 0], norm(sub(pose.SC, pose.Pc)), pose.f, len(sub(pose.SC, pose.Pc)));
+    set(this.boneMeshes.trunk, pose.Pc, [1, 0, 0], norm(sub(pose.SC, pose.Pc)), pose.f,
+      len(sub(pose.SC, pose.Pc)), DEFAULT_BODY.Ltr * body.shHalf / DEFAULT_BODY.shHalf);
     const trunkM = this.boneMeshes.trunk[0].matrix;
     // 頭：繞頸部轉軸屈曲（pose.neckFlex，正 = 下巴往胸口）
     const nf = pose.neckFlex || 0;
@@ -279,7 +281,7 @@ export class Rig {
     headM.matrixWorldNeedsUpdate = true; headM.visible = show;
     // 肩帶：繞胸鎖關節旋轉（後收／上提），肩關節跟著移動
     const g = girdleMatrix(pose.girdle || { ret: 0, elev: 0 });
-    const c = GIRDLE.scj.map((v) => v / BODY.Ltr);
+    const c = girdleForBody(body).scj.map((v, i) => v / (i === 0 ? DEFAULT_BODY.Ltr * body.shHalf / DEFAULT_BODY.shHalf : body.Ltr));
     const rot = new THREE.Matrix4().set(g[0][0], g[0][1], g[0][2], 0, g[1][0], g[1][1], g[1][2], 0, g[2][0], g[2][1], g[2][2], 0, 0, 0, 0, 1);
     const loc = new THREE.Matrix4().makeTranslation(c[0], c[1], c[2]).multiply(rot).multiply(new THREE.Matrix4().makeTranslation(-c[0], -c[1], -c[2]));
     const [sR, sL] = this.boneMeshes.scapula;
@@ -304,6 +306,9 @@ export class Rig {
   }
 
   update(pose, opt = {}) {
+    const body = pose.body || BODY;
+    const heightScale = body.heightM / DEFAULT_BODY.heightM;
+    const trunkScale = body.Ltr / DEFAULT_BODY.Ltr;
     const { layers = {}, colors = {}, jointLoad = {}, rom = {}, liftSet = null, armLines = [] } = opt;
     const showSkel = layers.skeleton !== false;
     for (const b of this.bones) {
@@ -315,15 +320,15 @@ export class Rig {
       j.m.position.copy(T(this.get(pose, j.k)));
       j.m.scale.setScalar(0.032);
     }
-    const ribC = add(pose.Pc, mul(pose.u, 0.36));
+    const ribC = add(pose.Pc, mul(pose.u, 0.36 * trunkScale));
     this.rib.position.copy(T(ribC));
     this.rib.quaternion.setFromUnitVectors(Y, T(pose.u));
-    this.rib.scale.set(0.15, 0.2, 0.11);
+    this.rib.scale.set(0.15 * body.shHalf / DEFAULT_BODY.shHalf, 0.2 * trunkScale, 0.11 * heightScale);
     this.pelvis.position.copy(T(add(pose.Pc, mul(pose.u, 0.03))));
     this.pelvis.quaternion.copy(this.rib.quaternion);
-    this.pelvis.scale.set(0.16, 0.09, 0.1);
-    this.head.position.copy(T(add(pose.SC, mul(pose.u, 0.23))));
-    this.head.scale.set(0.085, 0.11, 0.1);
+    this.pelvis.scale.set(0.16 * body.hipHalf / DEFAULT_BODY.hipHalf, 0.09 * heightScale, 0.1 * heightScale);
+    this.head.position.copy(T(add(pose.SC, mul(pose.u, 0.23 * heightScale))));
+    this.head.scale.set(0.085 * heightScale, 0.11 * heightScale, 0.1 * heightScale);
     this.rib.visible = showSkel; this.pelvis.visible = false;
     this.bar.position.copy(T(pose.bar));
     // 器械：barStyle = 'none'（沒有槓）或 { len }（短握把、沒有槓片）

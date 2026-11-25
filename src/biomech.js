@@ -19,15 +19,51 @@ export function withHeelShankShareForValidation(share, run) {
   }
 }
 
-export const BODY = {
+export const DEFAULT_BODY = Object.freeze({
   // 依 BodyParts3D 骨骼比例，縮放到身高 175 cm
-  mass: 75, Ls: 0.394, Lt: 0.44, Ltr: 0.518, Lu: 0.287, Lf: 0.332,
+  heightM: 1.75, sex: 'male', mass: 75, Ls: 0.394, Lt: 0.44, Ltr: 0.518, Lu: 0.287, Lf: 0.332,
   hipHalf: 0.09, shHalf: 0.167, ankleH: 0.068,
-};
+});
+const BODY_LENGTHS = ['Ls', 'Lt', 'Ltr', 'Lu', 'Lf', 'hipHalf', 'shHalf', 'ankleH'];
+// ratios 以身高為分母；未指定的欄位依原示範身體等比例縮放。
+export function createBody({ heightM = DEFAULT_BODY.heightM, massKg = DEFAULT_BODY.mass, sex = 'male', ratios = {} } = {}) {
+  if (!Number.isFinite(heightM) || heightM < 1.2 || heightM > 2.3) throw new Error('身高須介於 1.2 與 2.3 m');
+  if (!Number.isFinite(massKg) || massKg < 25 || massKg > 250) throw new Error('體重須介於 25 與 250 kg');
+  if (!['male', 'female'].includes(sex)) throw new Error('性別須為 male 或 female');
+  for (const [key, value] of Object.entries(ratios)) {
+    if (!BODY_LENGTHS.includes(key) || !Number.isFinite(value) || value <= 0 || value >= 0.7) throw new Error(`無效身體比例：${key}`);
+  }
+  const body = { heightM, sex, mass: massKg };
+  for (const key of BODY_LENGTHS) body[key] = ratios[key] === undefined ?
+    DEFAULT_BODY[key] * (heightM / DEFAULT_BODY.heightM) : heightM * ratios[key];
+  return Object.freeze(body);
+}
+// 模型幾何使用同步的動態身體範圍；可巢狀呼叫，finally 保證恢復。
+// 不可在 run 內 await。此 API 適合批次驗證，也可供日後 UI 在單次運算中使用。
+export let BODY = DEFAULT_BODY;
+export function withBody(body, run) {
+  if (!body || !Number.isFinite(body.heightM) || body.heightM <= 0 ||
+      !BODY_LENGTHS.every((key) => Number.isFinite(body[key]) && body[key] > 0) ||
+      !Number.isFinite(body.mass) || body.mass <= 0 || !['male', 'female'].includes(body.sex) ||
+      typeof run !== 'function') throw new Error('無效身體參數');
+  const previous = BODY;
+  BODY = body;
+  try {
+    const result = run();
+    if (result && typeof result.then === 'function') throw new Error('withBody 僅支援同步函式');
+    return result;
+  } finally { BODY = previous; }
+}
 // de Leva 1996 表 4，男性節段質量（全身比例）；頭頸與手各自計入，不把殘差塞進軀幹。
-// DOI: 10.1016/0021-9290(95)00178-6；節段標記與本骨架的對應見 docs/validation/squat-diagnosis.md。
-const MF = { head: 0.0694, trunk: 0.4346, upper: 0.0271, fore: 0.0162, hand: 0.0061,
-  thigh: 0.1416, shank: 0.0433, foot: 0.0137 };
+// DOI: 10.1016/0021-9290(95)00178-6；節段標記與本骨架的對應見 docs/research/methods.md。
+const SEGMENTS = {
+  male: { mass: { head: 0.0694, trunk: 0.4346, upper: 0.0271, fore: 0.0162, hand: 0.0061,
+    thigh: 0.1416, shank: 0.0433, foot: 0.0137 }, cm: { head: 0.5976, trunkUp: 0.5514, upper: 0.5772,
+    fore: 0.4574, hand: 0.7900, thigh: 0.4095, shank: 0.4395, foot: 0.4415 } },
+  female: { mass: { head: 0.0668, trunk: 0.4257, upper: 0.0255, fore: 0.0138, hand: 0.0056,
+    thigh: 0.1478, shank: 0.0481, foot: 0.0129 }, cm: { head: 0.5894, trunkUp: 0.5036, upper: 0.5754,
+    fore: 0.4559, hand: 0.7474, thigh: 0.3612, shank: 0.4352, foot: 0.4014 } },
+};
 // 負重比例（× 體重）：
 // - 臀推 1.70、臀橋 1.83：參考 Contreras et al. 2015（PMID 26214739；10RM 臀推／背蹲比 87.4／53.2 kg ≈ 1.64×，注意 1.64× 為臀推相對背蹲之負重比，非體重倍數）
 //   與 Kennedy et al. 2024（PMID 35586943；5RM 臀推 143.6 kg ≈ 1.71× 體重、臀橋 154.3 kg ≈ 1.83× 體重，體重 84.3 kg）。
@@ -38,14 +74,14 @@ export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row:
   smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
 
 // ---------- 器械規格與參數設定 ----------
-// 每個數值均標註 docs/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
+// 每個數值均標註 docs/research/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
 export const MACHINES = {
   smith: {
-    railDegDefault: '0',             // docs/machine-data.md §2.1：垂直軌道商用款 0°
+    railDegDefault: '0',             // docs/research/machine-data.md §2.1：垂直軌道商用款 0°
     railDegOptions: [
-      ['0', '0°（垂直軌道）'],       // docs/machine-data.md §2.1：力量訓練／健力房常見 0°
-      ['7', '7°（往上微後傾）'],     // docs/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
-      ['-7', '-7°（反向站位）'],     // docs/machine-data.md §2.2：背向／面向使用時斜軌方向相反
+      ['0', '0°（垂直軌道）'],       // docs/research/machine-data.md §2.1：力量訓練／健力房常見 0°
+      ['7', '7°（往上微後傾）'],     // docs/research/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
+      ['-7', '-7°（反向站位）'],     // docs/research/machine-data.md §2.2：背向／面向使用時斜軌方向相反
     ],
     railZ0: 0,                       // 假設：滑軌於參考高度處之 Z 座標（m）
     railRefY: 1.4,                   // 假設：斜軌參考高度（約站姿扛槓高度，使「腳在槓前方」定義一致）
@@ -55,43 +91,43 @@ export const MACHINES = {
     railHeight: 2.2,                 // 假設：機架高度（m）
   },
   legpress: {
-    railDeg: 45,                     // docs/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
-    sledKgDefault: 45,               // 假設：docs/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
+    railDeg: 45,                     // docs/research/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
+    sledKgDefault: 45,               // 假設：docs/research/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
     sledKgRange: [20, 65],           // 假設：輕型至重型商用滑台重量範圍（kg）
     platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加預設 45 kg 滑台 ＝ 總重 180 kg ＝ 2.4× 體重）
-    railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
-    railMuRange: [0, 0.15],          // 假設：docs/machine-data.md §1.1
-    seatDegDefault: 50,              // 假設：docs/machine-data.md §1.1 椅背離垂直估計 45°–65°
-    seatDegRange: [35, 65],          // 假設：docs/machine-data.md §1.1
+    railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/research/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
+    railMuRange: [0, 0.15],          // 假設：docs/research/machine-data.md §1.1
+    seatDegDefault: 50,              // 假設：docs/research/machine-data.md §1.1 椅背離垂直估計 45°–65°
+    seatDegRange: [35, 65],          // 假設：docs/research/machine-data.md §1.1
     hipY: 0.42,                      // 假設：座椅骨盆高度（m）
   },
   pulldown: {
-    pulleyRatioDefault: '1:1',       // docs/machine-data.md §3.1：專用滑輪下拉機 1:1（Hammer Strength / Life Fitness / Technogym 商用規格）
+    pulleyRatioDefault: '1:1',       // docs/research/machine-data.md §3.1：專用滑輪下拉機 1:1（Hammer Strength / Life Fitness / Technogym 商用規格）
     stackKg: 45,                     // 假設：示範配重片＝45 kg（1:1 實感 45 kg ≈ 0.6× 體重；2:1 實感 22.5 kg）
-    pulleyY: 2.35,                   // docs/machine-data.md §3.1：商用機總高 216–244 cm（Hammer Strength HDU-DPR 244 cm / HS-PD 226 cm / Technogym 228 cm）
+    pulleyY: 2.35,                   // docs/research/machine-data.md §3.1：商用機總高 216–244 cm（Hammer Strength HDU-DPR 244 cm / HS-PD 226 cm / Technogym 228 cm）
     towerZ: 0.8,                     // 假設：配重塔距骨盆水平距離（m）
     seatY: 0.47,                     // 假設：座墊高度（m）
     barLen: 1.25,                    // 假設：下拉長桿寬度（m）
   },
   cablerow: {
-    pulleyRatioDefault: '1:1',       // docs/machine-data.md §3.1：專用坐姿低拉划船機 1:1（Life Fitness PWR Play / Optima / Axiom / Technogym 規格）
+    pulleyRatioDefault: '1:1',       // docs/research/machine-data.md §3.1：專用坐姿低拉划船機 1:1（Life Fitness PWR Play / Optima / Axiom / Technogym 規格）
     stackKg: 56,                     // 假設：示範配重片＝56 kg（1:1 實感 56 kg ≈ 0.75× 體重；2:1 實感 28 kg）
-    pulleyY: 0.42,                   // docs/machine-data.md §3.1：低滑輪出繩口典型估算 35–45 cm（與坐墊同高或略低）
+    pulleyY: 0.42,                   // docs/research/machine-data.md §3.1：低滑輪出繩口典型估算 35–45 cm（與坐墊同高或略低）
     pulleyZ: 1.0,                    // 假設：低滑輪距骨盆水平距離（m）
     seatY: 0.47,                     // 假設：座墊高度（m）
     barLen: { v: 0.2, wide: 0.75 },  // 假設：V 把與寬握桿寬度（m）
   },
   pushdown: {
-    pulleyRatioDefault: '2:1',       // docs/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
+    pulleyRatioDefault: '2:1',       // docs/research/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
     stackKg: 38,                     // 假設：示範配重片＝38 kg（2:1 實感 19 kg ≈ 0.25× 體重；1:1 實感 38 kg）
-    pulleyY: 2.1,                    // docs/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
+    pulleyY: 2.1,                    // docs/research/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
     pulleyZ: 0.58,                   // 假設：站位距滑輪水平距離（m）
     barLen: 0.45,                    // 假設：短直桿寬度（m）
   },
   legext: {
     barRatio: 1.2,                   // 假設：示範配重片＝1.2× 體重
     camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
-    camDefault: 'comm_desc',         // docs/machine-data.md §4.3(A)：商用凸輪微降型（端點比例依 Folland & Morris 2008 極值，中間點為插值假設）
+    camDefault: 'comm_desc',         // docs/research/machine-data.md §4.3(A)：商用凸輪微降型（端點比例依 Folland & Morris 2008 極值，中間點為插值假設）
     seatY: 0.55,                     // 假設：座椅骨盆高度（m）
     backReclineDeg: 15,              // 假設：椅背後傾角（°）
     padOffset: 0.05,                 // 假設：小腿滾輪墊接觸偏移（m）
@@ -112,7 +148,7 @@ export const MACHINES = {
   legcurl: {
     barRatio: 0.45,                  // 假設：示範配重片＝0.45× 體重
     camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
-    camDefault: 'human',             // docs/machine-data.md §4.2：人體膝屈遞減曲線
+    camDefault: 'human',             // docs/research/machine-data.md §4.2：人體膝屈遞減曲線
     seatedHipY: 0.55,                // 假設：坐姿骨盆高度（m）
     seatedBackReclineDeg: 15,        // 假設：坐姿椅背後傾角（°）
     lyingHipY: 0.62,                 // 假設：俯臥骨盆高度（m）
@@ -132,7 +168,7 @@ export const MACHINES = {
   },
   chestpress: {
     barRatio: 0.9,                   // 假設：示範配重＝0.9× 體重
-    pathDefault: 'linear',           // docs/machine-data.md §5.1：固定直線軌跡胸推機
+    pathDefault: 'linear',           // docs/research/machine-data.md §5.1：固定直線軌跡胸推機
     convergeRatio: 0.72,             // 假設：內聚弧線推直時手距縮為起始寬度 72%（對應 §5.1 Hammer Strength / Life Fitness 內聚概念）
     seatY: 0.55,                     // 假設：座墊骨盆高度（m）
     backFrontZ: -0.085,              // 假設：椅背前緣止擋（肩關節後方 8.5 cm）
@@ -157,12 +193,12 @@ export const MACHINES = {
   },
   cablefly: {
     heightDefault: 'mid',            // 滑輪高度：高位往下／與肩同高／低位往上
-    pulleyRatioDefault: '2:1',       // docs/machine-data.md §3.1：多功能滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格）
+    pulleyRatioDefault: '2:1',       // docs/research/machine-data.md §3.1：多功能滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格）
     dualStack: true,                 // 雙側獨立配重塔，每手一條鋼索
     stackKg: 18,                     // 假設：單側示範配重片＝18 kg（2:1 實感單手 9 kg；1:1 實感單手 18 kg）
     pulleyX: 1.30,                   // 假設：左右滑輪柱半寬（m，總寬 2.60 m，對應商用大飛鳥門框寬度）
     pulleyZ: -0.10,                  // 假設：滑輪柱位於雙腳站位後方 10 cm（人站在大飛鳥門框略前方）
-    // docs/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
+    // docs/research/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
     pulleyY: { high: 1.92, mid: 1.34, low: 0.85 },
     towerH: 2.15,                    // 假設：雙側龍門架高度（m）
   },
@@ -190,7 +226,7 @@ export const MACHINES = {
 export const PULLEY_RATIOS = [['1:1', '1:1（直拉）'], ['2:1', '2:1（減半）']];
 export const pulleyDivisor = (r) => (r === '2:1' ? 2 : 1);
 
-// 凸輪阻力曲線選項（依 docs/machine-data.md §4 資料驅動）
+// 凸輪阻力曲線選項（依 docs/research/machine-data.md §4 資料驅動）
 export const CAMS_LEGEXT = [
   ['human', '貼合人體力量曲線（倒 U 型）'],
   ['comm_desc', '商用凸輪：伸直端微降'],
@@ -917,9 +953,9 @@ const hipFit = (a, b, c) => (q) => {
   const x = clamp((q.hipFlex || 0) / rad(45), 0, 2);
   return a + (b - a) * x + 0.5 * (c - 2 * b + a) * x * (x - 1);
 };
-// 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/muscle-params.md。
+// 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/research/muscle-params.md。
 const angleSlope = (base, key, per90) => (q) => base + per90 * clamp((q[key] || 0) / rad(90), -0.5, 1.7);
-// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；0.65 衰減幅度與 90°→170° 區間皆為無直接出處的估計，見 docs/muscle-params.md。
+// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；0.65 衰減幅度與 90°→170° 區間皆為無直接出處的估計，見 docs/research/muscle-params.md。
 const deltoidScale = (q) => 1 - 0.65 * clamp((q.shElev - rad(90)) / rad(80), 0, 1);
 const adeltFlex = (q) => 0.035 + 0.008 * clamp(q.shElev / rad(90), 0, 1);
 const adeltAbduction = (q) => (0.006 + 0.020 * clamp(q.shElev / rad(75), 0, 1)) * deltoidScale(q);
@@ -1051,6 +1087,12 @@ function applySquatHeel(pose, foot) {
 // ---------- 肩帶（肩胛骨＋鎖骨）----------
 // 軀幹局部座標：x = 外側、y = 沿軀幹向上、z = 前方，原點 = 骨盆中心；數值來自 BodyParts3D
 export const GIRDLE = { scj: [0.0151, 0.5243, 0.0583], sh: [BODY.shHalf, BODY.Ltr, 0] };
+export function girdleForBody(body = BODY) {
+  if (body === DEFAULT_BODY) return GIRDLE;
+  return { scj: [GIRDLE.scj[0] * body.shHalf / DEFAULT_BODY.shHalf,
+    GIRDLE.scj[1] * body.Ltr / DEFAULT_BODY.Ltr,
+    GIRDLE.scj[2] * body.Ltr / DEFAULT_BODY.Ltr], sh: [body.shHalf, body.Ltr, 0] };
+}
 // ret：後收（正）／前伸（負）；elev：上提（正）／下壓（負）；單位 rad
 export function girdleMatrix(g) {
   const cr = Math.cos(g.ret), sr = Math.sin(g.ret), ce = Math.cos(g.elev), se = Math.sin(g.elev);
@@ -1058,8 +1100,8 @@ export function girdleMatrix(g) {
   return [[cr * ce, -cr * se, sr], [se, ce, 0], [-sr * ce, sr * se, cr]];
 }
 export function shoulderLocal(g) {
-  const M = girdleMatrix(g), d = sub(GIRDLE.sh, GIRDLE.scj);
-  return add(GIRDLE.scj, M.map((r) => dot(r, d)));
+  const G = girdleForBody(), M = girdleMatrix(g), d = sub(G.sh, G.scj);
+  return add(G.scj, M.map((r) => dot(r, d)));
 }
 const toWorld = (tf, l) => add(add(add(tf.Pc, mul(tf.lat, l[0])), mul(tf.u, l[1])), mul(tf.f, l[2]));
 
@@ -1102,7 +1144,7 @@ function armChainBent(pose, S, B, pole, [epsDeg, Lh], hpref) {
 // [手腕背伸角（度）, 腕→槓距離（m）]
 export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [105, 0.05] };
 // Demers 等 2018 圖 1（無負重背蹲，股骨角 20°／40°／60°）的六個踝背屈圖讀點，
-// 依 docs/validation/squat-calibration-plan.md 等權網格擬合；跨到負重／其他槓位是外推。
+// 依 docs/research/methods.md 等權網格擬合；跨到負重／其他槓位是外推。
 // 寫計畫前已由測試組診斷知道髖位太後、膝前移不足，三種參數與冪函數形式不是盲選；數值才由 Demers 決定。
 // 原文大轉子間寬／腳跟外側標記暫以模型髖中心 18 cm／踝中心距代理，兩站距僅對應 stance≈0.024／0.238；
 // 預設 stance=0.3 的 dom=0.30 因而是外推。若僅假設大轉子寬 32 cm（非實測），兩點約為 stance=0.52／0.90。
@@ -1202,6 +1244,7 @@ function legFrontZ(A, hip, knee, y) {
   return lerp(knee[2], hip[2], t) + lerp(0.05, 0.09, t);
 }
 
+// 槓頂點由整條身體幾何鏈決定；不同身材不可共用求解結果。
 const dlTopCache = new Map();
 function deadliftPose(P, e) {
   const sumo = P.style === 'sumo';
@@ -1235,7 +1278,8 @@ function deadliftPose(P, e) {
     for (let i = 0; i < 34; i++) { const m = (lo + hi) / 2; if (build(m).front > target) hi = m; else lo = m; }
     return build(lo);
   };
-  const key = JSON.stringify([P.style, P.barDist, P.start || 0]);
+  const key = JSON.stringify([P.style, P.barDist, P.start || 0,
+    BODY.Ls, BODY.Lt, BODY.Ltr, BODY.Lu, BODY.Lf, BODY.hipHalf, BODY.shHalf, BODY.ankleH]);
   let barTopY = dlTopCache.get(key);
   if (barTopY === undefined) {
     let lo = 0.4, hi = 1.3;
@@ -1357,18 +1401,19 @@ function bisect(g, lo, hi, n = 34) {
 // 手腕在一般動作由肘→手端 74.6% 估計；深蹲折腕姿勢則使用實際求得的腕點。
 function segmentPoints(pose) {
   const R = pose.R;
+  const { mass: MF, cm } = SEGMENTS[BODY.sex];
   const toe = pose.toeDir || [0, 0, 1];
-  const foot = R.heel && R.toe ? lerpV(R.heel, R.toe, 0.4415) : add(R.ankle, mul(toe, -0.06 + 0.25 * 0.4415));
+  const foot = R.heel && R.toe ? lerpV(R.heel, R.toe, cm.foot) : add(R.ankle, mul(toe, -0.06 + 0.25 * cm.foot));
   const wrist = R.wrist || lerpV(R.elbow, R.hand, 0.746);
   return [
     [foot, MF.foot, 'foot'],
-    [lerpV(R.knee, R.ankle, 0.4395), MF.shank, 'shank'],
-    [lerpV(R.hip, R.knee, 0.4095), MF.thigh, 'thigh'],
-    [add(pose.Pc, mul(pose.u, BODY.Ltr * 0.5514)), MF.trunk / 2, 'trunk'],
-    [add(pose.Pc, mul(pose.u, BODY.Ltr + 0.34 - 0.20 * 0.5976)), MF.head / 2, 'trunk'],
-    [lerpV(R.shoulder, R.elbow, 0.5772), MF.upper, 'upper'],
-    [lerpV(R.elbow, wrist, 0.4574), MF.fore, 'fore'],
-    [lerpV(wrist, R.hand, 0.79), MF.hand, 'fore'],
+    [lerpV(R.knee, R.ankle, cm.shank), MF.shank, 'shank'],
+    [lerpV(R.hip, R.knee, cm.thigh), MF.thigh, 'thigh'],
+    [add(pose.Pc, mul(pose.u, BODY.Ltr * cm.trunkUp)), MF.trunk / 2, 'trunk'],
+    [add(pose.Pc, mul(pose.u, BODY.Ltr + (0.34 - 0.20 * cm.head) * BODY.heightM / DEFAULT_BODY.heightM)), MF.head / 2, 'trunk'],
+    [lerpV(R.shoulder, R.elbow, cm.upper), MF.upper, 'upper'],
+    [lerpV(R.elbow, wrist, cm.fore), MF.fore, 'fore'],
+    [lerpV(wrist, R.hand, cm.hand), MF.hand, 'fore'],
   ];
 }
 
@@ -3301,6 +3346,7 @@ function pullupPose(P, e) { return suspendedPose(P, e, P.assist === undefined ? 
 export function solvePose(lift, P, e) {
   const pose = LIFTS[lift].pose(P, e);
   pose.lift = lift;
+  pose.body = BODY;
   return pose;
 }
 
@@ -3538,7 +3584,7 @@ export function analyze(lift, P, e) {
   }
   if (has('scRet')) {
     // 手臂的負荷經肩關節傳到肩胛，再由肩胛肌群固定在軀幹上：力矩取在胸鎖關節
-    const SCJ = toWorld(pose, GIRDLE.scj);
+    const SCJ = toWorld(pose, girdleForBody().scj);
     const Mg = musMoment(forces, SCJ, ['upper', 'fore']);
     dem.scRet = dot(Mg, pose.u);
     dem.scElev = dot(Mg, pose.f);

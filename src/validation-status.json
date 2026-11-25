@@ -13,7 +13,7 @@
   },
   "byId": {
     "squat-high": {
-      "calibrationCaveat": "六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/validation/squat-calibration-result.md。",
+      "calibrationCaveat": "六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/research/results/squat.md。",
       "kinematics": {
         "status": "failed",
         "total": 11,
@@ -25,7 +25,7 @@
         "consistencyCheck": 2,
         "assumptionSensitivePass": 0,
         "links": [
-          "docs/validation/squat.md",
+          "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
         ]
@@ -41,7 +41,7 @@
         "consistencyCheck": 0,
         "assumptionSensitivePass": 1,
         "links": [
-          "docs/validation/squat.md",
+          "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
           "https://pubmed.ncbi.nlm.nih.gov/19002072/",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/"
@@ -56,14 +56,14 @@
         "qualitativePass": 7,
         "qualitativeFail": 1,
         "links": [
-          "docs/validation/squat.md",
-          "docs/references.md"
+          "docs/research/results/squat.md",
+          "docs/research/references.md"
         ],
         "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "squat-low": {
-      "calibrationCaveat": "沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/validation/squat-calibration-result.md。",
+      "calibrationCaveat": "沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/research/results/squat.md。",
       "kinematics": {
         "status": "failed",
         "total": 8,
@@ -75,7 +75,7 @@
         "consistencyCheck": 2,
         "assumptionSensitivePass": 0,
         "links": [
-          "docs/validation/squat.md",
+          "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
         ]
       },
@@ -99,14 +99,14 @@
         "qualitativePass": 1,
         "qualitativeFail": 0,
         "links": [
-          "docs/validation/squat.md",
-          "docs/references.md"
+          "docs/research/results/squat.md",
+          "docs/research/references.md"
         ],
         "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "front-squat": {
-      "calibrationCaveat": "沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/validation/squat-calibration-result.md。",
+      "calibrationCaveat": "沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/research/results/squat.md。",
       "kinematics": {
         "status": "failed",
         "total": 3,
@@ -118,7 +118,7 @@
         "consistencyCheck": 0,
         "assumptionSensitivePass": 0,
         "links": [
-          "docs/validation/squat.md",
+          "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
         ]
       },
@@ -133,7 +133,7 @@
         "consistencyCheck": 0,
         "assumptionSensitivePass": 0,
         "links": [
-          "docs/validation/squat.md",
+          "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
           "https://pubmed.ncbi.nlm.nih.gov/19002072/"
         ]
@@ -151,7 +151,7 @@
       }
     },
     "goblet-squat": {
-      "calibrationCaveat": "沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/validation/squat-calibration-result.md。",
+      "calibrationCaveat": "沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/research/results/squat.md。",
       "kinematics": {
         "status": "unvalidated",
         "total": 0,

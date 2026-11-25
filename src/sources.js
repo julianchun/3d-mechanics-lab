@@ -1,4 +1,4 @@
-// 每個動作的模型假設、已查證參考文獻（來自 docs/references.md 與 docs/machine-data.md）
+// 每個動作的模型假設、已查證參考文獻（來自 docs/research/references.md 與 docs/research/machine-data.md）
 // 以及與文獻趨勢比對狀態（由 npm run trends:json 產生的 src/trend-status.json 靜態匯入）
 import trendStatus from './trend-status.json' with { type: 'json' };
 
@@ -9,7 +9,7 @@ export const COMMON_ASSUMPTIONS = [
   '肌肉分配採最小化活化平方和之最佳化估計，不含疲勞、代謝累積與個人神經徵召差異。',
 ];
 
-// 已查證之參考文獻庫（所有條目均取自 docs/references.md 與 docs/machine-data.md）
+// 已查證之參考文獻庫（所有條目均取自 docs/research/references.md 與 docs/research/machine-data.md）
 const REFS = {
   cogley2005: { authors: 'Cogley RM et al.', year: 2005, title: 'Comparison of muscle activation using various hand positions during the push-up exercise', venue: 'J Strength Cond Res, 19(3):628–633', url: 'https://pubmed.ncbi.nlm.nih.gov/16095413/', tag: 'PubMed 16095413' },
   suprak2011: { authors: 'Suprak DN, Dawes J, Stephenson MD', year: 2011, title: 'The effect of position on the percentage of body mass supported during traditional and modified push-up variants', venue: 'J Strength Cond Res, 25(2):497–503', url: 'https://pubmed.ncbi.nlm.nih.gov/20179649/', tag: 'PubMed 20179649' },
@@ -144,7 +144,7 @@ export const SOURCES = {
     assumptions: [
       '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
       '預設主導 dom=0.30、站距偏移斜率 0.47、小腿角行程指數 0.83，依 Demers 等 2018 赤足、持輕木桿的無負重背蹲圖 1，在股骨 20°／40°／60° 六個踝背屈圖讀點等權擬合；圖讀約 ±1–2°。原文大轉子間寬與腳跟外側站距，暫用模型髖中心寬與踝中心距代理，換算未校驗；轉用負重亦為外推。小腿策略端點 40°／16°、大腿端點 70°／118° 仍是未實測的示範範圍。Zawadka 等 2020 的踝角峰值時間只作定性核對，未換算為模型股骨角進度。',
-      '校準站距代理只落在 stance≈0.024／0.238；預設 stance=0.3 的 dom=0.30 是外推。若大轉子間寬假設為 32 cm（僅示意估計，非實測），兩點會移到 stance≈0.52／0.90，預設 dom 可能更低。兩站距圖讀差僅 0.8–1.5°，與 ±1–2° 讀圖誤差相近；三參數可辨識性弱，冪函數殘差仍有系統型態。校準前診斷已指出髖位太後、膝前移不足，參數種類及方向並非對測試組盲選。詳細限制見 docs/validation/squat-calibration-result.md。',
+      '校準站距代理只落在 stance≈0.024／0.238；預設 stance=0.3 的 dom=0.30 是外推。若大轉子間寬假設為 32 cm（僅示意估計，非實測），兩點會移到 stance≈0.52／0.90，預設 dom 可能更低。兩站距圖讀差僅 0.8–1.5°，與 ±1–2° 讀圖誤差相近；三參數可辨識性弱，冪函數殘差仍有系統型態。校準前診斷已指出髖位太後、膝前移不足，參數種類及方向並非對測試組盲選。詳細限制見 docs/research/results/squat.md。',
       '寬站距（stance = 0.9）小腿最低點較窄站距（0.1）直立約 9.0°；Escamilla 2001 曾報寬窄差，但與 Demers 的無負重條件不同。固定腳掌中段重心與膝沿腳尖下，寬站距股骨矢狀投影縮短仍可能使模型軀幹較直立、髖伸力矩下降，與 Escamilla 2001 報告的方向矛盾；缺少髖外旋與臀大肌上束外展力臂。',
       '額狀面地面反作用力假設通過髖關節（外推膝蓋參數則額外施加橫向分力）；槓重 1.0× 體重為示範負重假設，僅分析下肢與腰椎自由度。',
       '鞋跟墊高以腳跟相對前腳掌的高度差（cm）表示；足底長 25 cm、踝高出足底 4.8 cm，前腳掌固定、腳跟旋起。腳掌角為 arcsin(高度/25 cm)，踝背屈量的是小腿相對腳掌，不是相對地面；壓力中心仍在地面鞋底接觸面。自由深蹲示範假設將足板角增量各半分給小腿前傾增加與踝背屈需求減少，沒有依驗證研究擬合個人策略。Lu 等 2022 的獨立試驗支持墊高鞋跟可降低踝背屈，但不能證明各半比例。',
@@ -154,7 +154,7 @@ export const SOURCES = {
   'squat-low': {
     assumptions: [
       '低槓位置下移至三角肌後束（較高槓低 8 cm、靠後 3.5 cm），另加入原有下肢策略偏移 domShift=+0.08；此為跨研究差異的示範反推值，非直接量測的策略參數。小腿行程與站距斜率同高槓的 Demers 2018 校準，低槓外推未另實測。',
-      '低槓的 +0.08 與小腿 40°／16° 端點均未被 Demers 六點校準；原研究無負重、赤足、持輕木桿，轉用 1.0 倍體重負重及低槓均屬外推。站距標記換算與參數可辨識性限制同高槓；Larsen 低槓寬站軀幹比對轉為失敗。詳細結果見 docs/validation/squat-calibration-result.md。',
+      '低槓的 +0.08 與小腿 40°／16° 端點均未被 Demers 六點校準；原研究無負重、赤足、持輕木桿，轉用 1.0 倍體重負重及低槓均屬外推。站距標記換算與參數可辨識性限制同高槓；Larsen 低槓寬站軀幹比對轉為失敗。詳細結果見 docs/research/results/squat.md。',
       '站姿總重心（含實際三維手臂位置）維持在腳掌中段上方；站距小腿角項與額狀面地面反作用力假設同高槓深蹲。',
       '槓重為 1.0× 體重示範假設，與高槓同負重下比較力臂差異。',
       '鞋跟墊高的足板、踝角與地面接觸假設同高槓深蹲。',
@@ -164,7 +164,7 @@ export const SOURCES = {
   'front-squat': {
     assumptions: [
       '前槓架在三角肌前束上方（軀幹軸前方 11 cm），另加入原有下肢策略偏移 domShift=−0.08；此為跨研究差異的示範反推值，非直接量測的策略參數。小腿行程與站距斜率同高槓的 Demers 2018 校準，前槓外推未另實測。',
-      '前蹲的 −0.08 與小腿 40°／16° 端點均未被 Demers 六點校準；轉用 1.0 倍體重負重是外推。趨勢檢查的最低點軀幹角 25.4°，但 Goršič 定點模型 27.8° 對研究 40.6° 失敗，姿勢可疑偏直立；兩者取樣條件不同。站距標記換算與參數可辨識性限制同高槓。詳細結果見 docs/validation/squat-calibration-result.md。',
+      '前蹲的 −0.08 與小腿 40°／16° 端點均未被 Demers 六點校準；轉用 1.0 倍體重負重是外推。趨勢檢查的最低點軀幹角 25.4°，但 Goršič 定點模型 27.8° 對研究 40.6° 失敗，姿勢可疑偏直立；兩者取樣條件不同。站距標記換算與參數可辨識性限制同高槓。詳細結果見 docs/research/results/squat.md。',
       '站姿總重心以實際三維手臂（前架式前伸手肘）位置計入平衡，維持在腳掌中段上方；站距小腿角項與額狀面反作用力假設同背蹲。',
       '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
       '鞋跟墊高的足板、踝角與地面接觸假設同高槓深蹲。',
@@ -174,7 +174,7 @@ export const SOURCES = {
   'goblet-squat': {
     assumptions: [
       '小腿行程與站距斜率沿用 Demers 2018 無負重背蹲校準，轉用高腳杯為外推；前側負重偏移 domShift=−0.08。預設 dom=0.25 是示範選擇，較背蹲校準預設 0.30 稍偏膝主導；每幀求解軀幹前傾角，使總重心維持在腳掌中段上方。',
-      '高腳杯的 −0.08、小腿 40°／16° 端點及 20 kg 啞鈴姿勢均無獨立校準；Demers 的站距標記換算與三參數可辨識性限制仍適用。詳細結果見 docs/validation/squat-calibration-result.md。',
+      '高腳杯的 −0.08、小腿 40°／16° 端點及 20 kg 啞鈴姿勢均無獨立校準；Demers 的站距標記換算與三參數可辨識性限制仍適用。詳細結果見 docs/research/results/squat.md。',
       '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
       '啞鈴尺寸與預設單顆 20 kg 為假設。',
       '鞋跟墊高沿用自由深蹲的足板、踝角、地面接觸與小腿前傾分配假設；Lu 等的槓鈴深蹲研究未直接驗證高腳杯深蹲。',
