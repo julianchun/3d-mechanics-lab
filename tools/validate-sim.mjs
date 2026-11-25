@@ -131,7 +131,7 @@ function referenceValue(measure) {
   return raw;
 }
 
-const filenames = fs.readdirSync(validationDir).filter((f) => f.endsWith('.json') && f !== 'results.json').sort();
+const filenames = fs.readdirSync(validationDir).filter((f) => f.endsWith('.json') && !['results.json', 'population-results.json'].includes(f)).sort();
 if (!filenames.length) throw new Error('validation/ 沒有文獻資料');
 const entries = new Map(CATALOG.map((c) => [c.id, c]));
 const comparisons = [], ids = new Set(), heelContexts = new Map();
