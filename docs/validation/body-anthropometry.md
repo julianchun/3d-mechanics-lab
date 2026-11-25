@@ -17,7 +17,7 @@
 
 ## 骨頭比例資料
 
-[美國陸軍 ANSUR II 2012 公開資料](https://ph.health.mil/topics/workplacehealth/ergo/Pages/Anthropometric-Database.aspx)按性別提供 4,082 男、1,986 女的逐人測量；[美國陸軍發布說明](https://www.army.mil/article/188601/for_good_measure_natick_releases_raw_data_from_army_wide_anthropometric_survey)、[資料與測量手冊入口](https://www.openlab.psu.edu/datasets/ansur2/)。本專案由[公開 CSV 鏡像](https://github.com/jocimarcan/antopometric-database)重現原始欄位，`tools/prepare-ansur.py` 擷取成 `validation/anthropometry/ansur-ii-ratios.json`，並記錄來源 CSV 的 SHA-256。每列的八個比例出自同一位受試者，抽樣時整列重抽，保留可見的相關性。
+[美國陸軍 ANSUR II 官方下載頁](https://ph.health.mil/topics/workplacehealth/ergo/Pages/Anthropometric-Database.aspx)提供男女公開 CSV；[美國陸軍發布說明](https://www.army.mil/article/188601/for_good_measure_natick_releases_raw_data_from_army_wide_anthropometric_survey)記載 4,082 男、1,986 女。這是美國政府公開發布的匿名逐人測量資料，供人體尺寸分析；美國政府職務著作的著作權規則見[美國法典第 17 篇第 105 節](https://uscode.house.gov/us/usc/t17/s105/)。本專案實際讀入的是[公開 CSV 鏡像](https://github.com/jocimarcan/antopometric-database)，`tools/prepare-ansur.py` 擷取成 `validation/anthropometry/ansur-ii-ratios.json`。JSON 的 `sha256.male` 與 `sha256.female` 是當時**鏡像原始 CSV 位元組**的 SHA-256；可對取得的 CSV 執行 `sha256sum 男性.csv 女性.csv`，依性別核對值。**目前未取得官方 CSV 重新計算並與鏡像雜湊比對，故不能聲稱鏡像與官方檔逐位元相同。**每列的八個比例出自同一位受試者，抽樣時整列重抽，保留比例彼此之間可觀測的相關性。
 
 | 模型量 | ANSUR II 代理標記與計算 | 男平均 ± SD／身高 | 女平均 ± SD／身高 |
 |---|---|---:|---:|
@@ -33,3 +33,5 @@
 這些標記**不等於關節中心**。大轉子相對髖中心偏外／下，外髁相對膝中心偏外，外踝相對踝中心偏外／下；肩峰相對肩中心偏外，橈骨頭相對肘中心偏外。ANSUR II 的站立垂直高度差也不等於姿勢中骨長。沒有每位受試者的影像校正可作精確換算。本次用各欄「ANSUR 比例 ÷ ANSUR 男性平均」乘既有 BodyParts3D 男性模型比例，當作**代理換算**：男性來源平均對齊原預設身體，女性保留來源的男女平均差，個體間變異保留。這不證明模型的絕對骨長正確，且髖半寬用髂嵴外寬做代理尤其不確定。不同研究的族群、訓練與測量法也未與陸軍樣本配對。
 
 `createBody({heightM, massKg, sex, ratios})` 的 `ratios` 是各模型長度除以身高；預設 1.75 m、75 kg、男性的每一個舊數值完全保留。以同步 `withBody(body, () => analyze(...))` 對整個計算套用身體，巢狀呼叫後還原；非同步回呼不支援。姿勢帶有 `pose.body`，3D 骨架依節段長度、肩／髖寬和整體身高縮放。模型中的鞋、槓、器械尺寸與部分固定距離仍是教學場景常數，未隨身高逐一縮放。
+
+群體模擬另外依各研究的平均與標準差抽身高、體重，再獨立抽一列 ANSUR II 的節段比例。因此來源資料中的**身高—體重**及**身高—節段比例**相關性沒有保留；比例之間的整列相關性仍保留。來源只給外觀標記，不能據此宣稱已估得真實關節中心或各研究受試者的個體身材。
