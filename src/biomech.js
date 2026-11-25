@@ -42,8 +42,10 @@ export function createBody({ heightM = DEFAULT_BODY.heightM, massKg = DEFAULT_BO
 // 不可在 run 內 await。此 API 適合批次驗證，也可供日後 UI 在單次運算中使用。
 export let BODY = DEFAULT_BODY;
 export function withBody(body, run) {
-  if (!body || !BODY_LENGTHS.every((key) => Number.isFinite(body[key]) && body[key] > 0) ||
-      !Number.isFinite(body.mass) || !['male', 'female'].includes(body.sex)) throw new Error('無效身體參數');
+  if (!body || !Number.isFinite(body.heightM) || body.heightM <= 0 ||
+      !BODY_LENGTHS.every((key) => Number.isFinite(body[key]) && body[key] > 0) ||
+      !Number.isFinite(body.mass) || body.mass <= 0 || !['male', 'female'].includes(body.sex) ||
+      typeof run !== 'function') throw new Error('無效身體參數');
   const previous = BODY;
   BODY = body;
   try {
@@ -1242,6 +1244,7 @@ function legFrontZ(A, hip, knee, y) {
   return lerp(knee[2], hip[2], t) + lerp(0.05, 0.09, t);
 }
 
+// 槓頂點由整條身體幾何鏈決定；不同身材不可共用求解結果。
 const dlTopCache = new Map();
 function deadliftPose(P, e) {
   const sumo = P.style === 'sumo';
@@ -1275,7 +1278,8 @@ function deadliftPose(P, e) {
     for (let i = 0; i < 34; i++) { const m = (lo + hi) / 2; if (build(m).front > target) hi = m; else lo = m; }
     return build(lo);
   };
-  const key = JSON.stringify([P.style, P.barDist, P.start || 0]);
+  const key = JSON.stringify([P.style, P.barDist, P.start || 0,
+    BODY.Ls, BODY.Lt, BODY.Ltr, BODY.Lu, BODY.Lf, BODY.hipHalf, BODY.shHalf, BODY.ankleH]);
   let barTopY = dlTopCache.get(key);
   if (barTopY === undefined) {
     let lo = 0.4, hi = 1.3;

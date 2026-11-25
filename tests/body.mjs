@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { BODY, DEFAULT_BODY, analyze, createBody, defaultParams, withBody } from '../src/biomech.js';
+import { CATALOG } from '../src/catalog.js';
 
 const same = createBody();
 for (const key of Object.keys(DEFAULT_BODY)) assert.equal(same[key], DEFAULT_BODY[key], `預設 ${key}`);
@@ -19,4 +20,38 @@ assert.equal(BODY, DEFAULT_BODY, '巢狀返回後還原');
 assert.throws(() => withBody(small, () => { throw new Error('預期錯誤'); }), /預期錯誤/);
 assert.equal(BODY, DEFAULT_BODY, '發生例外時還原');
 assert.throws(() => createBody({ ratios: { Lt: -1 } }), /無效身體比例/);
+assert.throws(() => withBody({ ...small, heightM: undefined }, () => {}), /無效身體參數/);
+assert.throws(() => withBody({ ...small, mass: 0 }, () => {}), /無效身體參數/);
+
+// 獨立載入一份尚未建立快取的模型，取得小身材硬舉的正確參考值。
+const isolated = await import('../src/biomech.js?body-cache-reference');
+const deadlift = { ...defaultParams('deadlift'), style: 'conv', start: 0 };
+const reference = isolated.withBody(isolated.createBody({ heightM: 1.6, massKg: 60, sex: 'female' }),
+  () => isolated.analyze('deadlift', deadlift, 0));
+for (const e of [0, 0.5, 1]) analyze('deadlift', deadlift, e);
+const afterDefault = withBody(small, () => analyze('deadlift', deadlift, 0));
+assert.deepEqual(afterDefault.pose.R, reference.pose.R, '硬舉姿勢不得依先前身材改變');
+assert.deepEqual(afterDefault.dem, reference.dem, '硬舉力矩不得依先前身材改變');
+assert.equal(afterDefault.pose.ok, reference.pose.ok, '硬舉鏈結狀態一致');
+assert.equal(afterDefault.pose.ok, true, '小身材硬舉可解');
+
+// 全清單以各變化式的預設參數掃描，列出固定器材幾何造成的身材限制。
+assert.equal(CATALOG.length, 63);
+for (const [label, body] of [['160 cm 女性', small], ['190 cm 男性', tall]]) {
+  const failures = [];
+  withBody(body, () => {
+    for (const item of CATALOG) {
+      const params = { ...defaultParams(item.lift), ...item.set };
+      const failed = [];
+      for (let i = 0; i <= 10; i++) {
+        const pose = analyze(item.lift, params, i / 10).pose;
+        if (!pose.ok) failed.push(`${i}/10：${pose.conflict || '姿勢無法成立'}`);
+      }
+      if (failed.length) failures.push(`${item.id}（${failed.join('；')}）`);
+    }
+  });
+  assert.deepEqual(failures.map((entry) => entry.split('（')[0]), label === '160 cm 女性' ?
+    ['pec-deck', 'reverse-deck', 'calf-raise-standing'] : [], `${label}的已知器材限制`);
+  console.log(`${label}：${failures.length} / 63 項有姿勢失敗${failures.length ? `\n${failures.join('\n')}` : ''}`);
+}
 console.log('身體參數 API PASS');
