@@ -3,7 +3,7 @@ import { CATALOG } from '../src/catalog.js';
 import { analyze, defaultParams, BODY } from '../src/biomech.js';
 
 // 排名用畫面顯示的 s（主動活化加被動份額）；超載門檻只用未截斷的 a。
-// 文獻趨勢見 docs/references.md；同一肌肉的不同動作峰值不等於跨肌肉 EMG 百分比。
+// 文獻趨勢見 docs/research/references.md；同一肌肉的不同動作峰值不等於跨肌肉 EMG 百分比。
 // 臀橋已修正為肩線貼地支撐與地板連續反力模型，臀大肌為第一位（高於腰背伸肌）。
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
