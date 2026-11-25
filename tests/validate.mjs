@@ -33,6 +33,12 @@ for (const lift of ['squat', 'goblet']) {
       !wide.warn.some((x) => x.includes('腳尖、小腿與大腿的水平面方向差較大'))) {
     console.log(`${lift}: 寬站膝路徑提示失敗`); bad++;
   }
+  const normal = Array.from({ length: 21 }, (_, i) => analyze(lift, { ...P, kneePath: 'forward' }, i / 20).pose);
+  if (normal.some((pose) => pose.warn.some((x) => x.includes('腳尖、小腿與大腿的水平面方向差較大'))) ||
+      normal[0].kneePath.shankThighProxyDeg !== null ||
+      normal.at(-1).kneePath.shankThighProxyDeg === null) {
+    console.log(`${lift}: 預設站距膝路徑誤報或缺少底點資料`); bad++;
+  }
 }
 // 鞋跟墊高：腳掌繞前腳掌抬起，外鞋底仍接地；角度須以腳掌為參考。
 for (const [lift, barPos] of [['squat', 'high'], ['squat', 'low'], ['squat', 'front'], ['goblet'], ['smith']]) {

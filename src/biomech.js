@@ -858,8 +858,8 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
     pose: gobletPose, loads: dumbbellLoads,
     params: [
-      // 胸前負重的股四頭導向示範採較多膝前移；依教練原則 S1／Q3，0.05 不是文獻界線。
-      { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.05, joint: 'hip', mech: 'A' },
+      // 高腳杯預設採教練選定的 0.25；0.05 可另作較膝主導示範，不是文獻界線。
+      { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.25, joint: 'hip', mech: 'A' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'A' },
       { key: 'kneePath', label: '膝蓋方向', type: 'select', options: [['forward', '正前方'], ['toes', '跟著腳尖']], def: 'forward', joint: 'knee', mech: 'A' },
@@ -1169,13 +1169,15 @@ function recordSquatKneePath(pose) {
   const thigh = Math.atan2(K[0] - H[0], K[2] - H[2]);
   const thighMismatch = Math.atan2(Math.sin(thigh - path), Math.cos(thigh - path));
   const thighSpan = Math.hypot(K[0] - H[0], K[2] - H[2]);
+  // 大腿接近垂直時，水平投影角會被很小的前後跨距放大；只在屈曲超過 45° 時計入。
+  const thighBent = thighSpan > Math.abs(K[1] - H[1]);
   pose.kneePath = { pathDeg: deg(path), toeDeg: deg(toe), footShankProxyDeg: deg(mismatch),
-    thighDeg: deg(thigh), shankThighProxyDeg: thighSpan > 0.05 ? deg(thighMismatch) : null,
+    thighDeg: deg(thigh), shankThighProxyDeg: thighBent ? deg(thighMismatch) : null,
     forwardM: forward, lateralM: lateral };
   pose.kneeDir = [Math.sin(path), 0, Math.cos(path)];
   // 25° 只觸發幾何人工複查，並非脛股旋轉或受傷安全界線。
   if ((Math.hypot(forward, lateral) > 0.05 && Math.abs(deg(mismatch)) > 25) ||
-      (thighSpan > 0.05 && Math.abs(deg(thighMismatch)) > 25))
+      (thighBent && Math.abs(deg(thighMismatch)) > 25))
     pose.warn.push('腳尖、小腿與大腿的水平面方向差較大，請檢查站距與腳尖角');
 }
 function squatPose(P, e) {
