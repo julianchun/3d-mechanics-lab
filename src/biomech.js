@@ -1767,10 +1767,13 @@ function goodMorningPose(P, e) {
     return { knee, hip, tf, bar, arm };
   };
   const comz = (th) => {
-    const r = build(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, ...r.arm.R }, Pc: r.tf.Pc, u, toeDir: toe }, r.bar, BAR_RATIO.goodmorning);
+    const r = build(th), p = { R: {}, Pc: r.tf.Pc, u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    Object.assign(p.R, r.arm.R);
+    return systemComZ(p, r.bar, BAR_RATIO.goodmorning);
   };
-  const r = build(bisect((th) => comz(th), rad(-20), rad(30)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = build(bisect((th) => comz(th) - footMid - (P.balanceCm || 0) / 100, rad(-20), rad(30)));
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, r.tf);
   pose.phi = phi;
