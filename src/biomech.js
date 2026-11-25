@@ -338,6 +338,7 @@ export const LIFTS = {
       { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.30, joint: 'hip', mech: 'A' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.3, joint: 'ankle', mech: 'A' },
+      { key: 'kneePath', label: '膝蓋方向', type: 'select', options: [['forward', '正前方'], ['toes', '跟著腳尖']], def: 'forward', joint: 'knee', mech: 'A' },
       { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
       { key: 'barPos', label: '槓位', type: 'select', options: [['high', '高槓'], ['low', '低槓'], ['front', '前槓（前蹲）']], def: 'high', joint: 'bar', mech: 'A' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
@@ -857,9 +858,11 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
     pose: gobletPose, loads: dumbbellLoads,
     params: [
-      { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.25, joint: 'hip', mech: 'A' },
+      // 胸前負重的股四頭導向示範採較多膝前移；依教練原則 S1／Q3，0.05 不是文獻界線。
+      { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.05, joint: 'hip', mech: 'A' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'A' },
+      { key: 'kneePath', label: '膝蓋方向', type: 'select', options: [['forward', '正前方'], ['toes', '跟著腳尖']], def: 'forward', joint: 'knee', mech: 'A' },
       { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
       { key: 'load', label: '啞鈴重量', left: '8 kg', right: '40 kg', min: 8, max: 40, step: 2, def: MACHINES.dumbbell.gobletKg, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
@@ -1156,6 +1159,25 @@ function freeSquatShankAngle(P, e, frontShift = 0) {
   const flat = rad(4 + (lerp(40, 16, domEff) - 4) * Math.pow(e, SQUAT_SHANK_PROGRESS));
   return { domEff, flat };
 }
+// 水平面的膝路徑與腳尖方向差只是幾何代理；模型沒有脛股軸旋自由度。
+function recordSquatKneePath(pose) {
+  const A = pose.R.ankle, K = pose.R.knee, H = pose.R.hip;
+  const forward = K[2] - A[2], lateral = K[0] - A[0];
+  const path = Math.atan2(lateral, forward);
+  const toe = Math.atan2(pose.toeDir[0], pose.toeDir[2]);
+  const mismatch = Math.atan2(Math.sin(toe - path), Math.cos(toe - path));
+  const thigh = Math.atan2(K[0] - H[0], K[2] - H[2]);
+  const thighMismatch = Math.atan2(Math.sin(thigh - path), Math.cos(thigh - path));
+  const thighSpan = Math.hypot(K[0] - H[0], K[2] - H[2]);
+  pose.kneePath = { pathDeg: deg(path), toeDeg: deg(toe), footShankProxyDeg: deg(mismatch),
+    thighDeg: deg(thigh), shankThighProxyDeg: thighSpan > 0.05 ? deg(thighMismatch) : null,
+    forwardM: forward, lateralM: lateral };
+  pose.kneeDir = [Math.sin(path), 0, Math.cos(path)];
+  // 25° 只觸發幾何人工複查，並非脛股旋轉或受傷安全界線。
+  if ((Math.hypot(forward, lateral) > 0.05 && Math.abs(deg(mismatch)) > 25) ||
+      (thighSpan > 0.05 && Math.abs(deg(thighMismatch)) > 25))
+    pose.warn.push('腳尖、小腿與大腿的水平面方向差較大，請檢查站距與腳尖角');
+}
 function squatPose(P, e) {
   const low = P.barPos === 'low', front = P.barPos === 'front';
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
@@ -1167,21 +1189,25 @@ function squatPose(P, e) {
   const { flat: flatShank } = freeSquatShankAngle(P, e, low ? 0.08 : front ? -0.08 : 0);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
   // 示範假設：鞋跟足板角按具名比例分給小腿前傾，其餘降低相對腳掌的踝背屈需求。
-  const thS = flatShank + (foot?.a || 0) * heelShankShare * e;
+  let thS = flatShank + (foot?.a || 0) * heelShankShare * e;
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
-  let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
-  for (let i = 0; i < 4; i++) {
-    const Ky = A[1] + Ls * Math.cos(thS), Kz = A[2] + Ls * Math.sin(thS);
-    Hy = Ky + Lt * Math.cos(gam); Hz = Kz - Lt * Math.sin(gam);
-    const Kx = w + (Kz - A[2]) * Math.tan(tau);
-    K = [Kx, Ky, Kz];
-    Ls = Math.sqrt(Math.max(0.01, BODY.Ls ** 2 - (Kx - w) ** 2));
-    Lt = Math.sqrt(Math.max(0.01, BODY.Lt ** 2 - (Kx - BODY.hipHalf) ** 2));
-  }
+  const legAt = (angle) => {
+    let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
+    for (let i = 0; i < 4; i++) {
+      const Ky = A[1] + Ls * Math.cos(angle), Kz = A[2] + Ls * Math.sin(angle);
+      Hy = Ky + Lt * Math.cos(gam); Hz = Kz - Lt * Math.sin(gam);
+      const Kx = w + (P.kneePath === 'toes' ? (Kz - A[2]) * Math.tan(tau) : 0);
+      K = [Kx, Ky, Kz];
+      Ls = Math.sqrt(Math.max(0.01, BODY.Ls ** 2 - (Kx - w) ** 2));
+      Lt = Math.sqrt(Math.max(0.01, BODY.Lt ** 2 - (Kx - BODY.hipHalf) ** 2));
+    }
+    return { K, Hy, Hz };
+  };
+  let { K, Hy, Hz } = legAt(thS);
   // ob：槓在軀幹後方的距離（負值 = 前方，前槓放在三角肌前束上）
   const Lb = front ? 0.5 : low ? 0.45 : 0.53, ob = front ? -0.11 : low ? 0.085 : 0.05, handX = front ? 0.23 : low ? 0.3 : 0.34;
-  const Pc = [0, Hy, Hz];
+  let Pc = [0, Hy, Hz];
   const girdle = { ret: rad(15), elev: 0 };
   const dl = shoulderLocal(girdle);
   const build = (phi) => {
@@ -1207,6 +1233,22 @@ function squatPose(P, e) {
     if (foot) applySquatHeel(pz, foot);
     return systemComZ(pz, bar, BAR_RATIO.squat);
   };
+  // 極端骨長比例若使原小腿角無法在足中段平衡，先讓膝再往前移到剛好可平衡；不由文獻測試值設定角度。
+  if (comz(rad(85)) < 0 && e > 0) {
+    const base = thS, limit = Math.max(0, rad(45) - base);
+    const shift = (extra) => {
+      ({ K, Hy, Hz } = legAt(base + extra));
+      Pc = [0, Hy, Hz];
+      pose.R.hip = [BODY.hipHalf, Hy, Hz]; pose.R.knee = K;
+      return comz(rad(85));
+    };
+    if (shift(limit) >= 0) {
+      let lo = 0, hi = limit;
+      for (let i = 0; i < 32; i++) { const mid = (lo + hi) / 2; if (shift(mid) < 0) lo = mid; else hi = mid; }
+      thS = base + hi;
+      shift(hi);
+    }
+  }
   let phi;
   if (comz(0) >= 0) phi = 0;
   else if (comz(rad(85)) < 0) { phi = rad(85); pose.ok = false; pose.conflict = '重心無法維持在腳掌中段：軀幹已前傾到極限'; }
@@ -1221,6 +1263,7 @@ function squatPose(P, e) {
   legChain(pose, A, toe, pose.R.hip);
   applySquatHeel(pose, foot);
   pose.R.knee = K; // 以平面解的膝位置為準
+  recordSquatKneePath(pose);
   pose.girdle = girdle;
   Object.assign(pose.R, arm.R);
   pose.armPole = arm.armPole;
@@ -3143,7 +3186,7 @@ function gobletPose(P, e) {
   for (let i = 0; i < 4; i++) {
     const Ky = A[1] + Ls * Math.cos(thS), Kz = A[2] + Ls * Math.sin(thS);
     Hy = Ky + Lt * Math.cos(gam); Hz = Kz - Lt * Math.sin(gam);
-    const Kx = w + (Kz - A[2]) * Math.tan(tau);
+    const Kx = w + (P.kneePath === 'toes' ? (Kz - A[2]) * Math.tan(tau) : 0);
     K = [Kx, Ky, Kz];
     Ls = Math.sqrt(Math.max(0.01, BODY.Ls ** 2 - (Kx - w) ** 2));
     Lt = Math.sqrt(Math.max(0.01, BODY.Lt ** 2 - (Kx - BODY.hipHalf) ** 2));
@@ -3188,6 +3231,7 @@ function gobletPose(P, e) {
   legChain(pose, A, toe, pose.R.hip);
   applySquatHeel(pose, foot);
   pose.R.knee = K;
+  recordSquatKneePath(pose);
   pose.girdle = girdle;
   Object.assign(pose.R, arm.R);
   pose.armPole = arm.armPole;
@@ -3550,11 +3594,11 @@ export function analyze(lift, P, e) {
     if (has('hipExt')) dem.hipExt = dot(Mh, norm(cross(neg(pose.u), neg(pose.f))));
     if (has('hipAbd')) dem.hipAbd = dot(Mh, pose.hipAbdAxis || norm(cross(neg(pose.u), pose.lat)));
   }
-  // 膝／踝的屈伸軸：預設沿腳尖方向（站姿）；腳不是平踩地面時（腿推機、腿伸機）由 pose.hinge 指定
-  const fx = pose.hinge || (pose.toeDir && norm(cross([0, 1, 0], pose.toeDir)));
+  // 深蹲的膝屈伸軸跟隨膝路徑；踝軸仍跟腳掌。缺少脛股軸旋，扭轉量僅作幾何代理。
+  const fx = pose.hinge || ((pose.kneeDir || pose.toeDir) && norm(cross([0, 1, 0], pose.kneeDir || pose.toeDir)));
   if (has('kneeExt')) {
     const Mk = musMoment(forces, R.knee, ['foot', 'shank']);
-    dem.kneeExt = dot(Mk, neg(fx)); // 膝蓋沿腳尖方向屈伸
+    dem.kneeExt = dot(Mk, neg(fx));
   }
   if (has('ankPF')) {
     const Ma = musMoment(forces, R.ankle, ['foot']);

@@ -15,6 +15,25 @@ for (const c of CATALOG) {
   if (flags.length) bad++;
   console.log(`${c.id.padEnd(16)} ${flags.join(' ') || 'ok'} | ${top}`);
 }
+// 自由深蹲與高腳杯可分開設定膝路徑；舊的跟腳尖幾何仍可重現。
+for (const lift of ['squat', 'goblet']) {
+  const P = defaultParams(lift);
+  for (const e of [0, 0.5, 1]) {
+    const f = analyze(lift, { ...P, kneePath: 'forward' }, e).pose;
+    const t = analyze(lift, { ...P, kneePath: 'toes' }, e).pose;
+    const dx = t.R.knee[0] - t.R.ankle[0], dz = t.R.knee[2] - t.R.ankle[2];
+    if (!f.ok || !t.ok || Math.abs(f.R.knee[0] - f.R.ankle[0]) > 1e-9 ||
+        Math.abs(dx - dz * t.toeDir[0] / t.toeDir[2]) > 1e-9 ||
+        Math.abs(f.kneePath.footShankProxyDeg - f.kneePath.toeDeg) > 1e-9) {
+      console.log(`${lift} e=${e}: 膝路徑幾何檢查失敗`); bad++;
+    }
+  }
+  const wide = analyze(lift, { ...P, stance: 1, kneePath: 'forward' }, 1).pose;
+  if (wide.kneePath.footShankProxyDeg < 25 || wide.kneePath.shankThighProxyDeg < 25 ||
+      !wide.warn.some((x) => x.includes('腳尖、小腿與大腿的水平面方向差較大'))) {
+    console.log(`${lift}: 寬站膝路徑提示失敗`); bad++;
+  }
+}
 // 鞋跟墊高：腳掌繞前腳掌抬起，外鞋底仍接地；角度須以腳掌為參考。
 for (const [lift, barPos] of [['squat', 'high'], ['squat', 'low'], ['squat', 'front'], ['goblet'], ['smith']]) {
   const P = { ...defaultParams(lift), ...(barPos ? { barPos } : {}) };

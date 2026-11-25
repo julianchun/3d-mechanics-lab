@@ -3,23 +3,23 @@
   "summary": {
     "total": 35,
     "count": 16,
-    "pass": 9,
-    "fail": 7,
+    "pass": 13,
+    "fail": 3,
     "definitionMismatch": 12,
     "exploratory": 3,
     "consistencyCheck": 4,
-    "assumptionSensitivePass": 1,
+    "assumptionSensitivePass": 3,
     "sources": 4
   },
   "byId": {
     "squat-high": {
       "calibrationCaveat": "六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/research/results/squat.md。",
       "kinematics": {
-        "status": "failed",
+        "status": "partial",
         "total": 11,
         "count": 3,
-        "pass": 2,
-        "fail": 1,
+        "pass": 3,
+        "fail": 0,
         "definitionMismatch": 6,
         "exploratory": 0,
         "consistencyCheck": 2,
@@ -34,8 +34,8 @@
         "status": "failed",
         "total": 8,
         "count": 5,
-        "pass": 3,
-        "fail": 2,
+        "pass": 4,
+        "fail": 1,
         "definitionMismatch": 0,
         "exploratory": 3,
         "consistencyCheck": 0,
@@ -65,11 +65,11 @@
     "squat-low": {
       "calibrationCaveat": "沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/research/results/squat.md。",
       "kinematics": {
-        "status": "failed",
+        "status": "partial",
         "total": 8,
         "count": 2,
-        "pass": 1,
-        "fail": 1,
+        "pass": 2,
+        "fail": 0,
         "definitionMismatch": 4,
         "exploratory": 0,
         "consistencyCheck": 2,
@@ -108,15 +108,15 @@
     "front-squat": {
       "calibrationCaveat": "沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/research/results/squat.md。",
       "kinematics": {
-        "status": "failed",
+        "status": "partial",
         "total": 3,
         "count": 1,
-        "pass": 0,
-        "fail": 1,
+        "pass": 1,
+        "fail": 0,
         "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "assumptionSensitivePass": 0,
+        "assumptionSensitivePass": 1,
         "links": [
           "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/"
@@ -131,7 +131,7 @@
         "definitionMismatch": 0,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "assumptionSensitivePass": 0,
+        "assumptionSensitivePass": 1,
         "links": [
           "docs/research/results/squat.md",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/",
