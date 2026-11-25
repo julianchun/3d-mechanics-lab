@@ -47,6 +47,7 @@
 - [Demers 等（2018），圖 1 與表 1](https://intjexersci.com/files/ijes/vol11/iss1/9.pdf)：32 人赤足、背持輕木桿深蹲的踝角；六個圖讀點用於小腿策略校準，非上列數值測試組。
 - [Lu 等（2022）](https://doi.org/10.3390/bioengineering9070301)：鞋跟墊高影響踝角與男性膝力矩方向；沒有量得本模型的 `HEEL_SHANK_SHARE=0.5`。
 - [Zawadka 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/)：自然深蹲各關節峰值的時間先後；研究時間比例不等於模型行程 `e`。
+- [Hanen 等（2025），表 1](https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2025.1597209/full)：傳統／相撲硬舉離地至過膝、過膝至鎖定的膝伸行程；目前只作獨立定性校準檢查，沒有以此擬合時序係數，也不屬於 `validation/*.json` 數值測試組。
 
 ## 各動作生物力學與 EMG
 
