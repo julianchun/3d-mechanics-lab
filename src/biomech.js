@@ -360,7 +360,6 @@ export const LIFTS = {
     // moving：主要在動的關節（清單上「主要肌群」只看作用在這些關節的肌肉，排除純穩定用的）
     moving: ['hipExt', 'kneeExt', 'trunkExt'],
     params: [
-      { key: 'dom', label: '主導（起始髖高）', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'hip', mech: 'A' },
       { key: 'style', label: '站姿', type: 'select', options: [['conv', '傳統'], ['sumo', '相撲']], def: 'conv', joint: 'ankle', mech: 'A' },
       { key: 'start', label: '起始槓高', left: '赤字（站高 10 cm）', right: '墊高 10 cm', min: -10, max: 10, step: 1, def: 0, joint: 'equip', mech: 'A', unit: ' cm' },
       { key: 'barDist', label: '槓離身體', left: '貼腿', right: '離腿 10 cm', min: 0, max: 1, step: 0.01, def: 0, joint: 'bar', mech: 'A' },
@@ -1306,7 +1305,8 @@ function deadliftPose(P, e) {
   const dfc = Math.max(0, -(P.start || 0)) / 100, blk = Math.max(0, P.start || 0) / 100;
   const A = [w, BODY.ankleH + dfc, -0.07];
   const gap = 0.1 * P.barDist;           // 槓與腿前緣的距離
-  const bz = 0.02 + 0.5 * gap;           // 槓的垂直路徑（約在腳掌中段）
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const bz = footMid + 0.5 * gap;        // H1：預設槓路在足底幾何中點正上方
   const target = bz - 0.016 - gap;        // 腿前緣要停在這裡（槓半徑 1.4 cm + 空隙）
   const Lr = BODY.Lu + BODY.Lf - 0.002;
   const girdle = { ret: rad(-8), elev: rad(-5) }; // 負重下肩胛略前伸、下壓
@@ -1341,9 +1341,12 @@ function deadliftPose(P, e) {
     dlTopCache.set(key, barTopY);
   }
   const barY = lerp(barTopY, 0.225 + blk, e);
-  const phi0 = rad(sumo ? lerp(36, 58, P.dom) : lerp(48, 70, P.dom));
+  // H1：在槓片起始高度以小腿貼槓及肩關節位於槓正上方決定軀幹角；段長變動會重新求解。
+  // 肩胛單獨位置沒有骨架自由度，先以肩關節代理；若此幾何與 G1 不可同時成立，稽核照實列出。
+  const startY = 0.225 + blk;
+  const phi0 = bisect((a) => place(a, startY).S[2] - bz, rad(15), rad(85));
   const pose = { R: {}, warn: [], ok: true };
-  // 前半段主要伸膝、軀幹角變化小；後半段才伸髖
+  // 原有行程冪次尚無獨立校準來源；維持現值，另以校準組檢查過膝前後的伸膝比例。
   let phi = phi0 * Math.pow(e, 0.45);
   let r = place(phi, barY);
   if (r.d > maxReach) {
