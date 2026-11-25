@@ -3171,7 +3171,6 @@ function dbReverseFlyPose(P, e) {
   const w = 0.15, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
-  const bz = 0.02;
   const phi = rad(P.torso);
   const u = [0, Math.cos(phi), Math.sin(phi)];
   const legs = fixedKneeLegs(A, w, rad(22));
@@ -3193,10 +3192,13 @@ function dbReverseFlyPose(P, e) {
     return { knee, hip, tf, S, E, H };
   };
   const com = (th) => {
-    const r = at(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: r.E, hand: r.H }, Pc: r.tf.Pc, u, toeDir: toe }, r.H, barW);
+    const r = at(th), p = { R: {}, Pc: r.tf.Pc, u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    armChain(p, r.S, r.H, pole);
+    return systemComZ(p, r.H, barW);
   };
-  const r = at(bisect((th) => com(th) - bz, rad(-15), rad(30)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = at(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-15), rad(30)));
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, r.tf);
   pose.phi = phi;
