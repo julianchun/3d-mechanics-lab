@@ -10,7 +10,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const validationDir = path.join(root, 'validation');
 const resultsPath = path.join(validationDir, 'results.json');
 const statusPath = path.join(root, 'src/validation-status.json');
-const figurePath = path.join(root, 'docs/validation/squat-curves.svg');
+const figurePath = path.join(root, 'docs/research/results/squat-curves.svg');
 const mode = process.argv[2] ?? '';
 if (!['', '--check', '--write-status', '--heel-share-sweep'].includes(mode) || process.argv.length > 3) {
   throw new Error('用法：node tools/validate-sim.mjs [--check|--write-status|--heel-share-sweep]');
@@ -234,10 +234,10 @@ const summary = { ...counts(comparisons), sources: sources.length };
 const results = { modelVersion: MODEL_VERSION, summary, comparisons };
 // 只提供公開說明文字；驗證計數、門檻與模型計算均不受此欄位影響。
 const calibrationCaveats = {
-  'squat-high': '六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/validation/squat-calibration-result.md。',
-  'squat-low': '沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/validation/squat-calibration-result.md。',
-  'front-squat': '沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/validation/squat-calibration-result.md。',
-  'goblet-squat': '沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/validation/squat-calibration-result.md。',
+  'squat-high': '六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/research/results/squat.md。',
+  'squat-low': '沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/research/results/squat.md。',
+  'front-squat': '沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/research/results/squat.md。',
+  'goblet-squat': '沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/research/results/squat.md。',
 };
 const byId = Object.fromEntries(CATALOG.map((entry) => {
   const make = (layer) => {
@@ -248,7 +248,7 @@ const byId = Object.fromEntries(CATALOG.map((entry) => {
       status: stats.count ? (stats.fail ? 'failed' : 'partial') : stats.definitionMismatch ? 'definition-mismatch' : stats.exploratory ? 'exploratory' : 'unvalidated',
       ...baseStats,
       ...(stats.count ? { assumptionSensitivePass } : {}),
-      links: items.length ? ['docs/validation/squat.md', ...new Set(items.map((c) => c.source))] : [],
+      links: items.length ? ['docs/research/results/squat.md', ...new Set(items.map((c) => c.source))] : [],
     };
   };
   const muscle = { status: 'unvalidated', count: 0, pass: 0, fail: 0, qualitativeCount: 0, qualitativePass: 0, qualitativeFail: 0, links: [] };
@@ -259,7 +259,7 @@ const byId = Object.fromEntries(CATALOG.map((entry) => {
     muscle.qualitativePass = qualitative.filter((t) => t.pass).length;
     muscle.qualitativeFail = qualitative.filter((t) => !t.pass).length;
     muscle.note = '僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證';
-    muscle.links = qualitative.length ? ['docs/validation/squat.md', 'docs/references.md'] : [];
+    muscle.links = qualitative.length ? ['docs/research/results/squat.md', 'docs/research/references.md'] : [];
   }
   return [entry.id, {
     ...(calibrationCaveats[entry.id] ? { calibrationCaveat: calibrationCaveats[entry.id] } : {}),

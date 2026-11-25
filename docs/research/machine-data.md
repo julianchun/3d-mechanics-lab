@@ -1,6 +1,6 @@
-# 器械規格與人體關節力矩－角度參考資料
+# 器械數值與幾何假設
 
-本文件彙整商業經典器械與生物力學文獻之實測數據，作為後續校正 [`src/biomech.js`](../src/biomech.js) 器械幾何、軌道角度、配重比例、凸輪阻力曲線與滑輪位置之依據。
+本文件列出目前 [`src/biomech.js`](../../src/biomech.js) 使用的器械幾何、軌道角、配重比例、凸輪阻力曲線與滑輪位置，並標明來源或估計。文獻與原廠資料索引見[參考資料](references.md#器材與阻力曲線)。
 
 目前 `MACHINES` 中的椅墊、握把、軌道與滑輪幾何，以及槓高、單槓高度和腳長等場景常數，不隨輸入身高縮放。身材離預設 175 cm 越遠，固定器材與手腳可及範圍越容易衝突。160 cm／60 kg 女性以清單預設參數掃描 63 項、每項 11 點時，蝴蝶機、反向蝴蝶機與站姿提踵機姿勢無法成立；190 cm／90 kg 男性同樣掃描則無失敗。這是目前器材幾何的適用範圍限制。
 
@@ -20,7 +20,7 @@
 | 椅背與座椅夾角 | 常見可調範圍：靠背與水平約 25°–45°（即離垂直約 45°–65°）（**無出處的假設**） | **無出處的假設**（未查單一原廠規格書）；目前模型 `seat` 參數為離垂直 35°–65°（預設 50°） |
 | 腳位與肌電／關節變化（Escamilla 2001 與 Da Silva 2008 分別支持） | • **寬站距＋高腳位（WS-LPH）**：膕繩肌 EMG 高於窄站距＋高腳位（NS-LPH）；LPH 與 LPL 之間膝關節受力無顯著差異（Escamilla 2001，**未量臀大肌**）<br>• **高腳位（LPH）vs 低腳位（LPL）**：高腳位之**臀大肌** EMG 顯著高於低腳位；低腳位於高負荷（80% 1RM）下**股四頭肌（股直肌、股外側肌）**高於高腳位（Da Silva 2008） | Escamilla et al. (2001, n=10 男性, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 只支持「寬站距＋高腳位 → 膕繩肌較多」；臀大肌與低腳位股四頭肌差異由 Da Silva et al. (2008, n=14 女性, [PubMed 18545207](https://pubmed.ncbi.nlm.nih.gov/18545207/)) 支持 |
 
-### 1.2 與現行模型差異（供後續校正參考）
+### 1.2 目前模型
 - 現行 `src/biomech.js` 採 45° 軌道且忽略導軌摩擦（僅算 $\sin 45^\circ$），準靜態下屬合理一階近似；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu$ 數值屬無出處的假設，需以實機測力校正）。
 
 ---
@@ -31,13 +31,13 @@
 
 | 類型／代表機型 | 軌道角度 | 空槓起始阻力（Starting Resistance） | 配重系統 | 來源 |
 |---|---|---|---|---|
-| **傾斜軌道商用經典**：Hammer Strength Smith Machine（Life Fitness） | **7° 傾斜**（模擬自由重量推／蹲自然弧線） | **30 lb（13.6 kg）** | 無配重或結構平衡標稱起始 30 lb | Life Fitness / Hammer Strength 官方規格頁面（[lifefitness.com](https://www.lifefitness.com)） |
+| **傾斜軌道商用經典**：Hammer Strength Smith Machine（Life Fitness） | **7° 傾斜**（模擬自由重量推／蹲自然弧線） | **30 lb（13.6 kg）** | 無配重或結構平衡標稱起始 30 lb | [Hammer Strength 官方規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine) |
 | **有配重平衡（Counterbalanced）商用款**（如部分 Life Fitness Signature / Cybex / Technogym 款） | 常見 **0°（垂直）或 7°–12°** | **約 15–25 lb（6.8–11.3 kg）**（部分全平衡款標稱可低至 ~15 lb） | 內部滑輪配重塊抵銷部分槓重與滑套重 | 商業健身器材常見規格（各型號差異大，使用特定型號時應查該型號手冊） |
 | **無配重垂直軌道款**（力量訓練／健力房常見） | **0°（完全垂直）** | **約 35–45 lb（16–20.4 kg）**（含線性軸承滑座重量） | 無配重 | 商業器材常見規格 |
 
 ### 2.2 力學意義與模型對照
 - 傾斜 7° 的史密斯機在**面向前或背向前**使用時，斜軌方向相反（往後上方 vs 往前上方），會改變身體站位與滑軌法向反作用力方向。
-- 現行 `src/biomech.js` 的 `smithPose` 採用 **0° 垂直滑軌**（`railZ = 0`，`n = [0, 0, 1]`），後續可考慮加入軌道傾角參數（0° vs ±7°）。
+- 現行 `src/biomech.js` 的 `smithPose` 預設 **0° 垂直滑軌**，亦可選 ±7°；滑軌承受法向反作用力。示範負重與軌道位置仍是假設。
 
 ---
 
@@ -47,16 +47,16 @@
 
 | 動作／設備類型 | 常見滑輪比（配重：實感阻力） | 實際感受到的力 | 典型機架／滑輪高度 | 來源 |
 |---|---|---|---|---|
-| **專用滑輪下拉機（Lat Pulldown）**<br>Hammer Strength HD Elite Dual Pulldown/Row (`HDU-DPR`)<br>Hammer Strength Select (`HS-PD`)<br>Life Fitness Optima / Axiom Combo<br>Technogym Selection Lat Machine | **1:1**（重負荷直接配重） | 選 100 kg ≈ 手感 100 kg（扣滑輪摩擦） | 機身總高約 **216–244 cm**（85"–96"）：<br>• Hammer Strength HDU-DPR：96"（244 cm）<br>• Hammer Strength HS-PD：89"（226 cm）<br>• Life Fitness Optima：87"（221 cm）<br>• Life Fitness Axiom：85"（216 cm）<br>• Technogym Selection：90"（228 cm） | Life Fitness / Hammer Strength 與 Technogym 商用規格表 |
-| **專用坐姿低拉划船機（Seated Low Row）**<br>Life Fitness PWR Play / Optima / Axiom / Technogym | **1:1** | 選 100 kg ≈ 手感 100 kg | 低滑輪出繩口高度通常與坐墊同高或略低（約 **35–45 cm**，視腳踏板與坐墊設計而定；未查到單一原廠出繩中心精確標註，為典型設計估算） | Life Fitness PWR Play 規格說明（1:1 比例） |
-| **多功能可調滑輪柱／大飛鳥（Functional Trainer / Cable Crossover）**（常用於三頭下壓） | **2:1**（主流，含動滑輪，行程加倍、慣性較低）；少數四線系統為 **4:1** | 2:1 時選 50 kg ≈ 手感 25 kg | Life Fitness 可調滑輪柱滑車高度範圍：**7"–76"（17.8–193.0 cm）**；機架頂部高約 210–240 cm | Life Fitness PWR Play 規格表 |
+| **專用滑輪下拉機（Lat Pulldown）**<br>Hammer Strength HD Elite Dual Pulldown/Row (`HDU-DPR`)<br>Technogym Selection Lat Machine | **1:1**（HDU-DPR 的配重與手感比） | HDU-DPR 選 100 kg 約為手感 100 kg（忽略摩擦） | HDU-DPR：96"（244 cm）；Technogym Selection：90"（228 cm） | [Hammer Strength HDU-DPR 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row)；[Technogym Selection 官方規格](https://www.technogym.com/de-DE/product/selection-lat-machine-med_C91200-ANVK.html) |
+| **專用坐姿低拉划船機（Seated Low Row）**<br>Life Fitness PWR Play 等 | **1:1 為模型預設** | 選 100 kg 約為手感 100 kg（忽略摩擦） | 低滑輪出繩口約 **35–45 cm**，與坐墊同高或略低，為未查證的典型設計估算 | 本模型的機型與尺寸估計；單一原廠出繩中心尺寸未查證 |
+| **多功能可調滑輪柱／大飛鳥（Functional Trainer / Cable Crossover）**（常用於三頭下壓） | **2:1**（所引機型） | 2:1 時選 50 kg 約為手感 25 kg | Life Fitness 滑車高度 **7"–76"（17.8–193.0 cm）**；模型機架頂部約 210–240 cm 為估計 | [Life Fitness Adjustable Cable Crossover 官方規格](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)；[PWR Play 官方手冊](https://support.lifefitness.com/hc/en-us/articles/30762202977431-Life-Fitness-PWR-Play-Assembly-Manual) |
 
 ### 3.2 與現行模型對照
 - 現行 `src/biomech.js`：
   - `pulldown`：滑輪高度 `y = 2.35 m`（位於商用 216–244 cm 範圍內，合理）。
   - `cablerow`：滑輪高度 `y = 0.42 m`、距骨盆中心 `z = 1.0 m`（合理，對應坐墊高 0.47 m）。
   - `pushdown`：滑輪高度 `y = 2.10 m`（對應可調滑輪高檔或高拉柱，合理）。
-- 注意：現行模型以 `BAR_RATIO` 直接代表「手感受到的鋼索張力（以體重倍數表示）」，不區分 1:1 與 2:1 配重片標示；未來介面若顯示「配重片重量」，需區分滑輪比。
+- 注意：現行模型以配重片公斤數除以選定滑輪比求手感鋼索張力；下拉、划船、三頭下壓及滑輪夾胸均可選滑輪比。機架尺寸仍是教學示意值。
 
 ---
 
@@ -92,7 +92,7 @@
 - **來源**：
   1. Knapik JJ et al. (1983). [PubMed 6856681](https://pubmed.ncbi.nlm.nih.gov/6856681/)
   2. Kulig K et al. (1984). [PubMed 6376139](https://pubmed.ncbi.nlm.nih.gov/6376139/)
-  3. Onishi H, Yagi R, Oyama M, Akasaka K, Ihashi K, Hoshimiya N. (2002). *EMG-angle relationship of the hamstring muscles during maximum knee flexion.* J Electromyogr Kinesiol, 12(5):399–406. [PubMed 12223173](https://pubmed.ncbi.nlm.nih.gov/12223173/) / [DOI](https://doi.org/10.1016/s1050-6411(02)00033-0)
+  3. Onishi H, Yagi R, Oyama M, Akasaka K, Ihashi K, Hoshimiya N. (2002). *EMG-angle relationship of the hamstring muscles during maximum knee flexion.* J Electromyogr Kinesiol, 12(5):399–406. [PubMed 12223173](https://pubmed.ncbi.nlm.nih.gov/12223173/) / [DOI](https://doi.org/10.1016/s1050-6411%2802%2900033-0)
   4. Beyer EB, Lunden JB, Russell Giveans M. (2019). *Medial and lateral hamstrings response and force production at varying degrees of knee flexion and tibial rotation in healthy individuals.* Int J Sports Phys Ther, 14(3):376–383. [PubMed 31681497](https://pubmed.ncbi.nlm.nih.gov/31681497/) / [DOI](https://doi.org/10.26603/ijspt20190376)
 
 #### 人體膝屈（Hamstrings）角度 → 相對力矩趨勢表
@@ -167,7 +167,7 @@
 
 ---
 
-## 7. E 階段新增器械與羅馬椅（皆為未查證幾何假設）
+## 7. 其他器械與羅馬椅（幾何假設未查證）
 
 下表尺寸、配重與凸輪值只供教學示意，未取得單一商用機型的原廠尺寸、握把力曲線或實測校正；程式數值集中於 `MACHINES`。所列研究僅支持動作與肌肉作用，不視為器械尺寸的出處。
 
@@ -182,7 +182,7 @@
 
 ---
 
-## 8. F 階段啞鈴器材規格與預設負重假設（未查證單一商用規格）
+## 8. 啞鈴器材與預設負重（未查證單一商用規格）
 
 啞鈴沒有剛體橫槓連接雙手，模型採共用負重函式 `dumbbellLoads`：每隻手各自承受自己那顆啞鈴的垂直重力（`barAxial = false`，不套用 `minimizeAxialMoment`），高腳杯深蹲則由雙手平分單顆啞鈴重量。以下尺寸與預設重量集中於 `MACHINES.dumbbell`，皆屬教學示意假設：
 

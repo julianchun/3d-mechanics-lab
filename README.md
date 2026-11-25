@@ -21,11 +21,7 @@ npm test         # 驗證所有動作＋回歸比對
 
 ## 數據蒐集、模擬與驗證流程
 
-驗證前先核對研究原文的方法、表格與量測定義，再把可用的定點數值、受試者資料及條件推導記入 [`validation/`](validation/)。[de Leva 1996](https://doi.org/10.1016/0021-9290(95)00178-6) 提供男女節段質量與質心；[美國陸軍 ANSUR II](https://ph.health.mil/topics/workplacehealth/ergo/Pages/Anthropometric-Database.aspx) 提供身材比例的逐人資料。[身體參數與標記換算](docs/validation/body-anthropometry.md) 說明哪些長度只是外觀標記的代理。
-
-Demers 2018 是姿勢參數的**校準組**；Goršič、Gullett、Hutchison、Larsen 四篇是**測試組**，不拿其結果反調身體參數。[群體比對條件與準則](docs/validation/population-protocol.md) 在模擬前獨立提交：每篇以固定種子抽 200 人，依研究的人數、男女比例、身高與體重分布抽樣，骨頭比例按性別從 ANSUR II 整列重抽以保留可觀測的相關性，並依各人的體重換算負重。`npm run test:validation` 重算[舊固定身體結果](validation/results.json)；`npm run test:validation-pop` 重算[群體結果](validation/population-results.json)，兩種判定並列。新準則為模型群體平均與研究平均的差不超過研究個體標準差；這是描述性檢查，不是精度證明。
-
-模型仍是準靜態、左右對稱，單一剛體軀幹沒有獨立骨盆角。各研究的訓練史、測量標記、負重或運動速度未完全對齊；ANSUR II 軍人樣本也不代表各研究受試者。[既有深蹲驗證說明](docs/validation/squat-calibration-result.md) 記錄固定身體比對的失敗項與疑點。
+模型使用人體測量、動作研究及器械資料估計姿勢、關節力矩與肌肉分配，並用軟體測試和深蹲研究數值檢查結果。資料來源、目前方法、比對結果與已知限制集中在[數據、模擬與驗證](docs/research/README.md)；可重算的條件與輸出留在 [`validation/`](validation/)。
 
 ## 結構
 

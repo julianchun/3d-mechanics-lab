@@ -1,7 +1,7 @@
 """從 ANSUR II 公開 CSV 擷取同一受試者的節段代理比例。
 
 用法：python3 tools/prepare-ansur.py male.csv female.csv
-欄位為外觀標記，不是模型關節中心；轉換與校正見 docs/validation/body-anthropometry.md。
+欄位為外觀標記，不是模型關節中心；轉換與校正見 docs/research/methods.md。
 """
 import csv
 import hashlib

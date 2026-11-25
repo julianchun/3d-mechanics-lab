@@ -1,58 +1,55 @@
-# 重訓動作生物力學與肌電圖文獻彙整
+# 參考資料
 
-本文件整理 [`src/catalog.js`](../src/catalog.js) 動作的同儕審查文獻（逆動力學／關節力矩、肌電圖 EMG、肌肥大研究與動作技術研究）、可與本模型比較的量化數據，以及可用於自動驗證（[`tests/trends.mjs`](../tests/trends.mjs)）的方向性趨勢。
+文獻依資料用途分類；動作研究另依動作模式排列。原文表格、同儕審查資料與原廠規格支持的範圍各不相同；未有同條件來源的模型常數，在[器械資料](machine-data.md)與[肌肉參數](muscle-params.md)標為估計或未查證。模型與研究的實際比對見[深蹲結果](results/squat.md)。
 
-> **驗證原則**：每筆引用均附已查證之 PubMed（PMID）或 DOI／原始出處連結；針對目前缺乏直接同儕審查動態研究之動作，明確標記「未找到」並說明替代參考方向。
+## 人體測量與節段參數
 
----
+- [de Leva（1996），男女節段質量與質心，表 4](https://doi.org/10.1016/0021-9290%2895%2900178-6)：用於身體節段重量與質心；表 1 的平均長度不作個體標準差。
+- [美國陸軍 ANSUR II 官方下載頁](https://ph.health.mil/topics/workplacehealth/ergo/Pages/Anthropometric-Database.aspx)與[陸軍發布說明](https://www.army.mil/article/188601/for_good_measure_natick_releases_raw_data_from_army_wide_anthropometric_survey)：男女匿名逐人測量 CSV，公開 4,082 男、1,986 女；用外觀標記作身材比例代理。[本專案實際採用的 CSV 鏡像](https://github.com/jocimarcan/antopometric-database)與官方檔**尚未以 SHA-256 比對**。
+- [美國法典第 17 篇第 105 節](https://uscode.house.gov/us/usc/t17/s105/)：美國政府職務著作的著作權規則；不等於對第三方鏡像內容的逐位元驗證。
 
-## 目錄與覆蓋總覽
+## 肌肉參數
 
-| 分類 | 清單 ID | 動作名稱 | 文獻狀態 |
-|---|---|---|---|
-| 蹲 | `squat-high` | 深蹲（高槓） | 完整（逆動力學、EMG、肌肥大） |
-| 蹲 | `squat-low` | 深蹲（低槓） | 完整（綜述、EMG、1RM 力學） |
-| 蹲 | `front-squat` | 前蹲 | 完整（逆動力學、EMG） |
-| 蹲 | `smith-squat` | 史密斯深蹲 | 完整（EMG） |
-| 蹲 | `leg-press` | 45° 腿推機 | 完整（逆動力學、EMG、腳位） |
-| 髖鉸鏈 | `deadlift` | 硬舉（傳統） | 完整（3D 逆動力學、EMG 系統綜述） |
-| 髖鉸鏈 | `deficit-dl` | 赤字硬舉 | 僅研討會摘要（期刊全文未找到） |
-| 髖鉸鏈 | `block-pull` | 墊高硬舉 | 僅研討會摘要（期刊全文未找到） |
-| 髖鉸鏈 | `sumo` | 相撲硬舉 | 完整（3D 逆動力學、EMG、腰椎負荷） |
-| 髖鉸鏈 | `rdl` | 羅馬尼亞硬舉 | 完整（EMG、系統綜述） |
-| 髖鉸鏈 | `good-morning` | 早安體前屈 | 完整（運動學、EMG） |
-| 髖鉸鏈 | `hip-thrust` | 臀推 | 完整（EMG、系統綜述、腳位變化） |
-| 髖鉸鏈 | `glute-bridge` | 槓鈴臀橋 | 完整（與臀推直接比較 EMG） |
-| 水平推 | `bench` | 臥推（平板） | 完整（EMG、握距與角度比較） |
-| 水平推 | `incline-bench` | 上斜臥推 | 完整（多角度 EMG） |
-| 水平推 | `cg-bench` | 窄握臥推 | 完整（握距 EMG） |
-| 水平推 | `floor-press` | 地板臥推 | 動態 EMG／逆動力學未找到（僅等長測試研究） |
-| 水平推 | `chest-press` | 坐姿胸推機 | 部分（多以史密斯機或機械臥推代替比較） |
-| 水平推 | `pec-deck` | 蝴蝶機 | 完整（與臥推直接比較 EMG、預先疲勞） |
-| 水平推 | `cable-fly-high` | 滑輪夾胸（高位） | 間接（斜向水平內收 EMG、肩力臂、滑輪比較） |
-| 水平推 | `cable-fly-mid` | 滑輪夾胸（中位） | 間接（斜向水平內收 EMG、滑輪比較） |
-| 水平推 | `cable-fly-low` | 滑輪夾胸（低位） | 間接（斜向水平內收 EMG、肩力臂、傾角比較） |
-| 垂直推 | `ohp` | 站姿肩推 | 完整（站姿 vs 坐姿、槓鈴 vs 啞鈴 EMG） |
-| 水平拉 | `row` | 槓鈴划船（正握） | 完整（腰椎負荷與 EMG） |
-| 水平拉 | `row-sup` | 槓鈴划船（反握） | 直接正反握槓鈴划船全文未找到（參考拉類握法研究） |
-| 水平拉 | `cable-row` | 坐姿滑輪划船 | 完整（EMG、肩胛後收與握距） |
-| 水平拉 | `cable-row-wide` | 坐姿滑輪划船（寬握） | 完整（寬握 vs 窄握肩外展角 EMG） |
-| 垂直拉 | `uprow` | 直立划船 | 完整（握距 EMG） |
-| 垂直拉 | `pulldown` | 滑輪下拉 | 完整（握法、握距 EMG） |
-| 垂直拉 | `pulldown-sup` | 反握滑輪下拉 | 完整（與正握直接比較 EMG） |
-| 單關節 | `leg-ext` | 腿伸機 | 完整（逆動力學、EMG、凸輪曲線） |
-| 單關節 | `leg-curl` | 坐姿腿彎舉 | 完整（MRI 肌肥大、EMG） |
-| 單關節 | `lying-leg-curl` | 俯臥腿彎舉 | 完整（與坐姿直接比較肌肥大、EMG） |
-| 單關節 | `pushdown` | 滑輪三頭下壓 | 完整（長頭肌肥大比較、三頭疲勞 EMG） |
-| 單關節 | `curl` | 槓鈴彎舉 | 完整（EMG、槓種與姿勢比較） |
-| 單關節 | `reverse-curl` | 反手彎舉 | 完整（旋前 vs 旋後肌肉協調 EMG） |
-| 單關節 | `shrug` | 槓鈴聳肩 | 完整（EMG、肩胛上旋變化式） |
+- [Rajagopal 等（2016）](https://pubmed.ncbi.nlm.nih.gov/27392337/)及[固定版 OpenSim 下肢模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/Rajagopal2016.osim)：下肢肌束最大等長力、纖維長與肌腱參數的主要來源。
+- [Saul 等（2015）MoBL-ARMS](https://pmc.ncbi.nlm.nih.gov/articles/PMC4282829/)及[固定版上肢模型檔](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)：上肢肌束與路徑參數來源；[Holzbaur 等（2005）](https://pubmed.ncbi.nlm.nih.gov/16078622/)是模型前身，並非本專案逐項取值版本。
+- [ISB 肩關節座標建議](https://media.isbweb.org/images/documents/standards/isb_jcs_part_ii.pdf)：肩、肘、腕與手的座標定義；本模型只借用上舉平面等幾何意義，沒有直接使用其 Euler 角。
+- [Christophy 等（2012）](https://doi.org/10.1007/s10237-011-0290-6)：腰背與腹部表列肌束及 L5/S1 力臂；對應 OpenSim 模型檔版本未查證。
+- [Seth 等（2016）](https://pubmed.ncbi.nlm.nih.gov/26734761/)、[Seth 等（2019）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6856649/)及[固定版 TSM 肩胛模型](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/b47b06cd23c872e69f92687270e47d4c560bb14b/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim)：肩胛肌束路徑；等效軸轉換未與 OpenSim 原模型逐點驗證。
+- [Ackland 等（2008）](https://pubmed.ncbi.nlm.nih.gov/18691376/)、[Kuechle 等（1997）](https://pubmed.ncbi.nlm.nih.gov/9356931/)、[Hik 與 Ackland（2019）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6284439/)：肩部力臂方向、量級及角度變化的對照。
+- [Dey 等（2023）](https://pubmed.ncbi.nlm.nih.gov/36796713/)、[Landin 等（2008）](https://pubmed.ncbi.nlm.nih.gov/17196396/)、[Itoi 等（2008）](https://doi.org/10.1142/S0218957708001973)：肱二頭肌的肩部作用與力臂；模型的角度函數仍為估計。
+- [Danneskiold-Samsøe 等（2009）](https://doi.org/10.1111/j.1748-1716.2009.02022.x)、[Kienbacher 等（2014）](https://doi.org/10.2340/16501977-1266)、[Graves 等（1990）](https://pubmed.ncbi.nlm.nih.gov/2141187/)、[Garner 與 Shim（2008）](https://web.ecs.baylor.edu/faculty/garner/Research/GarnerShimShrugStrengthClinBiomech2007.pdf)：最大自主等長力矩或肩帶上提量測，供功能群有效能力量級交叉檢查，並非個人肌力校準。
+- [Duaibes 等（2010）](https://journals.najah.edu/media/journals/full_texts/isokinetic-dynamometry-measuring-bilateral-shoulder-peak-torque-comparison-and-prediction.pdf)：等速肩水平外展峰值，供後三角功能群能力的量級對照；與準靜態模型不是同一量測。
+- [Thelen2003Muscle 公開實作](https://github.com/opensim-org/opensim-core/blob/main/OpenSim/Actuators/Thelen2003Muscle.cpp)：主動力長曲線的形式參考；本模型沒有完整肌腱動態。
 
----
+## 器材與阻力曲線
 
-## 一、蹲（Squat）
+- [Escamilla 等（1998）](https://pubmed.ncbi.nlm.nih.gov/9565938/)及[Escamilla 等（2001）](https://pubmed.ncbi.nlm.nih.gov/11528346/)：45° 腿推機及其力學條件；不提供所有商用機型的空滑台重量或摩擦係數。
+- [Knapik 等（1983）](https://pubmed.ncbi.nlm.nih.gov/6856681/)、[Kulig 等（1984）](https://pubmed.ncbi.nlm.nih.gov/6376139/)、[Folland 與 Morris（2008）](https://pubmed.ncbi.nlm.nih.gov/17885926/)：人體膝關節角度與力矩、商用腿伸機凸輪阻力曲線。
+- [Marginson 與 Eston（2001）](https://pubmed.ncbi.nlm.nih.gov/11695509/)：男童與成年男性的膝伸角度—力矩關係；[da Costa-Machado 等（2026a）](https://doi.org/10.3390/app16062633)及[同團隊（2026b）](https://doi.org/10.1080/15397734.2026.2669990)：可變凸輪裝置與力矩曲線的機械測試，不能當作所有商用機台的阻力曲線。
+- [Onishi 等（2002）](https://pubmed.ncbi.nlm.nih.gov/12223173/)及[Beyer 等（2019）](https://pubmed.ncbi.nlm.nih.gov/31681497/)：膝屈肌群角度與肌電／出力；[Cabell 與 Zebas（1999）](https://doi.org/10.1519/00124278-199902000-00004)量測一台二頭彎舉機阻力曲線。
+- [Hammer Strength Smith Machine 官方規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine)：此機型 7° 軌道及 30 lb 起始阻力；[HDU-DPR 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row)：244 cm 高、配重 1:1。
+- [Life Fitness Adjustable Cable Crossover 官方規格](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)及[PWR Play 官方手冊](https://support.lifefitness.com/hc/en-us/articles/30762202977431-Life-Fitness-PWR-Play-Assembly-Manual)：可調滑輪 2:1 與滑車高度範圍；[Technogym Selection Lat Machine 官方規格](https://www.technogym.com/de-DE/product/selection-lat-machine-med_C91200-ANVK.html)：機身高度 228 cm。其他機型與尚未查證的示範尺寸逐項列於[器械資料](machine-data.md)。
 
-### 1. `squat-high` 深蹲（高槓）
+## 驗證研究
+
+- [Goršič 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)：前／背蹲上升期三維運動學與逆動力學，18 人；表 2 的股骨角定點與力矩用於測試。
+- [Gullett 等（2009）](https://doi.org/10.1519/JSC.0b013e31818546bb)：前／背蹲動態膝力矩與肌電，15 人；峰值包含動態條件。
+- [Hutchison 與 Caterisano（2019）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/)：10 名男性的鋼槓背蹲動態峰值；平均 1RM 公斤數未報，僅探索展示。
+- [Larsen 等（2021）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)：18 人高／低槓、窄／寬站 3RM 的軀幹與關節角；只有軀幹角與目前模型直接比較。
+
+## 校準研究
+
+- [Demers 等（2018），圖 1 與表 1](https://intjexersci.com/files/ijes/vol11/iss1/9.pdf)：32 人赤足、背持輕木桿深蹲的踝角；六個圖讀點用於小腿策略校準，非上列數值測試組。
+- [Lu 等（2022）](https://doi.org/10.3390/bioengineering9070301)：鞋跟墊高影響踝角與男性膝力矩方向；沒有量得本模型的 `HEEL_SHANK_SHARE=0.5`。
+- [Zawadka 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/)：自然深蹲各關節峰值的時間先後；研究時間比例不等於模型行程 `e`。
+
+## 各動作生物力學與 EMG
+
+以下沿動作模式列研究來源及文獻結果。肌電、肌肥大、淨關節力矩分屬不同量，不能互作相同數值的驗證。
+
+### 蹲（Squat）
+
+#### `squat-high` 深蹲（高槓）
 
 - **可靠研究來源**
   1. Escamilla RF, Fleisig GS, Zheng N, Barrentine SW, Wilk KE, Andrews JR. (1998). *Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises.* Med Sci Sports Exerc, 30(4):556–569. [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)
@@ -76,9 +73,9 @@
 
 **鞋跟墊高的獨立資料**：[Lu 等，2022](https://doi.org/10.3390/bioengineering9070301)比較平底、1.5 cm 與 3 cm 鞋墊的槓鈴深蹲，報告墊高時踝背屈角降低，男性膝關節力矩與做功增加。該研究沒有給本模型「足板角一半分給小腿前傾」的通用比例；此比例仍為示範姿勢假設。鞋跟高度指腳跟相對前腳掌的高度差，不等同整體鞋底厚度。
 
-**T18 姿勢校準組（不屬於數值測試組）**：[Demers 等，2018，圖 1](https://intjexersci.com/files/ijes/vol11/iss1/9.pdf)量無負重背蹲於不同股骨角與站距的踝背屈；本模型只以圖讀的 20°／40°／60° 六點擬合小腿角策略，圖讀值及跨負重限制見[校準計畫](validation/squat-calibration-plan.md)。[Zawadka 等，2020，表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/)報無負重自然深蹲的踝背屈峰值先於膝／髖最深角；表內時間百分比不能當作模型股骨角比例使用。
+**姿勢校準組（不屬於數值測試組）**：[Demers 等，2018，圖 1](https://intjexersci.com/files/ijes/vol11/iss1/9.pdf)量無負重背蹲於不同股骨角與站距的踝背屈；本模型只以圖讀的 20°／40°／60° 六點擬合小腿角策略，圖讀值及跨負重限制見[目前方法](methods.md#校準組測試組與判定)。[Zawadka 等，2020，表 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/)報無負重自然深蹲的踝背屈峰值先於膝／髖最深角；表內時間百分比不能當作模型股骨角比例使用。
 
-### 2. `squat-low` 深蹲（低槓）
+#### `squat-low` 深蹲（低槓）
 
 - **可靠研究來源**
   1. Glassbrook DJ, Helms ER, Brown SR, Storey AG. (2017). *A review of the biomechanical differences between the high-bar and low-bar back-squat.* J Strength Cond Res, 31(9):2618–2634. [PubMed 28570490](https://pubmed.ncbi.nlm.nih.gov/28570490/) / [DOI](https://doi.org/10.1519/JSC.0000000000002007)
@@ -93,7 +90,7 @@
   - 低槓深蹲髖伸力矩與腰椎伸展力矩（豎脊肌）> 高槓深蹲（Glassbrook 2017）。
   - 高槓深蹲膝伸力矩／股四頭肌活化 > 低槓深蹲（Glassbrook 2017）。
 
-### 3. `front-squat` 前蹲
+#### `front-squat` 前蹲
 
 - **可靠研究來源**
   1. Gullett JC, Tillman MD, Gutierrez GM, Chow JW. (2009). *A biomechanical comparison of back and front squats in healthy trained individuals.* J Strength Cond Res, 23(1):284–292. [PubMed 19002072](https://pubmed.ncbi.nlm.nih.gov/19002072/) / [DOI](https://doi.org/10.1519/JSC.0b013e31818546bb)
@@ -111,7 +108,7 @@
   - 前蹲最低點軀幹前傾角 < 高槓背蹲（Yavuz 2015, n=12）。
   - 同等絕對槓重下，前蹲髖伸力矩 < 高槓背蹲（Krzyszkowski & Kipp 2020, n=11，60% 與 80% FS-1RM）。
 
-### 4. `smith-squat` 史密斯深蹲
+#### `smith-squat` 史密斯深蹲
 
 - **可靠研究來源**
   1. Schwanbeck S, Chilibeck PD, Binsted G. (2009). *A comparison of free weight squat to Smith machine squat using electromyography.* J Strength Cond Res, 23(9):2588–2591. [PubMed 19855308](https://pubmed.ncbi.nlm.nih.gov/19855308/)
@@ -124,7 +121,7 @@
   - 自由重量深蹲（高槓）膕繩肌活動 > 史密斯深蹲（Schwanbeck 2009, +26%）。
   - 自由重量深蹲（高槓）股四頭肌活動 > 史密斯深蹲（Schwanbeck 2009, 股內側肌 +49%）。
 
-### 5. `leg-press` 45° 腿推機
+#### `leg-press` 45° 腿推機
 
 - **可靠研究來源**
   1. Escamilla RF, Fleisig GS, Zheng N, Barrentine SW, Wilk KE, Andrews JR. (1998). *Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises.* Med Sci Sports Exerc, 30(4):556–569. [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)
@@ -141,9 +138,9 @@
 
 ---
 
-## 二、髖鉸鏈（Hinge）
+### 髖鉸鏈（Hinge）
 
-### 6. `deadlift` 硬舉（傳統）
+#### `deadlift` 硬舉（傳統）
 
 - **可靠研究來源**
   1. Cholewicki J, McGill SM, Norman RW. (1991). *Lumbar spine loads during the lifting of extremely heavy weights.* Med Sci Sports Exerc, 23(10):1179–1186. [PubMed 1758295](https://pubmed.ncbi.nlm.nih.gov/1758295/)
@@ -158,7 +155,7 @@
   - 傳統硬舉腰椎伸展力矩 > 相撲硬舉（Cholewicki 1991, ~+10%；Escamilla 2000）。
   - 槓離身體越遠（`barDist` 大）→ 腰椎伸展力矩與髖伸力矩皆上升（基礎槓桿力學，Cholewicki 1991）。
 
-### 7. `deficit-dl` 赤字硬舉 & 8. `block-pull` 墊高硬舉
+#### `deficit-dl` 赤字硬舉／`block-pull` 墊高硬舉
 
 - **可靠研究來源**
   - **同儕審查期刊全文：未找到**（PubMed 檢索未查得直接比較赤字硬舉、傳統硬舉與墊高硬舉之完整期刊逆動力學或 EMG 原著論文）。
@@ -169,7 +166,7 @@
 - **可檢驗趨勢（參考研討會初步證據，待期刊全文驗證）**
   - 赤字硬舉（`start = -5`）股四頭肌、臀大肌、膕繩肌峰值活化 > 墊高硬舉（`start = +10`）（Rogacion 2024 摘要）。
 
-### 9. `sumo` 相撲硬舉
+#### `sumo` 相撲硬舉
 
 - **可靠研究來源**
   1. Escamilla RF et al. (2000). *A three-dimensional biomechanical analysis of sumo and conventional style deadlifts.* Med Sci Sports Exerc, 32(7):1265–1275. [PubMed 10912892](https://pubmed.ncbi.nlm.nih.gov/10912892/) / [DOI](https://doi.org/10.1097/00005768-200007000-00013)
@@ -183,7 +180,7 @@
   - 相撲硬舉股四頭肌（`vasti`）活化 > 傳統硬舉（Escamilla 2002）。
   - 相撲硬舉腰椎伸展力矩（`trunkExt`）< 傳統硬舉（Cholewicki 1991；Escamilla 2000）。
 
-### 10. `rdl` 羅馬尼亞硬舉
+#### `rdl` 羅馬尼亞硬舉
 
 - **可靠研究來源**
   1. McAllister MJ, Hammond KG, Schilling BK, Ferreria LC, Reed JP, Weiss LW. (2014). *Muscle activation during various hamstring exercises.* J Strength Cond Res, 28(6):1573–1580. [PubMed 24149748](https://pubmed.ncbi.nlm.nih.gov/24149748/) / [DOI](https://doi.org/10.1519/JSC.0000000000000302)
@@ -194,7 +191,7 @@
 - **可檢驗趨勢**
   - RDL 膕繩肌活化 > 股四頭肌（膝伸力矩極小），且膕繩肌處於拉長位置（Martín-Fuentes 2020；McAllister 2014）。
 
-### 11. `good-morning` 早安體前屈
+#### `good-morning` 早安體前屈
 
 - **可靠研究來源**
   1. Vigotsky AD, Harper EN, Ryan DR, Contreras B. (2015). *Effects of load on good morning kinematics and EMG activity.* PeerJ, 3:e708. [PubMed 25653899](https://pubmed.ncbi.nlm.nih.gov/25653899/) / [DOI](https://doi.org/10.7717/peerj.708)
@@ -207,7 +204,7 @@
   - 早安體前屈膝彎曲越小（`kneeBend = 5°` vs `35°`）→ 膕繩肌估計長度越長（**幾何推論**——雙關節膕繩肌跨膝後側；註：Vigotsky 2015 係操弄負重而非直接操弄膝角，僅觀察到負重上升時膝屈曲增加伴隨估計長度縮短）。
   - 早安體前屈高槓（`barPos: 'high'`）腰椎伸展力矩 > 低槓（`barPos: 'low'`）（幾何推論）。
 
-### 12. `hip-thrust` 臀推
+#### `hip-thrust` 臀推
 
 - **可靠研究來源**
   1. Contreras B, Vigotsky AD, Schoenfeld BJ, Beardsley C, Cronin J. (2015). *A comparison of gluteus maximus, biceps femoris, and vastus lateralis electromyographic activity in the back squat and barbell hip thrust exercises.* J Appl Biomech, 31(6):452–458. [PubMed 26214739](https://pubmed.ncbi.nlm.nih.gov/26214739/) / [DOI](https://doi.org/10.1123/jab.2014-0301)
@@ -225,7 +222,7 @@
   - 臀推臀大肌活動 > 高槓深蹲（Contreras 2015, n=13）。
   - 臀推腳放遠（`kneeTop = 70°`）膕繩肌活動 > 腳放近（`kneeTop = 120°`）（Collazo García 2020）。
 
-### 13. `glute-bridge` 槓鈴臀橋
+#### `glute-bridge` 槓鈴臀橋
 
 - **可靠研究來源**
   1. Kennedy D, Casebolt JB, Farren GL, Fiaud V, Bartlett M, Strong L. (2024). *Electromyographic differences of the gluteus maximus, gluteus medius, biceps femoris, and vastus lateralis between the barbell hip thrust and barbell glute bridge.* Sports Biomech, 23(12):2935–2949. [PubMed 35586943](https://pubmed.ncbi.nlm.nih.gov/35586943/) / [DOI](https://doi.org/10.1080/14763141.2022.2074875)
@@ -239,13 +236,13 @@
 
 ---
 
-## 三、水平推（Horizontal Push）
+### 水平推（Horizontal Push）
 
-### 14. `bench` 臥推（平板）
+#### `bench` 臥推（平板）
 
 - **可靠研究來源**
   1. Lehman GJ. (2005). *The influence of grip width and forearm pronation/supination on upper-body myoelectric activity during the flat bench press.* J Strength Cond Res, 19(3):587–591. [PubMed 16095407](https://pubmed.ncbi.nlm.nih.gov/16095407/) / [DOI](https://doi.org/10.1519/R-15024.1)
-  2. Saeterbakken AH, Mo DA, Scott S, Andersen V. (2017). *The effects of bench press variations in competitive athletes on muscle activity and performance.* J Hum Kinet, 57:61–71. [PubMed 28713459](https://pubmed.ncbi.nlm.nih.gov/28713459/) / [DOI](https://doi.org/10.1515/hukin-2017-0047)
+  2. Saeterbakken AH, Mo DA, Scott S, Andersen V. (2017). *The effects of bench press variations in competitive athletes on muscle activity and performance.* J Hum Kinet, 57:61–71. [PubMed 28713459](https://pubmed.ncbi.nlm.nih.gov/28713459/)
   3. Rodríguez-Ridao D, Antequera-Vique JA, Martín-Fuentes I, Muyor JM. (2020). *Effect of five bench inclinations on the electromyographic activity of the pectoralis major, anterior deltoid, and triceps brachii during the bench press exercise.* Int J Environ Res Public Health, 17(19):7339. [DOI](https://doi.org/10.3390/ijerph17197339)（PMCID: PMC7579505）
 - **可比較量化結果**
   - Rodríguez-Ridao et al. (2020, 60% 1RM)：**0° 平板臥推**在胸大肌中下束（胸骨部）產生最高 EMG，且整體胸大肌與前三角肌比例均衡。
@@ -253,7 +250,7 @@
 - **可檢驗趨勢**
   - 平板臥推（0°）中下胸（`pecs`）活化 > 上斜 30°（Rodríguez-Ridao 2020；Lauver 2016）。
 
-### 15. `incline-bench` 上斜臥推
+#### `incline-bench` 上斜臥推
 
 - **可靠研究來源**
   1. Lauver JD, Cayot TE, Scheuermann BW. (2016). *Influence of bench angle on upper extremity muscular activation during bench press exercise.* Eur J Sport Sci, 16(3):309–316. [PubMed 25799093](https://pubmed.ncbi.nlm.nih.gov/25799093/) / [DOI](https://doi.org/10.1080/17461391.2015.1022605)
@@ -269,11 +266,11 @@
   - 30° 上斜臥推上胸（`pecc`）活化 > 0° 平板臥推（Rodríguez-Ridao 2020；Lauver 2016）。
   - 30° 上斜臥推前三角肌（`adelt`）活化 > 0° 平板臥推（Rodríguez-Ridao 2020）。
 
-### 16. `cg-bench` 窄握臥推
+#### `cg-bench` 窄握臥推
 
 - **可靠研究來源**
   1. Lehman GJ. (2005). *The influence of grip width and forearm pronation/supination on upper-body myoelectric activity during the flat bench press.* J Strength Cond Res, 19(3):587–591. [PubMed 16095407](https://pubmed.ncbi.nlm.nih.gov/16095407/) / [DOI](https://doi.org/10.1519/R-15024.1)
-  2. Saeterbakken AH et al. (2017). *The effects of bench press variations in competitive athletes on muscle activity and performance.* J Hum Kinet, 57:61–71. [PubMed 28713459](https://pubmed.ncbi.nlm.nih.gov/28713459/) / [DOI](https://doi.org/10.1515/hukin-2017-0047)
+  2. Saeterbakken AH et al. (2017). *The effects of bench press variations in competitive athletes on muscle activity and performance.* J Hum Kinet, 57:61–71. [PubMed 28713459](https://pubmed.ncbi.nlm.nih.gov/28713459/)
 - **可比較量化結果**
   - Lehman (2005, 等長平板臥推測試寬、中、窄握)：從寬握移至**窄握**時，**肱三頭肌肌電活動顯著增加**，同時**胸骨部（中下胸）胸大肌顯著下降**。
   - Saeterbakken et al. (2017) 補充：在競技運動員 6RM 動態測試中，窄握與寬握於胸大肌總 EMG 差異不大，但窄握負重能力低 5.8%–11.1% 且肱二頭肌穩定需求較低。
@@ -281,7 +278,7 @@
   - 窄握臥推（`grip: 0.9, flare: 35`）肱三頭肌（`trilat`）活化 > 標準寬握（`grip: 1.6, flare: 52`）（Lehman 2005）。
   - 窄握臥推中下胸（`pecs`）活化 < 標準寬握（Lehman 2005）。
 
-### 17. `floor-press` 地板臥推
+#### `floor-press` 地板臥推
 
 - **可靠研究來源**
   - **動態 EMG／逆動力學直接比較研究：未找到**（PubMed 缺乏將動態槓鈴地板臥推與平板臥推直接對比的 EMG 或關節力矩研究）。
@@ -289,7 +286,7 @@
 - **可比較量化結果**
   - 實務與力學推論（參考縮短行程／板推文獻）：地板阻擋上臂下降，減少肩水平外展末端行程（減少胸大肌最拉長區段負荷）並排除下肢驅動；因無直接動態 EMG 對照數據，暫不列為文獻趨勢自動測試。
 
-### 18. `chest-press` 坐姿胸推機
+#### `chest-press` 坐姿胸推機
 
 - **可靠研究來源**
   1. McCaw ST, Friday JJ. (1994). *A comparison of muscle activity between a free weight and machine bench press.* J Strength Cond Res, 8(4):259–264.（早期 NSCA 期刊未配發 PMID／DOI，為經典基準研究）
@@ -302,7 +299,7 @@
 - **可檢驗趨勢**
   - 坐姿胸推機胸大肌與三頭肌為主要動肌；與自由平板臥推相比，同等相對參數下胸大肌活化處於同量級（Schick 2010）。
 
-### 18b. `pec-deck` 蝴蝶機
+#### `pec-deck` 蝴蝶機
 
 - **可靠研究來源**
   1. Rocha Júnior VA, Gentil P, Oliveira E, do Carmo J. (2007). *Comparison among the EMG activity of the pectoralis major, anterior deltoidis and triceps brachii during the bench press and peck deck exercises.* Rev Bras Med Esporte, 13(1):43–46. [DOI](https://doi.org/10.1590/S1517-86922007000100012)
@@ -318,7 +315,7 @@
   - 平板臥推肱三頭肌（`trilat`）活化 > 蝴蝶機（Rocha Júnior 2007, direct）。
   - 蝴蝶機握把式（`style: 'handle'`）屈肘肌群（`brach`）活化 > 前臂墊式（`style: 'pad'`）（力學／解剖推論）。
 
-### 18c. `cable-fly-high`／`cable-fly-mid`／`cable-fly-low` 滑輪夾胸（高位／中位／低位）
+#### `cable-fly-high`／`cable-fly-mid`／`cable-fly-low` 滑輪夾胸（高位／中位／低位）
 
 - **可靠研究來源**
   1. Lee HM. (2019). *Force direction and arm position affect contribution of clavicular and sternal parts of pectoralis major muscle during muscle strength testing.* J Hand Ther, 32(1):71–79. [PubMed 28943236](https://pubmed.ncbi.nlm.nih.gov/28943236/)
@@ -335,9 +332,9 @@
 
 ---
 
-## 四、垂直推（Vertical Push）
+### 垂直推（Vertical Push）
 
-### 19. `ohp` 站姿肩推
+#### `ohp` 站姿肩推
 
 - **可靠研究來源**
   1. Saeterbakken AH, Fimland MS. (2013). *Effects of body position and loading modality on muscle activity and strength in shoulder presses.* J Strength Cond Res, 27(7):1824–1831. [PubMed 23096062](https://pubmed.ncbi.nlm.nih.gov/23096062/) / [DOI](https://doi.org/10.1519/JSC.0b013e318276b873)
@@ -350,9 +347,9 @@
 
 ---
 
-## 五、水平拉（Horizontal Pull）
+### 水平拉（Horizontal Pull）
 
-### 20. `row` 槓鈴划船（正握）
+#### `row` 槓鈴划船（正握）
 
 - **可靠研究來源**
   1. Fenwick CMJ, Brown SHM, McGill SM. (2009). *Comparison of different rowing exercises: trunk muscle activation and lumbar spine motion, load, and stiffness.* J Strength Cond Res, 23(2):350–358. [PubMed 19197209](https://pubmed.ncbi.nlm.nih.gov/19197209/) / [DOI](https://doi.org/10.1519/JSC.0b013e3181942019)
@@ -364,7 +361,7 @@
 - **可檢驗趨勢**
   - 站姿槓鈴划船腰椎伸展力矩（`trunkExt`）> 坐姿滑輪划船（Fenwick 2009；Saeterbakken 2015）。
 
-### 21. `row-sup` 槓鈴划船（反握）
+#### `row-sup` 槓鈴划船（反握）
 
 - **可靠研究來源**
   - **直接比較俯身槓鈴正握 vs 反握之期刊全文：未找到**。
@@ -373,7 +370,7 @@
 - **可檢驗趨勢**
   - 目前缺乏直接文獻證明「反握槓鈴划船肱二頭肌 EMG > 正握」；反握較利於肱二頭肌發力屬**解剖推論**（旋前時二頭肌屈肘力臂效率下降），非直接實測文獻結果。
 
-### 22. `cable-row` 坐姿滑輪划船 & 23. `cable-row-wide` 坐姿滑輪划船（寬握）
+#### `cable-row` 坐姿滑輪划船／`cable-row-wide` 坐姿滑輪划船（寬握）
 
 - **可靠研究來源**
   1. Lehman GJ, Buchan DD, Lundy A, Myers N, Nalborczyk A. (2004). *Variations in muscle activation levels during traditional latissimus dorsi weight training exercises: An experimental study.* Dyn Med, 3(1):4. [PubMed 15228624](https://pubmed.ncbi.nlm.nih.gov/15228624/) / [DOI](https://doi.org/10.1186/1476-5918-3-4)
@@ -393,9 +390,9 @@
 
 ---
 
-## 六、垂直拉（Vertical Pull）
+### 垂直拉（Vertical Pull）
 
-### 24. `uprow` 直立划船
+#### `uprow` 直立划船
 
 - **可靠研究來源**
   1. McAllister MJ, Schilling BK, Hammond KG, Weiss LW, Farney TM. (2013). *Effect of grip width on electromyographic activity during the upright row.* J Strength Cond Res, 27(1):181–187. [PubMed 22362088](https://pubmed.ncbi.nlm.nih.gov/22362088/) / [DOI](https://doi.org/10.1519/JSC.0b013e31824f23ad)
@@ -411,7 +408,7 @@
   - 直立划船寬握（`grip = 1.5`）上斜方肌（`uptrap`）活化 > 窄握（`grip = 0.7`）（McAllister 2013, n=16，**僅離心期顯著**，向心期不顯著）。
   - 直立划船窄握（`grip = 0.7`）肱二頭肌（`bic`）活化 > 寬握（`grip = 1.5`）（McAllister 2013, n=16，**僅離心期 50% vs 200% BAB 顯著**）。
 
-### 25. `pulldown` 滑輪下拉 & 26. `pulldown-sup` 反握滑輪下拉
+#### `pulldown` 滑輪下拉／`pulldown-sup` 反握滑輪下拉
 
 - **可靠研究來源**
   1. Signorile JF, Zink AJ, Szwed SP. (2002). *A comparative electromyographical investigation of muscle utilization patterns using various hand positions during the lat pull-down.* J Strength Cond Res, 16(4):539–546. [PubMed 12423182](https://pubmed.ncbi.nlm.nih.gov/12423182/)
@@ -432,9 +429,9 @@
 
 ---
 
-## 七、單關節（Isolation）
+### 單關節（Isolation）
 
-### 27. `leg-ext` 腿伸機
+#### `leg-ext` 腿伸機
 
 - **可靠研究來源**
   1. Escamilla RF et al. (1998). *Biomechanics of the knee during closed kinetic chain and open kinetic chain exercises.* Med Sci Sports Exerc, 30(4):556–569. [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)
@@ -443,12 +440,12 @@
   - Escamilla et al. (1998, n=10)：
     - 開放鏈坐姿腿伸機之**股四頭肌 EMG 峰值出現在接近完全伸直端**（與深蹲／腿推機在深屈端達到峰值相反）。
     - 開放鏈腿伸機比閉鏈深蹲更強調**股直肌（rectus femoris）**；僅在腿伸機末端伸直（30°–0°）測得顯著 ACL 張力。
-  - Folland & Morris (2008)：人體膝伸肌力矩－角度曲線呈倒 U 型（峰值在膝屈 60°–80°，近伸直端急劇下降約 -60%）；市售 8 台可變凸輪腿伸機阻力曲線普遍較平緩，未完整貼合人體曲線（詳見 [`docs/machine-data.md`](machine-data.md)）。
+  - Folland & Morris (2008)：人體膝伸肌力矩－角度曲線呈倒 U 型（峰值在膝屈 60°–80°，近伸直端急劇下降約 -60%）；市售 8 台可變凸輪腿伸機阻力曲線普遍較平緩，未完整貼合人體曲線（詳見 [器械資料](machine-data.md)）。
 - **可檢驗趨勢**
   - 無凸輪槓桿腿伸機（`cam: 'gravity'`）於接近伸直端之膝伸力矩 > 彎曲端（與深蹲深屈端 > 淺屈端相反；Escamilla 1998）。
   - 開放鏈腿伸機股直肌相對於股廣肌的參與比例（`rf / vasti`）高於閉鏈深蹲（Escamilla 1998）。
 
-### 28. `leg-curl` 坐姿腿彎舉 & 29. `lying-leg-curl` 俯臥腿彎舉
+#### `leg-curl` 坐姿腿彎舉／`lying-leg-curl` 俯臥腿彎舉
 
 - **可靠研究來源**
   1. Maeo S, Huang M, Wu Y, Sakurai H, Kusagawa Y, Sugiyama T, Kanehisa H, Isaka T. (2021). *Greater hamstrings muscle hypertrophy but similar damage protection after training at long versus short muscle lengths.* Med Sci Sports Exerc, 53(4):825–837. [PubMed 33009197](https://pubmed.ncbi.nlm.nih.gov/33009197/)
@@ -461,7 +458,7 @@
 - **可檢驗趨勢**
   - 坐姿腿彎舉（`posture: 'seated'`）全行程膕繩肌正規化長度 `l` > 俯臥腿彎舉（`posture: 'lying'`）（Maeo 2021, n=20）。
 
-### 30. `pushdown` 滑輪三頭下壓
+#### `pushdown` 滑輪三頭下壓
 
 - **可靠研究來源**
   1. Maeo S, Wu Y, Huang M, Sakurai H, Kusagawa Y, Sugiyama T, Kanehisa H, Isaka T. (2023). *Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position.* Eur J Sport Sci, 23(7):1240–1250. [PubMed 35819335](https://pubmed.ncbi.nlm.nih.gov/35819335/) / [DOI](https://doi.org/10.1080/17461391.2022.2100279)
@@ -472,7 +469,7 @@
 - **可檢驗趨勢**
   - 三頭下壓時，手肘前移（`elbFwd` 增加）使肩屈曲角上升，三頭肌長頭（`trilong`）被拉長，且肩伸肌（`lat`）穩定需求改變（Maeo 2023, n=21 長度力學）。
 
-### 31. `curl` 槓鈴彎舉 & 32. `reverse-curl` 反手彎舉
+#### `curl` 槓鈴彎舉／`reverse-curl` 反手彎舉
 
 - **可靠研究來源**
   1. Oliveira AS, Gonçalves M. (2009). *Positioning during resistance elbow flexor exercise affects electromyographic activity, heart rate, and perceived exertion.* J Strength Cond Res, 23(3):854–862. [PubMed 19387393](https://pubmed.ncbi.nlm.nih.gov/19387393/) / [DOI](https://doi.org/10.1519/JSC.0b013e3181a00c25)
@@ -485,7 +482,7 @@
   - 槓鈴彎舉反握（`supin: 'sup'`）肱二頭肌（`bic`）活化 > 反手彎舉（`supin: 'pro'`）：**屬解剖推論**（前臂旋前時二頭肌屈肘效率下降；**非文獻實測結果**，Kleiber 2015 實測顯示二頭肌 EMG 在各握法間無顯著差異）。
   - 反手彎舉（`supin: 'pro'`）肱肌／肱橈肌（`brach`）活化 > 槓鈴彎舉（`supin: 'sup'`）（Kleiber 2015, n=16；註：文獻實測為肱橈肌，本模型 `brach` 為肱肌＋肱橈肌合併）。
 
-### 33. `shrug` 槓鈴聳肩
+#### `shrug` 槓鈴聳肩
 
 - **可靠研究來源**
   1. Andersen LL, Kjær M, Andersen CH, Hansen PB, Zebis MK, Hansen K, Sjøgaard G. (2008). *Muscle activation during selected strength exercises in women with chronic neck muscle pain.* Phys Ther, 88(6):703–711. [PubMed 18339796](https://pubmed.ncbi.nlm.nih.gov/18339796/) / [DOI](https://doi.org/10.2522/ptj.20070304)
@@ -496,7 +493,7 @@
 - **可檢驗趨勢**
   - 槓鈴聳肩中，上斜方肌（`uptrap`）為顯著最高活化之肩胛／上肢動肌（Andersen 2008）；軀幹前傾（`lean` 增加）時，抵抗重力方向朝向肩胛後收，使中斜方肌（`midtrap`）參與上升。
 
-### 34–41. E 階段器械與自體重量動作
+#### 其他器械與自體重量動作
 
 - **反向蝴蝶機**：肩關節肌肉力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)；未查證同機型握把阻力、凸輪曲線或直接肌電比較。
 - **45° 背伸展**：[Andersen et al. 2021](https://pubmed.ncbi.nlm.nih.gov/33948095/) 比較羅馬椅、羅馬尼亞硬舉與坐姿背伸機的臀大肌、股二頭肌、豎脊肌肌電。研究未比較墊子高度，因此不建立墊高趨勢檢查。
@@ -507,7 +504,7 @@
 
 ---
 
-### 42–49. F 階段第一批啞鈴動作
+#### 啞鈴動作
 
 - **啞鈴臥推（平板／上斜 30°）**：[Saeterbakken et al. 2011](https://pubmed.ncbi.nlm.nih.gov/21225489/) 與 [Welsch et al. 2005](https://pubmed.ncbi.nlm.nih.gov/15903389/) 顯示 1RM／6RM 下啞鈴與槓鈴臥推之胸大肌峰值肌電相近（啞鈴 1RM 約輕 14–17%）；[Farias et al. 2017](https://pubmed.ncbi.nlm.nih.gov/27669189/) 於多組 10RM 觀察到啞鈴臥推胸大肌 sEMG 高於槓鈴。上斜 30° vs 平板 0° 趨勢間接參考槓鈴研究：[Rodríguez-Ridao et al. 2020](https://doi.org/10.3390/ijerph17197339) 顯示上胸於 30° 達最高、中下胸於 0° 較高（前三角肌則於 60° 最高，平板時胸大肌與前三角活動相近，故未設上斜 30° > 平板前三角自動趨勢）；[Lauver et al. 2016](https://pubmed.ncbi.nlm.nih.gov/25799093/) 顯示上胸在整段向心期無顯著差異，僅於 26–50% 向心段 30°／45° 高於平板。
 - **坐姿啞鈴肩推**：[Saeterbakken & Fimland 2013](https://pubmed.ncbi.nlm.nih.gov/23096062/) 比較站姿／坐姿 × 槓鈴／啞鈴肩推，前三角肌為槓鈴低於啞鈴（站姿 −15%、坐姿 −11%），坐姿 vs 站姿啞鈴僅呈趨勢（p = 0.070）；三頭肌「槓鈴 > 啞鈴」僅在站姿槓鈴 vs 站姿啞鈴成立。因本模型僅有站姿槓鈴與坐姿啞鈴，無法對齊同姿勢或同器材比較，未列入自動趨勢檢驗。
@@ -516,7 +513,7 @@
 - **俯身啞鈴反向飛鳥**：[Schoenfeld et al. 2013](https://pubmed.ncbi.nlm.nih.gov/23302754/)（J Strength Cond Res, 27(10):2644–2649；DOI 10.1519/JSC.0b013e318281e1e9，反向飛鳥機）比較水平外展時對握與正握對後三角與棘下肌 sEMG 之影響；[Franke et al. 2015](https://pubmed.ncbi.nlm.nih.gov/24947920/) 比較反向飛鳥與多關節拉類動作之後三角活化；肩部力臂參考 [Ackland et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18691376/)。
 - **高腳杯深蹲**：[Collins et al. 2021](https://pubmed.ncbi.nlm.nih.gov/34341315/) 比較高腳杯深蹲與地雷管深蹲之肌電與地面反作用力，證實高腳杯深蹲具高股四頭肌活化與較高垂直負荷；前側負重使軀幹較背蹲直立間接參考 [Yavuz et al. 2015](https://pubmed.ncbi.nlm.nih.gov/25630691/) 與 [Krzyszkowski & Kipp 2020](https://pubmed.ncbi.nlm.nih.gov/32544021/)。
 
-## 自體重量動作（T15）
+### 自體重量動作
 
 - **伏地挺身手距**：Cogley RM et al. (2005), *Comparison of muscle activation using various hand positions during the push-up exercise*, J Strength Cond Res 19(3):628–633. [PubMed 16095413](https://pubmed.ncbi.nlm.nih.gov/16095413/)。40 人各做一次肩寬、寬、窄手距伏地挺身；原文摘要指出**窄距高於寬距**的胸大肌及肱三頭肌 EMG。`tests/trends.mjs` 逐肌測相同方向；模型 0.8× 與 1.8× 肩寬僅是窄／寬的示範設定，不宣稱為原文量測距離。模型胸大肌方向相反，照實記為 FAIL。
 - **伏地挺身手部承重**：Suprak DN, Dawes J, Stephenson MD (2011), *The effect of position on the percentage of body mass supported during traditional and modified push-up variants*, J Strength Cond Res 25(2):497–503. [PubMed 20179649](https://pubmed.ncbi.nlm.nih.gov/20179649/)。傳統腳尖著地伏地挺身於撐起與下放靜態姿勢量手部反力，原文摘要指出下放時手部承重較高；趨勢檢查只比較相同傳統伏地挺身的兩個位置。

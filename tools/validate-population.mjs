@@ -1,4 +1,4 @@
-// 固定種子群體模擬；準則見 docs/validation/population-protocol.md。
+// 固定種子群體模擬；準則見 docs/research/methods.md。
 import fs from 'node:fs';
 import { BODY, DEFAULT_BODY, BAR_RATIO, MODEL_VERSION, analyze, createBody, defaultParams, solvePose, withBody } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';

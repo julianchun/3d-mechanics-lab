@@ -55,7 +55,7 @@ export function withBody(body, run) {
   } finally { BODY = previous; }
 }
 // de Leva 1996 表 4，男性節段質量（全身比例）；頭頸與手各自計入，不把殘差塞進軀幹。
-// DOI: 10.1016/0021-9290(95)00178-6；節段標記與本骨架的對應見 docs/validation/squat-diagnosis.md。
+// DOI: 10.1016/0021-9290(95)00178-6；節段標記與本骨架的對應見 docs/research/methods.md。
 const SEGMENTS = {
   male: { mass: { head: 0.0694, trunk: 0.4346, upper: 0.0271, fore: 0.0162, hand: 0.0061,
     thigh: 0.1416, shank: 0.0433, foot: 0.0137 }, cm: { head: 0.5976, trunkUp: 0.5514, upper: 0.5772,
@@ -74,14 +74,14 @@ export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row:
   smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
 
 // ---------- 器械規格與參數設定 ----------
-// 每個數值均標註 docs/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
+// 每個數值均標註 docs/research/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
 export const MACHINES = {
   smith: {
-    railDegDefault: '0',             // docs/machine-data.md §2.1：垂直軌道商用款 0°
+    railDegDefault: '0',             // docs/research/machine-data.md §2.1：垂直軌道商用款 0°
     railDegOptions: [
-      ['0', '0°（垂直軌道）'],       // docs/machine-data.md §2.1：力量訓練／健力房常見 0°
-      ['7', '7°（往上微後傾）'],     // docs/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
-      ['-7', '-7°（反向站位）'],     // docs/machine-data.md §2.2：背向／面向使用時斜軌方向相反
+      ['0', '0°（垂直軌道）'],       // docs/research/machine-data.md §2.1：力量訓練／健力房常見 0°
+      ['7', '7°（往上微後傾）'],     // docs/research/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
+      ['-7', '-7°（反向站位）'],     // docs/research/machine-data.md §2.2：背向／面向使用時斜軌方向相反
     ],
     railZ0: 0,                       // 假設：滑軌於參考高度處之 Z 座標（m）
     railRefY: 1.4,                   // 假設：斜軌參考高度（約站姿扛槓高度，使「腳在槓前方」定義一致）
@@ -91,43 +91,43 @@ export const MACHINES = {
     railHeight: 2.2,                 // 假設：機架高度（m）
   },
   legpress: {
-    railDeg: 45,                     // docs/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
-    sledKgDefault: 45,               // 假設：docs/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
+    railDeg: 45,                     // docs/research/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
+    sledKgDefault: 45,               // 假設：docs/research/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
     sledKgRange: [20, 65],           // 假設：輕型至重型商用滑台重量範圍（kg）
     platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加預設 45 kg 滑台 ＝ 總重 180 kg ＝ 2.4× 體重）
-    railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
-    railMuRange: [0, 0.15],          // 假設：docs/machine-data.md §1.1
-    seatDegDefault: 50,              // 假設：docs/machine-data.md §1.1 椅背離垂直估計 45°–65°
-    seatDegRange: [35, 65],          // 假設：docs/machine-data.md §1.1
+    railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/research/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
+    railMuRange: [0, 0.15],          // 假設：docs/research/machine-data.md §1.1
+    seatDegDefault: 50,              // 假設：docs/research/machine-data.md §1.1 椅背離垂直估計 45°–65°
+    seatDegRange: [35, 65],          // 假設：docs/research/machine-data.md §1.1
     hipY: 0.42,                      // 假設：座椅骨盆高度（m）
   },
   pulldown: {
-    pulleyRatioDefault: '1:1',       // docs/machine-data.md §3.1：專用滑輪下拉機 1:1（Hammer Strength / Life Fitness / Technogym 商用規格）
+    pulleyRatioDefault: '1:1',       // docs/research/machine-data.md §3.1：專用滑輪下拉機 1:1（Hammer Strength / Life Fitness / Technogym 商用規格）
     stackKg: 45,                     // 假設：示範配重片＝45 kg（1:1 實感 45 kg ≈ 0.6× 體重；2:1 實感 22.5 kg）
-    pulleyY: 2.35,                   // docs/machine-data.md §3.1：商用機總高 216–244 cm（Hammer Strength HDU-DPR 244 cm / HS-PD 226 cm / Technogym 228 cm）
+    pulleyY: 2.35,                   // docs/research/machine-data.md §3.1：商用機總高 216–244 cm（Hammer Strength HDU-DPR 244 cm / HS-PD 226 cm / Technogym 228 cm）
     towerZ: 0.8,                     // 假設：配重塔距骨盆水平距離（m）
     seatY: 0.47,                     // 假設：座墊高度（m）
     barLen: 1.25,                    // 假設：下拉長桿寬度（m）
   },
   cablerow: {
-    pulleyRatioDefault: '1:1',       // docs/machine-data.md §3.1：專用坐姿低拉划船機 1:1（Life Fitness PWR Play / Optima / Axiom / Technogym 規格）
+    pulleyRatioDefault: '1:1',       // docs/research/machine-data.md §3.1：專用坐姿低拉划船機 1:1（Life Fitness PWR Play / Optima / Axiom / Technogym 規格）
     stackKg: 56,                     // 假設：示範配重片＝56 kg（1:1 實感 56 kg ≈ 0.75× 體重；2:1 實感 28 kg）
-    pulleyY: 0.42,                   // docs/machine-data.md §3.1：低滑輪出繩口典型估算 35–45 cm（與坐墊同高或略低）
+    pulleyY: 0.42,                   // docs/research/machine-data.md §3.1：低滑輪出繩口典型估算 35–45 cm（與坐墊同高或略低）
     pulleyZ: 1.0,                    // 假設：低滑輪距骨盆水平距離（m）
     seatY: 0.47,                     // 假設：座墊高度（m）
     barLen: { v: 0.2, wide: 0.75 },  // 假設：V 把與寬握桿寬度（m）
   },
   pushdown: {
-    pulleyRatioDefault: '2:1',       // docs/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
+    pulleyRatioDefault: '2:1',       // docs/research/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
     stackKg: 38,                     // 假設：示範配重片＝38 kg（2:1 實感 19 kg ≈ 0.25× 體重；1:1 實感 38 kg）
-    pulleyY: 2.1,                    // docs/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
+    pulleyY: 2.1,                    // docs/research/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
     pulleyZ: 0.58,                   // 假設：站位距滑輪水平距離（m）
     barLen: 0.45,                    // 假設：短直桿寬度（m）
   },
   legext: {
     barRatio: 1.2,                   // 假設：示範配重片＝1.2× 體重
     camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
-    camDefault: 'comm_desc',         // docs/machine-data.md §4.3(A)：商用凸輪微降型（端點比例依 Folland & Morris 2008 極值，中間點為插值假設）
+    camDefault: 'comm_desc',         // docs/research/machine-data.md §4.3(A)：商用凸輪微降型（端點比例依 Folland & Morris 2008 極值，中間點為插值假設）
     seatY: 0.55,                     // 假設：座椅骨盆高度（m）
     backReclineDeg: 15,              // 假設：椅背後傾角（°）
     padOffset: 0.05,                 // 假設：小腿滾輪墊接觸偏移（m）
@@ -148,7 +148,7 @@ export const MACHINES = {
   legcurl: {
     barRatio: 0.45,                  // 假設：示範配重片＝0.45× 體重
     camArmM: 0.3,                    // 假設：等效凸輪基準力臂（m）
-    camDefault: 'human',             // docs/machine-data.md §4.2：人體膝屈遞減曲線
+    camDefault: 'human',             // docs/research/machine-data.md §4.2：人體膝屈遞減曲線
     seatedHipY: 0.55,                // 假設：坐姿骨盆高度（m）
     seatedBackReclineDeg: 15,        // 假設：坐姿椅背後傾角（°）
     lyingHipY: 0.62,                 // 假設：俯臥骨盆高度（m）
@@ -168,7 +168,7 @@ export const MACHINES = {
   },
   chestpress: {
     barRatio: 0.9,                   // 假設：示範配重＝0.9× 體重
-    pathDefault: 'linear',           // docs/machine-data.md §5.1：固定直線軌跡胸推機
+    pathDefault: 'linear',           // docs/research/machine-data.md §5.1：固定直線軌跡胸推機
     convergeRatio: 0.72,             // 假設：內聚弧線推直時手距縮為起始寬度 72%（對應 §5.1 Hammer Strength / Life Fitness 內聚概念）
     seatY: 0.55,                     // 假設：座墊骨盆高度（m）
     backFrontZ: -0.085,              // 假設：椅背前緣止擋（肩關節後方 8.5 cm）
@@ -193,12 +193,12 @@ export const MACHINES = {
   },
   cablefly: {
     heightDefault: 'mid',            // 滑輪高度：高位往下／與肩同高／低位往上
-    pulleyRatioDefault: '2:1',       // docs/machine-data.md §3.1：多功能滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格）
+    pulleyRatioDefault: '2:1',       // docs/research/machine-data.md §3.1：多功能滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格）
     dualStack: true,                 // 雙側獨立配重塔，每手一條鋼索
     stackKg: 18,                     // 假設：單側示範配重片＝18 kg（2:1 實感單手 9 kg；1:1 實感單手 18 kg）
     pulleyX: 1.30,                   // 假設：左右滑輪柱半寬（m，總寬 2.60 m，對應商用大飛鳥門框寬度）
     pulleyZ: -0.10,                  // 假設：滑輪柱位於雙腳站位後方 10 cm（人站在大飛鳥門框略前方）
-    // docs/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
+    // docs/research/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
     pulleyY: { high: 1.92, mid: 1.34, low: 0.85 },
     towerH: 2.15,                    // 假設：雙側龍門架高度（m）
   },
@@ -226,7 +226,7 @@ export const MACHINES = {
 export const PULLEY_RATIOS = [['1:1', '1:1（直拉）'], ['2:1', '2:1（減半）']];
 export const pulleyDivisor = (r) => (r === '2:1' ? 2 : 1);
 
-// 凸輪阻力曲線選項（依 docs/machine-data.md §4 資料驅動）
+// 凸輪阻力曲線選項（依 docs/research/machine-data.md §4 資料驅動）
 export const CAMS_LEGEXT = [
   ['human', '貼合人體力量曲線（倒 U 型）'],
   ['comm_desc', '商用凸輪：伸直端微降'],
@@ -953,9 +953,9 @@ const hipFit = (a, b, c) => (q) => {
   const x = clamp((q.hipFlex || 0) / rad(45), 0, 2);
   return a + (b - a) * x + 0.5 * (c - 2 * b + a) * x * (x - 1);
 };
-// 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/muscle-params.md。
+// 膝、踝、肘包覆路徑尚無可執行的 OpenSim 幾何；角度斜率是估計，見 docs/research/muscle-params.md。
 const angleSlope = (base, key, per90) => (q) => base + per90 * clamp((q[key] || 0) / rad(90), -0.5, 1.7);
-// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；0.65 衰減幅度與 90°→170° 區間皆為無直接出處的估計，見 docs/muscle-params.md。
+// 三角肌三束共用同一條高上舉（>90°）外展衰減規則；0.65 衰減幅度與 90°→170° 區間皆為無直接出處的估計，見 docs/research/muscle-params.md。
 const deltoidScale = (q) => 1 - 0.65 * clamp((q.shElev - rad(90)) / rad(80), 0, 1);
 const adeltFlex = (q) => 0.035 + 0.008 * clamp(q.shElev / rad(90), 0, 1);
 const adeltAbduction = (q) => (0.006 + 0.020 * clamp(q.shElev / rad(75), 0, 1)) * deltoidScale(q);
@@ -1144,7 +1144,7 @@ function armChainBent(pose, S, B, pole, [epsDeg, Lh], hpref) {
 // [手腕背伸角（度）, 腕→槓距離（m）]
 export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [105, 0.05] };
 // Demers 等 2018 圖 1（無負重背蹲，股骨角 20°／40°／60°）的六個踝背屈圖讀點，
-// 依 docs/validation/squat-calibration-plan.md 等權網格擬合；跨到負重／其他槓位是外推。
+// 依 docs/research/methods.md 等權網格擬合；跨到負重／其他槓位是外推。
 // 寫計畫前已由測試組診斷知道髖位太後、膝前移不足，三種參數與冪函數形式不是盲選；數值才由 Demers 決定。
 // 原文大轉子間寬／腳跟外側標記暫以模型髖中心 18 cm／踝中心距代理，兩站距僅對應 stance≈0.024／0.238；
 // 預設 stance=0.3 的 dom=0.30 因而是外推。若僅假設大轉子寬 32 cm（非實測），兩點約為 stance=0.52／0.90。
