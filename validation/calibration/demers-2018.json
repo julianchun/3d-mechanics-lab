@@ -1,0 +1,42 @@
+{
+  "id": "demers-2018",
+  "role": "calibration-only",
+  "source": {
+    "authors": "Demers E, Pendenza J, Radevich V, Preuss R",
+    "year": 2018,
+    "title": "The Effect of Stance Width and Anthropometrics on Joint Range of Motion in the Lower Extremities during a Back Squat",
+    "doi": "10.70252/BWZE8275",
+    "url": "https://intjexersci.com/files/ijes/vol11/iss1/9.pdf"
+  },
+  "participants": {
+    "n": 32,
+    "training": "18–35 歲健康成人，可無負重蹲至大腿後側平行或更低；文中未要求負重訓練經驗"
+  },
+  "protocol": "無外加負重，手臂交叉於肩；站距為骨盆寬 100%、150%、200%，每人各 3 次下降期。角度相對直立靜站，於股骨感測器對垂直每 10° 取樣。圖 1 只有平均柱圖和誤差棒，沒有數值表。",
+  "overlapAudit": "作者與 Larsen 2021、Goršič 2020、Gullett 2009、Hutchison 2019 均不同；McGill 研究團隊、無負重受試者與四篇測試組的受試條件不符；未見同批受試者證據。",
+  "model": "僅用 150%、200% 骨盆寬。模型骨盆寬 2×BODY.hipHalf=18 cm，踝間距=2×lerp(0.13,0.34,stance)，對應 stance 約 0.024、0.238。將模型小腿角扣除頂點 4°，近似原文相對靜站踝背屈。無負重、鞋具未知、量角座標與模型不同，是轉用至負重示範的限制。",
+  "conditions": [
+    {
+      "id": "medium",
+      "catalogId": "squat-high",
+      "params": { "barPos": "high", "stance": 0.024, "depth": 0.55, "heelHeight": 0 },
+      "conditionDerivation": "150%×18 cm=27 cm 踝間距；模型 26+42×stance cm，故 stance=(27−26)/42≈0.024。",
+      "measurements": [
+        { "metric": "ankleDorsiflexionChange", "sample": { "type": "thighAngle", "targetDeg": 20 }, "reference": { "mean": 8.0, "unit": "deg", "rawDefinition": "相對靜站踝背屈" }, "evidence": { "type": "figure-digitized", "location": "圖 1，踝背屈面板，150% 骨盆寬，約 8°" }, "tolerance": { "absolute": 2.0 }, "limitations": "圖讀值約 ±1–2°；無負重" },
+        { "metric": "ankleDorsiflexionChange", "sample": { "type": "thighAngle", "targetDeg": 40 }, "reference": { "mean": 16.5, "unit": "deg", "rawDefinition": "相對靜站踝背屈" }, "evidence": { "type": "figure-digitized", "location": "圖 1，踝背屈面板，150% 骨盆寬，約 16.5°" }, "tolerance": { "absolute": 2.0 }, "limitations": "圖讀值約 ±1–2°；無負重" },
+        { "metric": "ankleDorsiflexionChange", "sample": { "type": "thighAngle", "targetDeg": 60 }, "reference": { "mean": 21.0, "unit": "deg", "rawDefinition": "相對靜站踝背屈" }, "evidence": { "type": "figure-digitized", "location": "圖 1，踝背屈面板，150% 骨盆寬，約 21°" }, "tolerance": { "absolute": 2.0 }, "limitations": "圖讀值約 ±1–2°；無負重" }
+      ]
+    },
+    {
+      "id": "wide",
+      "catalogId": "squat-high",
+      "params": { "barPos": "high", "stance": 0.238, "depth": 0.55, "heelHeight": 0 },
+      "conditionDerivation": "200%×18 cm=36 cm 踝間距；模型 26+42×stance cm，故 stance=(36−26)/42≈0.238。",
+      "measurements": [
+        { "metric": "ankleDorsiflexionChange", "sample": { "type": "thighAngle", "targetDeg": 20 }, "reference": { "mean": 7.2, "unit": "deg", "rawDefinition": "相對靜站踝背屈" }, "evidence": { "type": "figure-digitized", "location": "圖 1，踝背屈面板，200% 骨盆寬，約 7.2°" }, "tolerance": { "absolute": 2.0 }, "limitations": "圖讀值約 ±1–2°；無負重" },
+        { "metric": "ankleDorsiflexionChange", "sample": { "type": "thighAngle", "targetDeg": 40 }, "reference": { "mean": 15.2, "unit": "deg", "rawDefinition": "相對靜站踝背屈" }, "evidence": { "type": "figure-digitized", "location": "圖 1，踝背屈面板，200% 骨盆寬，約 15.2°" }, "tolerance": { "absolute": 2.0 }, "limitations": "圖讀值約 ±1–2°；無負重" },
+        { "metric": "ankleDorsiflexionChange", "sample": { "type": "thighAngle", "targetDeg": 60 }, "reference": { "mean": 19.5, "unit": "deg", "rawDefinition": "相對靜站踝背屈" }, "evidence": { "type": "figure-digitized", "location": "圖 1，踝背屈面板，200% 骨盆寬，約 19.5°" }, "tolerance": { "absolute": 2.0 }, "limitations": "圖讀值約 ±1–2°；無負重" }
+      ]
+    }
+  ]
+}
