@@ -1,6 +1,6 @@
 // 依教練原則掃描每個清單預設；輸出為模型稽核，不是人體安全或增肌判定。
 import fs from 'node:fs';
-import { analyze, defaultParams, MUSCLE_BY_ID } from '../src/biomech.js';
+import { analyze, defaultParams, MUSCLE_BY_ID, ROM_HINTS } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
 const data = JSON.parse(fs.readFileSync(new URL('./technique-targets.json', import.meta.url)));
@@ -59,10 +59,11 @@ for (const entry of active) {
   if (freeFootLifts.has(entry.lift)) {
     const samples = results.map(({ pose }) => {
       if (!pose.cop || !pose.R.heel || !pose.R.toe) throw new Error(`${entry.id} 缺少腳底接觸幾何`);
-      const mid = (pose.R.heel[2] + pose.R.toe[2]) / 2;
+      const [rear, front] = pose.supportSpan || [pose.R.heel[2], pose.R.toe[2]];
+      const mid = pose.supportSpan ? (pose.visualLegs.L.heel[2] + pose.visualLegs.L.toe[2] +
+        pose.visualLegs.R.heel[2] + pose.visualLegs.R.toe[2]) / 4 : (rear + front) / 2;
       return { delta: (pose.cop[2] - mid) * 100,
-        outside: pose.cop[2] < Math.min(pose.R.heel[2], pose.R.toe[2]) - 1e-9 ||
-          pose.cop[2] > Math.max(pose.R.heel[2], pose.R.toe[2]) + 1e-9 };
+        outside: pose.cop[2] < rear - 1e-9 || pose.cop[2] > front + 1e-9 };
     });
     cop = { max: samples.reduce((a, b) => Math.abs(a.delta) > Math.abs(b.delta) ? a : b).delta,
       outside: samples.some((x) => x.outside) };
@@ -70,18 +71,24 @@ for (const entry of active) {
   const knees = results.map((r) => r.pose.kneePath).filter(Boolean);
   const thighAngles = knees.map((k) => k.shankThighProxyDeg).filter((v) => v !== null);
   const kneeText = knees.length ? `膝 ${fmt(knees.at(-1).pathDeg)}°／腳尖 ${fmt(knees.at(-1).toeDeg)}°；腳尖－小腿 ${fmt(Math.max(...knees.map((k) => Math.abs(k.footShankProxyDeg))))}°；小腿－大腿 ${thighAngles.length ? `${fmt(Math.max(...thighAngles.map(Math.abs)))}°` : '—'}` : '—';
-  const angleParts = [['髖屈', 'hipFlex', 136], ['膝屈', 'kneeFlex', 138], ['踝背屈', 'ankleDorsi', 36],
-    ['舉臂', 'shElev', 178], ['肘屈', 'elbFlex', 140]].filter(([, key]) => results.some((r) => Number.isFinite(r.q[key])))
+  const angleParts = [['髖屈', 'hipFlex', ROM_HINTS.hipFlex], ['膝屈', 'kneeFlex', ROM_HINTS.kneeFlex], ['踝背屈', 'ankleDorsi', ROM_HINTS.ankleDorsi],
+    ['肘屈', 'elbFlex', ROM_HINTS.elbFlex]].filter(([, key]) => results.some((r) => Number.isFinite(r.q[key])))
     .map(([name, key, hint]) => {
       const value = Math.max(...results.map((r) => Number.isFinite(r.q[key]) ? deg(r.q[key]) : -Infinity));
-      return `${name} ${fmt(value)}°（${value >= 0 ? `${fmt(value / hint * 100, 0)}% 模型提示線` : '反方向，未達此提示線'}）`;
+      const label = key === 'hipFlex' ? '模型提示線' : '常模參考';
+      return `${name} ${fmt(value)}°（${value >= 0 ? `${fmt(value / hint * 100, 0)}% ${label}` : '反方向，未達此參考'}）`;
     });
+  if (results.some((r) => Number.isFinite(r.q.shElev))) {
+    const peak = results.reduce((a, b) => b.q.shElev > a.q.shElev ? b : a);
+    const hint = Math.abs(deg(peak.q.shPlane)) < 45 ? ROM_HINTS.shFlex : ROM_HINTS.shAbd;
+    angleParts.push(`舉臂 ${fmt(deg(peak.q.shElev))}°（${fmt(deg(peak.q.shElev) / hint * 100, 0)}% 常模參考）`);
+  }
   if (Number.isFinite(P.flare)) angleParts.push(`肘外展設定 ${fmt(P.flare, 0)}°`);
   if (Number.isFinite(P.topHeight)) angleParts.push(`上舉設定 ${fmt(P.topHeight, 0)}°`);
   const reasons = [];
   if (badPose.length) reasons.push(`姿勢無法成立 ${badPose.length}/21 點`);
-  if (cop?.outside) reasons.push('壓力中心超出腳掌接觸範圍');
-  else if (cop && Math.abs(cop.max) > 5) reasons.push('壓力中心偏離中段超過 5 cm');
+  if (cop?.outside) reasons.push('壓力中心超出兩腳支撐範圍');
+  else if (cop && P.footStance !== 'staggered' && Math.abs(cop.max) > 5) reasons.push('壓力中心偏離中段超過 5 cm');
   if (missed.length) {
     const category = knownModel.has(entry.id) ? '已知肌肉模型問題' : '姿勢預設／肌肉模型待教練判定';
     reasons.push(`${category}：${missed.map((x) => x.name).join('、')}未進前三`);
@@ -101,15 +108,15 @@ for (const entry of active) {
     `${r.name} a=${peakText(r)}（全肌 #${r.rank}）`).join('；') || '—';
   const orderText = targetOrder ? `${orderFailed ? '未達' : '符合'}：${targetOrder.map((r) => `${r.name} #${r.rank}`).join(' → ')}` :
     ['deadlift', 'sumo'].includes(data.entries[entry.id]) ? `股四頭肌 a=${fmt(ranks.find((r) => r.name === '股四頭肌').peak, 2)}；參與門檻待教練決定` : '—';
-  rows.push(`| ${entry.name} | ${status} | ${cop ? `${cop.max >= 0 ? '+' : ''}${fmt(cop.max)} cm${cop.outside ? '（越界）' : ''}` : '不適用'} | ${targetText} | ${synergyText} | ${stableText} | ${orderText} | ${kneeText} | ${angleParts.join('；') || '—'} | ${esc(reasons.join('；') || '量化項目無提示')} |`);
+  rows.push(`| ${entry.name} | ${status} | ${cop ? `${cop.max >= 0 ? '+' : ''}${fmt(cop.max)} cm${P.footStance === 'staggered' ? '（兩腳中點）' : ''}${cop.outside ? '（越界）' : ''}` : '不適用'} | ${targetText} | ${synergyText} | ${stableText} | ${orderText} | ${kneeText} | ${angleParts.join('；') || '—'} | ${esc(reasons.join('；') || '量化項目無提示')} |`);
 }
 
 const lines = [
   '# 預設動作技術原則稽核', '',
   `使用預設身體（1.75 m、75 kg）與 63 個清單項目的預設參數，每項取全行程 21 點。結果：符合 ${counts['符合']}、需複查 ${counts['需複查']}、不符合 ${counts['不符合']}。`, '',
-  '「符合」只表示本工具可量化的檢查沒有提示，不代表個人安全、動作正確或增肌效果。姿勢／壓力中心越界列「不符合」；壓力中心偏離腳掌幾何中段超過 ±5 cm、模型 ROM 與姿勢提示、目標肌群未進前三列「需複查」。±5 cm 是教練指定的複查值，不是文獻安全線。', '',
-  '自由站姿以腳跟至腳尖的前後接觸範圍檢查 `pose.cop`。史密斯、哈克、腿推、臀推、伏地挺身、提踵機等有軌道、墊子或多接點支撐，不套用單腳掌判準。目標與協同肌排名按 21 點最高模型活化 `a`，先排除各動作明列的穩定肌；穩定肌仍列最高 `a` 及全肌排名。目標群組與依據見 [`tools/technique-targets.json`](../../../tools/technique-targets.json) 及[技術原則](../technique-principles.md)。肌肉排名只是模型觀察。', '',
-  '角度欄為全程模型最大值與程式 `rom` 提示角的比例（髖 136°、膝 138°、踝 36°、舉臂 178°、肘 140°）；肘外展等為設定值。提示角是啟發式，**不是個人活動範圍或負重安全界線**；沒有個人活動度、疼痛與通用負重門檻，角度數值均**待教練決定**。腳尖－小腿、小腿－大腿的水平投影方向差是幾何代理，**不是實際脛股旋轉角**；小腿－大腿只取大腿相對垂直屈曲超過 45° 的點，避免頂點近垂直的大腿因微小水平跨距造成 90° 誤報。25° 警示只是幾何人工複查設定。史密斯使用固定膝位求解器，未共用自由深蹲的 `kneePath`。', '',
+  '「符合」只表示本工具可量化的檢查沒有提示，不代表個人安全、動作正確或增肌效果。姿勢／壓力中心越界列「不符合」；雙腳併站時壓力中心偏離腳掌幾何中段超過 ±5 cm、模型 ROM 與姿勢提示、目標肌群未進前三列「需複查」。前後腳站姿只以壓力中心是否落在兩腳支撐範圍判斷，仍報相對兩腳中點的偏移。±5 cm 是教練指定的複查值，不是文獻安全線。', '',
+  '自由站姿以腳跟至腳尖的前後接觸範圍檢查 `pose.cop`；前後腳視覺各錯開 10 cm，以兩腳外緣作等效支撐範圍。左右對稱力學仍只解右半身並鏡像，不會算出前後腳分力或單側關節力矩。史密斯、哈克、腿推、臀推、伏地挺身、提踵機等有軌道、墊子或多接點支撐，不套用此判準。目標與協同肌排名按 21 點最高模型活化 `a`，先排除各動作明列的穩定肌；穩定肌仍列最高 `a` 及全肌排名。目標群組與依據見 [`tools/technique-targets.json`](../../../tools/technique-targets.json) 及[技術原則](../technique-principles.md)。肌肉排名只是模型觀察。', '',
+  '角度欄為全程模型最大值與程式 `rom` 提示角／常模參考的比例（髖 136° 為啟發式；膝 138° 為成人男性被動常模；踝 39° 為屈膝負重常模；舉臂前舉 160°／外展 150° 為混合性別主動常模約值；肘 146° 為主動常模）。舉臂依峰值姿勢的肩平面選前舉或外展代理；各動作過程可切換參考線。肘外展等為設定值。常模群體與量測條件不等同負重動作，**不是個人活動範圍或安全界線**；髖屈為軀幹—大腿夾角，不能直接等同骨盆—大腿屈曲常模。原肩後伸 `shPlane` 155° 為幾何啟發式。詳見[技術原則 G5](../technique-principles.md)。腳尖－小腿、小腿－大腿的水平投影方向差是幾何代理，**不是實際脛股旋轉角**；小腿－大腿只取大腿相對垂直屈曲超過 45° 的點，避免頂點近垂直的大腿因微小水平跨距造成 90° 誤報。25° 警示只是幾何人工複查設定。史密斯使用固定膝位求解器，未共用自由深蹲的 `kneePath`。', '',
   '| 動作 | 結果 | 壓力中心離中段最大偏移 | 目標肌群排名 | 協同肌排名 | 穩定肌（不列目標） | 目標內部順序／股四頭參與 | 膝路徑 | 角度／設定（待教練決定） | 原因 |',
   '| --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- |', ...rows, '',
   '## 目標肌群未進前三', '',

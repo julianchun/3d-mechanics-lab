@@ -237,7 +237,7 @@ export class Rig {
     for (const o of [this.rib, this.pelvis, this.head]) this.group.remove(o);
   }
 
-  placeBones(pose, F, show) {
+  placeBones(pose, F, show, displayFrames = null) {
     const body = pose.body || BODY;
     const V = (a) => new THREE.Vector3(a[0], a[1], a[2]);
     const set = (arr, origin, lat, dir, ant, L, width = L) => {
@@ -250,6 +250,14 @@ export class Rig {
       const f = F[k];
       const L = len(sub(f.b, f.a));
       set(this.boneMeshes[k], f.a, f.lat, norm(sub(f.b, f.a)), f.ant, L);
+      if (displayFrames && k !== 'upper') {
+        for (const [i, side] of ['R', 'L'].entries()) {
+          const v = displayFrames[side][k];
+          _m.makeBasis(V(v.lat).multiplyScalar(len(sub(v.b, v.a))), V(norm(sub(v.b, v.a))).multiplyScalar(len(sub(v.b, v.a))), V(v.ant).multiplyScalar(len(sub(v.b, v.a)))).setPosition(V(v.a));
+          this.boneMeshes[k][i].matrix.copy(i ? new THREE.Matrix4().multiplyMatrices(MIRROR, _m) : _m);
+          this.boneMeshes[k][i].matrixWorldNeedsUpdate = true;
+        }
+      }
     }
     if (this.hand) {
       // 前臂＋手：尺骨跟著前臂座標；橈骨繞旋前軸轉；手掌與手指去握槓
@@ -270,6 +278,15 @@ export class Rig {
     // 腳：footUp = 腳底法線（往踝）；平踩地面時 = 正上方（腿推機、腿伸機時腳掌是斜的）
     const t = pose.toeDir, fu = pose.footUp || [0, 1, 0];
     set(this.boneMeshes.foot, pose.R.ankle, norm(cross(fu, t)), fu, t, len(sub(pose.R.knee, pose.R.ankle)));
+    if (displayFrames) {
+      for (const [i, side] of ['R', 'L'].entries()) {
+        const v = pose.visualLegs[side];
+        const L = len(sub(v.knee, v.ankle));
+        _m.makeBasis(V(norm(cross(fu, t))).multiplyScalar(L), V(fu).multiplyScalar(L), V(t).multiplyScalar(L)).setPosition(V(v.ankle));
+        this.boneMeshes.foot[i].matrix.copy(i ? new THREE.Matrix4().multiplyMatrices(MIRROR, _m) : _m);
+        this.boneMeshes.foot[i].matrixWorldNeedsUpdate = true;
+      }
+    }
     set(this.boneMeshes.trunk, pose.Pc, [1, 0, 0], norm(sub(pose.SC, pose.Pc)), pose.f,
       len(sub(pose.SC, pose.Pc)), DEFAULT_BODY.Ltr * body.shHalf / DEFAULT_BODY.shHalf);
     const trunkM = this.boneMeshes.trunk[0].matrix;
@@ -294,6 +311,14 @@ export class Rig {
     const [pR, pL] = this.boneMeshes.patella;
     pR.matrix.multiplyMatrices(this.boneMeshes.thigh[0].matrix, pl);
     pL.matrix.multiplyMatrices(MIRROR, pR.matrix);
+    if (displayFrames) {
+      for (const [i, side] of ['R', 'L'].entries()) {
+        const thigh = displayFrames[side].thigh, shank = displayFrames[side].shank;
+        const flex = Math.acos(Math.max(-1, Math.min(1, dot(norm(sub(thigh.b, thigh.a)), norm(sub(shank.b, shank.a))))));
+        const patellaLocal = new THREE.Matrix4().makeTranslation(0, 1, 0).multiply(new THREE.Matrix4().makeRotationX(-0.7 * flex)).multiply(new THREE.Matrix4().makeTranslation(0, -1, 0));
+        this.boneMeshes.patella[i].matrix.copy(this.boneMeshes.thigh[i].matrix).multiply(patellaLocal);
+      }
+    }
     for (const m of [sR, sL, pR, pL]) { m.matrixWorldNeedsUpdate = true; m.visible = show; }
   }
 
@@ -301,7 +326,7 @@ export class Rig {
     if (key === 'Pc') return pose.Pc;
     if (key === 'SC') return pose.SC;
     const [s, j] = key.split('.');
-    const p = pose.R[j];
+    const p = pose.visualLegs?.[s]?.[j] || pose.R[j];
     return s === 'R' ? p : mirror(p);
   }
 
@@ -339,14 +364,17 @@ export class Rig {
 
     if (this.ghost) return;
     const F = frames(pose);
-    if (this.boneMeshes) this.placeBones(pose, F, showSkel);
+    const displayFrames = pose.visualLegs ? Object.fromEntries(['R', 'L'].map((side) =>
+      [side, frames({ ...pose, R: { ...pose.R, ...pose.visualLegs[side] } })])) : null;
+    if (this.boneMeshes) this.placeBones(pose, F, showSkel, displayFrames);
     for (const m of MUSCLES) {
       const at = ATTACH[m.id];
-      const pa = attachPt(F, at.a), pb = attachPt(F, at.b);
+      const pa = attachPt(displayFrames?.R || F, at.a), pb = attachPt(displayFrames?.R || F, at.b);
+      const la = attachPt(displayFrames?.L || F, at.a), lb = attachPt(displayFrames?.L || F, at.b);
       const [mr, ml] = this.muscles[m.id];
       const c = colors[m.id];
       const inLift = !liftSet || liftSet.has(m.id);
-      for (const [mesh, A, Bp] of [[mr, pa, pb], [ml, mirror(pa), mirror(pb)]]) {
+      for (const [mesh, A, Bp] of [[mr, pa, pb], [ml, mirror(la), mirror(lb)]]) {
         mesh.visible = layers.muscles !== false;
         place(mesh, A, Bp, at.r);
         if (c && inLift) { mesh.material.color.copy(c); mesh.material.opacity = 0.9; mesh.material.emissive?.setRGB(c.r * 0.08, c.g * 0.08, c.b * 0.08); }
@@ -362,7 +390,8 @@ export class Rig {
       arr.forEach((g, i) => {
         g.visible = !!show;
         if (!show) return;
-        const p = i === 0 ? jp[k] : mirror(jp[k]);
+        const footJoint = pose.visualLegs?.[i === 0 ? 'R' : 'L']?.[k];
+        const p = footJoint ? (i === 0 ? footJoint : mirror(footJoint)) : (i === 0 ? jp[k] : mirror(jp[k]));
         g.position.copy(T(k === 'lumbar' ? add(p, mul(pose.f, -0.12)) : p));
         g.scale.setScalar(0.035 + 0.045 * v);
         g.material.color.setHex(rom[k] ? 0xc026d3 : 0x0891b2);
