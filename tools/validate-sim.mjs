@@ -232,6 +232,13 @@ function counts(items) {
 }
 const summary = { ...counts(comparisons), sources: sources.length };
 const results = { modelVersion: MODEL_VERSION, summary, comparisons };
+// 只提供公開說明文字；驗證計數、門檻與模型計算均不受此欄位影響。
+const calibrationCaveats = {
+  'squat-high': '六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/validation/squat-calibration-result.md。',
+  'squat-low': '沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/validation/squat-calibration-result.md。',
+  'front-squat': '沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/validation/squat-calibration-result.md。',
+  'goblet-squat': '沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/validation/squat-calibration-result.md。',
+};
 const byId = Object.fromEntries(CATALOG.map((entry) => {
   const make = (layer) => {
     const items = comparisons.filter((c) => c.catalogId === entry.id && c.layer === layer);
@@ -254,7 +261,10 @@ const byId = Object.fromEntries(CATALOG.map((entry) => {
     muscle.note = '僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證';
     muscle.links = qualitative.length ? ['docs/validation/squat.md', 'docs/references.md'] : [];
   }
-  return [entry.id, { kinematics: make('kinematics'), moments: make('moments'), muscles: muscle }];
+  return [entry.id, {
+    ...(calibrationCaveats[entry.id] ? { calibrationCaveat: calibrationCaveats[entry.id] } : {}),
+    kinematics: make('kinematics'), moments: make('moments'), muscles: muscle,
+  }];
 }));
 const status = { modelVersion: MODEL_VERSION, summary, byId };
 const serialize = (o) => JSON.stringify(o, null, 2) + '\n';

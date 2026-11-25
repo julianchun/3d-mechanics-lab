@@ -13,6 +13,7 @@
   },
   "byId": {
     "squat-high": {
+      "calibrationCaveat": "六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/validation/squat-calibration-result.md。",
       "kinematics": {
         "status": "failed",
         "total": 11,
@@ -62,6 +63,7 @@
       }
     },
     "squat-low": {
+      "calibrationCaveat": "沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/validation/squat-calibration-result.md。",
       "kinematics": {
         "status": "failed",
         "total": 8,
@@ -104,6 +106,7 @@
       }
     },
     "front-squat": {
+      "calibrationCaveat": "沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/validation/squat-calibration-result.md。",
       "kinematics": {
         "status": "failed",
         "total": 3,
@@ -148,6 +151,7 @@
       }
     },
     "goblet-squat": {
+      "calibrationCaveat": "沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/validation/squat-calibration-result.md。",
       "kinematics": {
         "status": "unvalidated",
         "total": 0,

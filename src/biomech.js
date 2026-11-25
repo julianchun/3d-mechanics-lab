@@ -1103,6 +1103,10 @@ function armChainBent(pose, S, B, pole, [epsDeg, Lh], hpref) {
 export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [105, 0.05] };
 // Demers 等 2018 圖 1（無負重背蹲，股骨角 20°／40°／60°）的六個踝背屈圖讀點，
 // 依 docs/validation/squat-calibration-plan.md 等權網格擬合；跨到負重／其他槓位是外推。
+// 寫計畫前已由測試組診斷知道髖位太後、膝前移不足，三種參數與冪函數形式不是盲選；數值才由 Demers 決定。
+// 原文大轉子間寬／腳跟外側標記暫以模型髖中心 18 cm／踝中心距代理，兩站距僅對應 stance≈0.024／0.238；
+// 預設 stance=0.3 的 dom=0.30 因而是外推。若僅假設大轉子寬 32 cm（非實測），兩點約為 stance=0.52／0.90。
+// 六點擬合三參數；站距差 0.8–1.5° 接近讀圖誤差 ±1–2°，參數可辨識性弱，冪函數殘差呈系統型態。
 const SQUAT_STANCE_SHIFT = 0.47;
 const SQUAT_SHANK_PROGRESS = 0.83;
 function freeSquatShankAngle(P, e, frontShift = 0) {
@@ -1114,8 +1118,9 @@ function squatPose(P, e) {
   const low = P.barPos === 'low', front = P.barPos === 'front';
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
-  // 低槓 +0.08、前槓 -0.08 仍為原來跨研究反推的示範偏移，未由 Demers 的單槓位資料重估。
-  // 40°／16° 策略端點與大腿 70°／118° 仍為原始示範幾何，非研究量測邊界。
+  // 低槓 +0.08、前槓 -0.08 仍為原來跨研究反推的示範偏移，未由 Demers 的單槓位資料重估；兩式姿勢未獨立校準。
+  // 40°／16° 策略端點與大腿 70°／118° 仍為原始示範幾何，非研究量測邊界；端點也未納入本次擬合。
+  // Demers 赤足持輕木桿、無外加負重；產品 1.0 倍體重槓重是外推。前蹲在 Goršič 定點可疑偏直立。
   // 站距斜率及小腿隨股骨角進度的曲線按上述獨立校準組；舊註解 46.6°／29.2° 是舊模型輸出，非研究目標。
   const { flat: flatShank } = freeSquatShankAngle(P, e, low ? 0.08 : front ? -0.08 : 0);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
