@@ -1,15 +1,15 @@
 {
   "modelVersion": "0.7.3",
   "summary": {
-    "total": 35,
-    "count": 16,
-    "pass": 13,
-    "fail": 3,
-    "definitionMismatch": 12,
+    "total": 75,
+    "count": 44,
+    "pass": 24,
+    "fail": 20,
+    "definitionMismatch": 24,
     "exploratory": 3,
     "consistencyCheck": 4,
     "assumptionSensitivePass": 3,
-    "sources": 4
+    "sources": 7
   },
   "byId": {
     "squat-high": {
@@ -289,36 +289,50 @@
     },
     "deadlift": {
       "kinematics": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
-        "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
+        "status": "failed",
+        "total": 12,
+        "count": 8,
+        "pass": 4,
+        "fail": 4,
+        "definitionMismatch": 4,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/deadlift.md",
+          "https://pubmed.ncbi.nlm.nih.gov/10912892/",
+          "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+        ]
       },
       "moments": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
-        "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
+        "status": "failed",
+        "total": 8,
+        "count": 6,
+        "pass": 5,
+        "fail": 1,
+        "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/deadlift.md",
+          "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+        ]
       },
       "muscles": {
-        "status": "unvalidated",
+        "status": "partial",
         "count": 0,
         "pass": 0,
         "fail": 0,
-        "qualitativeCount": 0,
-        "qualitativePass": 0,
+        "qualitativeCount": 1,
+        "qualitativePass": 1,
         "qualitativeFail": 0,
-        "links": []
+        "links": [
+          "docs/research/results/deadlift.md",
+          "docs/research/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "deficit-dl": {
@@ -391,49 +405,66 @@
     },
     "sumo": {
       "kinematics": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
+        "status": "failed",
+        "total": 9,
+        "count": 7,
         "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
+        "fail": 7,
+        "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/deadlift.md",
+          "https://pubmed.ncbi.nlm.nih.gov/10912892/",
+          "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+        ]
       },
       "moments": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
-        "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
+        "status": "failed",
+        "total": 8,
+        "count": 6,
+        "pass": 2,
+        "fail": 4,
+        "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/deadlift.md",
+          "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+        ]
       },
       "muscles": {
-        "status": "unvalidated",
+        "status": "partial",
         "count": 0,
         "pass": 0,
         "fail": 0,
-        "qualitativeCount": 0,
-        "qualitativePass": 0,
+        "qualitativeCount": 1,
+        "qualitativePass": 1,
         "qualitativeFail": 0,
-        "links": []
+        "links": [
+          "docs/research/results/deadlift.md",
+          "docs/research/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "rdl": {
       "kinematics": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
+        "status": "failed",
+        "total": 3,
+        "count": 1,
         "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
+        "fail": 1,
+        "definitionMismatch": 2,
         "exploratory": 0,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/deadlift.md",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+        ]
       },
       "moments": {
         "status": "unvalidated",

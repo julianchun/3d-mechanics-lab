@@ -1,0 +1,732 @@
+{
+  "id": "henning-2023",
+  "source": {
+    "authors": "Henning M",
+    "year": 2023,
+    "title": "Kinematics and Kinetics of Sumo versus Conventional Deadlift",
+    "url": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+  },
+  "sourceQuality": {
+    "rating": "caution",
+    "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+    "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+  },
+  "participants": {
+    "n": 12,
+    "sex": "11 男、1 女",
+    "training": "兩式硬舉均至少五年經驗的力量舉選手",
+    "massKg": {
+      "mean": 89.9,
+      "sd": 9.4181
+    },
+    "heightM": {
+      "mean": 1.804,
+      "sd": 0.04917
+    }
+  },
+  "protocol": "各式以個人 6RM 進行三次；傳統平均 148.3±31.7 kg，相撲 141.7±26.7 kg。10 台攝影機、測力板及 Visual3D 逆動力學；離地與槓過膝為獨立事件。未用腰帶，鞋型未報。",
+  "model": "預設 1.75 m／75 kg 身體；槓重按研究平均公斤數／報告體重均值換算成體重比。模型固定傳統／相撲踝中心站距約 30／72 cm、腳尖約 8／40°，研究量跟內側站距 33.9／65.4 cm、腳尖 8.1／27.0°，不能完全對齊。模型 e=1 代理離地，過膝按槓心與膝中心等高求解。",
+  "footwear": "未報；模型無鞋底幾何，保留平底預設。",
+  "conditions": [
+    {
+      "id": "conventional",
+      "catalogId": "deadlift",
+      "params": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "referenceLoadKg": 148.3,
+      "loadRatio": 1.64961,
+      "conditionDerivation": "方法頁 8–10：傳統 6RM 平均槓重 148.3 kg／本文體重均值 89.9 kg＝1.64961×體重；槓片自地面起、無墊高，故 start=0；研究未量槓離小腿距，模型保留貼腿 barDist=0，不視為已對齊。離地=最低點 e=1；過膝=槓心與膝中心等高。模型站距固定約 30 cm，研究跟內側 33.9±5.7 cm；鞋型未報。",
+      "measurements": [
+        {
+          "id": "liftOff-trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 77.2,
+            "sd": 10.9,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, trunk",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "liftOff-hip-angle",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 82.8,
+            "sd": 13.6,
+            "unit": "deg",
+            "definition": "骨盆—大腿關節角，模型只有軀幹—大腿代理"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, hip-angle",
+          "tolerance": {
+            "absolute": 20,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch"
+        },
+        {
+          "id": "liftOff-knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 72.7,
+            "sd": 12.9,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, knee",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "liftOff-ankle-angle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 10.8,
+            "sd": 6.7,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, ankle-angle",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "limitations": "研究足部座標可能與模型腳掌方向不同；未報鞋型。"
+        },
+        {
+          "id": "liftOff-hip-moment",
+          "layer": "moments",
+          "metric": "hipExtensionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -301.6,
+            "sd": 75.7,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, hip-moment",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate",
+          "limitations": "研究為動態逆動力學；模型為準靜態，且髖中心採代理。"
+        },
+        {
+          "id": "liftOff-knee-moment",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -57.8,
+            "sd": 30.5,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, knee-moment",
+          "tolerance": {
+            "absolute": 65,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "liftOff-ankle-moment",
+          "layer": "moments",
+          "metric": "anklePlantarflexionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -107.6,
+            "sd": 26.9,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, ankle-moment",
+          "tolerance": {
+            "absolute": 60,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "liftOff-lumbar",
+          "layer": "moments",
+          "metric": "lumbarExtensionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -42.8,
+            "sd": 57.3,
+            "unit": "Nm",
+            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, lumbar",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "comparisonRole": "definition-mismatch",
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "kneePassing-trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 67.9,
+            "sd": 5.3,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, trunk",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "kneePassing-hip-angle",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 50.2,
+            "sd": 14.3,
+            "unit": "deg",
+            "definition": "骨盆—大腿關節角，模型只有軀幹—大腿代理"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, hip-angle",
+          "tolerance": {
+            "absolute": 20,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch"
+        },
+        {
+          "id": "kneePassing-knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 28.4,
+            "sd": 6.8,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, knee",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "kneePassing-ankle-angle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -6.0,
+            "sd": 5.1,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, ankle-angle",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "limitations": "研究足部座標可能與模型腳掌方向不同；未報鞋型。"
+        },
+        {
+          "id": "kneePassing-hip-moment",
+          "layer": "moments",
+          "metric": "hipExtensionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -267.2,
+            "sd": 64.7,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, hip-moment",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate",
+          "limitations": "研究為動態逆動力學；模型為準靜態，且髖中心採代理。"
+        },
+        {
+          "id": "kneePassing-knee-moment",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 49.9,
+            "sd": 30.8,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, knee-moment",
+          "tolerance": {
+            "absolute": 65,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "kneePassing-ankle-moment",
+          "layer": "moments",
+          "metric": "anklePlantarflexionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -66.3,
+            "sd": 42.1,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, ankle-moment",
+          "tolerance": {
+            "absolute": 60,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "kneePassing-lumbar",
+          "layer": "moments",
+          "metric": "lumbarExtensionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -41.9,
+            "sd": 49.7,
+            "unit": "Nm",
+            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, lumbar",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "comparisonRole": "definition-mismatch",
+          "referenceTransform": "negate"
+        }
+      ]
+    },
+    {
+      "id": "sumo",
+      "catalogId": "sumo",
+      "params": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "referenceLoadKg": 141.7,
+      "loadRatio": 1.5762,
+      "conditionDerivation": "方法頁 8–10：相撲 6RM 平均槓重 141.7 kg／本文體重均值 89.9 kg＝1.5762×體重；槓片自地面起、無墊高，故 start=0；研究未量槓離小腿距，模型保留貼腿 barDist=0，不視為已對齊。離地=最低點 e=1；過膝=槓心與膝中心等高。模型站距固定約 72 cm／腳尖 40°，研究跟內側 65.4±12.8 cm／腳尖 27.0±7.9°；鞋型未報。",
+      "measurements": [
+        {
+          "id": "liftOff-trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 69.7,
+            "sd": 14.0,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, trunk",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "liftOff-hip-angle",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 82.1,
+            "sd": 16.0,
+            "unit": "deg",
+            "definition": "骨盆—大腿關節角，模型只有軀幹—大腿代理"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, hip-angle",
+          "tolerance": {
+            "absolute": 20,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch"
+        },
+        {
+          "id": "liftOff-knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": 63.1,
+            "sd": 14.4,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, knee",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "liftOff-ankle-angle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -1.8,
+            "sd": 8.1,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, ankle-angle",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "limitations": "研究足部座標可能與模型腳掌方向不同；未報鞋型。"
+        },
+        {
+          "id": "liftOff-hip-moment",
+          "layer": "moments",
+          "metric": "hipExtensionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -258.8,
+            "sd": 114.9,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, hip-moment",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate",
+          "limitations": "研究為動態逆動力學；模型為準靜態，且髖中心採代理。"
+        },
+        {
+          "id": "liftOff-knee-moment",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -53.3,
+            "sd": 47.2,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, knee-moment",
+          "tolerance": {
+            "absolute": 65,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "liftOff-ankle-moment",
+          "layer": "moments",
+          "metric": "anklePlantarflexionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -81.0,
+            "sd": 47.2,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, ankle-moment",
+          "tolerance": {
+            "absolute": 60,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "liftOff-lumbar",
+          "layer": "moments",
+          "metric": "lumbarExtensionMoment",
+          "sample": {
+            "type": "liftOff"
+          },
+          "reference": {
+            "mean": -39.6,
+            "sd": 51.3,
+            "unit": "Nm",
+            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+          },
+          "evidence": "table",
+          "location": "Table 2, LO, lumbar",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "comparisonRole": "definition-mismatch",
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "kneePassing-trunk",
+          "layer": "kinematics",
+          "metric": "trunkInclination",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 54.4,
+            "sd": 7.3,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, trunk",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "kneePassing-hip-angle",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 47.5,
+            "sd": 18.0,
+            "unit": "deg",
+            "definition": "骨盆—大腿關節角，模型只有軀幹—大腿代理"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, hip-angle",
+          "tolerance": {
+            "absolute": 20,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch"
+        },
+        {
+          "id": "kneePassing-knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 30.1,
+            "sd": 10.3,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, knee",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "kneePassing-ankle-angle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -13.5,
+            "sd": 7.0,
+            "unit": "deg",
+            "definition": "Visual3D 矢狀面角度"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, ankle-angle",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          },
+          "limitations": "研究足部座標可能與模型腳掌方向不同；未報鞋型。"
+        },
+        {
+          "id": "kneePassing-hip-moment",
+          "layer": "moments",
+          "metric": "hipExtensionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -213.5,
+            "sd": 88.4,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, hip-moment",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate",
+          "limitations": "研究為動態逆動力學；模型為準靜態，且髖中心採代理。"
+        },
+        {
+          "id": "kneePassing-knee-moment",
+          "layer": "moments",
+          "metric": "kneeExtensionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": 28.0,
+            "sd": 57.6,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, knee-moment",
+          "tolerance": {
+            "absolute": 65,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "kneePassing-ankle-moment",
+          "layer": "moments",
+          "metric": "anklePlantarflexionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -66.3,
+            "sd": 45.9,
+            "unit": "Nm",
+            "definition": "Visual3D 矢狀面右側內部淨力矩"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, ankle-moment",
+          "tolerance": {
+            "absolute": 60,
+            "unit": "Nm"
+          },
+          "referenceTransform": "negate"
+        },
+        {
+          "id": "kneePassing-lumbar",
+          "layer": "moments",
+          "metric": "lumbarExtensionMoment",
+          "sample": {
+            "type": "kneePassing"
+          },
+          "reference": {
+            "mean": -35.6,
+            "sd": 46.0,
+            "unit": "Nm",
+            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+          },
+          "evidence": "table",
+          "location": "Table 2, KP, lumbar",
+          "tolerance": {
+            "absolute": 100,
+            "unit": "Nm"
+          },
+          "comparisonRole": "definition-mismatch",
+          "referenceTransform": "negate"
+        }
+      ]
+    }
+  ]
+}

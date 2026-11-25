@@ -1,6 +1,6 @@
 # 模型限制與已知問題
 
-這些限制適用於目前畫面與輸出；`tests/plausibility.mjs` 的已知問題仍逐項執行檢查，避免靜默變動。結果摘要見[深蹲比對](results/squat.md)，數值及資料來源見[方法](methods.md)與[參考資料](references.md)。
+這些限制適用於目前畫面與輸出；`tests/plausibility.mjs` 的已知問題仍逐項執行檢查，避免靜默變動。結果摘要見[深蹲比對](results/squat.md)與[硬舉比對](results/deadlift.md)，數值及資料來源見[方法](methods.md)與[參考資料](references.md)。
 
 ## 全身與姿勢
 

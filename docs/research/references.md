@@ -1,6 +1,6 @@
 # 參考資料
 
-文獻依資料用途分類；動作研究另依動作模式排列。原文表格、同儕審查資料與原廠規格支持的範圍各不相同；未有同條件來源的模型常數，在[器械資料](machine-data.md)與[肌肉參數](muscle-params.md)標為估計或未查證。模型與研究的實際比對見[深蹲結果](results/squat.md)。
+文獻依資料用途分類；動作研究另依動作模式排列。原文表格、同儕審查資料與原廠規格支持的範圍各不相同；未有同條件來源的模型常數，在[器械資料](machine-data.md)與[肌肉參數](muscle-params.md)標為估計或未查證。模型與研究的實際比對見[深蹲結果](results/squat.md)與[硬舉結果](results/deadlift.md)。
 
 ## 人體測量與節段參數
 
@@ -36,6 +36,11 @@
 - [Gullett 等（2009）](https://doi.org/10.1519/JSC.0b013e31818546bb)：前／背蹲動態膝力矩與肌電，15 人；峰值包含動態條件。
 - [Hutchison 與 Caterisano（2019）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/)：10 名男性的鋼槓背蹲動態峰值；平均 1RM 公斤數未報，僅探索展示。
 - [Larsen 等（2021）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)：18 人高／低槓、窄／寬站 3RM 的軀幹與關節角；只有軀幹角與目前模型直接比較。
+- [Escamilla 等（2000）](https://pubmed.ncbi.nlm.nih.gov/10912892/)及[原文掃描](https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts)：24 名男性國家級力量舉選手兩式非配對，表 3 槓垂直位移；掃描 OCR 須注意欄位交錯。
+- [Henning（2023）學位論文](https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en)：12 名配對選手兩式 6RM，表 2 事件角度與淨關節力矩；非同儕審查且表列單位有錯標。
+- [Lee 等（2018）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/)：21 名男性 70% RDL 1RM 的傳統／羅馬尼亞硬舉，表 3 膝屈角；平均 1RM 公斤數未報。
+- [Hanen 等（2025）](https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2025.1597209/full)：30 名男性配對兩式，表 1–2 的三維關節 ROM 與動態力矩作方向交叉核對；平均 1RM 公斤數未報。
+- [Cholewicki 等（1991）](https://pubmed.ncbi.nlm.nih.gov/1758295/)：競賽選手 L4/L5 力矩及腰椎負荷模型；摘要報相撲關節矩約低 10%，不等於本模型的單一剛體軀幹力矩。
 
 ## 校準研究
 

@@ -1,4 +1,4 @@
-// 以事先固定的文獻數值與容許誤差比對深蹲；FAIL 是研究結果，不讓測試程序中斷。
+// 以事先固定的文獻數值與容許誤差比對動作；FAIL 是研究結果，不讓測試程序中斷。
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,6 +24,7 @@ const clamp = (v) => Math.max(-1, Math.min(1, v));
 const round = (v) => Number(v.toFixed(4));
 const metricLayer = {
   trunkInclination: 'kinematics', pelvisAnteriorTilt: 'kinematics', hipFlexion: 'kinematics', kneeFlexion: 'kinematics', ankleDorsiflexion: 'kinematics',
+  barVerticalTravelPctHeight: 'kinematics',
   hipExtensionMoment: 'moments', kneeExtensionMoment: 'moments', anklePlantarflexionMoment: 'moments', lumbarExtensionMoment: 'moments',
 };
 const momentDof = { hipExtensionMoment: 'hipExt', kneeExtensionMoment: 'kneeExt', anklePlantarflexionMoment: 'ankPF', lumbarExtensionMoment: 'trunkExt' };
@@ -46,8 +47,16 @@ function thighAngle(pose) {
   return deg(Math.atan2(Math.abs(v[2]), -v[1]));
 }
 
-function sampleE(type, sample, params) {
-  if (type === 'bottom') return 1;
+function sampleE(lift, type, sample, params) {
+  if (type === 'bottom' || type === 'liftOff') return 1;
+  if (type === 'kneePassing') {
+    if (lift !== 'deadlift') throw new Error('過膝事件只適用硬舉');
+    const delta = (e) => { const p = solvePose(lift, params, e); return p.bar[1] - p.R.knee[1]; };
+    if (!(delta(0) >= 0 && delta(1) <= 0)) throw new Error('槓未經過膝中心高度');
+    let lo = 0, hi = 1;
+    for (let i = 0; i < 32; i++) { const mid = (lo + hi) / 2; if (delta(mid) > 0) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
   if (type === 'parallelThigh') {
     const target = sample.targetDeg;
     if (!Number.isFinite(target) || target <= 0 || target >= 180) throw new Error('parallelThigh.targetDeg 無效');
@@ -65,15 +74,15 @@ function sampleE(type, sample, params) {
   throw new Error(`未支援 sample.type：${type}`);
 }
 
-function withSquatLoad(loadRatio, run) {
+function withLoad(lift, loadRatio, run) {
   if (loadRatio === null) return run();
   if (!Number.isFinite(loadRatio) || loadRatio <= 0) throw new Error(`無效 loadRatio：${loadRatio}`);
-  const original = BAR_RATIO.squat;
+  const original = BAR_RATIO[lift];
   try {
-    BAR_RATIO.squat = loadRatio;
+    BAR_RATIO[lift] = loadRatio;
     return run();
   } finally {
-    BAR_RATIO.squat = original;
+    BAR_RATIO[lift] = original;
   }
 }
 
@@ -92,22 +101,28 @@ function peakEndE(sample, params) {
   return (lo + hi) / 2;
 }
 
-function modelValue(measure, params) {
+function modelValue(lift, measure, params) {
   const { metric, sample } = measure;
   // 模型沒有獨立骨盆；保留文獻定點，但不虛構骨盆角模型值。
-  if (metric === 'pelvisAnteriorTilt') return { value: null, atE: round(sampleE(sample.type, sample, params)) };
+  if (metric === 'pelvisAnteriorTilt') return { value: null, atE: round(sampleE(lift, sample.type, sample, params)) };
   let value, atE;
-  if (sample.type === 'peak') {
+  if (sample.type === 'fullRange') {
+    if (metric !== 'barVerticalTravelPctHeight' || lift !== 'deadlift') throw new Error('全程槓位移只適用硬舉');
+    const top = solvePose(lift, params, 0), bottom = solvePose(lift, params, 1);
+    if (!top.ok || !bottom.ok) throw new Error('全程槓位移姿勢失敗');
+    value = (top.bar[1] - bottom.bar[1]) / BODY.heightM * 100;
+    atE = 1;
+  } else if (sample.type === 'peak') {
     if (!momentDof[metric]) throw new Error(`${metric} 不支援 peak`);
     value = -Infinity;
     const endE = peakEndE(sample, params);
     for (let i = 0; i <= 400; i++) {
-      const e = endE * i / 400, raw = analyze('squat', params, e).dem[momentDof[metric]];
+      const e = endE * i / 400, raw = analyze(lift, params, e).dem[momentDof[metric]];
       if (raw > value) { value = raw; atE = e; }
     }
   } else {
-    atE = sampleE(sample.type, sample, params);
-    const result = analyze('squat', params, atE);
+    atE = sampleE(lift, sample.type, sample, params);
+    const result = analyze(lift, params, atE);
     if (!result.pose.ok) throw new Error(`姿勢失敗，e=${round(atE)}`);
     value = momentDof[metric] ? result.dem[momentDof[metric]] : angles(result.pose)[metric];
   }
@@ -127,6 +142,7 @@ function referenceValue(measure) {
   if (!Number.isFinite(raw)) throw new Error('文獻平均值非數字');
   if (measure.referenceTransform === 'minus90') return raw - 90;
   if (measure.referenceTransform === 'absolute') return Math.abs(raw);
+  if (measure.referenceTransform === 'negate') return -raw;
   if (measure.referenceTransform !== undefined) throw new Error(`未知文獻轉換：${measure.referenceTransform}`);
   return raw;
 }
@@ -140,9 +156,10 @@ for (const source of sources) {
   if (!source.id || !source.source?.url || !source.participants || !source.protocol || !source.model || !Array.isArray(source.conditions)) throw new Error(`${source.id ?? '?'} 資料格式不完整`);
   for (const condition of source.conditions) {
     const entry = entries.get(condition.catalogId);
-    if (!entry || entry.lift !== 'squat') throw new Error(`未知深蹲清單項目：${condition.catalogId}`);
-    const params = { ...defaultParams('squat'), ...entry.set, ...condition.params };
-    if (params.barPos !== entry.set.barPos) throw new Error(`${condition.catalogId} 槓位與清單不符`);
+    if (!entry || !['squat', 'deadlift', 'rdl'].includes(entry.lift)) throw new Error(`未知驗證清單項目：${condition.catalogId}`);
+    const params = { ...defaultParams(entry.lift), ...entry.set, ...condition.params };
+    if (entry.lift === 'squat' && params.barPos !== entry.set.barPos) throw new Error(`${condition.catalogId} 槓位與清單不符`);
+    if (entry.lift === 'deadlift' && (params.style !== entry.set.style || params.start !== entry.set.start)) throw new Error(`${condition.catalogId} 站姿或起槓高度與清單不符`);
     if (!condition.conditionDerivation || !Object.hasOwn(condition, 'loadRatio')) throw new Error(`${source.id}/${condition.id} 缺少條件推導或負重`);
     for (const measure of condition.measurements) {
       const id = `${source.id}/${condition.id}/${measure.id}`;
@@ -153,18 +170,18 @@ for (const source of sources) {
       if (!['table', 'text', 'figureDigitized', 'datasetComputed'].includes(measure.evidence) || !measure.location) throw new Error(`${id} 出處不完整`);
       if (!(measure.tolerance?.absolute >= 0) || measure.tolerance.unit !== measure.reference.unit) throw new Error(`${id} 容許範圍無效`);
       const reference = referenceValue(measure);
-      const actual = withSquatLoad(condition.loadRatio, () => modelValue(measure, params));
+      const actual = withLoad(entry.lift, condition.loadRatio, () => modelValue(entry.lift, measure, params));
       const category = measure.comparisonRole ?? 'comparable';
       if (!['comparable', 'definition-mismatch', 'exploratory', 'consistency-check'].includes(category)) throw new Error(`${id} 比對類別無效`);
       const comparableDefinition = category !== 'definition-mismatch';
       const error = comparableDefinition ? actual.value - reference : null;
       const withinTolerance = comparableDefinition ? Math.abs(error) <= measure.tolerance.absolute + 1e-8 : null;
-      if (category === 'comparable' && params.heelHeight > 0) {
+      if (entry.lift === 'squat' && category === 'comparable' && params.heelHeight > 0) {
         heelContexts.set(id, { measure, params, loadRatio: condition.loadRatio, reference });
       }
       comparisons.push({
         id, catalogId: condition.catalogId, layer: measure.layer, metric: measure.metric,
-        sample: measure.sample, modelParams: condition.params, modelLoadRatio: condition.loadRatio ?? BAR_RATIO.squat, modelE: actual.atE,
+        sample: measure.sample, modelParams: condition.params, modelLoadRatio: condition.loadRatio ?? BAR_RATIO[entry.lift], modelE: actual.atE,
         model: actual.value, reference: comparableDefinition ? round(reference) : null,
         referenceRaw: measure.reference.mean, referenceSd: measure.reference.sd,
         unit: measure.reference.unit, error: comparableDefinition ? round(error) : null, tolerance: measure.tolerance.absolute,
@@ -182,7 +199,7 @@ for (const source of sources) {
 const shares = [0, 0.25, HEEL_SHANK_SHARE, 0.75, 1];
 function heelResult(context, share) {
   return withHeelShankShareForValidation(share, () =>
-    withSquatLoad(context.loadRatio, () => modelValue(context.measure, context.params)));
+    withLoad('squat', context.loadRatio, () => modelValue('squat', context.measure, context.params)));
 }
 function heelPass(context, share) {
   return Math.abs(heelResult(context, share).value - context.reference) <= context.measure.tolerance.absolute + 1e-8;
@@ -248,18 +265,18 @@ const byId = Object.fromEntries(CATALOG.map((entry) => {
       status: stats.count ? (stats.fail ? 'failed' : 'partial') : stats.definitionMismatch ? 'definition-mismatch' : stats.exploratory ? 'exploratory' : 'unvalidated',
       ...baseStats,
       ...(stats.count ? { assumptionSensitivePass } : {}),
-      links: items.length ? ['docs/research/results/squat.md', ...new Set(items.map((c) => c.source))] : [],
+      links: items.length ? [entry.cat === 'hinge' ? 'docs/research/results/deadlift.md' : 'docs/research/results/squat.md', ...new Set(items.map((c) => c.source))] : [],
     };
   };
   const muscle = { status: 'unvalidated', count: 0, pass: 0, fail: 0, qualitativeCount: 0, qualitativePass: 0, qualitativeFail: 0, links: [] };
-  if (['squat-high', 'squat-low', 'front-squat'].includes(entry.id)) {
+  if (['squat-high', 'squat-low', 'front-squat', 'deadlift', 'sumo'].includes(entry.id)) {
     const qualitative = (trendStatus.byId[entry.id] || []).filter((t) => /活化|肌.*負荷/.test(t.compare));
     muscle.status = qualitative.length ? (qualitative.some((t) => !t.pass) ? 'failed' : 'partial') : 'unvalidated';
     muscle.qualitativeCount = qualitative.length;
     muscle.qualitativePass = qualitative.filter((t) => t.pass).length;
     muscle.qualitativeFail = qualitative.filter((t) => !t.pass).length;
     muscle.note = '僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證';
-    muscle.links = qualitative.length ? ['docs/research/results/squat.md', 'docs/research/references.md'] : [];
+    muscle.links = qualitative.length ? [entry.cat === 'hinge' ? 'docs/research/results/deadlift.md' : 'docs/research/results/squat.md', 'docs/research/references.md'] : [];
   }
   return [entry.id, {
     ...(calibrationCaveats[entry.id] ? { calibrationCaveat: calibrationCaveats[entry.id] } : {}),
@@ -291,7 +308,7 @@ function makeFigure() {
       const condition = source.conditions.find((c) => c.id === id);
       const params = { ...defaultParams('squat'), ...condition.params };
       const comparison = comparisons.find((c) => c.id.startsWith(`${panel.source}/${id}/`) && c.metric === panel.metric);
-      const series = withSquatLoad(condition.loadRatio, () => Array.from({ length: 101 }, (_, i) => {
+      const series = withLoad('squat', condition.loadRatio, () => Array.from({ length: 101 }, (_, i) => {
         const r = analyze('squat', params, i / 100);
         let value = momentDof[panel.metric] ? r.dem[momentDof[panel.metric]] / (BODY.mass * 1.75) : angles(r.pose)[panel.metric];
         return value;

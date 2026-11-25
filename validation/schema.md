@@ -26,3 +26,13 @@
 `results.summary.total` 是全部筆數；`count=pass+fail` 是可比較筆數；另列 `definitionMismatch`、`exploratory`、`consistencyCheck`。`src/validation-status.json` 各清單項目、各層使用相同算法，層級狀態只由可比較筆數決定：有失敗為 `failed`、全通過仍因條件限制為 `partial`；零筆可比較時為 `definition-mismatch`、`exploratory` 或 `unvalidated`。肌肉層仍只有定性趨勢，不代表肌力已驗證。
 
 `npm run test:heel-sweep` 將鞋跟足板角分給小腿前傾的 `HEEL_SHANK_SHARE` 暫時設為 0、0.25、0.5、0.75、1；此指令不寫入產品或驗證產物。對有鞋跟且可比較的項目，再以 0.01 網格偵測 0–1 間通過／失敗翻轉，二分求邊界。翻轉項於 `results.comparisons[]` 加 `assumptionSensitive: { "parameter": "HEEL_SHANK_SHARE", "passRange": [起點, 終點] }`，端點取四位小數；`passRange` 表示此比例下通過原門檻，不代表生理有效範圍。`summary.assumptionSensitivePass` 與 `src/validation-status.json` 有可比較項目的層級同名欄位為目前 0.5 預設下，會受此假設翻轉的通過數。
+
+## T23 硬舉預先固定條件
+
+`escamilla-2000.json`、`henning-2023.json`、`lee-2018.json` 的研究數值、比較角色與絕對容許差須先獨立提交，再執行任何模型比對；不以模型輸出調整條件。硬舉 `catalogId` 可為 `deadlift`、`sumo`、`deficit-dl`、`block-pull`，RDL 為 `rdl`；清單的 `style`／`start` 必須一致。`loadRatio` 暫時覆寫對應的 `BAR_RATIO.deadlift` 或 `.rdl`，`null` 表示平均負重公斤數未知、只用產品預設作探索；不能聲稱負重對齊。`conditions[].participants` 可覆寫研究整體受試者分布，供 Escamilla 非配對兩組各自抽樣。
+
+`sample.type` 另可為 `liftOff`（硬舉 `e=1`）、`kneePassing`（沿上升路徑找槓心與右膝中心等高）、`fullRange`（頂點至離地槓心垂直位移）。`barVerticalTravelPctHeight` 為槓垂直位移／當前身高 ×100，不包含槓片壓縮或預張力。`referenceTransform: "negate"` 用於研究負號代表伸力矩的表列值，正值代表屈力矩時轉為模型的負伸需求。模型力矩為右側／單腳；Henning 的「average」視為左右平均，並保留側別不確定。L5/S1 研究點與模型單一剛體軀幹不等同，列 `definition-mismatch`。
+
+Henning 的槓重來自方法頁 8，受試者 SD 用表 1 逐人值計算；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致，負重比例採本文明示的 89.9 kg。其站距、腳尖、鞋型與模型不能完整對齊，來源品質另註記學位論文及表 2 單位錯標。Lee 的平均 1RM 未報，只有最低點膝屈角列可比較；骨盆—大腿髖角及欠站立零位的踝角列定義不一致。Escamilla 的槓位移採原文表 3，來源掃描 OCR 有欄位交錯疑慮。
+
+固定身體容許差按指標在來源資料中事先固定：Henning 軀幹／膝／踝角分別 15°／15°／12°，髖／膝／踝力矩 100／65／60 Nm；Escamilla 槓位移 5% 身高；Lee 膝角 15°。容許差是建模與量測代理的工程界線，不是研究 SD 或安全門檻。群體仍沿用 `|模型平均−研究平均| ≤ 研究個體 SD`；兩準則分開呈現。RDL 底點研究事件不完全明示且有人未觸地，膝角結果須連同此限制解讀。
