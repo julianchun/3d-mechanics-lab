@@ -19,15 +19,49 @@ export function withHeelShankShareForValidation(share, run) {
   }
 }
 
-export const BODY = {
+export const DEFAULT_BODY = Object.freeze({
   // 依 BodyParts3D 骨骼比例，縮放到身高 175 cm
-  mass: 75, Ls: 0.394, Lt: 0.44, Ltr: 0.518, Lu: 0.287, Lf: 0.332,
+  heightM: 1.75, sex: 'male', mass: 75, Ls: 0.394, Lt: 0.44, Ltr: 0.518, Lu: 0.287, Lf: 0.332,
   hipHalf: 0.09, shHalf: 0.167, ankleH: 0.068,
-};
+});
+const BODY_LENGTHS = ['Ls', 'Lt', 'Ltr', 'Lu', 'Lf', 'hipHalf', 'shHalf', 'ankleH'];
+// ratios 以身高為分母；未指定的欄位依原示範身體等比例縮放。
+export function createBody({ heightM = DEFAULT_BODY.heightM, massKg = DEFAULT_BODY.mass, sex = 'male', ratios = {} } = {}) {
+  if (!Number.isFinite(heightM) || heightM < 1.2 || heightM > 2.3) throw new Error('身高須介於 1.2 與 2.3 m');
+  if (!Number.isFinite(massKg) || massKg < 25 || massKg > 250) throw new Error('體重須介於 25 與 250 kg');
+  if (!['male', 'female'].includes(sex)) throw new Error('性別須為 male 或 female');
+  for (const [key, value] of Object.entries(ratios)) {
+    if (!BODY_LENGTHS.includes(key) || !Number.isFinite(value) || value <= 0 || value >= 0.7) throw new Error(`無效身體比例：${key}`);
+  }
+  const body = { heightM, sex, mass: massKg };
+  for (const key of BODY_LENGTHS) body[key] = ratios[key] === undefined ?
+    DEFAULT_BODY[key] * (heightM / DEFAULT_BODY.heightM) : heightM * ratios[key];
+  return Object.freeze(body);
+}
+// 模型幾何使用同步的動態身體範圍；可巢狀呼叫，finally 保證恢復。
+// 不可在 run 內 await。此 API 適合批次驗證，也可供日後 UI 在單次運算中使用。
+export let BODY = DEFAULT_BODY;
+export function withBody(body, run) {
+  if (!body || !BODY_LENGTHS.every((key) => Number.isFinite(body[key]) && body[key] > 0) ||
+      !Number.isFinite(body.mass) || !['male', 'female'].includes(body.sex)) throw new Error('無效身體參數');
+  const previous = BODY;
+  BODY = body;
+  try {
+    const result = run();
+    if (result && typeof result.then === 'function') throw new Error('withBody 僅支援同步函式');
+    return result;
+  } finally { BODY = previous; }
+}
 // de Leva 1996 表 4，男性節段質量（全身比例）；頭頸與手各自計入，不把殘差塞進軀幹。
 // DOI: 10.1016/0021-9290(95)00178-6；節段標記與本骨架的對應見 docs/validation/squat-diagnosis.md。
-const MF = { head: 0.0694, trunk: 0.4346, upper: 0.0271, fore: 0.0162, hand: 0.0061,
-  thigh: 0.1416, shank: 0.0433, foot: 0.0137 };
+const SEGMENTS = {
+  male: { mass: { head: 0.0694, trunk: 0.4346, upper: 0.0271, fore: 0.0162, hand: 0.0061,
+    thigh: 0.1416, shank: 0.0433, foot: 0.0137 }, cm: { head: 0.5976, trunkUp: 0.5514, upper: 0.5772,
+    fore: 0.4574, hand: 0.7900, thigh: 0.4095, shank: 0.4395, foot: 0.4415 } },
+  female: { mass: { head: 0.0668, trunk: 0.4257, upper: 0.0255, fore: 0.0138, hand: 0.0056,
+    thigh: 0.1478, shank: 0.0481, foot: 0.0129 }, cm: { head: 0.5894, trunkUp: 0.5036, upper: 0.5754,
+    fore: 0.4559, hand: 0.7474, thigh: 0.3612, shank: 0.4352, foot: 0.4014 } },
+};
 // 負重比例（× 體重）：
 // - 臀推 1.70、臀橋 1.83：參考 Contreras et al. 2015（PMID 26214739；10RM 臀推／背蹲比 87.4／53.2 kg ≈ 1.64×，注意 1.64× 為臀推相對背蹲之負重比，非體重倍數）
 //   與 Kennedy et al. 2024（PMID 35586943；5RM 臀推 143.6 kg ≈ 1.71× 體重、臀橋 154.3 kg ≈ 1.83× 體重，體重 84.3 kg）。
@@ -1051,6 +1085,12 @@ function applySquatHeel(pose, foot) {
 // ---------- 肩帶（肩胛骨＋鎖骨）----------
 // 軀幹局部座標：x = 外側、y = 沿軀幹向上、z = 前方，原點 = 骨盆中心；數值來自 BodyParts3D
 export const GIRDLE = { scj: [0.0151, 0.5243, 0.0583], sh: [BODY.shHalf, BODY.Ltr, 0] };
+export function girdleForBody(body = BODY) {
+  if (body === DEFAULT_BODY) return GIRDLE;
+  return { scj: [GIRDLE.scj[0] * body.shHalf / DEFAULT_BODY.shHalf,
+    GIRDLE.scj[1] * body.Ltr / DEFAULT_BODY.Ltr,
+    GIRDLE.scj[2] * body.Ltr / DEFAULT_BODY.Ltr], sh: [body.shHalf, body.Ltr, 0] };
+}
 // ret：後收（正）／前伸（負）；elev：上提（正）／下壓（負）；單位 rad
 export function girdleMatrix(g) {
   const cr = Math.cos(g.ret), sr = Math.sin(g.ret), ce = Math.cos(g.elev), se = Math.sin(g.elev);
@@ -1058,8 +1098,8 @@ export function girdleMatrix(g) {
   return [[cr * ce, -cr * se, sr], [se, ce, 0], [-sr * ce, sr * se, cr]];
 }
 export function shoulderLocal(g) {
-  const M = girdleMatrix(g), d = sub(GIRDLE.sh, GIRDLE.scj);
-  return add(GIRDLE.scj, M.map((r) => dot(r, d)));
+  const G = girdleForBody(), M = girdleMatrix(g), d = sub(G.sh, G.scj);
+  return add(G.scj, M.map((r) => dot(r, d)));
 }
 const toWorld = (tf, l) => add(add(add(tf.Pc, mul(tf.lat, l[0])), mul(tf.u, l[1])), mul(tf.f, l[2]));
 
@@ -1357,18 +1397,19 @@ function bisect(g, lo, hi, n = 34) {
 // 手腕在一般動作由肘→手端 74.6% 估計；深蹲折腕姿勢則使用實際求得的腕點。
 function segmentPoints(pose) {
   const R = pose.R;
+  const { mass: MF, cm } = SEGMENTS[BODY.sex];
   const toe = pose.toeDir || [0, 0, 1];
-  const foot = R.heel && R.toe ? lerpV(R.heel, R.toe, 0.4415) : add(R.ankle, mul(toe, -0.06 + 0.25 * 0.4415));
+  const foot = R.heel && R.toe ? lerpV(R.heel, R.toe, cm.foot) : add(R.ankle, mul(toe, -0.06 + 0.25 * cm.foot));
   const wrist = R.wrist || lerpV(R.elbow, R.hand, 0.746);
   return [
     [foot, MF.foot, 'foot'],
-    [lerpV(R.knee, R.ankle, 0.4395), MF.shank, 'shank'],
-    [lerpV(R.hip, R.knee, 0.4095), MF.thigh, 'thigh'],
-    [add(pose.Pc, mul(pose.u, BODY.Ltr * 0.5514)), MF.trunk / 2, 'trunk'],
-    [add(pose.Pc, mul(pose.u, BODY.Ltr + 0.34 - 0.20 * 0.5976)), MF.head / 2, 'trunk'],
-    [lerpV(R.shoulder, R.elbow, 0.5772), MF.upper, 'upper'],
-    [lerpV(R.elbow, wrist, 0.4574), MF.fore, 'fore'],
-    [lerpV(wrist, R.hand, 0.79), MF.hand, 'fore'],
+    [lerpV(R.knee, R.ankle, cm.shank), MF.shank, 'shank'],
+    [lerpV(R.hip, R.knee, cm.thigh), MF.thigh, 'thigh'],
+    [add(pose.Pc, mul(pose.u, BODY.Ltr * cm.trunkUp)), MF.trunk / 2, 'trunk'],
+    [add(pose.Pc, mul(pose.u, BODY.Ltr + (0.34 - 0.20 * cm.head) * BODY.heightM / DEFAULT_BODY.heightM)), MF.head / 2, 'trunk'],
+    [lerpV(R.shoulder, R.elbow, cm.upper), MF.upper, 'upper'],
+    [lerpV(R.elbow, wrist, cm.fore), MF.fore, 'fore'],
+    [lerpV(wrist, R.hand, cm.hand), MF.hand, 'fore'],
   ];
 }
 
@@ -3301,6 +3342,7 @@ function pullupPose(P, e) { return suspendedPose(P, e, P.assist === undefined ? 
 export function solvePose(lift, P, e) {
   const pose = LIFTS[lift].pose(P, e);
   pose.lift = lift;
+  pose.body = BODY;
   return pose;
 }
 
@@ -3538,7 +3580,7 @@ export function analyze(lift, P, e) {
   }
   if (has('scRet')) {
     // 手臂的負荷經肩關節傳到肩胛，再由肩胛肌群固定在軀幹上：力矩取在胸鎖關節
-    const SCJ = toWorld(pose, GIRDLE.scj);
+    const SCJ = toWorld(pose, girdleForBody().scj);
     const Mg = musMoment(forces, SCJ, ['upper', 'fore']);
     dem.scRet = dot(Mg, pose.u);
     dem.scElev = dot(Mg, pose.f);

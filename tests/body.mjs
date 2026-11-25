@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import { BODY, DEFAULT_BODY, analyze, createBody, defaultParams, withBody } from '../src/biomech.js';
+
+const same = createBody();
+for (const key of Object.keys(DEFAULT_BODY)) assert.equal(same[key], DEFAULT_BODY[key], `預設 ${key}`);
+const small = createBody({ heightM: 1.6, massKg: 60, sex: 'female' });
+const tall = createBody({ heightM: 1.9, massKg: 90, sex: 'male' });
+const P = defaultParams('squat');
+const baseline = analyze('squat', P, 1);
+const low = withBody(small, () => analyze('squat', P, 1));
+const high = withBody(tall, () => analyze('squat', P, 1));
+assert.equal(BODY, DEFAULT_BODY, '正常返回後還原');
+assert.equal(low.pose.body, small, '姿勢保留其身體供骨架使用');
+assert.ok(low.pose.R.hip[1] < high.pose.R.hip[1], '大腿與小腿長度改變姿勢');
+assert.notEqual(low.dem.hipExt, high.dem.hipExt, '質量與長度改變關節力矩');
+assert.notEqual(low.dem.hipExt, baseline.dem.hipExt, '女性身體改變力矩');
+assert.equal(withBody(small, () => withBody(tall, () => BODY)), tall, '巢狀作用域');
+assert.equal(BODY, DEFAULT_BODY, '巢狀返回後還原');
+assert.throws(() => withBody(small, () => { throw new Error('預期錯誤'); }), /預期錯誤/);
+assert.equal(BODY, DEFAULT_BODY, '發生例外時還原');
+assert.throws(() => createBody({ ratios: { Lt: -1 } }), /無效身體比例/);
+console.log('身體參數 API PASS');
