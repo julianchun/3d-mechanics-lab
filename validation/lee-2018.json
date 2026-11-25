@@ -1,0 +1,191 @@
+{
+  "id": "lee-2018",
+  "source": {
+    "authors": "Lee S, Schultz J, Timgren J, Staelgraeve K, Miller M, Liu Y",
+    "year": 2018,
+    "title": "An electromyographic and kinetic comparison of conventional and Romanian deadlifts",
+    "doi": "10.1016/j.jesf.2018.08.001",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+  },
+  "sourceQuality": {
+    "rating": "caution",
+    "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+  },
+  "participants": {
+    "n": 21,
+    "sex": "全男",
+    "training": "兩式至少三年經驗，無力量舉經驗",
+    "massKg": {
+      "mean": 82.5,
+      "sd": 13.0
+    },
+    "heightM": {
+      "mean": 1.76,
+      "sd": 0.071
+    }
+  },
+  "protocol": "兩式均以同一人的 RDL 1RM 之 70% 進行，平均 1RM 公斤數未報。100% 骨盆寬站距、雙手正握；RDL 預設微彎約 15°，兩式下放時要求槓觸地，但部分 RDL 未觸地。Table 3 角度，Table 2 動態淨力矩。",
+  "model": "使用清單預設：傳統槓自地面、RDL kneeBend=18°／depth=0.55；負重未知所以保留產品預設 1.2／0.9×體重，僅角度可作定量比對。",
+  "footwear": "未報鞋型；保留模型平底。",
+  "conditions": [
+    {
+      "id": "conventional",
+      "catalogId": "deadlift",
+      "params": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "referenceLoadKg": null,
+      "loadRatio": null,
+      "conditionDerivation": "方法：兩式負重皆為個人 RDL 1RM 的 70%，但平均 1RM 與槓重公斤數未報，故 loadRatio=null 並保留產品預設，不能用於力矩判定。100% 骨盆寬用模型固定窄站（約 30／28 cm）代理；槓自地面／RDL 下放盡可能觸地。Table 3 未明說角度採樣事件，按圖 2 底點屈曲最大以 e=1 代理；不以研究結果改 RDL 膝角參數。鞋型未報。",
+      "measurements": [
+        {
+          "id": "bottom-knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 85.17,
+            "sd": 11.71,
+            "unit": "deg",
+            "definition": "Table 3 屈曲角；相對節段的 XYZ Cardan 角，採樣事件未明列"
+          },
+          "evidence": "table",
+          "location": "Table 3, CD, knee",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "limitations": "Table 3 未明列角度採樣事件，RDL 有人未觸地；Cardan 膝角與模型三維夾角近似。"
+        },
+        {
+          "id": "bottom-hip",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 90.63,
+            "sd": 8.39,
+            "unit": "deg",
+            "definition": "Table 3 屈曲角；相對節段的 XYZ Cardan 角，採樣事件未明列"
+          },
+          "evidence": "table",
+          "location": "Table 3, CD, hip",
+          "tolerance": {
+            "absolute": 20,
+            "unit": "deg"
+          },
+          "limitations": "研究骨盆—大腿 Cardan 角，模型只有軀幹—大腿代理。",
+          "comparisonRole": "definition-mismatch"
+        },
+        {
+          "id": "bottom-ankle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 111.89,
+            "sd": 6.68,
+            "unit": "deg",
+            "definition": "Table 3 屈曲角；相對節段的 XYZ Cardan 角，採樣事件未明列"
+          },
+          "evidence": "table",
+          "location": "Table 3, CD, ankle",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "limitations": "研究踝角缺站立零位參考，不能將 90° 直接扣除。",
+          "comparisonRole": "definition-mismatch"
+        }
+      ]
+    },
+    {
+      "id": "romanian",
+      "catalogId": "rdl",
+      "params": {
+        "kneeBend": 18,
+        "depth": 0.55,
+        "barDist": 0
+      },
+      "referenceLoadKg": null,
+      "loadRatio": null,
+      "conditionDerivation": "方法：兩式負重皆為個人 RDL 1RM 的 70%，但平均 1RM 與槓重公斤數未報，故 loadRatio=null 並保留產品預設，不能用於力矩判定。100% 骨盆寬用模型固定窄站（約 30／28 cm）代理；槓自地面／RDL 下放盡可能觸地。Table 3 未明說角度採樣事件，按圖 2 底點屈曲最大以 e=1 代理；不以研究結果改 RDL 膝角參數。鞋型未報。",
+      "measurements": [
+        {
+          "id": "bottom-knee",
+          "layer": "kinematics",
+          "metric": "kneeFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 33.86,
+            "sd": 12.59,
+            "unit": "deg",
+            "definition": "Table 3 屈曲角；相對節段的 XYZ Cardan 角，採樣事件未明列"
+          },
+          "evidence": "table",
+          "location": "Table 3, RD, knee",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "limitations": "Table 3 未明列角度採樣事件，RDL 有人未觸地；Cardan 膝角與模型三維夾角近似。"
+        },
+        {
+          "id": "bottom-hip",
+          "layer": "kinematics",
+          "metric": "hipFlexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 79.97,
+            "sd": 15.85,
+            "unit": "deg",
+            "definition": "Table 3 屈曲角；相對節段的 XYZ Cardan 角，採樣事件未明列"
+          },
+          "evidence": "table",
+          "location": "Table 3, RD, hip",
+          "tolerance": {
+            "absolute": 20,
+            "unit": "deg"
+          },
+          "limitations": "研究骨盆—大腿 Cardan 角，模型只有軀幹—大腿代理。",
+          "comparisonRole": "definition-mismatch"
+        },
+        {
+          "id": "bottom-ankle",
+          "layer": "kinematics",
+          "metric": "ankleDorsiflexion",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 90.47,
+            "sd": 4.82,
+            "unit": "deg",
+            "definition": "Table 3 屈曲角；相對節段的 XYZ Cardan 角，採樣事件未明列"
+          },
+          "evidence": "table",
+          "location": "Table 3, RD, ankle",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "limitations": "研究踝角缺站立零位參考，不能將 90° 直接扣除。",
+          "comparisonRole": "definition-mismatch"
+        }
+      ]
+    }
+  ]
+}

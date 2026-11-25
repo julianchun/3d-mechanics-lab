@@ -1,0 +1,118 @@
+{
+  "id": "escamilla-2000",
+  "source": {
+    "authors": "Escamilla RF et al.",
+    "year": 2000,
+    "title": "A three-dimensional biomechanical analysis of sumo and conventional style deadlifts",
+    "doi": "10.1097/00005768-200007000-00013",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/10912892/",
+    "fullTextUrl": "https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts"
+  },
+  "sourceQuality": {
+    "rating": "caution",
+    "reason": "同儕審查期刊，PubMed 摘要可核對；Table 3 取自原文掃描鏡像，OCR 欄位交錯，僅採清楚可辨的槓位移／身高數值。",
+    "source": "https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts"
+  },
+  "participants": {
+    "n": 24,
+    "sex": "全男",
+    "training": "國家級力量舉比賽，兩式各 12 人；非配對組"
+  },
+  "protocol": "比賽硬舉，離地、過膝、完成三事件；Table 3 報槓垂直位移佔身高百分比。兩式平均負重約 221.6／214.6 kg，負重為實際比賽值。",
+  "model": "兩式清單預設姿勢；槓位移 = 模型頂點與底點槓心高度差／身高。模型固定傳統與相撲站距約 30／72 cm，研究平均 32／70 cm。",
+  "footwear": "鞋型未報；模型平底預設。",
+  "conditions": [
+    {
+      "id": "conventional",
+      "catalogId": "deadlift",
+      "params": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "referenceLoadKg": 221.6,
+      "loadRatio": 2.885417,
+      "conditionDerivation": "Table 3：比賽槓重 221.6 kg／本組平均體重 76.8 kg＝2.8854×體重；標準槓片自地面開始，start=0。研究站距 32±8 cm，模型本式踝中心站距約 30 cm；槓離腿距及鞋型未量測，維持產品預設。槓位移依方法採離地至完成，模型以 e=1 到 e=0。",
+      "measurements": [
+        {
+          "id": "vertical-bar-travel",
+          "layer": "kinematics",
+          "metric": "barVerticalTravelPctHeight",
+          "sample": {
+            "type": "fullRange"
+          },
+          "reference": {
+            "mean": 26.8,
+            "sd": 4.2,
+            "unit": "%height",
+            "definition": "離地到完成，槓垂直位移／受試者身高 ×100"
+          },
+          "evidence": "table",
+          "location": "Table 3, Vert Bar Dist (% Ht), Current Conventional",
+          "tolerance": {
+            "absolute": 5,
+            "unit": "%height"
+          }
+        }
+      ],
+      "participants": {
+        "n": 12,
+        "sex": "全男",
+        "massKg": {
+          "mean": 76.8,
+          "sd": 22.7
+        },
+        "heightM": {
+          "mean": 1.7,
+          "sd": 0.08
+        }
+      }
+    },
+    {
+      "id": "sumo",
+      "catalogId": "sumo",
+      "params": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "referenceLoadKg": 214.6,
+      "loadRatio": 2.997207,
+      "conditionDerivation": "Table 3：比賽槓重 214.6 kg／本組平均體重 71.6 kg＝2.9972×體重；標準槓片自地面開始，start=0。研究站距 70±11 cm，模型本式踝中心站距約 72 cm；槓離腿距及鞋型未量測，維持產品預設。槓位移依方法採離地至完成，模型以 e=1 到 e=0。",
+      "measurements": [
+        {
+          "id": "vertical-bar-travel",
+          "layer": "kinematics",
+          "metric": "barVerticalTravelPctHeight",
+          "sample": {
+            "type": "fullRange"
+          },
+          "reference": {
+            "mean": 21.1,
+            "sd": 2.2,
+            "unit": "%height",
+            "definition": "離地到完成，槓垂直位移／受試者身高 ×100"
+          },
+          "evidence": "table",
+          "location": "Table 3, Vert Bar Dist (% Ht), Current Sumo",
+          "tolerance": {
+            "absolute": 5,
+            "unit": "%height"
+          }
+        }
+      ],
+      "participants": {
+        "n": 12,
+        "sex": "全男",
+        "massKg": {
+          "mean": 71.6,
+          "sd": 10.8
+        },
+        "heightM": {
+          "mean": 1.72,
+          "sd": 0.08
+        }
+      }
+    }
+  ]
+}
