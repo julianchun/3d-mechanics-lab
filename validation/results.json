@@ -1,17 +1,87 @@
 {
   "modelVersion": "0.7.3",
   "summary": {
-    "total": 35,
-    "count": 16,
-    "pass": 13,
-    "fail": 3,
-    "definitionMismatch": 12,
+    "total": 75,
+    "count": 44,
+    "pass": 24,
+    "fail": 20,
+    "definitionMismatch": 24,
     "exploratory": 3,
     "consistencyCheck": 4,
     "assumptionSensitivePass": 3,
-    "sources": 4
+    "sources": 7
   },
   "comparisons": [
+    {
+      "id": "escamilla-2000/conventional/vertical-bar-travel",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "barVerticalTravelPctHeight",
+      "sample": {
+        "type": "fullRange"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 2.885417,
+      "modelE": 1,
+      "model": 32.612,
+      "reference": 26.8,
+      "referenceRaw": 26.8,
+      "referenceSd": 4.2,
+      "unit": "%height",
+      "error": 5.812,
+      "tolerance": 5,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查期刊，PubMed 摘要可核對；Table 3 取自原文掃描鏡像，OCR 欄位交錯，僅採清楚可辨的槓位移／身高數值。",
+        "source": "https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts"
+      },
+      "evidence": "table",
+      "location": "Table 3, Vert Bar Dist (% Ht), Current Conventional",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/10912892/"
+    },
+    {
+      "id": "escamilla-2000/sumo/vertical-bar-travel",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "barVerticalTravelPctHeight",
+      "sample": {
+        "type": "fullRange"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 2.997207,
+      "modelE": 1,
+      "model": 29.8656,
+      "reference": 21.1,
+      "referenceRaw": 21.1,
+      "referenceSd": 2.2,
+      "unit": "%height",
+      "error": 8.7656,
+      "tolerance": 5,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查期刊，PubMed 摘要可核對；Table 3 取自原文掃描鏡像，OCR 欄位交錯，僅採清楚可辨的槓位移／身高數值。",
+        "source": "https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts"
+      },
+      "evidence": "table",
+      "location": "Table 3, Vert Bar Dist (% Ht), Current Sumo",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/10912892/"
+    },
     {
       "id": "gorsic-2020/straight-back/trunk",
       "catalogId": "squat-high",
@@ -587,6 +657,1126 @@
       "evidence": "text",
       "location": "Results, Kinetic Data, p. 287（Figure 3 後）",
       "source": "https://pubmed.ncbi.nlm.nih.gov/19002072/"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-trunk",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 59,
+      "reference": 77.2,
+      "referenceRaw": 77.2,
+      "referenceSd": 10.9,
+      "unit": "deg",
+      "error": -18.2,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, trunk",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-hip-angle",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 129.6865,
+      "reference": null,
+      "referenceRaw": 82.8,
+      "referenceSd": 13.6,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 20,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, hip-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-knee",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 84.7326,
+      "reference": 72.7,
+      "referenceRaw": 72.7,
+      "referenceSd": 12.9,
+      "unit": "deg",
+      "error": 12.0326,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, knee",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-ankle-angle",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 13.8599,
+      "reference": 10.8,
+      "referenceRaw": 10.8,
+      "referenceSd": 6.7,
+      "unit": "deg",
+      "error": 3.0599,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, ankle-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-hip-moment",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 310.3002,
+      "reference": 301.6,
+      "referenceRaw": -301.6,
+      "referenceSd": 75.7,
+      "unit": "Nm",
+      "error": 8.7002,
+      "tolerance": 100,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, hip-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-knee-moment",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 59.0069,
+      "reference": 57.8,
+      "referenceRaw": -57.8,
+      "referenceSd": 30.5,
+      "unit": "Nm",
+      "error": 1.2069,
+      "tolerance": 65,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, knee-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-ankle-moment",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 39.8569,
+      "reference": 107.6,
+      "referenceRaw": -107.6,
+      "referenceSd": 26.9,
+      "unit": "Nm",
+      "error": -67.7431,
+      "tolerance": 60,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, ankle-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/liftOff-lumbar",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "lumbarExtensionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 1,
+      "model": 274.3328,
+      "reference": null,
+      "referenceRaw": -42.8,
+      "referenceSd": 57.3,
+      "unit": "Nm",
+      "error": null,
+      "tolerance": 100,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, lumbar",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-trunk",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 46.3913,
+      "reference": 67.9,
+      "referenceRaw": 67.9,
+      "referenceSd": 5.3,
+      "unit": "deg",
+      "error": -21.5087,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, trunk",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-hip-angle",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 96.6504,
+      "reference": null,
+      "referenceRaw": 50.2,
+      "referenceSd": 14.3,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 20,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, hip-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-knee",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 53.9385,
+      "reference": 28.4,
+      "referenceRaw": 28.4,
+      "referenceSd": 6.8,
+      "unit": "deg",
+      "error": 25.5385,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, knee",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-ankle-angle",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 3.3357,
+      "reference": -6,
+      "referenceRaw": -6,
+      "referenceSd": 5.1,
+      "unit": "deg",
+      "error": 9.3357,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, ankle-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-hip-moment",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 293.4473,
+      "reference": 267.2,
+      "referenceRaw": -267.2,
+      "referenceSd": 64.7,
+      "unit": "Nm",
+      "error": 26.2473,
+      "tolerance": 100,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, hip-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-knee-moment",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": -1.0917,
+      "reference": -49.9,
+      "referenceRaw": 49.9,
+      "referenceSd": 30.8,
+      "unit": "Nm",
+      "error": 48.8083,
+      "tolerance": 65,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, knee-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-ankle-moment",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 27.2021,
+      "reference": 66.3,
+      "referenceRaw": -66.3,
+      "referenceSd": 42.1,
+      "unit": "Nm",
+      "error": -39.0979,
+      "tolerance": 60,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, ankle-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/conventional/kneePassing-lumbar",
+      "catalogId": "deadlift",
+      "layer": "moments",
+      "metric": "lumbarExtensionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.64961,
+      "modelE": 0.5861,
+      "model": 262.1072,
+      "reference": null,
+      "referenceRaw": -41.9,
+      "referenceSd": 49.7,
+      "unit": "Nm",
+      "error": null,
+      "tolerance": 100,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, lumbar",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-trunk",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 47,
+      "reference": 69.7,
+      "referenceRaw": 69.7,
+      "referenceSd": 14,
+      "unit": "deg",
+      "error": -22.7,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, trunk",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-hip-angle",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 126.5733,
+      "reference": null,
+      "referenceRaw": 82.1,
+      "referenceSd": 16,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 20,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, hip-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-knee",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 94.1908,
+      "reference": 63.1,
+      "referenceRaw": 63.1,
+      "referenceSd": 14.4,
+      "unit": "deg",
+      "error": 31.0908,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, knee",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-ankle-angle",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 12.2557,
+      "reference": -1.8,
+      "referenceRaw": -1.8,
+      "referenceSd": 8.1,
+      "unit": "deg",
+      "error": 14.0557,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, ankle-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-hip-moment",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 242.437,
+      "reference": 258.8,
+      "referenceRaw": -258.8,
+      "referenceSd": 114.9,
+      "unit": "Nm",
+      "error": -16.363,
+      "tolerance": 100,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, hip-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-knee-moment",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 185.5903,
+      "reference": 53.3,
+      "referenceRaw": -53.3,
+      "referenceSd": 47.2,
+      "unit": "Nm",
+      "error": 132.2903,
+      "tolerance": 65,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, knee-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-ankle-moment",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 17.1899,
+      "reference": 81,
+      "referenceRaw": -81,
+      "referenceSd": 47.2,
+      "unit": "Nm",
+      "error": -63.8101,
+      "tolerance": 60,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, ankle-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/liftOff-lumbar",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "lumbarExtensionMoment",
+      "sample": {
+        "type": "liftOff"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 1,
+      "model": 212.5222,
+      "reference": null,
+      "referenceRaw": -39.6,
+      "referenceSd": 51.3,
+      "unit": "Nm",
+      "error": null,
+      "tolerance": 100,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, LO, lumbar",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-trunk",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "trunkInclination",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 35.867,
+      "reference": 54.4,
+      "referenceRaw": 54.4,
+      "referenceSd": 7.3,
+      "unit": "deg",
+      "error": -18.533,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, trunk",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-hip-angle",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 88.017,
+      "reference": null,
+      "referenceRaw": 47.5,
+      "referenceSd": 18,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 20,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, hip-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-knee",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 61.3692,
+      "reference": 30.1,
+      "referenceRaw": 30.1,
+      "referenceSd": 10.3,
+      "unit": "deg",
+      "error": 31.2692,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, knee",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-ankle-angle",
+      "catalogId": "sumo",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 1.3762,
+      "reference": -13.5,
+      "referenceRaw": -13.5,
+      "referenceSd": 7,
+      "unit": "deg",
+      "error": 14.8762,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, ankle-angle",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-hip-moment",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "hipExtensionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 240.2644,
+      "reference": 213.5,
+      "referenceRaw": -213.5,
+      "referenceSd": 88.4,
+      "unit": "Nm",
+      "error": 26.7644,
+      "tolerance": 100,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, hip-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-knee-moment",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "kneeExtensionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 97.5592,
+      "reference": -28,
+      "referenceRaw": 28,
+      "referenceSd": 57.6,
+      "unit": "Nm",
+      "error": 125.5592,
+      "tolerance": 65,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, knee-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-ankle-moment",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "anklePlantarflexionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 6.1475,
+      "reference": 66.3,
+      "referenceRaw": -66.3,
+      "referenceSd": 45.9,
+      "unit": "Nm",
+      "error": -60.1525,
+      "tolerance": 60,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, ankle-moment",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+    },
+    {
+      "id": "henning-2023/sumo/kneePassing-lumbar",
+      "catalogId": "sumo",
+      "layer": "moments",
+      "metric": "lumbarExtensionMoment",
+      "sample": {
+        "type": "kneePassing"
+      },
+      "modelParams": {
+        "style": "sumo",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.5762,
+      "modelE": 0.5484,
+      "model": 214.7193,
+      "reference": null,
+      "referenceRaw": -35.6,
+      "referenceSd": 46,
+      "unit": "Nm",
+      "error": null,
+      "tolerance": 100,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
+      },
+      "evidence": "table",
+      "location": "Table 2, KP, lumbar",
+      "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
       "id": "hutchison-2019/steel-back/peak-hip",
@@ -1198,6 +2388,216 @@
       "evidence": "table",
       "location": "Table 3, v0, low-bar wide",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/"
+    },
+    {
+      "id": "lee-2018/conventional/bottom-knee",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.2,
+      "modelE": 1,
+      "model": 84.7326,
+      "reference": 85.17,
+      "referenceRaw": 85.17,
+      "referenceSd": 11.71,
+      "unit": "deg",
+      "error": -0.4374,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+      },
+      "evidence": "table",
+      "location": "Table 3, CD, knee",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+    },
+    {
+      "id": "lee-2018/conventional/bottom-hip",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.2,
+      "modelE": 1,
+      "model": 129.6865,
+      "reference": null,
+      "referenceRaw": 90.63,
+      "referenceSd": 8.39,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 20,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+      },
+      "evidence": "table",
+      "location": "Table 3, CD, hip",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+    },
+    {
+      "id": "lee-2018/conventional/bottom-ankle",
+      "catalogId": "deadlift",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "style": "conv",
+        "start": 0,
+        "barDist": 0
+      },
+      "modelLoadRatio": 1.2,
+      "modelE": 1,
+      "model": 13.8599,
+      "reference": null,
+      "referenceRaw": 111.89,
+      "referenceSd": 6.68,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 15,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+      },
+      "evidence": "table",
+      "location": "Table 3, CD, ankle",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+    },
+    {
+      "id": "lee-2018/romanian/bottom-knee",
+      "catalogId": "rdl",
+      "layer": "kinematics",
+      "metric": "kneeFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "kneeBend": 18,
+        "depth": 0.55,
+        "barDist": 0
+      },
+      "modelLoadRatio": 0.9,
+      "modelE": 1,
+      "model": 17.9674,
+      "reference": 33.86,
+      "referenceRaw": 33.86,
+      "referenceSd": 12.59,
+      "unit": "deg",
+      "error": -15.8926,
+      "tolerance": 15,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+      },
+      "evidence": "table",
+      "location": "Table 3, RD, knee",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+    },
+    {
+      "id": "lee-2018/romanian/bottom-hip",
+      "catalogId": "rdl",
+      "layer": "kinematics",
+      "metric": "hipFlexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "kneeBend": 18,
+        "depth": 0.55,
+        "barDist": 0
+      },
+      "modelLoadRatio": 0.9,
+      "modelE": 1,
+      "model": 97.25,
+      "reference": null,
+      "referenceRaw": 79.97,
+      "referenceSd": 15.85,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 20,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+      },
+      "evidence": "table",
+      "location": "Table 3, RD, hip",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+    },
+    {
+      "id": "lee-2018/romanian/bottom-ankle",
+      "catalogId": "rdl",
+      "layer": "kinematics",
+      "metric": "ankleDorsiflexion",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "kneeBend": 18,
+        "depth": 0.55,
+        "barDist": 0
+      },
+      "modelLoadRatio": 0.9,
+      "modelE": 1,
+      "model": -10.3758,
+      "reference": null,
+      "referenceRaw": 90.47,
+      "referenceSd": 4.82,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 15,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "期刊全文可查，但 Table 3 未明列角度是底點還是整程峰值；方法與圖 2 顯示底點最屈曲，故以底點代理並保留事件不確定。平均 RDL 1RM 公斤數未報，力矩條件不能對齊。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+      },
+      "evidence": "table",
+      "location": "Table 3, RD, ankle",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
     }
   ]
 }

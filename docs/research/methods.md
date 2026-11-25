@@ -20,7 +20,7 @@
 
 ## 資料選取與核對
 
-研究數值須能追到原文表、圖或方法，並記錄受試者、負重、動作、事件、單位與量測定義；來源連結集中在[參考資料](references.md)，深蹲條件與機器可讀輸入在 [`validation/`](../../validation/)。圖讀值標明讀圖誤差；器械或身體代理數值若未由原文支持，標為「估計」或「未查證」。只把定義可對齊的數值列入通過率；骨盆角、欠缺站立參考的踝角、未知負重的動態峰值等另行展示。
+研究數值須能追到原文表、圖或方法，並記錄受試者、負重、動作、事件、單位與量測定義；來源連結集中在[參考資料](references.md)，深蹲與硬舉條件及機器可讀輸入在 [`validation/`](../../validation/)。圖讀值標明讀圖誤差；器械或身體代理數值若未由原文支持，標為「估計」或「未查證」。只把定義可對齊的數值列入通過率；骨盆角、欠缺站立參考的踝角、未知負重的動態峰值等另行展示。
 
 [ANSUR II 官方下載頁](https://ph.health.mil/topics/workplacehealth/ergo/Pages/Anthropometric-Database.aspx)提供匿名逐人男女 CSV，公開資料含 4,082 男、1,986 女；它是美國政府發布的軍人測量資料。專案目前使用[公開鏡像](https://github.com/jocimarcan/antopometric-database)轉出的 [`ansur-ii-ratios.json`](../../validation/anthropometry/ansur-ii-ratios.json)。JSON 中 `sha256.male`／`sha256.female` 只記錄鏡像原始 CSV 的 SHA-256；取得 CSV 後用 `sha256sum` 按性別核對位元組即可重現鏡像檢查。**尚未將官方 CSV 與鏡像的 SHA-256 比對**，故鏡像與官方檔是否逐位元相同未查證。資料性質及政府著作規則連結見[參考資料](references.md#人體測量與節段參數)。
 
@@ -30,8 +30,10 @@
 
 固定身體準則使用 1.75 m、75 kg 男性，在研究相應的槓位、負重、站距、深度與特定事件計算。定義可比較者以 [`validation/*.json`](../../validation/) 中事先固定的**絕對容許差**判定；文獻標準差只呈現，不加入門檻。群體準則以固定種子 `0x19b0d9`，每篇研究抽 200 人，男女數依原研究比例、身高體重依原研究群體平均與標準差作截斷常態抽樣；骨段比例按性別從同一位 ANSUR II 受試者整列重抽，負重按個人體重換算，同研究的條件共用一組虛擬人。群體可比較項的判定式為 **|模型群體平均 − 研究平均| ≤ 研究個體標準差**。模型群體標準差另列，不加入門檻。兩套準則不同，通過率不能直接當成模型改善幅度，也不是預測精度或統計等價檢定。
 
+硬舉研究的條件及容許差在比對前另行凍結，沒有修改姿勢或肌肉模型。傳統／相撲 `e=1` 代理槓離地；過膝事件用槓心與膝中心等高求解，不以研究時間百分比定位。Escamilla 2000 的非配對兩組各依其身材分布抽樣；其餘同研究條件共用虛擬群體。Henning 2023 有各式 6RM 平均公斤數，模型用該負重／研究平均體重的比例覆寫；Lee 2018 未報平均 RDL 1RM 公斤數，力矩不能作同負重判定。角度、力矩的定義排除及來源品質見[硬舉結果](results/deadlift.md)。
+
 群體抽樣保留八項來源比例**彼此之間**的相關性；身高、體重與比例分開抽，**沒有保留身高—體重及身高—比例的來源相關性**。研究只報整體身高體重分布時，男女共用這些邊際分布。ANSUR II 軍人樣本也不代表各研究的受訓者。
 
 ## 群體輸出與一般測試
 
-[`validation/results.json`](../../validation/results.json) 與 [`validation/population-results.json`](../../validation/population-results.json) 留下每筆模型值、研究值、來源、判定及群體模擬輸出。`npm test` 檢查 63 項清單姿勢、身材快取、合理性、回歸基準、文獻趨勢及固定身體驗證產物；`npm run test:validation`、`npm run test:validation-pop -- --check` 可重算兩種數值比對。這些檢查的現況見[深蹲結果](results/squat.md)與[限制](limitations.md)。
+[`validation/results.json`](../../validation/results.json) 與 [`validation/population-results.json`](../../validation/population-results.json) 留下每筆模型值、研究值、來源、判定及群體模擬輸出。`npm test` 檢查 63 項清單姿勢、身材快取、合理性、回歸基準、文獻趨勢及固定身體驗證產物；`npm run test:validation`、`npm run test:validation-pop -- --check` 可重算兩種數值比對。這些檢查的現況見[深蹲結果](results/squat.md)、[硬舉結果](results/deadlift.md)與[限制](limitations.md)。

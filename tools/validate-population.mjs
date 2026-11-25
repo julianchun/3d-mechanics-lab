@@ -7,7 +7,9 @@ const mode = process.argv[2] ?? '';
 if (!['', '--check'].includes(mode) || process.argv.length > 3) throw new Error('用法：node tools/validate-population.mjs [--check]');
 const path = new URL('../validation/', import.meta.url);
 const output = new URL('population-results.json', path);
-const sourceNames = ['gorsic-2020', 'gullett-2009', 'hutchison-2019', 'larsen-2021'];
+// 舊研究維持原抽樣順序，使深蹲的固定種子結果逐筆不變。
+const sourceNames = ['gorsic-2020', 'gullett-2009', 'hutchison-2019', 'larsen-2021',
+  'escamilla-2000', 'henning-2023', 'lee-2018'];
 const source = Object.fromEntries(sourceNames.map((name) => [name, JSON.parse(fs.readFileSync(new URL(`${name}.json`, path)))]));
 const old = JSON.parse(fs.readFileSync(new URL('results.json', path)));
 const oldById = new Map(old.comparisons.map((c) => [c.id, c]));
@@ -73,26 +75,35 @@ function bisectSample(target, fn) {
   for (let i = 0; i < 32; i++) { const mid = (lo + hi) / 2; if (fn(mid) < target) lo = mid; else hi = mid; }
   return (lo + hi) / 2;
 }
-function withLoad(loadRatio, fn) {
+function withLoad(lift, loadRatio, fn) {
   if (loadRatio === null) return fn();
-  const before = BAR_RATIO.squat; BAR_RATIO.squat = loadRatio;
-  try { return fn(); } finally { BAR_RATIO.squat = before; }
+  const before = BAR_RATIO[lift]; BAR_RATIO[lift] = loadRatio;
+  try { return fn(); } finally { BAR_RATIO[lift] = before; }
 }
 const dof = { hipExtensionMoment: 'hipExt', kneeExtensionMoment: 'kneeExt',
   anklePlantarflexionMoment: 'ankPF', lumbarExtensionMoment: 'trunkExt' };
-function measureValue(m, params, cache) {
+function measureValue(lift, m, params, cache) {
   if (m.metric === 'pelvisAnteriorTilt') return null;
-  const at = (e) => { if (!cache.has(e)) cache.set(e, analyze('squat', params, e)); return cache.get(e); };
+  const at = (e) => { if (!cache.has(e)) cache.set(e, analyze(lift, params, e)); return cache.get(e); };
   const poseAt = (e) => at(e).pose;
   let value;
-  if (m.sample.type === 'peak') {
+  if (m.sample.type === 'fullRange') {
+    value = (poseAt(0).bar[1] - poseAt(1).bar[1]) / BODY.heightM * 100;
+  } else if (m.sample.type === 'peak') {
     const end = m.sample.endKneeFlexionDeg === undefined ? 1 :
       bisectSample(m.sample.endKneeFlexionDeg, (e) => angles(poseAt(e)).kneeFlexion);
     value = -Infinity;
     for (let i = 0; i <= 400; i++) value = Math.max(value, at(end * i / 400).dem[dof[m.metric]]);
   } else {
-    const e = m.sample.type === 'bottom' ? 1 :
-      bisectSample(m.sample.targetDeg, (t) => thighAngle(poseAt(t)));
+    let e;
+    if (m.sample.type === 'bottom' || m.sample.type === 'liftOff') e = 1;
+    else if (m.sample.type === 'kneePassing') {
+      const delta = (t) => poseAt(t).bar[1] - poseAt(t).R.knee[1];
+      if (!(delta(0) >= 0 && delta(1) <= 0)) throw new Error('槓未經過膝中心高度');
+      let lo = 0, hi = 1;
+      for (let i = 0; i < 32; i++) { const mid = (lo + hi) / 2; if (delta(mid) > 0) lo = mid; else hi = mid; }
+      e = (lo + hi) / 2;
+    } else e = bisectSample(m.sample.targetDeg, (t) => thighAngle(poseAt(t)));
     const r = at(e);
     if (!r.pose.ok) throw new Error(r.pose.conflict || '姿勢失敗');
     value = dof[m.metric] ? r.dem[dof[m.metric]] : angles(r.pose)[m.metric];
@@ -107,21 +118,24 @@ function measureValue(m, params, cache) {
 function referenceValue(m) {
   if (m.referenceTransform === 'minus90') return m.reference.mean - 90;
   if (m.referenceTransform === 'absolute') return Math.abs(m.reference.mean);
+  if (m.referenceTransform === 'negate') return -m.reference.mean;
   return m.reference.mean;
 }
-const bodiesBySource = Object.fromEntries(sourceNames.map((name) => [name, sampleBodies(source[name].participants)]));
+const bodiesBySource = Object.fromEntries(sourceNames.filter((name) => source[name].participants.heightM)
+  .map((name) => [name, sampleBodies(source[name].participants)]));
 const comparisons = [], summaries = {};
 for (const name of sourceNames) {
-  const study = source[name], bodies = bodiesBySource[name];
+  const study = source[name];
   for (const condition of study.conditions) {
     const entry = catalog.get(condition.catalogId);
-    const params = { ...defaultParams('squat'), ...entry.set, ...condition.params };
+    const bodies = condition.participants ? sampleBodies(condition.participants) : bodiesBySource[name];
+    const params = { ...defaultParams(entry.lift), ...entry.set, ...condition.params };
     const values = condition.measurements.map(() => []), errors = [];
     for (const body of bodies) {
       try {
-        withBody(body, () => withLoad(condition.loadRatio, () => {
+        withBody(body, () => withLoad(entry.lift, condition.loadRatio, () => {
           const cache = new Map();
-          condition.measurements.forEach((m, j) => { const value = measureValue(m, params, cache); if (value !== null) values[j].push(value); });
+          condition.measurements.forEach((m, j) => { const value = measureValue(entry.lift, m, params, cache); if (value !== null) values[j].push(value); });
         }));
       } catch (error) { errors.push(error.message); }
     }
@@ -158,7 +172,7 @@ const sensitivity = sensitivityIds.map((id) => {
     const changed = createBody({ heightM: body.heightM, massKg: body.mass, sex: body.sex,
       ratios: Object.fromEntries(anthro.keys.map((key) => [key, key === 'Lt' ?
         body.Lt / body.heightM * (1 + direction * ratioChange) : body[key] / body.heightM])) });
-    return withBody(changed, () => withLoad(condition.loadRatio, () => measureValue(m, params, new Map())));
+    return withBody(changed, () => withLoad('squat', condition.loadRatio, () => measureValue('squat', m, params, new Map())));
   }));
   return { id, shortThigh: round(run(-1)), population: comparisons.find((c) => c.id === id).modelMean,
     longThigh: round(run(1)) };
@@ -179,7 +193,7 @@ const demersBodies = Array.from({ length: N }, (_, i) => {
 const calibration = demers.conditions.flatMap((condition) => {
   const params = { ...defaultParams('squat'), ...condition.params };
   return condition.measurements.map((m) => {
-    const xs = demersBodies.map((body) => withBody(body, () => withLoad(0, () => {
+    const xs = demersBodies.map((body) => withBody(body, () => withLoad('squat', 0, () => {
       const e = bisectSample(m.sample.targetDeg, (t) => thighAngle(solvePose('squat', params, t)));
       return angles(solvePose('squat', params, e)).ankleDorsiflexion - angles(solvePose('squat', params, 0)).ankleDorsiflexion;
     })));
