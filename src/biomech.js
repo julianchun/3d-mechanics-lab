@@ -299,7 +299,7 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt'],
     pose: squatPose, loads: barOnTrunkLoads,
     params: [
-      { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.45, joint: 'hip', mech: 'A' },
+      { key: 'dom', label: '主導', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.30, joint: 'hip', mech: 'A' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.3, joint: 'ankle', mech: 'A' },
       { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
@@ -1101,22 +1101,31 @@ function armChainBent(pose, S, B, pole, [epsDeg, Lh], hpref) {
 
 // [手腕背伸角（度）, 腕→槓距離（m）]
 export const SQ_WRIST = { high: [30, 0.075], low: [90, 0.05], front: [105, 0.05] };
+// Demers 等 2018 圖 1（無負重背蹲，股骨角 20°／40°／60°）的六個踝背屈圖讀點，
+// 依 docs/validation/squat-calibration-plan.md 等權網格擬合；跨到負重／其他槓位是外推。
+// 寫計畫前已由測試組診斷知道髖位太後、膝前移不足，三種參數與冪函數形式不是盲選；數值才由 Demers 決定。
+// 原文大轉子間寬／腳跟外側標記暫以模型髖中心 18 cm／踝中心距代理，兩站距僅對應 stance≈0.024／0.238；
+// 預設 stance=0.3 的 dom=0.30 因而是外推。若僅假設大轉子寬 32 cm（非實測），兩點約為 stance=0.52／0.90。
+// 六點擬合三參數；站距差 0.8–1.5° 接近讀圖誤差 ±1–2°，參數可辨識性弱，冪函數殘差呈系統型態。
+const SQUAT_STANCE_SHIFT = 0.47;
+const SQUAT_SHANK_PROGRESS = 0.83;
+function freeSquatShankAngle(P, e, frontShift = 0) {
+  const domEff = clamp(P.dom + frontShift + SQUAT_STANCE_SHIFT * (P.stance - 0.3), 0, 1);
+  const flat = rad(4 + (lerp(40, 16, domEff) - 4) * Math.pow(e, SQUAT_SHANK_PROGRESS));
+  return { domEff, flat };
+}
 function squatPose(P, e) {
   const low = P.barPos === 'low', front = P.barPos === 'front';
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
-  // 槓位與站距改變下肢運動學策略（由文獻最低點軀幹／小腿角度反推 domShift；預設高槓最低點軀幹 46.6°、小腿 29.2°，dom 每 +0.1 使小腿直立 2.4°）：
-  // - 低槓 +0.08：目標小腿較高槓直立約 2°（van den Tillaar et al. 2020, PMID 33345183, 同站距下關節角差約 2–3°；Murawa et al. 2020, PMID 32551198, p<0.001）、
-  //   軀幹較高槓多前傾約 12°（58.9° vs 46.6°；落於 Illmeier & Rechberger 2023, PMID 37109294 [49.3° vs 43.7°, +5.6°] 與 Glassbrook et al. 2017/2019, PMID 28570490 常見 ~5–15° 範圍）。
-  // - 前蹲 -0.08：純槓位重心平衡已使前蹲較高槓直立 13.4°（33.2°），加 -0.08 使小腿僅多前傾 1.9°（31.1° vs 29.2°，符合 Yavuz et al. 2015, PMID 25630691 與 Braidot 2007 膝／踝角無顯著差異）、
-  //   軀幹較高槓直立約 15.8°（30.7° vs 46.6°；介於 Russell & Phillips 1989, PMID 2489844 相關量測 ~10–15° 與 Illmeier & Rechberger 2023, PMID 37109294 深前蹲 -17.3° [26.4° vs 43.7°] 之間），並維持同負重下前蹲髖伸力矩低於高槓（Krzyszkowski & Kipp 2020, PMID 32544021）。
-  // - 寬站距 +0.35*(stance-0.3)：寬站距（0.9）較窄站距（0.1）小腿直立 6.7°（24.2° vs 30.9°），符合 Escamilla et al. 2001（PMID 11404665, 5–9°）；
-  //   已知限制：在固定腳掌中段 cop.z=0 且膝對齊腳尖下，股骨外展使矢狀面投影縮短約 33%，導致寬站距模型軀幹反較直立約 16° 且矢狀面髖伸力矩下降，與 Escamilla 2001（軀幹角無顯著差異、寬站距髖伸力矩較高）存在矛盾。
-  const domShift = (low ? 0.08 : front ? -0.08 : 0) + 0.35 * (P.stance - 0.3);
-  const domEff = clamp(P.dom + domShift, 0, 1);
+  // 低槓 +0.08、前槓 -0.08 仍為原來跨研究反推的示範偏移，未由 Demers 的單槓位資料重估；兩式姿勢未獨立校準。
+  // 40°／16° 策略端點與大腿 70°／118° 仍為原始示範幾何，非研究量測邊界；端點也未納入本次擬合。
+  // Demers 赤足持輕木桿、無外加負重；產品 1.0 倍體重槓重是外推。前蹲在 Goršič 定點可疑偏直立。
+  // 站距斜率及小腿隨股骨角進度的曲線按上述獨立校準組；舊註解 46.6°／29.2° 是舊模型輸出，非研究目標。
+  const { flat: flatShank } = freeSquatShankAngle(P, e, low ? 0.08 : front ? -0.08 : 0);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
   // 示範假設：鞋跟足板角按具名比例分給小腿前傾，其餘降低相對腳掌的踝背屈需求。
-  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * heelShankShare * e;
+  const thS = flatShank + (foot?.a || 0) * heelShankShare * e;
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
@@ -3075,15 +3084,14 @@ function dbReverseFlyPose(P, e) {
 }
 
 // ---------- 高腳杯深蹲 ----------
-// 姿勢求解沿用 squatPose（採前側負重策略 domShift = -0.08，與前蹲一致）；
+// 下肢小腿曲線與 squatPose 共用；前側負重策略偏移 -0.08，與前蹲一致。
 // 單顆啞鈴垂直捧於胸骨前方（距軀幹軸 21 cm），雙手於上端片下方承托、手肘自然垂於胸側。
 function gobletPose(P, e) {
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
-  const domShift = -0.08 + 0.35 * (P.stance - 0.3);
-  const domEff = clamp(P.dom + domShift, 0, 1);
+  const { flat: flatShank } = freeSquatShankAngle(P, e, -0.08);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
-  const thS = rad(4 + (lerp(40, 16, domEff) - 4) * e) + (foot?.a || 0) * heelShankShare * e;
+  const thS = flatShank + (foot?.a || 0) * heelShankShare * e;
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
