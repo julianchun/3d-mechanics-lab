@@ -1,0 +1,34 @@
+{
+  "note": "目標是教練審閱的健美動作模式，不是實測肌電排名或增肌保證；來源見 docs/research/technique-principles.md 第二節。",
+  "patterns": {
+    "squat": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "股四頭肌", "ids": ["vasti", "rf"] }, { "name": "臀大肌", "ids": ["gmax"] }] },
+    "hinge": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "臀大肌", "ids": ["gmax"] }, { "name": "膕繩肌", "ids": ["hams"] }] },
+    "backext": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "髖伸肌", "ids": ["gmax", "hams"] }, { "name": "腰背伸肌", "ids": ["erec"] }] },
+    "chest": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "胸大肌", "ids": ["pecs", "pecc"] }] },
+    "closepress": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "肱三頭肌", "ids": ["trilat", "trilong"] }] },
+    "shoulderpress": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "三角肌前／中束", "ids": ["adelt", "mdelt"] }, { "name": "肱三頭肌", "ids": ["trilat", "trilong"] }] },
+    "dips": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "胸大肌", "ids": ["pecs", "pecc"] }, { "name": "肱三頭肌", "ids": ["trilat", "trilong"] }] },
+    "row": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "背闊肌", "ids": ["lat"] }, { "name": "中斜方／菱形肌", "ids": ["midtrap"] }] },
+    "rearfly": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "後三角肌", "ids": ["pdelt"] }] },
+    "pulldown": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "背闊肌", "ids": ["lat"] }] },
+    "uprow": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "三角肌中束／上斜方肌", "ids": ["mdelt", "uptrap"] }] },
+    "legext": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "股四頭肌", "ids": ["vasti", "rf"] }] },
+    "legcurl": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "膕繩肌", "ids": ["hams"] }] },
+    "calf": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "小腿後側", "ids": ["gas", "sol"] }] },
+    "hipabd": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "臀中肌", "ids": ["gmed"] }] },
+    "hipadd": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "內收肌", "ids": ["addmag", "addl"] }] },
+    "triceps": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "肱三頭肌", "ids": ["trilat", "trilong"] }] },
+    "curl": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "肘屈肌", "ids": ["bic", "brach"] }] },
+    "raise": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "三角肌中束", "ids": ["mdelt"] }] },
+    "shrug": { "source": "docs/research/technique-principles.md", "groups": [{ "name": "上斜方肌", "ids": ["uptrap"] }] }
+  },
+  "entries": {
+    "squat-high": "squat", "squat-low": "squat", "front-squat": "squat", "goblet-squat": "squat", "smith-squat": "squat", "leg-press": "squat", "hack-squat": "squat",
+    "deadlift": "hinge", "deficit-dl": "hinge", "block-pull": "hinge", "sumo": "hinge", "rdl": "hinge", "good-morning": "hinge", "hip-thrust": "hinge", "back-extension": "backext", "glute-bridge": "hinge",
+    "bench": "chest", "incline-bench": "chest", "cg-bench": "closepress", "floor-press": "chest", "db-bench": "chest", "db-bench-incline": "chest", "pushup": "chest", "pushup-feet": "chest", "pushup-hands": "chest", "chest-press": "chest", "pec-deck": "chest", "reverse-deck": "rearfly", "machine-press": "shoulderpress", "cable-fly-high": "chest", "cable-fly-mid": "chest", "cable-fly-low": "chest",
+    "ohp": "shoulderpress", "db-press": "shoulderpress", "dips": "dips", "dips-upright": "dips",
+    "row": "row", "row-sup": "row", "cable-row": "row", "cable-row-wide": "row", "db-reverse-fly": "rearfly",
+    "uprow": "uprow", "pulldown": "pulldown", "pulldown-sup": "pulldown", "pullup": "pulldown", "pullup-wide": "pulldown", "chinup": "pulldown", "assist-pullup": "pulldown", "assist-chinup": "pulldown",
+    "leg-ext": "legext", "calf-raise-standing": "calf", "calf-raise-seated": "calf", "hip-abduction": "hipabd", "hip-adduction": "hipadd", "leg-curl": "legcurl", "lying-leg-curl": "legcurl", "pushdown": "triceps", "curl": "curl", "reverse-curl": "curl", "lat-raise": "raise", "db-curl": "curl", "hammer-curl": "curl", "shrug": "shrug"
+  }
+}

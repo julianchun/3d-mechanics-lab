@@ -14,6 +14,7 @@
     "test:validation": "node tools/validate-sim.mjs --write-status",
     "test:validation-pop": "node tools/validate-population.mjs",
     "test:heel-sweep": "node tools/validate-sim.mjs --heel-share-sweep",
+    "audit:technique": "node tools/audit-technique.mjs",
     "trends:json": "node tests/trends.mjs --write-status"
   },
   "keywords": [],
