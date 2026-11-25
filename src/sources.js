@@ -20,6 +20,10 @@ const REFS = {
   escamilla2001_sq: { authors: 'Escamilla RF', year: 2001, title: 'Knee biomechanics of the dynamic squat exercise', venue: 'Med Sci Sports Exerc, 33(1):127–141', url: 'https://pubmed.ncbi.nlm.nih.gov/11194098/', tag: 'PubMed 11194098' },
   escamilla2001_stance: { authors: 'Escamilla RF et al.', year: 2001, title: 'A three-dimensional biomechanical analysis of the squat during varying stance widths', venue: 'Med Sci Sports Exerc, 33(6):984–998', url: 'https://pubmed.ncbi.nlm.nih.gov/11404665/', tag: 'PubMed 11404665' },
   escamilla2001_var: { authors: 'Escamilla RF et al.', year: 2001, title: 'Effects of technique variations on knee biomechanics during the squat and leg press', venue: 'Med Sci Sports Exerc, 33(9):1552–1566', url: 'https://pubmed.ncbi.nlm.nih.gov/11528346/', tag: 'PubMed 11528346' },
+  demers2018: { authors: 'Demers E et al.', year: 2018, title: 'The Effect of Stance Width and Anthropometrics on Joint Range of Motion in the Lower Extremities during a Back Squat', venue: 'Int J Exerc Sci, 11(1):764–775', url: 'https://intjexersci.com/files/ijes/vol11/iss1/9.pdf', tag: '原文圖 1' },
+  gorsic2020: { authors: 'Goršič M et al.', year: 2020, title: 'Biomechanical comparisons of back and front squats with a straight bar and four squats with a transformer bar', venue: 'Sports Biomech, 23(2):166–181（2024 紙本；2020 線上）', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/', tag: '原文表 2' },
+  larsen2021: { authors: 'Larsen S et al.', year: 2021, title: 'Effects of Stance Width and Barbell Placement on Kinematics, Kinetics, and Myoelectric Activity in Back Squats', venue: 'Front Sports Act Living, 3:719013', url: 'https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2021.719013/full', tag: '原文表 3' },
+  zawadka2020: { authors: 'Zawadka M et al.', year: 2020, title: 'How Are Squat Timing and Kinematics in The Sagittal Plane Related to Squat Depth?', venue: 'J Sports Sci Med, 19(3):500–507', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/', tag: '原文表 2' },
   paoli2009: { authors: 'Paoli A, Marcolin G, Petrone N', year: 2009, title: 'The effect of stance width on the electromyographical activity of eight superficial thigh muscles during back squat with different bar loads', venue: 'J Strength Cond Res, 23(1):246–250', url: 'https://pubmed.ncbi.nlm.nih.gov/19130646/', tag: 'PubMed 19130646' },
   bryanton2012: { authors: 'Bryanton MA et al.', year: 2012, title: 'Effect of squat depth and barbell load on relative muscular effort in squatting', venue: 'J Strength Cond Res, 26(10):2820–2828', url: 'https://pubmed.ncbi.nlm.nih.gov/22797000/', tag: 'PubMed 22797000' },
   kubo2019: { authors: 'Kubo K, Ikebukuro T, Yata H', year: 2019, title: 'Effects of squat training with different depths on lower limb muscle volumes', venue: 'Eur J Appl Physiol, 119(9):1933–1942', url: 'https://pubmed.ncbi.nlm.nih.gov/31230110/', tag: 'PubMed 31230110' },
@@ -139,38 +143,43 @@ export const SOURCES = {
   'squat-high': {
     assumptions: [
       '站姿動作：每幀求解軀幹前傾角，使系統總重心（含實際三維手臂位置與槓鈴）維持在腳掌中段上方。',
-      '站距小腿角項：寬站距（stance = 0.9）小腿較窄站距（0.1）直立 6.7°（依 Escamilla et al. 2001, PMID 11404665 量測 5–9°）；已知限制：在固定腳掌中段重心下，寬站距股骨矢狀投影縮短使模型軀幹反少傾約 16° 且髖伸力矩下降（與該文獻軀幹無差異、髖力矩較高之結果矛盾），且缺少髖外旋與臀大肌上束外展力臂。',
+      '預設主導 dom=0.30、站距偏移斜率 0.47、小腿角行程指數 0.83，依 Demers 等 2018 赤足、持輕木桿的無負重背蹲圖 1，在股骨 20°／40°／60° 六個踝背屈圖讀點等權擬合；圖讀約 ±1–2°。原文大轉子間寬與腳跟外側站距，暫用模型髖中心寬與踝中心距代理，換算未校驗；轉用負重亦為外推。小腿策略端點 40°／16°、大腿端點 70°／118° 仍是未實測的示範範圍。Zawadka 等 2020 的踝角峰值時間只作定性核對，未換算為模型股骨角進度。',
+      '校準站距代理只落在 stance≈0.024／0.238；預設 stance=0.3 的 dom=0.30 是外推。若大轉子間寬假設為 32 cm（僅示意估計，非實測），兩點會移到 stance≈0.52／0.90，預設 dom 可能更低。兩站距圖讀差僅 0.8–1.5°，與 ±1–2° 讀圖誤差相近；三參數可辨識性弱，冪函數殘差仍有系統型態。校準前診斷已指出髖位太後、膝前移不足，參數種類及方向並非對測試組盲選。詳細限制見 docs/validation/squat-calibration-result.md。',
+      '寬站距（stance = 0.9）小腿最低點較窄站距（0.1）直立約 9.0°；Escamilla 2001 曾報寬窄差，但與 Demers 的無負重條件不同。固定腳掌中段重心與膝沿腳尖下，寬站距股骨矢狀投影縮短仍可能使模型軀幹較直立、髖伸力矩下降，與 Escamilla 2001 報告的方向矛盾；缺少髖外旋與臀大肌上束外展力臂。',
       '額狀面地面反作用力假設通過髖關節（外推膝蓋參數則額外施加橫向分力）；槓重 1.0× 體重為示範負重假設，僅分析下肢與腰椎自由度。',
       '鞋跟墊高以腳跟相對前腳掌的高度差（cm）表示；足底長 25 cm、踝高出足底 4.8 cm，前腳掌固定、腳跟旋起。腳掌角為 arcsin(高度/25 cm)，踝背屈量的是小腿相對腳掌，不是相對地面；壓力中心仍在地面鞋底接觸面。自由深蹲示範假設將足板角增量各半分給小腿前傾增加與踝背屈需求減少，沒有依驗證研究擬合個人策略。Lu 等 2022 的獨立試驗支持墊高鞋跟可降低踝背屈，但不能證明各半比例。',
     ],
-    refs: ['escamilla1998', 'escamilla2001_sq', 'escamilla2001_stance', 'escamilla2001_var', 'paoli2009', 'bryanton2012', 'kubo2019', 'illmeier2023', 'lu2022heel'],
+    refs: ['demers2018', 'zawadka2020', 'gorsic2020', 'larsen2021', 'escamilla1998', 'escamilla2001_sq', 'escamilla2001_stance', 'escamilla2001_var', 'paoli2009', 'bryanton2012', 'kubo2019', 'illmeier2023', 'lu2022heel'],
   },
   'squat-low': {
     assumptions: [
-      '低槓位置下移至三角肌後束（較高槓低 8 cm、靠後 3.5 cm），另加入下肢策略偏移（domShift = +0.08，依 van den Tillaar 2020、Murawa 2020、Glassbrook 2017、Illmeier & Rechberger 2023 反推，使最低點小腿較高槓直立約 1.9°、軀幹多前傾約 12.3°）。',
+      '低槓位置下移至三角肌後束（較高槓低 8 cm、靠後 3.5 cm），另加入原有下肢策略偏移 domShift=+0.08；此為跨研究差異的示範反推值，非直接量測的策略參數。小腿行程與站距斜率同高槓的 Demers 2018 校準，低槓外推未另實測。',
+      '低槓的 +0.08 與小腿 40°／16° 端點均未被 Demers 六點校準；原研究無負重、赤足、持輕木桿，轉用 1.0 倍體重負重及低槓均屬外推。站距標記換算與參數可辨識性限制同高槓；Larsen 低槓寬站軀幹比對轉為失敗。詳細結果見 docs/validation/squat-calibration-result.md。',
       '站姿總重心（含實際三維手臂位置）維持在腳掌中段上方；站距小腿角項與額狀面地面反作用力假設同高槓深蹲。',
       '槓重為 1.0× 體重示範假設，與高槓同負重下比較力臂差異。',
       '鞋跟墊高的足板、踝角與地面接觸假設同高槓深蹲。',
     ],
-    refs: ['glassbrook2017', 'glassbrook2019', 'murawa2020', 'vandentillaar2020', 'illmeier2023', 'escamilla2001_stance', 'lu2022heel'],
+    refs: ['demers2018', 'larsen2021', 'glassbrook2017', 'glassbrook2019', 'murawa2020', 'vandentillaar2020', 'illmeier2023', 'escamilla2001_stance', 'lu2022heel'],
   },
   'front-squat': {
     assumptions: [
-      '前槓架在三角肌前束上方（軀幹軸前方 11 cm），另加入下肢策略偏移（domShift = -0.08，依 Illmeier & Rechberger 2023、Yavuz 2015、Russell & Phillips 1989 反推，使最低點軀幹較高槓直立約 15.8°、小腿微多前傾約 1.9°）。',
+      '前槓架在三角肌前束上方（軀幹軸前方 11 cm），另加入原有下肢策略偏移 domShift=−0.08；此為跨研究差異的示範反推值，非直接量測的策略參數。小腿行程與站距斜率同高槓的 Demers 2018 校準，前槓外推未另實測。',
+      '前蹲的 −0.08 與小腿 40°／16° 端點均未被 Demers 六點校準；轉用 1.0 倍體重負重是外推。趨勢檢查的最低點軀幹角 25.4°，但 Goršič 定點模型 27.8° 對研究 40.6° 失敗，姿勢可疑偏直立；兩者取樣條件不同。站距標記換算與參數可辨識性限制同高槓。詳細結果見 docs/validation/squat-calibration-result.md。',
       '站姿總重心以實際三維手臂（前架式前伸手肘）位置計入平衡，維持在腳掌中段上方；站距小腿角項與額狀面反作用力假設同背蹲。',
       '槓重採相同 1.0× 體重示範假設，以比較相同絕對負重下的關節力矩（Krzyszkowski & Kipp 2020）。',
       '鞋跟墊高的足板、踝角與地面接觸假設同高槓深蹲。',
     ],
-    refs: ['gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance', 'lu2022heel'],
+    refs: ['demers2018', 'gorsic2020', 'gullett2009', 'yavuz2015', 'krzyszkowski2020', 'illmeier2023', 'russell1989', 'escamilla2001_stance', 'lu2022heel'],
   },
   'goblet-squat': {
     assumptions: [
-      '沿用深蹲姿勢求解與前側負重下肢策略（domShift = -0.08，同前蹲）；預設偏膝主導（dom = 0.25，無單一實測出處之預設假設，較背蹲預設 0.45 更偏膝主導）反映前側負重深蹲較直立的軀幹與膝前移，每幀求解軀幹前傾角使總重心維持在腳掌中段上方。',
+      '小腿行程與站距斜率沿用 Demers 2018 無負重背蹲校準，轉用高腳杯為外推；前側負重偏移 domShift=−0.08。預設 dom=0.25 是示範選擇，較背蹲校準預設 0.30 稍偏膝主導；每幀求解軀幹前傾角，使總重心維持在腳掌中段上方。',
+      '高腳杯的 −0.08、小腿 40°／16° 端點及 20 kg 啞鈴姿勢均無獨立校準；Demers 的站距標記換算與三參數可辨識性限制仍適用。詳細結果見 docs/validation/squat-calibration-result.md。',
       '單顆啞鈴垂直捧於胸骨前方（距軀幹軸 22 cm、沿軀幹 40 cm），雙手共同承托（右半身承擔一半重量），僅分析下肢與腰椎自由度。',
       '啞鈴尺寸與預設單顆 20 kg 為假設。',
       '鞋跟墊高沿用自由深蹲的足板、踝角、地面接觸與小腿前傾分配假設；Lu 等的槓鈴深蹲研究未直接驗證高腳杯深蹲。',
     ],
-    refs: ['collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020', 'lu2022heel'],
+    refs: ['demers2018', 'collins2021', 'gullett2009', 'yavuz2015', 'krzyszkowski2020', 'lu2022heel'],
   },
   'smith-squat': {
     assumptions: [

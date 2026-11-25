@@ -1,6 +1,6 @@
 # 深蹲數值比對：T16b 方法修正（歷史基線）
 
-> **目前模型 0.7.3（T17c）**：可比較項為 **10/16 通過，其中 1 筆是假設敏感的通過**；另有四筆 Goršič 骨盆前傾資料供未來驗證，暫列 `definition-mismatch`。鞋跟條件前後逐筆變化及係數敏感度見[鞋跟影響](heel-impact.md)，髖位與 24 cm 估算核對見[診斷報告](squat-diagnosis.md)，T17 節段質量變化見[節段參數影響](segment-impact.md)。下文的 T16b 表格是歷史結果；連結的 `validation/results.json` 與圖為目前模型重算值。
+> **目前模型 0.7.3（T18 姿勢校準）**：可比較項為 **9/16 通過，其中 1 筆是假設敏感的通過**；詳細逐筆新舊值及校準／測試組分離見[校準檢驗結果](squat-calibration-result.md)。下文 T16b 與 T17c 的表格均是歷史結果；連結的 `validation/results.json` 與圖為目前模型重算值。四筆 Goršič 骨盆前傾仍列 `definition-mismatch`。鞋跟條件歷史分析見[鞋跟影響](heel-impact.md)，髖位診斷見[診斷報告](squat-diagnosis.md)，T17 節段變化見[節段參數影響](segment-impact.md)。
 
 2026-11-24，產品版本 0.7.2。研究數值與容許誤差事先固定於 `0df5506`、`cb666ff`；依研究方法修正條件於 `f88f525` 單獨提交後，才重新計算。產品模型及回歸基準未修改。逐筆機器結果在 [`validation/results.json`](../../validation/results.json)，全清單層級狀態在 [`src/validation-status.json`](../../src/validation-status.json)。
 

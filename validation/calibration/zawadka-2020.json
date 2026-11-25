@@ -1,0 +1,26 @@
+{
+  "id": "zawadka-2020",
+  "role": "calibration-only-qualitative",
+  "source": {
+    "authors": "Zawadka M, Smolka J, Skublewska-Paszkowska M, Lukasik E, Gawda P",
+    "year": 2020,
+    "title": "How Are Squat Timing and Kinematics in The Sagittal Plane Related to Squat Depth?",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/",
+    "pmid": "32874102"
+  },
+  "participants": { "n": 60, "sex": "40 男、20 女", "training": "健康、休閒活動的大學生，非深蹲專項訓練者" },
+  "protocol": "無負重、雙臂前伸、肩寬站距、足跟著地，按個人慣用方式到最大深度並停 3 秒；VICON 八台攝影機量關節角，下降期時間正規化為 0–100%。",
+  "overlapAudit": "波蘭 Lublin 團隊，作者與四篇測試組無重疊；無負重且非負重訓練樣本，未見相同受試者證據。",
+  "model": "只用來約束時序解釋：e 代表模型股骨角進度，原文百分比是下降時間，兩者不可直接等同，故本研究不進入數值目標函數。",
+  "conditions": [
+    {
+      "id": "bodyweight-descent",
+      "catalogId": "squat-high",
+      "params": {},
+      "conditionDerivation": "原文自然深蹲，未指定模型可重現的股骨定點。",
+      "measurements": [
+        { "metric": "anklePeakTime", "sample": { "type": "descentTimePercent" }, "reference": { "mean": 86.75, "unit": "percent", "rawDefinition": "男性最大踝背屈出現的下降期時間中位數；女性 90.17%" }, "evidence": { "type": "table", "location": "表 2，Time max ankle [%]：男性中位 86.75%，女性中位 90.17%" }, "tolerance": null, "comparisonRole": "qualitative-only", "limitations": "時間百分比不能換算股骨角進度；不能用此值擬合 e 函數。" }
+      ]
+    }
+  ]
+}
