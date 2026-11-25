@@ -1380,7 +1380,7 @@ function rdlPose(P, e) {
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
   const gap = 0.1 * P.barDist;
-  const bz = 0.02 + 0.5 * gap;
+  const bz = 0.02 + 0.5 * gap + (P._balanceBarShift || 0);
   const target = bz - 0.016 - gap;
   const Lr = BODY.Lu + BODY.Lf - 0.002;
   const girdle = { ret: rad(-5), elev: rad(-5) };
@@ -1426,11 +1426,21 @@ function rdlPose(P, e) {
   pose.R.knee = r.knee;
   armChain(pose, r.S, [gx, r.barY, bz], norm(add(mul(r.tf.f, -1), [0.3, -0.2, 0])));
   pose.bar = [0, r.barY, bz];
-  pose.cop = [w, 0, 0];
   pose.barW = BAR_RATIO.rdl;
   const shin = deg(Math.atan2(r.knee[2] - A[2], r.knee[1] - A[1]));
   if (shin > 15 && e > 0.3) pose.warn.push('膝蓋往前跑 ' + Math.round(shin) + '°，變成接近深蹲');
   if (r.barY < r.knee[1] - 0.12 && e > 0.5) pose.warn.push('槓已低於膝下方，注意膕繩肌柔軟度');
+  // H2：保留膝角與髖折疊，以槓貼腿的位置作唯一剩餘自由度；按完整外力求平衡。
+  // 不把骨盆或膝角硬調成另一個動作。求解得到的槓前後漂移須由稽核另列。
+  if (P._balanceBarShift === undefined) {
+    const target = balanceTargetZ(pose, P);
+    const error = (shift) => {
+      const candidate = rdlPose({ ...P, _balanceBarShift: shift }, e);
+      forcesOf(candidate, P, 'rdl');
+      return candidate.cop[2] - target;
+    };
+    return rdlPose({ ...P, _balanceBarShift: bisect(error, -0.12, 0.12) }, e);
+  }
   return pose;
 }
 
@@ -1481,12 +1491,16 @@ function systemComZ(pose, bar, barW) {
   return z / m;
 }
 
+// 腳跟與腳尖的幾何中點；G1 的零點使用實際足底，而非世界座標 z=0。
+function footMidZ(pose) { return (pose.R.heel[2] + pose.R.toe[2]) / 2; }
+function balanceTargetZ(pose, P) { return footMidZ(pose) + (P.balanceCm || 0) / 100; }
+
 // 槓鈴划船：軀幹角固定、髖往後讓手臂垂下時槓在腳掌中段正上方；槓從垂手位置拉到軀幹
 function rowPose(P, e) {
   const w = 0.15, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
-  const bz = 0.02, gx = 0.2 * P.grip;
+  const gx = 0.2 * P.grip;
   const phi = rad(P.torso);
   const u = [0, Math.cos(phi), Math.sin(phi)];
   const legs = fixedKneeLegs(A, w, rad(22));
