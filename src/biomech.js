@@ -3,6 +3,11 @@
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 
 export const MODEL_VERSION = '0.7.3';
+// 群體常模僅供人工複查；髖角缺骨盆分段，肩後伸代理亦無可直接換算的常模。
+export const ROM_HINTS = Object.freeze({
+  hipFlex: 136, kneeFlex: 138, ankleDorsi: 39, shFlex: 160, shAbd: 150,
+  shPlane: 155, elbFlex: 146,
+});
 const G = 9.81;
 // 示範假設：足板角有一半用於小腿前傾；此比例沒有同條件實測值。
 export const HEEL_SHANK_SHARE = 0.5;
@@ -3794,12 +3799,12 @@ export function analyze(lift, P, e) {
   }
   // 關節負擔
   const rom = {};
-  if (has('hipExt') && deg(q.hipFlex) > 136) rom.hip = '髖屈曲接近末端';
-  if (has('kneeExt') && deg(q.kneeFlex) > 138) rom.knee = '膝屈曲接近末端';
-  if (has('ankPF') && deg(q.ankleDorsi) > 36) rom.ankle = '踝背屈接近末端';
-  if (has('shFwd') && Math.abs(deg(q.shPlane)) > 155) rom.shoulder = '上臂伸到身後，留意肩前側';
-  if (has('elbExt') && deg(q.elbFlex) > 140) rom.elbow = '肘屈曲接近末端';
-  if (has('shFwd') && deg(q.shElev) > 178) rom.shoulder = '舉臂接近末端';
+  if (has('hipExt') && deg(q.hipFlex) > ROM_HINTS.hipFlex) rom.hip = '髖屈曲接近模型提示線';
+  if (has('kneeExt') && deg(q.kneeFlex) > ROM_HINTS.kneeFlex) rom.knee = '膝屈曲高於常模參考值，按個人活動度複查';
+  if (has('ankPF') && deg(q.ankleDorsi) > ROM_HINTS.ankleDorsi) rom.ankle = '踝背屈高於負重常模參考值，按個人活動度複查';
+  if (has('shFwd') && Math.abs(deg(q.shPlane)) > ROM_HINTS.shPlane) rom.shoulder = '上臂伸到身後，留意肩前側';
+  if (has('elbExt') && deg(q.elbFlex) > ROM_HINTS.elbFlex) rom.elbow = '肘屈曲高於主動常模參考值，按個人活動度複查';
+  if (has('shFwd') && deg(q.shElev) > (Math.abs(deg(q.shPlane)) < 45 ? ROM_HINTS.shFlex : ROM_HINTS.shAbd)) rom.shoulder = '舉臂高於主動常模參考值，按個人活動度複查';
   const joints = {};
   if (has('hipExt')) joints.hip = Math.hypot(dem.hipExt, dem.hipAbd || 0);
   if (has('kneeExt')) joints.knee = Math.abs(dem.kneeExt);
