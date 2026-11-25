@@ -604,7 +604,7 @@ export const LIFTS = {
     pose: pushdownPose, loads: cableLoads,
     moving: ['elbExt'],
     params: [
-      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳併站'], ['staggered', '前後腳']], def: 'parallel', joint: 'ankle', mech: 'A' },
+      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳併站'], ['staggered', '前後腳']], def: 'staggered', joint: 'ankle', mech: 'A' },
       { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.pushdown.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'topFlex', label: '起點手肘角度', left: '80°', right: '130°', min: 80, max: 130, step: 1, def: 100, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'elbFwd', label: '手肘位置', left: '-10°（往後）', right: '30°（往前）', min: -10, max: 30, step: 1, def: 5, joint: 'shoulder', mech: 'A', unit: '°' },
@@ -612,7 +612,7 @@ export const LIFTS = {
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefTri', label: '三頭偏好', left: '偏外側／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
     ],
-    standardNote: '站在滑輪前、軀幹微前傾，上臂貼身不動，從手肘約 90～100° 壓到完全伸直；多功能滑輪柱多為 2:1 滑輪比（實感為配重片一半）。',
+    standardNote: '站在滑輪前、前後腳微錯開、軀幹微前傾，上臂貼身不動，從手肘約 90～100° 壓到完全伸直；多功能滑輪柱多為 2:1 滑輪比（實感為配重片一半）。',
   },
   legext: {
     name: '腿伸機', topLabel: '伸直', bottomLabel: '彎曲',
@@ -2366,7 +2366,7 @@ function pushdownPose(P, e) {
   });
   const extra = P.footStance === 'staggered' ? 0 : bisect((x) => rad(3) - make(x).shinTilt, 0, rad(40), 16);
   const pose = make(extra);
-  if (deg(extra) > 8) pose.warn.push('滑輪把手往上推：軀幹要再前傾約 ' + Math.round(deg(extra)) + '° 才站得穩（實務上常用前後腳站）');
+  if (deg(extra) > 8) pose.warn.push('雙腳併站時模型已讓軀幹額外前傾約 ' + Math.round(deg(extra)) + '° 以平衡；可改用前後腳站姿');
   // 調整前臂視覺參考軸讓正握旋前角落在自然範圍內，五指包覆直槓
   pose.armPole = norm(add(sub(pose.R.elbow, pose.R.shoulder), [0.35, 0, -0.1]));
   pose.barAxial = false;
