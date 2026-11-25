@@ -27,6 +27,7 @@
       "id": "high-narrow",
       "catalogId": "squat-high",
       "params": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.14,
         "depth": 0.52
@@ -128,6 +129,7 @@
       "id": "high-wide",
       "catalogId": "squat-high",
       "params": {
+        "kneePath": "forward",
         "barPos": "high",
         "stance": 0.8,
         "depth": 0.52
@@ -229,6 +231,7 @@
       "id": "low-narrow",
       "catalogId": "squat-low",
       "params": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.14,
         "depth": 0.52
@@ -330,6 +333,7 @@
       "id": "low-wide",
       "catalogId": "squat-low",
       "params": {
+        "kneePath": "forward",
         "barPos": "low",
         "stance": 0.8,
         "depth": 0.52
