@@ -1120,11 +1120,11 @@ function girdlePointLocal(point, g) {
   return add(G.scj, M.map((r) => dot(r, d)));
 }
 export function shoulderLocal(g) { return girdlePointLocal(girdleForBody().sh, g); }
-// public/bones.bin 的 scapula（右肩胛骨與鎖骨）網格頂點中心，座標以軀幹長正規化。
-// 與 rig.js 的肩帶同繞胸鎖關節旋轉；以網格幾何決定參考點，不另設肩到肩胛的距離。
+// BodyParts3D 原始右肩胛骨的頂點中心，依 tools/build_bones.py 的軀幹座標正規化。
+// rig.js 顯示網格合併肩胛與鎖骨；此點只取肩胛骨，仍同繞胸鎖關節旋轉，不另設距離。
 export function scapulaLocal(g) {
-  const center = [0.22469512939171318 * BODY.Ltr * BODY.shHalf / DEFAULT_BODY.shHalf,
-    0.985798544138571 * BODY.Ltr, -0.04272550181801772 * BODY.Ltr];
+  const center = [0.235231909098065 * DEFAULT_BODY.Ltr * BODY.shHalf / DEFAULT_BODY.shHalf,
+    0.975678396831072 * BODY.Ltr, -0.059557042521439 * BODY.Ltr];
   return girdlePointLocal(center, g);
 }
 const toWorld = (tf, l) => add(add(add(tf.Pc, mul(tf.lat, l[0])), mul(tf.u, l[1])), mul(tf.f, l[2]));
@@ -1358,7 +1358,7 @@ function deadliftPose(P, e) {
     dlTopCache.set(key, barTopY);
   }
   const barY = lerp(barTopY, 0.225 + blk, e);
-  // H1／G1：槓在足中段、小腿貼槓，肩胛網格中心在槓正上方；肩關節自然位於槓前。
+  // H1／G1：槓在足中段、小腿貼槓，右肩胛骨頂點中心在槓正上方；肩關節自然位於槓前。
   const startY = 0.225 + blk;
   const phi0 = bisect((a) => place(a, startY).scapZ - bz, rad(15), rad(85));
   const pose = { R: {}, warn: [], ok: true };
