@@ -531,3 +531,14 @@
 - **雙槓撐體**：McKenzie A et al. (2022), *Bench, Bar, and Ring Dips: Do Kinematics and Muscle Activity Differ?*, Int J Environ Res Public Health 19(20):13211. [DOI 10.3390/ijerph192013211](https://doi.org/10.3390/ijerph192013211)。研究比較椅上、雙槓和吊環撐體；雙槓相較椅上有較高胸大肌、前三角、三頭等峰值 EMG，並呈現軀幹前傾。**未比較雙槓的直立與前傾兩個條件**，因此不加入該方向的趨勢檢查。
 - **引體向上握法**：Dickie JA et al. (2017), *Electromyographic analysis of muscle activation during pull-up variations*, J Electromyogr Kinesiol 32:30–36. [PubMed 28011412](https://pubmed.ncbi.nlm.nih.gov/28011412/)。研究比較正握、反握、對握和繩索；摘要指出握法之間大多數全程峰值與平均肌電相近，特定顯著差異是正握相較對握的中斜方肌，而非正握與反握背闊肌／二頭肌的固定方向。因此未加正反握背闊肌／二頭肌趨勢。
 - **輔助引體機**：目前未查到可直接支援「輔助公斤數增加，各肌肉 EMG 逐級下降」的原始比較研究。膝墊輔助的單調檢查僅驗證模型內部的總主動活化與支撐力平衡，不標記為文獻趨勢。
+
+### 姿勢預設的外部依據與界線
+
+- **RDL 屈膝**：[Lyons et al. 2026](https://journals.northumbria.ac.uk/index.php/gjsscmr/article/view/1595)（DOI 10.19164/gjsscmr.v2i1.1595）比較傳統與羅馬尼亞硬舉的膝角、股外側肌肌電：兩式中途膝角有差異，傳統硬舉股外側肌活動較高。這是「RDL 與傳統硬舉膝部需求不同」的方向依據，沒有 18° 的通用屈膝處方。
+- **槓鈴划船軀幹角**：[Ishida et al. 2007](https://www.jstage.jst.go.jp/article/rigaku/34/3/34_KJ00004621606/_article/-char/en)（DOI 10.15063/rigaku.KJ00004621606）在等長前傾拉舉測試 30°、45°、60° 軀幹角，角度改變背闊肌、股二頭肌與豎脊肌肌電。這不是動態槓鈴划船或 60° 最佳角的證明。
+- **腿推腳位**：[Martín-Fuentes et al. 2022](https://pubmed.ncbi.nlm.nih.gov/34085847/)（DOI 10.1177/19417381211016357）在斜式腿推比較站距與腳尖角，受測肌群肌電未見顯著差異；沒有比較腳在足板上的高低。[Da Silva et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18545207/) 對高低腳位有急性肌電方向資料，但沒有中間腳位 0.52 的標準。
+- **滑輪下拉後仰**：[Buonsenso et al. 2025](https://pubmed.ncbi.nlm.nih.gov/40981044/) 比較包含 30° 後仰的握法組合：寬正握後仰 30° 的後三角肌電高於部分其他條件，背闊肌肌電未見相應差異。研究未測 15° 最適值，反握條件亦未與 15° 後仰配對。
+- **臥推觸點**：[Ferri Marini et al. 2022](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0278909)（DOI 10.1371/journal.pone.0278909）在平板臥推研究中以乳頭附近觸胸作方法條件；沒有測不同觸點的效果，不能將本模型 `touch=0.6` 當作實測標準。
+- **彎舉上臂位置**：[Oliveira et al. 2009](https://jssm.org/jssm-08-24.xml-Fulltext)（J Sports Sci Med 8(1):24–29；PMID 24150552）比較標準、上斜與牧師椅啞鈴彎舉，二頭肌肌電隨肩位與肘行程而變；沒有測上臂前移 10°、槓鈴正握或錘式對握。
+- **雙槓前傾**：[McKenzie et al. 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC9659300/)（PMID 36361276）量測雙槓撐體軀幹角與胸大肌、三頭肌活動，但未比較指定前傾角；15° 與 0° 仍是示範設定。
+- **尚無可移植數值**：滑輪夾胸前後腳距、RDL 18°、划船 60°、下拉 15°、側平舉 90°、彎舉上臂前移 10°、雙槓 15°、腿推中間腳位 0.52、臥推 `touch=0.6`，以及各器械椅墊、轉軸、踏板與凸輪尺寸，均不是文獻確立的通用預設。

@@ -151,21 +151,21 @@
 | 前蹲（`front-squat`） | `barPos=front`、`dom=0.3`、`depth=0.55`、`stance=0.3`、`kneePath=forward`、`heelHeight=0`；符合可量化幾何條件 | G1、G3、S1–S4 | [R06]、[R09]；教練原則（深度／站距） | 部分：姿勢、力矩與膝路徑代理 |
 | 高腳杯深蹲（`goblet-squat`） | `dom=0.25`、`depth=0.55`、`stance=0.35`、`kneePath=forward`、`heelHeight=0`；符合可量化幾何條件 | G1、G3、S1–S4 | [R06]、[R09]；教練原則（深度／站距） | 部分：姿勢、力矩與膝路徑代理 |
 | 史密斯深蹲（`smith-squat`） | `railAngle=0`、`feetFwd=0.02`、`torso=26`、`depth=0.55`；水平滑軌反力峰值約體重 0.9%；髖／膝／踝均在模型參考內 | G1、G5、M3 | 教練原則；滑軌水平反力為幾何條件 | 能：滑軌反力與關節角；個人 ROM 不能 |
-| 45° 腿推機（`leg-press`） | `footHigh=0.52`、`depth=0.25`、`seat=50`；髖屈峰值 135.3°、踝背屈 38.0°、股廣肌第一 | M1、G5 | [R42]（踝常模）；髖 136° 為模型提示；腳位為教練原則 | 部分：關節角及目標肌；器材尺寸為估計 |
+| 45° 腿推機（`leg-press`） | `footHigh=0.52`、`depth=0.25`、`seat=50`；髖屈峰值 135.3°、踝背屈 38.0°、股廣肌第一 | M1、G5 | 有方向依據：[R30] 比較高低腳位肌電、[R49] 比較站距與腳尖角而未見肌電差異；0.52 中間腳位與深度仍是教練原則。[R42] 僅作踝常模參考 | 部分：關節角及目標肌；器材尺寸為估計 |
 | 哈克深蹲機（`hack-squat`） | `feetFwd=0.1`、`stance=0.4`、`depth=0.55`；符合可量化幾何條件 | M3、G5 | 教練原則／未有出處 | 部分：關節角、軌道反力；無實機校準 |
 | 硬舉（傳統）（`deadlift`） | `style=conv`、`start=0`、`barDist=0`；過膝前軀幹角維持起槓角；肌群分配需複查 | G1、H1、H2 | 教練原則（槓貼身、離地先伸膝）；時序未有出處 | 部分：槓路與關節時序；無速度 |
 | 赤字硬舉（`deficit-dl`） | `style=conv`、`start=-5`、`barDist=0`；過膝前軀幹角維持起槓角；肌群分配需複查 | G1、H1、H2 | 教練原則（槓貼身、離地先伸膝）；時序未有出處 | 部分：槓路與關節時序；無速度 |
 | 墊高硬舉（`block-pull`） | `style=conv`、`start=10`、`barDist=0`；過膝前軀幹角維持起槓角；肌群分配需複查 | G1、H1、H2 | 教練原則（槓貼身、離地先伸膝）；時序未有出處 | 部分：槓路與關節時序；無速度 |
 | 相撲硬舉（`sumo`） | `style=sumo`、`start=0`、`barDist=0`；過膝前軀幹角維持起槓角；肌群分配需複查 | G1、H1、H2 | 教練原則（槓貼身、離地先伸膝）；時序未有出處 | 部分：槓路與關節時序；無速度 |
-| 羅馬尼亞硬舉（`rdl`） | `kneeBend=18`、`depth=0.55`、`barDist=0`；符合可量化幾何條件 | H1、H2、G1 | 教練原則（屈膝 18°）；[R07]（力臂方向） | 部分：姿勢、力矩與壓力中心 |
+| 羅馬尼亞硬舉（`rdl`） | `kneeBend=18`、`depth=0.55`、`barDist=0`；符合可量化幾何條件 | H1、H2、G1 | 有方向依據：[R47] 比較 RDL 與傳統硬舉的膝角及股外側肌活動；屈膝 18° 與深度仍是教練原則。[R07] 支持力臂方向 | 部分：姿勢、力矩與壓力中心 |
 | 早安體前屈（`good-morning`） | `depth=0.6`、`kneeBend=15`；符合可量化幾何條件 | H1、G2、G5 | 教練原則／未有出處 | 部分：髖角與軀幹角；無腰椎分段 |
 | 臀推（`hip-thrust`） | `surface=bench`、`kneeTop=90`、`depth=0.6`、`lockout=0`；頂點小腿傾約 2.9°、膝屈峰值 108.8°、臀大肌第一 | H1、G5 | 教練原則（頂點小腿垂直）；[R41]（膝常模） | 部分：小腿角、關節角與肌群分配 |
 | 45° 背伸展（`back-extension`） | `padHeight=0`、`round=0`；符合可量化幾何條件 | H1、G2、G5 | 教練原則／未有出處 | 部分：髖角與軀幹角；無腰椎分段 |
 | 槓鈴臀橋（`glute-bridge`） | `surface=floor`、`kneeTop=130`、`depth=0.6`、`lockout=0`；頂點小腿偏前、膝屈高於群體常模；維持臀大肌第一，需複查 | H1、G5 | 教練原則（頂點小腿垂直）；[R41]（膝常模） | 部分：小腿角、關節角與肌群分配 |
-| 臥推（平板）（`bench`） | `incline=0`、`grip=1.6`、`flare=52`、`touch=0.6`、`scap=0.8`；符合可量化幾何條件 | P1–P3、Q6、G4 | [R11]；握距／外展值為教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
-| 上斜臥推（`incline-bench`） | `incline=30`、`grip=1.6`、`flare=52`、`touch=0.6`、`scap=0.8`；符合可量化幾何條件 | P1–P3、Q6、G4 | [R11]；握距／外展值為教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
-| 窄握臥推（`cg-bench`） | `incline=0`、`grip=1`、`flare=32`、`touch=0.75`、`scap=0.8`；符合可量化幾何條件 | P1–P3、Q6、G4 | [R11]；握距／外展值為教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
-| 地板臥推（`floor-press`） | `incline=0`、`grip=1.6`、`flare=45`、`touch=0.6`、`scap=0.8`；符合可量化幾何條件 | P1–P3、Q6、G4 | [R11]；握距／外展值為教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
+| 臥推（平板）（`bench`） | `incline=0`、`grip=1.6`、`flare=52`、`touch=0.6`、`scap=0.8`；符合可量化幾何條件 | P1–P4、G6、G4 | [R11] 支持握距／肩胛影響模型肩負荷；[R50] 以乳頭附近觸點為研究操作條件，未比較觸點。1.6、52°、0.6 仍是教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
+| 上斜臥推（`incline-bench`） | `incline=30`、`grip=1.6`、`flare=52`、`touch=0.6`、`scap=0.8`；符合可量化幾何條件 | P1–P4、G6、G4 | [R11] 支持握距／肩胛影響模型肩負荷；[R50] 僅平板研究條件。上斜觸點及具體角度仍是教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
+| 窄握臥推（`cg-bench`） | `incline=0`、`grip=1`、`flare=32`、`touch=0.75`、`scap=0.8`；符合可量化幾何條件 | P1–P4、G6、G4 | [R11] 支持握距／肩胛影響模型肩負荷；窄握觸點與具體角度仍是教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
+| 地板臥推（`floor-press`） | `incline=0`、`grip=1.6`、`flare=45`、`touch=0.6`、`scap=0.8`；符合可量化幾何條件 | P1–P4、G6、G4 | [R11] 僅平凳臥推肩負荷間接方向；地板觸點及具體角度仍是教練原則 | 部分：肩肘路徑；無胸廓、手腕角 |
 | 啞鈴臥推（`db-bench`） | `incline=0`、`depth=0.6`、`flare=50`、`grip=pro`；符合可量化幾何條件 | P1–P3、G5 | 教練原則／未有出處 | 部分：肩肘角與肌群；無胸廓 |
 | 上斜啞鈴臥推（`db-bench-incline`） | `incline=30`、`depth=0.6`、`flare=50`、`grip=pro`；符合可量化幾何條件 | P1–P3、G5 | 教練原則／未有出處 | 部分：肩肘角與肌群；無胸廓 |
 | 伏地挺身（`pushup`） | `grip=1.2`、`flare=45`、`handFwd=-0.06`、`elevation=flat`；符合可量化幾何條件 | P1–P3、G4 | [R10]（手腕力傳遞）；設定值為教練原則 | 部分：手位與肩肘角；無可靠腕角 |
@@ -180,16 +180,16 @@
 | 滑輪夾胸（低位）（`cable-fly-low`） | `stretch=82`、`height=low`、`elbowBend=25`、`lean=12`、`scap=0.6`；符合可量化幾何條件 | P1–P3、M3、G5 | 教練原則／器材幾何未有出處 | 部分：路徑與關節角；無實機對軸校準 |
 | 站姿肩推（`ohp`） | `grip=1.3`、`flare=30`、`lean=5`、`path=0.1`；終點舉臂 166.5°、屈肘 149.7° 高於群體常模，屬動作終點，維持原值 | V1、V2、G5、M3 | 教練原則；[R43]、[R44] 為活動度參考 | 部分：槓路與角度；終點可超群體平均 |
 | 坐姿啞鈴肩推（`db-press`） | `grip=pro`、`elbowFwd=30`、`depth=0.6`；符合可量化幾何條件 | V1、V2、G5、M3 | 教練原則；[R43]、[R44] 為活動度參考 | 部分：槓路與角度；終點可超群體平均 |
-| 雙槓撐體（`dips`） | `lean=15`、`depth=0.6`；底部肘點高於肩點；肩後伸不可可靠量測，需複查 | V3、G5 | [R46]（肩後伸常模）；目前深度為教練原則 | 部分：肩角幾何代理；無肩胛個人 ROM |
-| 直立雙槓撐體（`dips-upright`） | `lean=0`、`depth=0.6`；底部肘點高於肩點；肩後伸不可可靠量測，需複查 | V3、G5 | [R46]（肩後伸常模）；目前深度為教練原則 | 部分：肩角幾何代理；無肩胛個人 ROM |
-| 槓鈴划船（正握）（`row`） | `torso=60`、`grip=1.3`、`supin=pro`、`flare=35`、`pullTo=0.4`；符合可量化幾何條件 | L1–L3、H1 | 教練原則（軀幹約 60°）；[R19]（力臂方向） | 部分：軀幹角、槓路、肩肘角 |
-| 槓鈴划船（反握）（`row-sup`） | `torso=60`、`grip=1.3`、`supin=sup`、`flare=35`、`pullTo=0.4`；符合可量化幾何條件 | L1–L3、H1 | 教練原則（軀幹約 60°）；[R19]（力臂方向） | 部分：軀幹角、槓路、肩肘角 |
+| 雙槓撐體（`dips`） | `lean=15`、`depth=0.6`；底部肘點高於肩點；肩後伸不可可靠量測，需複查 | V3、G5 | [R52] 量得雙槓撐體軀幹角與胸／三頭肌電，但未比較前傾角；15° 與深度仍是教練原則。[R46] 僅肩後伸常模 | 部分：肩角幾何代理；無肩胛個人 ROM |
+| 直立雙槓撐體（`dips-upright`） | `lean=0`、`depth=0.6`；底部肘點高於肩點；肩後伸不可可靠量測，需複查 | V3、G5 | [R52] 未比較直立與前傾；0° 與深度仍是教練原則。[R46] 僅肩後伸常模 | 部分：肩角幾何代理；無肩胛個人 ROM |
+| 槓鈴划船（正握）（`row`） | `torso=60`、`grip=1.3`、`supin=pro`、`flare=35`、`pullTo=0.4`；符合可量化幾何條件 | L1–L3、H1 | 有方向依據：[R48] 等長前傾拉舉於 30°／45°／60° 比較軀幹角與肌電；非動態划船，60° 仍是教練原則。[R19] 支持力臂方向 | 部分：軀幹角、槓路、肩肘角 |
+| 槓鈴划船（反握）（`row-sup`） | `torso=60`、`grip=1.3`、`supin=sup`、`flare=35`、`pullTo=0.4`；符合可量化幾何條件 | L1–L3、H1 | 有方向依據：[R48] 等長前傾拉舉比較軀幹角與肌電；非動態反握划船，60° 仍是教練原則。[R19] 支持力臂方向 | 部分：軀幹角、槓路、肩肘角 |
 | 坐姿滑輪划船（`cable-row`） | `grip=v`、`leanStart=15`、`leanEnd=-5`、`pullTo=0.4`；終點肩後伸 25.1°，低於約 50° 常模 | L3、G5 | [R46]（肩後伸常模）；拉距為教練原則 | 部分：肩角幾何代理；無個人 ROM |
 | 坐姿滑輪划船（寬握）（`cable-row-wide`） | `grip=wide`、`leanStart=15`、`leanEnd=-5`、`pullTo=0.4`；終點肩後伸 38.4°，低於約 50° 常模 | L3、G5 | [R46]（肩後伸常模）；拉距為教練原則 | 部分：肩角幾何代理；無個人 ROM |
 | 俯身啞鈴反向飛鳥（`db-reverse-fly`） | `torso=65`、`elbowBend=20`；符合可量化幾何條件 | L2、G5 | 教練原則／未有出處 | 部分：肩肘角、目標肌分配 |
 | 直立划船（`uprow`） | `grip=1.2`、`height=0.4`、`lean=3`；符合可量化幾何條件 | U2、G5 | 教練原則／未有出處 | 部分：肩角；無肱骨內外旋 |
-| 滑輪下拉（`pulldown`） | `grip=1.7`、`supin=pro`、`lean=15`、`pullTo=0.8`；符合可量化幾何條件 | D1–D2、G5 | 教練原則／握距與後仰未有通用出處 | 部分：肩肘角與負重；無肩胛個人 ROM |
-| 反握滑輪下拉（`pulldown-sup`） | `grip=1.1`、`supin=sup`、`lean=15`、`pullTo=0.8`；符合可量化幾何條件 | D1–D2、G5 | 教練原則／握距與後仰未有通用出處 | 部分：肩肘角與負重；無肩胛個人 ROM |
+| 滑輪下拉（`pulldown`） | `grip=1.7`、`supin=pro`、`lean=15`、`pullTo=0.8`；符合可量化幾何條件 | D1–D2、G5 | 有方向依據：[R27] 以 30° 後仰比較握法，後三角肌電增加、背闊肌無顯著改變；15° 與 1.7 倍握距仍是教練原則 | 部分：肩肘角與負重；無肩胛個人 ROM |
+| 反握滑輪下拉（`pulldown-sup`） | `grip=1.1`、`supin=sup`、`lean=15`、`pullTo=0.8`；符合可量化幾何條件 | D1–D2、G5 | [R27] 未比較反握 15° 後仰；握距與後仰數值仍是教練原則 | 部分：肩肘角與負重；無肩胛個人 ROM |
 | 引體向上（正握）（`pullup`） | `grip=pro`、`width=1.35`、`lean=5`；符合可量化幾何條件 | D1–D2、G5 | 教練原則／握距與後仰未有通用出處 | 部分：肩肘角與負重；無肩胛個人 ROM |
 | 寬握引體向上（`pullup-wide`） | `grip=pro`、`width=1.8`、`lean=5`；符合可量化幾何條件 | D1–D2、G5 | 教練原則／握距與後仰未有通用出處 | 部分：肩肘角與負重；無肩胛個人 ROM |
 | 反手引體向上（`chinup`） | `grip=sup`、`width=1.1`、`lean=5`；符合可量化幾何條件 | D1–D2、G5 | 教練原則／握距與後仰未有通用出處 | 部分：肩肘角與負重；無肩胛個人 ROM |
@@ -203,11 +203,11 @@
 | 坐姿腿彎舉（`leg-curl`） | `cam=human`、`depth=0.5`、`padPos=0.8`、`posture=seated`；符合可量化幾何條件 | M3、G5 | 教練原則／凸輪與器材尺寸未有出處 | 部分：關節角；器材曲線為估計 |
 | 俯臥腿彎舉（`lying-leg-curl`） | `cam=human`、`depth=0.5`、`padPos=0.8`、`posture=lying`；符合可量化幾何條件 | M3、G5 | 教練原則／凸輪與器材尺寸未有出處 | 部分：關節角；器材曲線為估計 |
 | 滑輪三頭下壓（`pushdown`） | `topFlex=100`、`elbFwd=5`、`lean=10`；符合可量化幾何條件 | U1、G5 | 教練原則／未有出處 | 部分：肘角與上臂路徑 |
-| 槓鈴彎舉（`curl`） | `supin=sup`、`grip=1.1`、`topFlex=135`、`elbFwd=10`、`swing=0`；符合可量化幾何條件 | U1、G5 | 教練原則／未有出處 | 部分：肘角與上臂路徑 |
-| 反手彎舉（`reverse-curl`） | `supin=pro`、`grip=1.1`、`topFlex=135`、`elbFwd=10`、`swing=0`；符合可量化幾何條件 | U1、G5 | 教練原則／未有出處 | 部分：肘角與上臂路徑 |
-| 啞鈴側平舉（`lat-raise`） | `plane=scap`、`elbowBend=20`、`topHeight=90`；符合可量化幾何條件 | U2、G5 | 教練原則；[R43] 為舉臂常模參考 | 部分：舉臂角與平面；無肱骨內外旋 |
-| 啞鈴彎舉（`db-curl`） | `grip=sup`、`elbFwd=10`；符合可量化幾何條件 | U1、G5 | 教練原則／未有出處 | 部分：肘角與上臂路徑 |
-| 錘式彎舉（`hammer-curl`） | `grip=neutral`、`elbFwd=10`；符合可量化幾何條件 | U1、G5 | 教練原則／未有出處 | 部分：肘角與上臂路徑 |
+| 槓鈴彎舉（`curl`） | `supin=sup`、`grip=1.1`、`topFlex=135`、`elbFwd=10`、`swing=0`；符合可量化幾何條件 | U1、G5 | 有方向依據：[R51] 啞鈴彎舉肩位改變二頭肌肌電時序；槓鈴的 10° 上臂前移與頂點 135° 仍是教練原則 | 部分：肘角與上臂路徑 |
+| 反手彎舉（`reverse-curl`） | `supin=pro`、`grip=1.1`、`topFlex=135`、`elbFwd=10`、`swing=0`；符合可量化幾何條件 | U1、G5 | [R51] 未研究正握；上臂前移與頂點角仍是教練原則 | 部分：肘角與上臂路徑 |
+| 啞鈴側平舉（`lat-raise`） | `plane=scap`、`elbowBend=20`、`topHeight=90`；符合可量化幾何條件 | U2、G5 | 有方向依據：[R28] 比較肩胛平面上舉時肌電；90° 與屈肘 20° 仍是教練原則。[R43] 僅舉臂常模 | 部分：舉臂角與平面；無肱骨內外旋 |
+| 啞鈴彎舉（`db-curl`） | `grip=sup`、`elbFwd=10`；符合可量化幾何條件 | U1、G5 | 有方向依據：[R51] 比較不同肩位的二頭肌肌電時序；前移 10° 仍是教練原則 | 部分：肘角與上臂路徑 |
+| 錘式彎舉（`hammer-curl`） | `grip=neutral`、`elbFwd=10`；符合可量化幾何條件 | U1、G5 | [R51] 未研究對握；前移 10° 仍是教練原則 | 部分：肘角與上臂路徑 |
 | 槓鈴聳肩（`shrug`） | `grip=1.15`、`height=0.7`、`ret=0.2`、`lean=5`；符合可量化幾何條件 | U3、G5 | 教練原則／未有出處 | 部分：肩胛角代理 |
 
 ## 四、目前模型狀態（只列觀察）
@@ -276,6 +276,12 @@
 - **R38** NSCA，[*Basics of Strength and Conditioning*，Breathing Considerations](https://www.nsca.com/contentassets/116c55d64e1343d2b264e05aaf158a91/basics_of_strength_and_conditioning_manual.pdf)。官方手冊建議最吃力處吐氣、較輕鬆段吸氣；未規定「吐多少」或每次都須離心吸、向心吐。
 - **R39** McCaw、Melrose，1999，[*Stance width and bar load effects on leg muscle activity during the parallel squat*](https://pubmed.ncbi.nlm.nih.gov/10188748/)。DOI: 10.1097/00005768-199903000-00012。站距與階段交互影響內收長肌 EMG；未測內收大肌或膝朝前提示。
 - **R40** Paoli、Marcolin、Petrone，2009，[*The effect of stance width on the electromyographical activity of eight superficial thigh muscles during back squat with different bar loads*](https://pubmed.ncbi.nlm.nih.gov/19130646/)。DOI: 10.1519/JSC.0b013e3181876811。六名有經驗舉者的站距實驗，除臀大肌外未見受測肌群 EMG 顯著差異，含內收肌與臀中肌。
+- **R47** Lyons 等，2026，[*The effects of the conventional deadlift and Romanian deadlift on muscle activation and joint angles at a submaximal intensity*](https://journals.northumbria.ac.uk/index.php/gjsscmr/article/view/1595)。DOI: 10.19164/gjsscmr.v2i1.1595。15 名成人、50% RDL 1RM；傳統硬舉股外側肌活動較高，兩式中途膝角有差異；沒有可移植的 RDL 屈膝 18° 處方。
+- **R48** Ishida 等，2007，[*An Electromyographic Analysis of Trunk and Hip Extensor Muscles During Isometric Pulling Up in the Forward Bending Posture*](https://www.jstage.jst.go.jp/article/rigaku/34/3/34_KJ00004621606/_article/-char/en)。DOI: 10.15063/rigaku.KJ00004621606。10 名男性等長前傾拉舉，30°／45°／60° 前傾改變背闊肌、股二頭肌與豎脊肌肌電；非動態槓鈴划船，不能指定最佳 60°。
+- **R49** Martín-Fuentes 等，2022，[*Influence of Feet Position and Execution Velocity on Muscle Activation and Kinematic Parameters During the Inclined Leg Press Exercise*](https://pubmed.ncbi.nlm.nih.gov/34085847/)。DOI: 10.1177/19417381211016357。斜式腿推比較站距與腳尖角；受測肌群肌電未見兩者顯著差異，未比較足板高低位置。
+- **R50** Ferri Marini 等，2022，[*Barbell load distribution and lifting velocity affect bench press exercise volume and perceived exertion*](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0278909)。DOI: 10.1371/journal.pone.0278909。研究方法以乳頭附近觸胸作統一操作條件，沒有比較觸胸點、上斜或地板臥推。
+- **R51** Oliveira 等，2009，[*Effect of the shoulder position on the biceps brachii EMG in different dumbbell curls*](https://jssm.org/jssm-08-24.xml-Fulltext)。J Sports Sci Med 8(1):24–29；PubMed PMID: 24150552。22 名男性比較標準、上斜、牧師椅啞鈴彎舉的二頭肌肌電時序；未檢驗上臂前移 10° 或正握、對握。
+- **R52** McKenzie 等，2022，[*Fatigue Increases Muscle Activations but Does Not Change Maximal Joint Angles during the Bar Dip*](https://pmc.ncbi.nlm.nih.gov/articles/PMC9659300/)。PubMed PMID: 36361276。15 名男性雙槓撐體測得軀幹角及胸大肌、三頭肌活動；疲勞前後峰值角無顯著變化，未比較 0° 與 15° 前傾。
 
 [R01]: https://pubmed.ncbi.nlm.nih.gov/31775556/
 [R02]: https://pubmed.ncbi.nlm.nih.gov/34170576/
@@ -324,3 +330,9 @@
 [R44]: https://pubmed.ncbi.nlm.nih.gov/31210794/
 [R45]: https://pubmed.ncbi.nlm.nih.gov/18545207/
 [R46]: https://www.jstage.jst.go.jp/article/jpts/28/3/28_jpts-2015-845/_pdf
+[R47]: https://journals.northumbria.ac.uk/index.php/gjsscmr/article/view/1595
+[R48]: https://www.jstage.jst.go.jp/article/rigaku/34/3/34_KJ00004621606/_article/-char/en
+[R49]: https://pubmed.ncbi.nlm.nih.gov/34085847/
+[R50]: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0278909
+[R51]: https://jssm.org/jssm-08-24.xml-Fulltext
+[R52]: https://pmc.ncbi.nlm.nih.gov/articles/PMC9659300/
