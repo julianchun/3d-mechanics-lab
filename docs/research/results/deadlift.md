@@ -4,7 +4,7 @@
 
 ## 資料及可比性
 
-| 來源 | 條件與品質 | 本次使用 |
+| 來源 | 條件與品質 | 模型比對用途 |
 | --- | --- | --- |
 | [Escamilla 等 2000，PubMed](https://pubmed.ncbi.nlm.nih.gov/10912892/)（[原文掃描](https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts)） | 同儕審查；國家級力量舉比賽 12 名傳統、12 名相撲男性，約 1RM。表 3 掃描 OCR 欄位交錯，數字需人工再核。 | 表 3 的槓垂直位移／身高；兩組各自抽樣。未用其力矩，因缺測力板、以槓負重與幾何準靜態估計。 |
 | [Henning 2023 學位論文](https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en) | 12 名選手（11 男、1 女）配對做兩式 6RM，攝影機＋測力板。非同儕審查；表 2 力矩單位誤寫 N，本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。 | 方法頁 8–10 的負重與站距、表 2 離地／過膝角度和髖、膝、踝力矩。L5/S1 表值與模型軀幹矩定義不合。 |
