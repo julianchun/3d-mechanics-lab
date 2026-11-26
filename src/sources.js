@@ -45,6 +45,13 @@ const REFS = {
   lifefitness_pwrplay: { authors: 'Life Fitness', year: null, title: 'PWR Play Cable Stations（1:1 低拉與 2:1 多功能可調滑輪柱規格）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play', tag: '原廠規格' },
   lifefitness_chestpress: { authors: 'Life Fitness', year: null, title: 'Insignia Series Chest Press（內聚弧線胸推機規格）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/insignia-series-chest-press', tag: '原廠規格' },
   dasilva2008: { authors: 'Da Silva EM et al.', year: 2008, title: 'Analysis of muscle activation during different leg press exercises at submaximum effort levels', venue: 'J Strength Cond Res, 22(4):1059–1065', url: 'https://pubmed.ncbi.nlm.nih.gov/18545207/', tag: 'PubMed 18545207' },
+  lyons2026: { authors: 'Lyons M et al.', year: 2026, title: 'The effects of the conventional deadlift and Romanian deadlift on muscle activation and joint angles at a submaximal intensity', venue: 'Graduate J Sports Sci Coaching Manag Rehabil, 2(1):29–41', url: 'https://journals.northumbria.ac.uk/index.php/gjsscmr/article/view/1595', tag: '期刊頁' },
+  ishida2007: { authors: 'Ishida H et al.', year: 2007, title: 'An Electromyographic Analysis of Trunk and Hip Extensor Muscles During Isometric Pulling Up in the Forward Bending Posture', venue: 'Phys Ther Jpn, 34(3):74–78', url: 'https://www.jstage.jst.go.jp/article/rigaku/34/3/34_KJ00004621606/_article/-char/en', tag: '期刊頁' },
+  buonsenso2025: { authors: 'Buonsenso A et al.', year: 2025, title: 'Electromyographic Analysis of Back Muscle Activation During Lat Pulldown Exercise: Effects of Grip Variations and Forearm Orientation', venue: 'J Funct Morphol Kinesiol, 10(3):345', url: 'https://pubmed.ncbi.nlm.nih.gov/40981044/', tag: 'PubMed 40981044' },
+  martinfuentes2022lp: { authors: 'Martín-Fuentes I et al.', year: 2022, title: 'Influence of Feet Position and Execution Velocity on Muscle Activation and Kinematic Parameters During the Inclined Leg Press Exercise', venue: 'Sports Health, 14(3):317–327', url: 'https://pubmed.ncbi.nlm.nih.gov/34085847/', tag: 'PubMed 34085847' },
+  ferrimarini2022: { authors: 'Ferri Marini C et al.', year: 2022, title: 'Barbell load distribution and lifting velocity affect bench press exercise volume and perceived exertion', venue: 'PLOS ONE, 17(12):e0278909', url: 'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0278909', tag: '期刊頁' },
+  oliveira2009curl: { authors: 'Oliveira LF et al.', year: 2009, title: 'Effect of the shoulder position on the biceps brachii EMG in different dumbbell curls', venue: 'J Sports Sci Med, 8(1):24–29', url: 'https://jssm.org/jssm-08-24.xml-Fulltext', tag: '期刊頁' },
+  mckenzie2022fatigue: { authors: 'McKenzie A et al.', year: 2022, title: 'Fatigue Increases Muscle Activations but Does Not Change Maximal Joint Angles during the Bar Dip', venue: 'Int J Environ Res Public Health, 19(21):14390', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9659300/', tag: 'PMC 全文' },
   cholewicki1991: { authors: 'Cholewicki J, McGill SM, Norman RW', year: 1991, title: 'Lumbar spine loads during the lifting of extremely heavy weights', venue: 'Med Sci Sports Exerc, 23(10):1179–1186', url: 'https://pubmed.ncbi.nlm.nih.gov/1758295/', tag: 'PubMed 1758295' },
   escamilla2000: { authors: 'Escamilla RF et al.', year: 2000, title: 'A three-dimensional biomechanical analysis of sumo and conventional style deadlifts', venue: 'Med Sci Sports Exerc, 32(7):1265–1275', url: 'https://pubmed.ncbi.nlm.nih.gov/10912892/', tag: 'PubMed 10912892' },
   escamilla2002: { authors: 'Escamilla RF et al.', year: 2002, title: 'An electromyographic analysis of sumo and conventional style deadlifts', venue: 'Med Sci Sports Exerc, 34(4):682–688', url: 'https://pubmed.ncbi.nlm.nih.gov/11932579/', tag: 'PubMed 11932579' },
@@ -126,9 +133,9 @@ export const SOURCES = {
     assumptions: [
       '雙手各握獨立平行槓，手部垂直反力合計承擔全身與腰掛負重；每幀水平調整身體位置，使含彎腿的質心投影落在握點支撐線。假設無水平外力，槓面無須摩擦，兩手不能透過剛體橫桿互推。',
       '槓高 1.18 m、腿於身後彎曲與下放路徑為示範幾何假設；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
-    ], refs: ['mckenzie2022'], trendNote: '文獻比較的是椅上、雙槓與吊環撐體，未查到直立與前傾雙槓撐體之直接 EMG 比較，故不加前傾趨勢。',
+    ], refs: ['mckenzie2022', 'mckenzie2022fatigue'], trendNote: '現有文獻量得雙槓軀幹角及胸、三頭肌電，未比較直立與前傾雙槓撐體。',
   },
-  'dips-upright': { assumptions: ['軀幹前傾設為 0°，雙槓支撐、腿部重心平衡與示範幾何同雙槓撐體。'], refs: ['mckenzie2022'], trendNote: '未查到同負重下直立與前傾雙槓撐體的直接 EMG 比較。' },
+  'dips-upright': { assumptions: ['軀幹前傾設為 0°，雙槓支撐、腿部重心平衡與示範幾何同雙槓撐體。'], refs: ['mckenzie2022', 'mckenzie2022fatigue'], trendNote: '未查到同負重下直立與前傾雙槓撐體的直接 EMG 比較。' },
   pullup: {
     assumptions: [
       '雙手握固定剛體單槓，手部向上反力等於全身與腰掛負重；每幀調整身體前後位置使質心落在握點支撐線。左右各承擔一半，允許兩手沿單槓互推／互拉以減少肩肘橫向力矩（上限為單手反力一半）。',
@@ -188,7 +195,7 @@ export const SOURCES = {
       '軌道傾角提供 0°（垂直）與 ±7°（Hammer Strength 官方規格）；示範總負重（0.9× 體重）為假設。',
       '腳底壓力中心由「用力點」參數決定，重心不必落在腳掌正上方。',
       '鞋跟墊高採相同的 25 cm 足底傾斜幾何；腳與槓受滑軌約束，由幾何求小腿角，不另套用自由深蹲的各半策略；壓力中心在 y=0 的外鞋底接觸面。',
-      '腳在槓前方預設 12 cm 為示範幾何，未找到可通用的史密斯腳位距離常模。預設踝背屈峰值約 37.7°，接近 Baumbach 等 2014 屈膝負重量測平均 39°；該研究不是史密斯深蹲研究，因此維持原預設。',
+      '腳在槓前方預設 2 cm 為示範幾何，未找到可通用的史密斯腳位距離常模。預設踝背屈峰值約 37.9°，接近 Baumbach 等 2014 屈膝負重量測平均 39°；該研究不是史密斯深蹲研究。',
     ],
     refs: ['schwanbeck2009', 'lifefitness_smith', 'lu2022heel', 'baumbach2014'],
   },
@@ -197,9 +204,9 @@ export const SOURCES = {
       '坐姿器械：椅背與座墊承擔身體重量，不算地面反作用力。',
       '滑台只沿 45° 軌道方向出力；預設導軌摩擦 μ = 0 為準靜態參考（sin 45°），設定 μ 時代表向心階段的上限（sinθ + μcosθ），離心時為 sinθ − μcosθ。',
       '空滑台重量（預設 45 kg）、導軌摩擦係數範圍（0–0.15）與椅背角度範圍屬常見商用假設，未查得單一原廠實測值。',
-      '踏板高低預設 0.5 為中間示範位置，非研究指定的標準腳位。預設踝背屈峰值約 44.7°；把腳移高至 0.65 時約 39.8°、髖屈峰值由 141.4° 增至 146.3°。Da Silva 等 2008 支持高低腳位改變肌群參與，沒有證明中間位置不合理；Baumbach 等 2014 屈膝負重平均 39° 不能當作腿推腳位目標，故維持原預設。',
+      '踏板高低預設 0.52、深度 0.25 為中間示範幾何，非研究指定的標準腳位。預設髖屈峰值約 135.3°、踝背屈約 38.0°。Da Silva 等 2008 支持高低腳位改變肌群參與；Martín-Fuentes 等 2022 比較站距與腳尖角，未見受測肌群肌電顯著差異。兩者都不能指定中間腳位；Baumbach 等 2014 的屈膝負重踝角亦非腿推安全線。',
     ],
-    refs: ['escamilla1998', 'escamilla2001_var', 'dasilva2008', 'baumbach2014'],
+    refs: ['escamilla1998', 'escamilla2001_var', 'dasilva2008', 'martinfuentes2022lp', 'baumbach2014'],
   },
   deadlift: {
     assumptions: [
@@ -234,8 +241,8 @@ export const SOURCES = {
       '膝彎曲角全程固定，以髖鉸鏈為主；槓貼近腿部時假設腿前緣可提供水平接觸反力。',
       '示範負重 0.9× 體重為假設。',
     ],
-    refs: ['mcallister2014', 'martinfuentes2020'],
-    trendNote: '已有肌電文獻支持 RDL 高膕繩肌活化與拉長張力，目前尚未列入自動化趨勢比對項目。',
+    refs: ['mcallister2014', 'martinfuentes2020', 'lyons2026'],
+    trendNote: 'RDL 與傳統硬舉的股四頭肌活動、膝角有方向差異；18° 屈膝角仍為示範值，沒有可移植的標準。',
   },
   'good-morning': {
     assumptions: [
@@ -264,7 +271,7 @@ export const SOURCES = {
       '仰臥於臥推椅（不算地面反作用力），僅分析肩屈伸、肩水平內收與肘伸展。',
       '模型不含肱骨內外旋自由度（旋轉肌袖以水平內收軸近似）；示範負重 0.8× 體重為假設。',
     ],
-    refs: ['lehman2005', 'saeterbakken2017', 'rodriguezridao2020'],
+    refs: ['lehman2005', 'saeterbakken2017', 'rodriguezridao2020', 'ferrimarini2022'],
   },
   'incline-bench': {
     assumptions: [
@@ -439,14 +446,14 @@ export const SOURCES = {
       '站姿每幀維持系統重心在腳掌中段；正握時二頭肌屈肘效率調降（0.6× 偏好）由肱肌／肱橈肌多分擔。',
       '不含肱骨內外旋自由度；示範負重 0.7× 體重為假設。',
     ],
-    refs: ['fenwick2009', 'saeterbakken2015', 'fischer2025'],
+    refs: ['fenwick2009', 'ishida2007', 'saeterbakken2015', 'fischer2025'],
   },
   'row-sup': {
     assumptions: [
       '反握（旋後）時模型提高肱二頭肌偏好係數（1.6×）；其餘站姿平衡假設同正握槓鈴划船。',
       '目前未查得直接比較正握與反握槓鈴划船之期刊全文，反握偏向二頭肌屬解剖推論。',
     ],
-    refs: ['kleiber2015', 'fenwick2009'],
+    refs: ['kleiber2015', 'fenwick2009', 'ishida2007'],
     noStudy: true,
     trendNote: '尚無直接比較正握與反握槓鈴划船之同儕審查期刊全文（僅間接參考單關節屈肘握法研究）。',
   },
@@ -480,7 +487,7 @@ export const SOURCES = {
       '雙手透過剛體握把可橫向互推／互拉（上限為單手拉力一半）；正握二頭肌偏好設為 0.6×。',
       '滑輪比 1:1（專用下拉機）或 2:1（多功能滑輪柱），實際手拉力＝配重片重量 ÷ 滑輪比；示範配重 45 kg 為假設。',
     ],
-    refs: ['signorile2002', 'lehman2004', 'lusk2010', 'andersen2014', 'lifefitness_pulldown', 'lifefitness_pulldown_row'],
+    refs: ['signorile2002', 'lehman2004', 'lusk2010', 'andersen2014', 'buonsenso2025', 'lifefitness_pulldown', 'lifefitness_pulldown_row'],
   },
   'pulldown-sup': {
     assumptions: [
@@ -527,7 +534,7 @@ export const SOURCES = {
       '站姿垂手握剛體槓身，雙手可橫向互推／互拉；每幀維持系統重心在腳掌中段上方。',
       '反握二頭肌偏好設為 1.6×；示範負重 0.35× 體重為假設。',
     ],
-    refs: ['oliveira2009', 'kleiber2015', 'marcolin2018'],
+    refs: ['oliveira2009', 'oliveira2009curl', 'kleiber2015', 'marcolin2018'],
   },
   'reverse-curl': {
     assumptions: [
@@ -549,7 +556,7 @@ export const SOURCES = {
       '站姿兩手各持獨立啞鈴（無剛體槓互推），上臂微外開 8° 避開髖部，每幀維持系統總重心在腳掌中段上方。',
       '反握二頭肌偏好沿用現有槓鈴彎舉機制（1.6×）；啞鈴尺寸與預設每顆 12 kg（雙手 24 kg）為假設。',
     ],
-    refs: ['coratella2023', 'kleiber2015', 'oliveira2009', 'marcolin2018'],
+    refs: ['coratella2023', 'kleiber2015', 'oliveira2009', 'oliveira2009curl', 'marcolin2018'],
   },
   'hammer-curl': {
     assumptions: [

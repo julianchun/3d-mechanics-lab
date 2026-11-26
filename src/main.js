@@ -9,6 +9,7 @@ import { Rig, heatColor, diffColor, lengthColor, loadBones } from './rig.js';
 import { CATALOG, CATEGORIES, EQUIPMENT, MUSCLE_SHORT, matchEntry } from './catalog.js';
 import { sampleCurve, buildCurve } from './curve.js';
 import { getSourceInfo } from './sources.js';
+import { CUES } from './cues.js';
 
 const $ = (s) => document.querySelector(s);
 const el = (tag, attrs = {}, ...kids) => {
@@ -40,6 +41,7 @@ const state = {
   tab: 'adjust',
   view: 'oblique',
   sourcesOpen: false,
+  cuesOpen: false,
   baseline: prefs.baseline || {}, // lift -> preset id（無 = 內建預設）
   ab: { A: null, B: null, side: false, showing: 'A' },
 };
@@ -489,6 +491,29 @@ function paramControl(p) {
 
 const MECH = { A: '姿勢／軌跡（看得到）', B: '等長用力（看不到，力矩改變）', C: '協同肌偏好（看不到，總力矩不變）' };
 
+function cuesBlock() {
+  const entry = matchEntry(state.lift, P());
+  const key = getSourceInfo(state.lift, entry?.id).key;
+  const card = CUES[key];
+  if (!card) return null;
+  const groups = [
+    ['準備與站姿', card.setup],
+    ['下放與出力', card.motion],
+    ['呼吸與軀幹張力', card.breath],
+    ['常見錯誤與負荷轉移', card.errors],
+  ];
+  const details = el('details', { class: 'sources-box cues-box', open: state.cuesOpen || false },
+    el('summary', {}, el('span', { class: 'src-title' }, '動作要點')),
+    el('div', { class: 'src-body' },
+      !entry ? el('p', { class: 'src-empty' }, '以下為原變化式的提示；自訂參數後請按實際姿勢重新判讀。') : null,
+      groups.map(([title, points]) => el('section', { class: 'cue-group' },
+        el('div', { class: 'src-hd' }, title),
+        el('ul', { class: 'src-list' }, points.map((point) => el('li', {}, point.text))))),
+      el('p', { class: 'cue-note' }, '呼吸、胸廓與借力提示是教學要點，並非模型計算結果。')));
+  details.addEventListener('toggle', () => { state.cuesOpen = details.open; });
+  return details;
+}
+
 function sourcesBlock() {
   const entry = matchEntry(state.lift, P());
   const info = getSourceInfo(state.lift, entry?.id);
@@ -671,6 +696,8 @@ function renderSave(box) {
 function renderPanel() {
   const box = $('#panel'); box.innerHTML = ''; dataBox = null;
   renderLifts();
+  const cues = cuesBlock();
+  if (cues) box.append(cues);
   ({ adjust: renderAdjust, data: renderData, layers: renderLayers, compare: renderCompare, save: renderSave })[state.tab](box);
 }
 function renderAll() {
