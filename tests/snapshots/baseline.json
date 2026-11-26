@@ -1618,11 +1618,11 @@
  },
  "rdl@0": {
   "dem": {
-   "hipExt": 36.8445,
+   "hipExt": 36.8446,
    "hipAbd": 2.7468,
-   "kneeExt": -1.5222,
-   "ankPF": 43.6733,
-   "trunkExt": 32.5406,
+   "kneeExt": -1.5225,
+   "ankPF": 43.674,
+   "trunkExt": 32.5407,
    "shFwd": -10.3475
   },
   "mus": {
@@ -1654,18 +1654,18 @@
  },
  "rdl@0.25": {
   "dem": {
-   "hipExt": 82.7538,
+   "hipExt": 82.755,
    "hipAbd": 0.9917,
-   "kneeExt": -22.4259,
-   "ankPF": 43.6721,
-   "trunkExt": 72.6663,
-   "shFwd": -14.4887
+   "kneeExt": -22.4262,
+   "ankPF": 43.6713,
+   "trunkExt": 72.6675,
+   "shFwd": -14.4875
   },
   "mus": {
    "vasti": 0.0257,
    "rf": 0,
    "hams": 0.1762,
-   "gmax": 0.1811,
+   "gmax": 0.1812,
    "gmed": 0.0464,
    "addmag": 0.0115,
    "addl": 0,
@@ -1690,12 +1690,12 @@
  },
  "rdl@0.5": {
   "dem": {
-   "hipExt": 141.9127,
+   "hipExt": 141.9141,
    "hipAbd": -2.9087,
-   "kneeExt": -52.6856,
-   "ankPF": 43.6663,
-   "trunkExt": 124.9031,
-   "shFwd": -17.4342
+   "kneeExt": -52.6863,
+   "ankPF": 43.6665,
+   "trunkExt": 124.9045,
+   "shFwd": -17.4329
   },
   "mus": {
    "vasti": 0,
@@ -1726,12 +1726,12 @@
  },
  "rdl@0.75": {
   "dem": {
-   "hipExt": 187.9436,
+   "hipExt": 187.9439,
    "hipAbd": -7.7816,
-   "kneeExt": -77.0648,
-   "ankPF": 43.6581,
-   "trunkExt": 165.4235,
-   "shFwd": -20.4186
+   "kneeExt": -77.0651,
+   "ankPF": 43.6585,
+   "trunkExt": 165.4238,
+   "shFwd": -20.4183
   },
   "mus": {
    "vasti": 0,
@@ -1742,7 +1742,7 @@
    "addmag": 0.1028,
    "addl": 0,
    "ilio": 0,
-   "gas": 0.1181,
+   "gas": 0.1182,
    "sol": 0.053,
    "ta": 0,
    "erec": 0.732,
@@ -1762,12 +1762,12 @@
  },
  "rdl@1": {
   "dem": {
-   "hipExt": 209.4071,
+   "hipExt": 209.4075,
    "hipAbd": -11.625,
-   "kneeExt": -88.2862,
-   "ankPF": 43.6525,
-   "trunkExt": 183.2452,
-   "shFwd": -30.7855
+   "kneeExt": -88.2866,
+   "ankPF": 43.6529,
+   "trunkExt": 183.2455,
+   "shFwd": -30.7851
   },
   "mus": {
    "vasti": 0,

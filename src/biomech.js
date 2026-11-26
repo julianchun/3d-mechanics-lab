@@ -880,8 +880,9 @@ export const LIFTS = {
   },
 };
 // 自由站姿共用的教練控制量：幾何足底中點為 0，正值往腳尖、負值往腳跟。
-for (const lift of ['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
-  'latraise', 'dbcurl', 'dbreversefly', 'pushdown', 'cablefly']) {
+const BALANCE_LIFTS = new Set(['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
+  'latraise', 'dbcurl', 'dbreversefly', 'pushdown', 'cablefly']);
+for (const lift of BALANCE_LIFTS) {
   LIFTS[lift].params.unshift({ key: 'balanceCm', label: '重心前後位置', left: '偏腳跟 8 cm',
     right: '偏腳尖 8 cm', min: -8, max: 8, step: 0.5, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' });
 }
@@ -1424,7 +1425,8 @@ function rdlPose(P, e) {
     let lo = rad(-10), hi = rad(30);
     if (g(lo) > 0) return lo;
     if (g(hi) < 0) return hi;
-    for (let i = 0; i < 34; i++) { const m = (lo + hi) / 2; if (g(m) > 0) hi = m; else lo = m; }
+    // 17 步的角度誤差換算到肢段端點小於 0.01 mm，外層平衡不必重解 34 次。
+    for (let i = 0; i < 17; i++) { const m = (lo + hi) / 2; if (g(m) > 0) hi = m; else lo = m; }
     return lo;
   };
   const sOff = 0.03 * e;
@@ -1454,7 +1456,7 @@ function rdlPose(P, e) {
       forcesOf(candidate, P, 'rdl');
       return candidate.cop[2] - target;
     };
-    return rdlPose({ ...P, _balanceBarShift: bisect(error, -0.12, 0.12) }, e);
+    return rdlPose({ ...P, _balanceBarShift: bisect(error, -0.12, 0.3, 17) }, e);
   }
   return pose;
 }
@@ -1544,7 +1546,7 @@ function rowPose(P, e) {
     return systemComZ(p, r.bar, BAR_RATIO.row);
   };
   const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
-  const r = at(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-10), rad(30)));
+  const r = at(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-30), rad(30)));
   const { tf, S, hang, bar } = r;
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, tf);
@@ -1664,7 +1666,7 @@ function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, barAxial 
     return (-m * cz + H[2] * F[1] - H[1] * F[2]) / (-m + F[1]);
   };
   const target = balanceTargetZ(makePose(0), P);
-  const pose = makePose(bisect((th) => copAt(th) - target, rad(-15), rad(25)));
+  const pose = makePose(bisect((th) => copAt(th) - target, rad(-25), rad(45)));
   if (P.footStance === 'staggered') {
     // 力學仍以左右對稱半身求解；畫面前後各錯開 10 cm，支撐面取兩腳外緣。
     // 此等效支撐面不推算左右腳各自反力或不對稱的髖膝踝力矩。
@@ -3651,6 +3653,13 @@ function solveLinear(K, b) {
 export function analyze(lift, P, e) {
   const pose = solvePose(lift, P, e);
   const forces = forcesOf(pose, P, lift);
+  if (BALANCE_LIFTS.has(lift) && pose.cop && pose.R.heel && pose.R.toe) {
+    const actual = (pose.cop[2] - footMidZ(pose)) * 100;
+    const target = Number(P.balanceCm) || 0;
+    if (Math.abs(actual - target) > 1) {
+      pose.warn.push(`重心設定 ${target.toFixed(1)} cm 無法達到，實際偏移 ${actual.toFixed(1)} cm（正值偏腳尖）`);
+    }
+  }
   const R = pose.R, L = LIFTS[lift];
   const dofs = L.dofs, has = (d) => dofs.includes(d);
   const dem = {};

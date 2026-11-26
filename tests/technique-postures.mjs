@@ -21,6 +21,27 @@ for (const entry of CATALOG.filter((x) => free.has(x.lift))) {
   }
 }
 
+// 滑桿的每個身材／端點都要兌現；若幾何碰到界線，必須明確說明實際偏移。
+const balanceBodies = [null, createBody({ heightM: 1.5, massKg: 50, sex: 'female' }),
+  createBody({ heightM: 2, massKg: 110, sex: 'male' })];
+for (const body of balanceBodies) {
+  const check = () => {
+    for (const entry of CATALOG.filter((x) => free.has(x.lift))) {
+      const base = { ...defaultParams(entry.lift), ...entry.set };
+      for (const shift of [-8, 0, 8]) for (let i = 0; i <= 20; i++) {
+        const pose = analyze(entry.lift, { ...base, balanceCm: shift }, i / 20).pose;
+        const error = Math.abs(offsetCm(pose) - shift);
+        assert.ok(error <= 1 || pose.warn.some((w) => w.includes('重心設定') && w.includes('實際偏移')),
+          `${body?.heightM ?? 1.75} m ${entry.id} ${shift} cm ${i}/20：實際 ${offsetCm(pose).toFixed(2)} cm，無警告`);
+      }
+    }
+  };
+  body ? withBody(body, check) : check();
+}
+const beyond = analyze('rdl', { ...defaultParams('rdl'), balanceCm: 30 }, 0.5).pose;
+assert.ok(beyond.warn.some((w) => w.includes('重心設定 30.0 cm') && w.includes('實際偏移')),
+  '超出可行槓位時應顯示實際達成的重心偏移');
+
 const pushdown = defaultParams('pushdown');
 assert.equal(pushdown.footStance, 'staggered');
 for (let i = 0; i <= 20; i++) {
