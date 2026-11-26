@@ -1362,8 +1362,9 @@ function deadliftPose(P, e) {
   const startY = 0.225 + blk;
   const phi0 = bisect((a) => place(a, startY).scapZ - bz, rad(15), rad(85));
   const pose = { R: {}, warn: [], ok: true };
-  // 原有行程冪次尚無獨立校準來源；維持現值，另以校準組檢查過膝前後的伸膝比例。
-  let phi = phi0 * Math.pow(e, 0.45);
+  // H1／H2 教練原則：槓離地至過膝維持起槓軀幹角，先靠伸膝抬槓；過膝才逐步伸髖。
+  const kneeY = bisect((y) => y - place(phi0, y).knee[1], startY, barTopY);
+  let phi = phi0 * (barY <= kneeY ? 1 : clamp((barTopY - barY) / (barTopY - kneeY), 0, 1));
   let r = place(phi, barY);
   if (r.d > maxReach) {
     // 腿伸直也碰不到：軀幹改直一點（髖往下、往前）
