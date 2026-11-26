@@ -16,7 +16,7 @@ for (const c of CATALOG) {
   console.log(`${c.id.padEnd(16)} ${flags.join(' ') || 'ok'} | ${top}`);
 }
 // 前後腳僅延展等效支撐面；壓力中心須落在兩腳外緣，併站仍採單腳接觸範圍。
-if (defaultParams('cablefly').footStance !== 'staggered' || defaultParams('pushdown').footStance !== 'parallel') {
+if (defaultParams('cablefly').footStance !== 'staggered' || defaultParams('pushdown').footStance !== 'staggered') {
   console.log('滑輪站姿預設錯誤'); bad++;
 }
 for (const lift of ['cablefly', 'pushdown']) for (const e of [0, 0.5, 1]) {

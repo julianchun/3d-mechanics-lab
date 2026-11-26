@@ -1,0 +1,33 @@
+{
+  "id": "hanen-2025",
+  "role": "calibration-only-qualitative",
+  "source": {
+    "authors": "Hanen et al.",
+    "year": 2025,
+    "title": "Biomechanical analysis of conventional and sumo deadlift",
+    "doi": "10.3389/fbioe.2025.1597209",
+    "url": "https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2025.1597209/full"
+  },
+  "participants": { "n": 30, "sex": "男性", "training": "健康且有運動習慣" },
+  "protocol": "傳統與相撲各做 85% 估計 1RM 的三次反覆；槓離地到過膝為第一階段，過膝到鎖定為第二階段。三維動作捕捉與測力板同步。",
+  "overlapAudit": "作者與 Escamilla 2000、Henning 2023、Lee 2018 不同；來源未見同一批受試者證據。本文既有文件曾作方向性背景，但不屬於 validation/*.json 的數值測試組。",
+  "model": "預先規劃：只比較過膝前後的伸膝行程比例與傳統／相撲排序，不以研究時間百分比擬合模型的槓高進度 e。研究是動態 85% 1RM，模型為準靜態且示範負重較輕；比例僅作方向性校準。不得取用驗證組角度選擇曲線參數。",
+  "conditions": [
+    {
+      "id": "conventional",
+      "catalogId": "deadlift",
+      "params": { "style": "conv" },
+      "measurements": [
+        { "metric": "kneeExtensionShareBeforeBarPassesKnee", "reference": { "phase1Deg": 33.4, "phase2Deg": 19.4, "share": 0.6326, "unit": "fraction" }, "evidence": { "type": "table", "location": "表 1，膝矢狀面伸展 ROM；33.4/(33.4+19.4)" }, "comparisonRole": "qualitative-only", "limitations": "研究按動作階段分段，模型 e 是槓高進度；髕骨標記與模型膝中心不完全相同。" }
+      ]
+    },
+    {
+      "id": "sumo",
+      "catalogId": "sumo",
+      "params": { "style": "sumo" },
+      "measurements": [
+        { "metric": "kneeExtensionShareBeforeBarPassesKnee", "reference": { "phase1Deg": 38.1, "phase2Deg": 19.1, "share": 0.6661, "unit": "fraction" }, "evidence": { "type": "table", "location": "表 1，膝矢狀面伸展 ROM；38.1/(38.1+19.1)" }, "comparisonRole": "qualitative-only", "limitations": "研究按動作階段分段，模型 e 是槓高進度；髕骨標記與模型膝中心不完全相同。" }
+      ]
+    }
+  ]
+}

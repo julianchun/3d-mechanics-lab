@@ -360,7 +360,6 @@ export const LIFTS = {
     // moving：主要在動的關節（清單上「主要肌群」只看作用在這些關節的肌肉，排除純穩定用的）
     moving: ['hipExt', 'kneeExt', 'trunkExt'],
     params: [
-      { key: 'dom', label: '主導（起始髖高）', left: '膝主導', right: '髖主導', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'hip', mech: 'A' },
       { key: 'style', label: '站姿', type: 'select', options: [['conv', '傳統'], ['sumo', '相撲']], def: 'conv', joint: 'ankle', mech: 'A' },
       { key: 'start', label: '起始槓高', left: '赤字（站高 10 cm）', right: '墊高 10 cm', min: -10, max: 10, step: 1, def: 0, joint: 'equip', mech: 'A', unit: ' cm' },
       { key: 'barDist', label: '槓離身體', left: '貼腿', right: '離腿 10 cm', min: 0, max: 1, step: 0.01, def: 0, joint: 'bar', mech: 'A' },
@@ -605,7 +604,7 @@ export const LIFTS = {
     pose: pushdownPose, loads: cableLoads,
     moving: ['elbExt'],
     params: [
-      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳併站'], ['staggered', '前後腳']], def: 'parallel', joint: 'ankle', mech: 'A' },
+      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳併站'], ['staggered', '前後腳']], def: 'staggered', joint: 'ankle', mech: 'A' },
       { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.pushdown.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'topFlex', label: '起點手肘角度', left: '80°', right: '130°', min: 80, max: 130, step: 1, def: 100, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'elbFwd', label: '手肘位置', left: '-10°（往後）', right: '30°（往前）', min: -10, max: 30, step: 1, def: 5, joint: 'shoulder', mech: 'A', unit: '°' },
@@ -613,7 +612,7 @@ export const LIFTS = {
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefTri', label: '三頭偏好', left: '偏外側／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
     ],
-    standardNote: '站在滑輪前、軀幹微前傾，上臂貼身不動，從手肘約 90～100° 壓到完全伸直；多功能滑輪柱多為 2:1 滑輪比（實感為配重片一半）。',
+    standardNote: '站在滑輪前、前後腳微錯開、軀幹微前傾，上臂貼身不動，從手肘約 90～100° 壓到完全伸直；多功能滑輪柱多為 2:1 滑輪比（實感為配重片一半）。',
   },
   legext: {
     name: '腿伸機', topLabel: '伸直', bottomLabel: '彎曲',
@@ -880,6 +879,13 @@ export const LIFTS = {
     standardNote: '雙手於胸前垂直捧住一顆啞鈴上端、手肘自然下垂靠胸前；前側配重讓軀幹較背蹲直立、膝伸參與比例提高。',
   },
 };
+// 自由站姿共用的教練控制量：幾何足底中點為 0，正值往腳尖、負值往腳跟。
+const BALANCE_LIFTS = new Set(['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
+  'latraise', 'dbcurl', 'dbreversefly', 'pushdown', 'cablefly']);
+for (const lift of BALANCE_LIFTS) {
+  LIFTS[lift].params.unshift({ key: 'balanceCm', label: '重心前後位置', left: '偏腳跟 8 cm',
+    right: '偏腳尖 8 cm', min: -8, max: 8, step: 0.5, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' });
+}
 export const JOINT_NAMES = { equip: '器材', scap: '肩胛', hip: '髖', knee: '膝', ankle: '踝', lumbar: '下背', shoulder: '肩', elbow: '肘', hand: '握距', bar: '槓' };
 
 export function defaultParams(lift) {
@@ -1109,9 +1115,17 @@ export function girdleMatrix(g) {
   // Ry(ret) · Rz(elev)
   return [[cr * ce, -cr * se, sr], [se, ce, 0], [-sr * ce, sr * se, cr]];
 }
-export function shoulderLocal(g) {
-  const G = girdleForBody(), M = girdleMatrix(g), d = sub(G.sh, G.scj);
+function girdlePointLocal(point, g) {
+  const G = girdleForBody(), M = girdleMatrix(g), d = sub(point, G.scj);
   return add(G.scj, M.map((r) => dot(r, d)));
+}
+export function shoulderLocal(g) { return girdlePointLocal(girdleForBody().sh, g); }
+// BodyParts3D 原始右肩胛骨的頂點中心，依 tools/build_bones.py 的軀幹座標正規化。
+// rig.js 顯示網格合併肩胛與鎖骨；此點只取肩胛骨，仍同繞胸鎖關節旋轉，不另設距離。
+export function scapulaLocal(g) {
+  const center = [0.235231909098065 * DEFAULT_BODY.Ltr * BODY.shHalf / DEFAULT_BODY.shHalf,
+    0.975678396831072 * BODY.Ltr, -0.059557042521439 * BODY.Ltr];
+  return girdlePointLocal(center, g);
 }
 const toWorld = (tf, l) => add(add(add(tf.Pc, mul(tf.lat, l[0])), mul(tf.u, l[1])), mul(tf.f, l[2]));
 
@@ -1306,11 +1320,13 @@ function deadliftPose(P, e) {
   const dfc = Math.max(0, -(P.start || 0)) / 100, blk = Math.max(0, P.start || 0) / 100;
   const A = [w, BODY.ankleH + dfc, -0.07];
   const gap = 0.1 * P.barDist;           // 槓與腿前緣的距離
-  const bz = 0.02 + 0.5 * gap;           // 槓的垂直路徑（約在腳掌中段）
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const bz = footMid + 0.5 * gap;        // H1：預設槓路在足底幾何中點正上方
   const target = bz - 0.016 - gap;        // 腿前緣要停在這裡（槓半徑 1.4 cm + 空隙）
   const Lr = BODY.Lu + BODY.Lf - 0.002;
   const girdle = { ret: rad(-8), elev: rad(-5) }; // 負重下肩胛略前伸、下壓
   const dl = shoulderLocal(girdle);
+  const scap = scapulaLocal(girdle);
   const R2 = Lr ** 2 - (gx - dl[0]) ** 2;
   const maxReach = (BODY.Ls + BODY.Lt) * 0.997;
 
@@ -1324,7 +1340,8 @@ function deadliftPose(P, e) {
       const Pc = [0, Sy - (u[1] * dl[1] - u[2] * dl[2]), pcz - (Sz - (bz + dz))];
       const hip = [BODY.hipHalf, Pc[1], Pc[2]];
       const knee = ik2(hip, A, BODY.Lt, BODY.Ls, toe).mid;
-      return { u, Pc, hip, knee, S: [dl[0], Sy, bz + dz], front: legFrontZ(A, hip, knee, barY), d: len(sub(hip, A)) };
+      const scapZ = Pc[2] + u[2] * scap[1] + u[1] * scap[2];
+      return { u, Pc, hip, knee, S: [dl[0], Sy, bz + dz], scapZ, front: legFrontZ(A, hip, knee, barY), d: len(sub(hip, A)) };
     };
     let lo = bz - 1.0, hi = bz + 0.3;
     for (let i = 0; i < 34; i++) { const m = (lo + hi) / 2; if (build(m).front > target) hi = m; else lo = m; }
@@ -1341,9 +1358,11 @@ function deadliftPose(P, e) {
     dlTopCache.set(key, barTopY);
   }
   const barY = lerp(barTopY, 0.225 + blk, e);
-  const phi0 = rad(sumo ? lerp(36, 58, P.dom) : lerp(48, 70, P.dom));
+  // H1／G1：槓在足中段、小腿貼槓，右肩胛骨頂點中心在槓正上方；肩關節自然位於槓前。
+  const startY = 0.225 + blk;
+  const phi0 = bisect((a) => place(a, startY).scapZ - bz, rad(15), rad(85));
   const pose = { R: {}, warn: [], ok: true };
-  // 前半段主要伸膝、軀幹角變化小；後半段才伸髖
+  // 原有行程冪次尚無獨立校準來源；維持現值，另以校準組檢查過膝前後的伸膝比例。
   let phi = phi0 * Math.pow(e, 0.45);
   let r = place(phi, barY);
   if (r.d > maxReach) {
@@ -1377,7 +1396,7 @@ function rdlPose(P, e) {
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
   const gap = 0.1 * P.barDist;
-  const bz = 0.02 + 0.5 * gap;
+  const bz = 0.02 + 0.5 * gap + (P._balanceBarShift || 0);
   const target = bz - 0.016 - gap;
   const Lr = BODY.Lu + BODY.Lf - 0.002;
   const girdle = { ret: rad(-5), elev: rad(-5) };
@@ -1406,7 +1425,8 @@ function rdlPose(P, e) {
     let lo = rad(-10), hi = rad(30);
     if (g(lo) > 0) return lo;
     if (g(hi) < 0) return hi;
-    for (let i = 0; i < 34; i++) { const m = (lo + hi) / 2; if (g(m) > 0) hi = m; else lo = m; }
+    // 17 步的角度誤差換算到肢段端點小於 0.01 mm，外層平衡不必重解 34 次。
+    for (let i = 0; i < 17; i++) { const m = (lo + hi) / 2; if (g(m) > 0) hi = m; else lo = m; }
     return lo;
   };
   const sOff = 0.03 * e;
@@ -1423,11 +1443,21 @@ function rdlPose(P, e) {
   pose.R.knee = r.knee;
   armChain(pose, r.S, [gx, r.barY, bz], norm(add(mul(r.tf.f, -1), [0.3, -0.2, 0])));
   pose.bar = [0, r.barY, bz];
-  pose.cop = [w, 0, 0];
   pose.barW = BAR_RATIO.rdl;
   const shin = deg(Math.atan2(r.knee[2] - A[2], r.knee[1] - A[1]));
   if (shin > 15 && e > 0.3) pose.warn.push('膝蓋往前跑 ' + Math.round(shin) + '°，變成接近深蹲');
   if (r.barY < r.knee[1] - 0.12 && e > 0.5) pose.warn.push('槓已低於膝下方，注意膕繩肌柔軟度');
+  // H2：保留膝角與髖折疊，以槓貼腿的位置作唯一剩餘自由度；按完整外力求平衡。
+  // 不把骨盆或膝角硬調成另一個動作。求解得到的槓前後漂移須由稽核另列。
+  if (P._balanceBarShift === undefined) {
+    const target = balanceTargetZ(pose, P);
+    const error = (shift) => {
+      const candidate = rdlPose({ ...P, _balanceBarShift: shift }, e);
+      forcesOf(candidate, P, 'rdl');
+      return candidate.cop[2] - target;
+    };
+    return rdlPose({ ...P, _balanceBarShift: bisect(error, -0.12, 0.3, 17) }, e);
+  }
   return pose;
 }
 
@@ -1478,12 +1508,16 @@ function systemComZ(pose, bar, barW) {
   return z / m;
 }
 
+// 腳跟與腳尖的幾何中點；G1 的零點使用實際足底，而非世界座標 z=0。
+function footMidZ(pose) { return (pose.R.heel[2] + pose.R.toe[2]) / 2; }
+function balanceTargetZ(pose, P) { return footMidZ(pose) + (P.balanceCm || 0) / 100; }
+
 // 槓鈴划船：軀幹角固定、髖往後讓手臂垂下時槓在腳掌中段正上方；槓從垂手位置拉到軀幹
 function rowPose(P, e) {
   const w = 0.15, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
-  const bz = 0.02, gx = 0.2 * P.grip;
+  const gx = 0.2 * P.grip;
   const phi = rad(P.torso);
   const u = [0, Math.cos(phi), Math.sin(phi)];
   const legs = fixedKneeLegs(A, w, rad(22));
@@ -1504,10 +1538,15 @@ function rowPose(P, e) {
   };
   // 每一幀都讓系統重心停在腳掌中段（槓往身上拉時，髖會跟著往前一點）
   const com = (th) => {
-    const r = at(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: lerpV(r.S, r.bar, 0.5), hand: r.bar }, Pc: r.tf.Pc, u, toeDir: toe }, r.bar, BAR_RATIO.row);
+    const r = at(th), p = { R: {}, Pc: r.tf.Pc, u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    const fl = rad(P.flare);
+    const pole = norm(add(add(mul(r.tf.f, -Math.cos(fl)), mul(r.tf.lat, Math.sin(fl))), mul(r.tf.u, -0.3)));
+    armChain(p, r.S, r.bar, pole);
+    return systemComZ(p, r.bar, BAR_RATIO.row);
   };
-  const r = at(bisect((th) => com(th) - bz, rad(-10), rad(30)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = at(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-30), rad(30)));
   const { tf, S, hang, bar } = r;
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, tf);
@@ -1532,7 +1571,7 @@ function ohpPose(P, e) {
   const w = 0.14, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
-  const bz = 0.02, gx = 0.2 * P.grip;
+  const gx = 0.2 * P.grip;
   const legs = fixedKneeLegs(A, w, rad(3));
   const lean = rad(P.lean) * (0.4 + 0.6 * e); // 槓經過臉時後仰最多，鎖死時身體回正一些
   const girdle = { ret: rad(lerp(0, 8, e)), elev: rad(lerp(4 + 14 * P.shrug, -2, e)) };
@@ -1563,12 +1602,14 @@ function ohpPose(P, e) {
     return { knee, hip, tf, S, bar, head };
   };
   const com = (th) => {
-    const r = build(th);
-    const pose = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar }, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
-    pose.R.elbow = lerpV(r.S, r.bar, 0.45);
-    return systemComZ(pose, r.bar, BAR_RATIO.ohp);
+    const r = build(th), p = { R: {}, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    const pole = norm(add(add(mul(r.tf.lat, Math.sin(a)), mul(r.tf.f, Math.cos(a))), mul(r.tf.u, -0.8)));
+    armChain(p, r.S, r.bar, pole);
+    return systemComZ(p, r.bar, BAR_RATIO.ohp);
   };
-  const r = build(bisect((th) => com(th) - bz, rad(-15), rad(15)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = build(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-15), rad(15)));
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, r.tf);
   pose.phi = r.tf.u[2] < 0 ? -Math.asin(-r.tf.u[2]) : Math.asin(r.tf.u[2]);
@@ -1589,7 +1630,7 @@ function ohpPose(P, e) {
 
 // 站姿、槓在手上（彎舉、聳肩、直立划船）：腳到肩繞踝前後傾，讓系統重心停在腳掌中段
 // kap = 膝彎曲、lean = 軀幹相對大腿前傾（負 = 後仰）；barAt(tf, S, hip, knee) 回傳 { bar, elbow? }（bar 的 x = 握點）
-function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.02, barAxial = true }) {
+function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, barAxial = true }) {
   const w = 0.14, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
@@ -1602,29 +1643,30 @@ function standingHands(P, { kap, lean, girdle, barAt, pole, barW, ext, copZ = 0.
     const S = toWorld(tf, dl);
     return { knee, hip, tf, S, ...barAt(tf, S, hip, knee) };
   };
-  const com = (th) => {
-    const r = build(th);
-    const pz = { R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, hand: r.bar, elbow: r.elbow || lerpV(r.S, r.bar, 0.5) }, Pc: r.tf.Pc, u: r.tf.u, toeDir: toe };
-    const cz = systemComZ(pz, r.bar, barW);
-    if (!ext) return cz;
-    // 滑輪等外力（單位：體重）：壓力中心 = 力矩平衡（重量總和 = 1 + barW）
-    const F = ext(r), m = 1 + barW;
-    return (-m * cz + r.bar[2] * F[1] - r.bar[1] * F[2]) / (-m + F[1]);
+  const makePose = (th) => {
+    const r = build(th), pose = { R: {}, warn: [], ok: true };
+    Object.assign(pose, r.tf);
+    pose.phi = Math.asin(clamp(r.tf.u[2], -1, 1));
+    pose.girdle = girdle;
+    legChain(pose, A, toe, r.hip);
+    pose.R.knee = r.knee;
+    pose.armOk = armChain(pose, r.S, r.bar, typeof pole === 'function' ? pole(r.tf, r) : pole);
+    pose.barAxial = barAxial;
+    pose.bar = [0, r.bar[1], r.bar[2]];
+    pose.barW = barW;
+    pose.r = r;
+    pose.shinTilt = Math.atan2(r.knee[2] - A[2], r.knee[1] - A[1]);
+    return pose;
   };
-  const r = build(bisect((th) => com(th) - copZ, rad(-15), rad(25)));
-  const pose = { R: {}, warn: [], ok: true };
-  Object.assign(pose, r.tf);
-  pose.phi = Math.asin(clamp(r.tf.u[2], -1, 1));
-  pose.girdle = girdle;
-  legChain(pose, A, toe, r.hip);
-  pose.R.knee = r.knee;
-  const ok = armChain(pose, r.S, r.bar, typeof pole === 'function' ? pole(r.tf, r) : pole);
-  pose.barAxial = barAxial;
-  pose.bar = [0, r.bar[1], r.bar[2]];
-  pose.barW = barW;
-  pose.armOk = ok;
-  pose.r = r;
-  pose.shinTilt = Math.atan2(r.knee[2] - A[2], r.knee[1] - A[1]);
+  const copAt = (th) => {
+    const p = makePose(th), cz = systemComZ(p, p.R.hand, barW);
+    if (!ext) return cz;
+    // 鋼索的水平與垂直外力均納入壓力中心；只使用實際求得的肘、手與足底幾何。
+    const F = ext(p.r), m = 1 + barW, H = p.R.hand;
+    return (-m * cz + H[2] * F[1] - H[1] * F[2]) / (-m + F[1]);
+  };
+  const target = balanceTargetZ(makePose(0), P);
+  const pose = makePose(bisect((th) => copAt(th) - target, rad(-25), rad(45)));
   if (P.footStance === 'staggered') {
     // 力學仍以左右對稱半身求解；畫面前後各錯開 10 cm，支撐面取兩腳外緣。
     // 此等效支撐面不推算左右腳各自反力或不對稱的髖膝踝力矩。
@@ -1743,10 +1785,13 @@ function goodMorningPose(P, e) {
     return { knee, hip, tf, bar, arm };
   };
   const comz = (th) => {
-    const r = build(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, ...r.arm.R }, Pc: r.tf.Pc, u, toeDir: toe }, r.bar, BAR_RATIO.goodmorning);
+    const r = build(th), p = { R: {}, Pc: r.tf.Pc, u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    Object.assign(p.R, r.arm.R);
+    return systemComZ(p, r.bar, BAR_RATIO.goodmorning);
   };
-  const r = build(bisect((th) => comz(th), rad(-20), rad(30)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = build(bisect((th) => comz(th) - footMid - (P.balanceCm || 0) / 100, rad(-20), rad(30)));
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, r.tf);
   pose.phi = phi;
@@ -2318,7 +2363,7 @@ function pushdownPose(P, e) {
   // 滑輪把手往上推：重心要往前移才站得穩。真人是髖往後、軀幹再前傾（不是整個人從腳踝往前倒）：
   // 找出需要多前傾 extra，讓小腿維持接近垂直（前傾約 3°）
   const make = (extra) => standingHands(P, {
-    kap: rad(8), lean: rad(P.lean) + extra, girdle: { ret: rad(0), elev: rad(-6) }, barW: 0, copZ: -0.05, // 滑輪往上推手：壓力中心落在腳跟那一側，重心才不必前移太多
+    kap: rad(8), lean: rad(P.lean) + extra, girdle: { ret: rad(0), elev: rad(-6) }, barW: 0,
     ext: (r) => mul(norm(sub([0, M.pulleyY, M.pulleyZ], [0, r.bar[1], r.bar[2]])), effBarW),
     pole: (tf, r) => sub(r.elbow, r.S),
     barAt: (tf, S) => {
@@ -2332,7 +2377,7 @@ function pushdownPose(P, e) {
   });
   const extra = P.footStance === 'staggered' ? 0 : bisect((x) => rad(3) - make(x).shinTilt, 0, rad(40), 16);
   const pose = make(extra);
-  if (deg(extra) > 8) pose.warn.push('滑輪把手往上推：軀幹要再前傾約 ' + Math.round(deg(extra)) + '° 才站得穩（實務上常用前後腳站）');
+  if (deg(extra) > 8) pose.warn.push('雙腳併站時模型已讓軀幹額外前傾約 ' + Math.round(deg(extra)) + '° 以平衡；可改用前後腳站姿');
   // 調整前臂視覺參考軸讓正握旋前角落在自然範圍內，五指包覆直槓
   pose.armPole = norm(add(sub(pose.R.elbow, pose.R.shoulder), [0.35, 0, -0.1]));
   pose.barAxial = false;
@@ -2649,9 +2694,9 @@ function cableFlyPose(P, e) {
       return { bar: H, elbow: arm.mid, pole, ok: arm.ok };
     };
     // 兩側鋼索的 X 分量左右相消；Y、Z 分量合計作用於系統平衡（雙手總和 = effBarW）
-    // 鋼索往後拉時壓力中心落在腳跟側（copZ = -0.07），重心不需過度前傾
+    // 鋼索往後拉的水平分量進入完整壓力中心計算。
     return standingHands(P, {
-      kap: rad(10), lean: rad(P.lean ?? 12) + extra, girdle, barW: 0, copZ: -0.07,
+      kap: rad(10), lean: rad(P.lean ?? 12) + extra, girdle, barW: 0,
       ext: (r) => {
         const d = norm(sub(pulleyR, r.bar));
         return [0, d[1] * effBarW, d[2] * effBarW];
@@ -3144,7 +3189,6 @@ function dbReverseFlyPose(P, e) {
   const w = 0.15, tau = rad(8);
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const A = [w, BODY.ankleH, -0.07];
-  const bz = 0.02;
   const phi = rad(P.torso);
   const u = [0, Math.cos(phi), Math.sin(phi)];
   const legs = fixedKneeLegs(A, w, rad(22));
@@ -3166,10 +3210,13 @@ function dbReverseFlyPose(P, e) {
     return { knee, hip, tf, S, E, H };
   };
   const com = (th) => {
-    const r = at(th);
-    return systemComZ({ R: { hip: r.hip, knee: r.knee, ankle: A, shoulder: r.S, elbow: r.E, hand: r.H }, Pc: r.tf.Pc, u, toeDir: toe }, r.H, barW);
+    const r = at(th), p = { R: {}, Pc: r.tf.Pc, u, toeDir: toe };
+    legChain(p, A, toe, r.hip);
+    armChain(p, r.S, r.H, pole);
+    return systemComZ(p, r.H, barW);
   };
-  const r = at(bisect((th) => com(th) - bz, rad(-15), rad(30)));
+  const footMid = A[2] + (0.19 - 0.06) * toe[2] / 2;
+  const r = at(bisect((th) => com(th) - footMid - (P.balanceCm || 0) / 100, rad(-15), rad(30)));
   const pose = { R: {}, warn: [], ok: true };
   Object.assign(pose, r.tf);
   pose.phi = phi;
@@ -3606,6 +3653,13 @@ function solveLinear(K, b) {
 export function analyze(lift, P, e) {
   const pose = solvePose(lift, P, e);
   const forces = forcesOf(pose, P, lift);
+  if (BALANCE_LIFTS.has(lift) && pose.cop && pose.R.heel && pose.R.toe) {
+    const actual = (pose.cop[2] - footMidZ(pose)) * 100;
+    const target = Number(P.balanceCm) || 0;
+    if (Math.abs(actual - target) > 1) {
+      pose.warn.push(`重心設定 ${target.toFixed(1)} cm 無法達到，實際偏移 ${actual.toFixed(1)} cm（正值偏腳尖）`);
+    }
+  }
   const R = pose.R, L = LIFTS[lift];
   const dofs = L.dofs, has = (d) => dofs.includes(d);
   const dem = {};
