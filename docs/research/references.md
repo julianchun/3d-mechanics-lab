@@ -30,6 +30,10 @@
 - [Hammer Strength Smith Machine 官方規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine)：此機型 7° 軌道及 30 lb 起始阻力；[HDU-DPR 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row)：244 cm 高、配重 1:1。
 - [Life Fitness Adjustable Cable Crossover 官方規格](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)及[PWR Play 官方手冊](https://support.lifefitness.com/hc/en-us/articles/30762202977431-Life-Fitness-PWR-Play-Assembly-Manual)：可調滑輪 2:1 與滑車高度範圍；[Technogym Selection Lat Machine 官方規格](https://www.technogym.com/de-DE/product/selection-lat-machine-med_C91200-ANVK.html)：機身高度 228 cm。其他機型與尚未查證的示範尺寸逐項列於[器械資料](machine-data.md)。
 
+## 活動度常模
+
+- [Kim 與 Kim（2016）主動肩／髖活動度量角研究](https://www.jstage.jst.go.jp/article/jpts/28/3/28_jpts-2015-845/_pdf)：30 名無肩部問題的大學生，主動肩後伸兩次均值 50.3°／51.9°；本專案僅作人工複查參考，不作負重安全上限。
+
 ## 驗證研究
 
 - [Goršič 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)：前／背蹲上升期三維運動學與逆動力學，18 人；表 2 的股骨角定點與力矩用於測試。

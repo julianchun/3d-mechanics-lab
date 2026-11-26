@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { analyze, createBody, defaultParams, scapulaLocal, withBody } from '../src/biomech.js';
+import { analyze, BODY, createBody, defaultParams, scapulaLocal, withBody } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
 const free = new Set(['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
@@ -72,4 +72,22 @@ for (const shape of shapes) {
   });
 }
 assert.ok(Math.abs(startAngles[0] - startAngles[1]) > 10 * Math.PI / 180, '不同身材的起槓角度沒有跟著段長改變');
-console.log('站姿 G1 控制與硬舉 H1 身材幾何 PASS');
+
+// H1／H2：四式硬舉在槓過膝之前維持起槓軀幹角；用關節幾何判斷事件，不指定行程百分比。
+for (const id of ['deadlift', 'deficit-dl', 'block-pull', 'sumo']) {
+  const entry = CATALOG.find((x) => x.id === id);
+  const P = { ...defaultParams(entry.lift), ...entry.set };
+  const start = analyze('deadlift', P, 1).pose.phi;
+  for (let i = 0; i <= 40; i++) {
+    const pose = analyze('deadlift', P, i / 40).pose;
+    if (pose.bar[1] < pose.R.knee[1] - 0.01)
+      assert.ok(Math.abs(pose.phi - start) < Math.PI / 180, `${id} 過膝前軀幹角未維持`);
+  }
+}
+const smithDefault = defaultParams('smith');
+const smithSamples = Array.from({ length: 41 }, (_, i) => analyze('smith', smithDefault, i / 40));
+assert.ok(smithSamples.every((r) => Math.abs(r.pose.support.N[2]) < 0.02 * BODY.mass * 9.81), '史密斯滑軌水平支撐力過高');
+const pressDefault = defaultParams('legpress');
+const pressSamples = Array.from({ length: 41 }, (_, i) => analyze('legpress', pressDefault, i / 40));
+assert.ok(pressSamples.every((r) => r.q.hipFlex * 180 / Math.PI <= 136 && r.q.ankleDorsi * 180 / Math.PI <= 39), '腿推預設超過模型髖／踝參考線');
+console.log('站姿 G1、硬舉 H1／H2 與器械預設幾何 PASS');

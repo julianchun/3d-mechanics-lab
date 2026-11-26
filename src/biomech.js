@@ -530,16 +530,16 @@ export const LIFTS = {
     moving: ['hipExt', 'kneeExt'],
     params: [
       { key: 'railAngle', label: '滑軌角度', type: 'select', options: MACHINES.smith.railDegOptions, def: MACHINES.smith.railDegDefault, joint: 'equip', mech: 'A' },
-      { key: 'feetFwd', label: '腳在槓前方', left: '0（同自由深蹲）', right: '30 cm', min: 0, max: 0.3, step: 0.01, def: 0.12, joint: 'ankle', mech: 'A', fmt: 'cm' },
+      { key: 'feetFwd', label: '腳在槓前方', left: '0（同自由深蹲）', right: '30 cm', min: 0, max: 0.3, step: 0.01, def: 0.02, joint: 'ankle', mech: 'A', fmt: 'cm' },
       { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
       { key: 'depth', label: '深度', left: '高於平行', right: '全蹲', min: 0, max: 1, step: 0.01, def: 0.55, joint: 'knee', mech: 'A' },
-      { key: 'torso', label: '最低點軀幹前傾', left: '0°（直立）', right: '45°', min: 0, max: 45, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
+      { key: 'torso', label: '最低點軀幹前傾', left: '0°（直立）', right: '45°', min: 0, max: 45, step: 1, def: 26, joint: 'lumbar', mech: 'A', unit: '°' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'ankle', mech: 'B' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },
     ],
-    standardNote: '腳放在槓前方約 10～15 cm、軀幹比自由深蹲直立、蹲到大腿約平行；滑軌承擔前後平衡，傾斜 7° 款（如 Hammer Strength）面向斜軌站立時起立軌跡微向後。',
+    standardNote: '腳放在槓前方約 2 cm、最低點軀幹前傾約 26°，讓滑軌的水平支撐力接近零；蹲到大腿約平行。傾斜 7° 款（如 Hammer Strength）面向斜軌站立時起立軌跡微向後。',
   },
   legpress: {
     name: '45° 腿推機', topLabel: '腿伸直', bottomLabel: '最低點',
@@ -548,16 +548,16 @@ export const LIFTS = {
     pose: legPressPose, loads: pushLoads,
     moving: ['hipExt', 'kneeExt'],
     params: [
-      { key: 'footHigh', label: '腳踩踏板的位置', left: '低（偏股四頭）', right: '高（偏臀／膕繩）', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'ankle', mech: 'A' },
+      { key: 'footHigh', label: '腳踩踏板的位置', left: '低（偏股四頭）', right: '高（偏臀／膕繩）', min: 0, max: 1, step: 0.01, def: 0.52, joint: 'ankle', mech: 'A' },
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'ankle', mech: 'A' },
-      { key: 'depth', label: '下放深度（最低點膝角度）', left: '75°', right: '125°', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'knee', mech: 'A' },
+      { key: 'depth', label: '下放深度（最低點膝角度）', left: '75°', right: '125°', min: 0, max: 1, step: 0.01, def: 0.25, joint: 'knee', mech: 'A' },
       { key: 'seat', label: '椅背角度（離垂直）', left: '35°（較直立）', right: '65°（較躺）', min: MACHINES.legpress.seatDegRange[0], max: MACHINES.legpress.seatDegRange[1], step: 1, def: MACHINES.legpress.seatDegDefault, joint: 'equip', mech: 'A', unit: '°' },
       { key: 'sledKg', label: '空滑台重量（假設）', left: '20 kg（輕型）', right: '65 kg（重型）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'friction', label: '導軌摩擦 μ（假設・向心上限）', left: '0（準靜態參考）', right: '0.15', min: MACHINES.legpress.railMuRange[0], max: MACHINES.legpress.railMuRange[1], step: 0.01, def: MACHINES.legpress.railMuDefault, joint: 'equip', mech: 'A', fmt: 'dec2' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },
     ],
-    standardNote: '45° 軌道、腳踩踏板中間、與髖同寬，下放到膝約 90°、臀部不離開椅墊，用整個腳掌推。',
+    standardNote: '45° 軌道、腳踩踏板中間略偏高、與髖同寬，下放到膝約 88°；按個人活動度調整深度，臀部不離開椅墊，用整個腳掌推。',
   },
   pulldown: {
     name: '滑輪下拉', topLabel: '手臂伸直', bottomLabel: '拉到胸前',
@@ -1362,8 +1362,9 @@ function deadliftPose(P, e) {
   const startY = 0.225 + blk;
   const phi0 = bisect((a) => place(a, startY).scapZ - bz, rad(15), rad(85));
   const pose = { R: {}, warn: [], ok: true };
-  // 原有行程冪次尚無獨立校準來源；維持現值，另以校準組檢查過膝前後的伸膝比例。
-  let phi = phi0 * Math.pow(e, 0.45);
+  // H1／H2 教練原則：槓離地至過膝維持起槓軀幹角，先靠伸膝抬槓；過膝才逐步伸髖。
+  const kneeY = bisect((y) => y - place(phi0, y).knee[1], startY, barTopY);
+  let phi = phi0 * (barY <= kneeY ? 1 : clamp((barTopY - barY) / (barTopY - kneeY), 0, 1));
   let r = place(phi, barY);
   if (r.d > maxReach) {
     // 腿伸直也碰不到：軀幹改直一點（髖往下、往前）
