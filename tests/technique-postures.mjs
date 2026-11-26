@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { analyze, createBody, defaultParams, withBody } from '../src/biomech.js';
+import { analyze, createBody, defaultParams, scapulaLocal, withBody } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
 const free = new Set(['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
@@ -42,7 +42,10 @@ for (const shape of shapes) {
     const startPose = poses.at(-1);
     assert.ok(startPose.ok, `${style} ${body.heightM} m 起槓姿勢不成立`);
     assert.ok(Math.abs(startPose.bar[2] - (startPose.R.heel[2] + startPose.R.toe[2]) / 2) < 0.001);
-    assert.ok(Math.abs(startPose.R.shoulder[2] - startPose.bar[2]) < 0.005);
+    const scap = scapulaLocal(startPose.girdle);
+    const scapZ = startPose.Pc[2] + startPose.u[2] * scap[1] + startPose.f[2] * scap[2];
+    assert.ok(Math.abs(scapZ - startPose.bar[2]) < 0.001, `${style} 肩胛未在槓上方`);
+    assert.ok(startPose.R.shoulder[2] > startPose.bar[2], `${style} 肩關節應在槓前方`);
     assert.ok(poses.every((p) => Math.abs(p.bar[2] - startPose.bar[2]) < 1e-6), `${style} 槓路未保持垂直`);
     if (style === 'conv' && P.start === 0) startAngles.push(startPose.phi);
   });

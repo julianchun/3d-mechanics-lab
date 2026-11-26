@@ -382,7 +382,7 @@
         "compare": "相撲 vs 傳統 — 股四頭肌活化",
         "expected": "相撲 > 傳統",
         "ref": "Escamilla 2002 (PMID 11932579)",
-        "model": "相撲 = 0.838 a vs 傳統 = 0.574 a"
+        "model": "相撲 = 0.803 a vs 傳統 = 0.556 a"
       },
       {
         "index": 19,
@@ -394,7 +394,7 @@
         "compare": "相撲 vs 傳統 — 腰椎伸展力矩",
         "expected": "相撲 < 傳統",
         "ref": "Cholewicki 1991 (PMID 1758295, -10%); Escamilla 2000 (PMID 10912892)",
-        "model": "相撲 = 202.3 N·m vs 傳統 = 232.1 N·m"
+        "model": "相撲 = 202.3 N·m vs 傳統 = 229.6 N·m"
       }
     ],
     "deadlift": [
@@ -408,7 +408,7 @@
         "compare": "相撲 vs 傳統 — 股四頭肌活化",
         "expected": "相撲 > 傳統",
         "ref": "Escamilla 2002 (PMID 11932579)",
-        "model": "相撲 = 0.838 a vs 傳統 = 0.574 a"
+        "model": "相撲 = 0.803 a vs 傳統 = 0.556 a"
       },
       {
         "index": 19,
@@ -420,7 +420,7 @@
         "compare": "相撲 vs 傳統 — 腰椎伸展力矩",
         "expected": "相撲 < 傳統",
         "ref": "Cholewicki 1991 (PMID 1758295, -10%); Escamilla 2000 (PMID 10912892)",
-        "model": "相撲 = 202.3 N·m vs 傳統 = 232.1 N·m"
+        "model": "相撲 = 202.3 N·m vs 傳統 = 229.6 N·m"
       }
     ],
     "deficit-dl": [
@@ -434,7 +434,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 股四頭肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.624 a vs 墊高 = 0.493 a"
+        "model": "赤字 = 0.608 a vs 墊高 = 0.472 a"
       },
       {
         "index": 21,
@@ -446,7 +446,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 臀大肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.658 a vs 墊高 = 0.649 a"
+        "model": "赤字 = 0.661 a vs 墊高 = 0.639 a"
       },
       {
         "index": 22,
@@ -458,7 +458,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 膕繩肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.724 a vs 墊高 = 0.695 a"
+        "model": "赤字 = 0.735 a vs 墊高 = 0.689 a"
       }
     ],
     "block-pull": [
@@ -472,7 +472,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 股四頭肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.624 a vs 墊高 = 0.493 a"
+        "model": "赤字 = 0.608 a vs 墊高 = 0.472 a"
       },
       {
         "index": 21,
@@ -484,7 +484,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 臀大肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.658 a vs 墊高 = 0.649 a"
+        "model": "赤字 = 0.661 a vs 墊高 = 0.639 a"
       },
       {
         "index": 22,
@@ -496,7 +496,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 膕繩肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.724 a vs 墊高 = 0.695 a"
+        "model": "赤字 = 0.735 a vs 墊高 = 0.689 a"
       }
     ],
     "good-morning": [

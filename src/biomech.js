@@ -1114,9 +1114,17 @@ export function girdleMatrix(g) {
   // Ry(ret) · Rz(elev)
   return [[cr * ce, -cr * se, sr], [se, ce, 0], [-sr * ce, sr * se, cr]];
 }
-export function shoulderLocal(g) {
-  const G = girdleForBody(), M = girdleMatrix(g), d = sub(G.sh, G.scj);
+function girdlePointLocal(point, g) {
+  const G = girdleForBody(), M = girdleMatrix(g), d = sub(point, G.scj);
   return add(G.scj, M.map((r) => dot(r, d)));
+}
+export function shoulderLocal(g) { return girdlePointLocal(girdleForBody().sh, g); }
+// public/bones.bin 的 scapula（右肩胛骨與鎖骨）網格頂點中心，座標以軀幹長正規化。
+// 與 rig.js 的肩帶同繞胸鎖關節旋轉；以網格幾何決定參考點，不另設肩到肩胛的距離。
+export function scapulaLocal(g) {
+  const center = [0.22469512939171318 * BODY.Ltr * BODY.shHalf / DEFAULT_BODY.shHalf,
+    0.985798544138571 * BODY.Ltr, -0.04272550181801772 * BODY.Ltr];
+  return girdlePointLocal(center, g);
 }
 const toWorld = (tf, l) => add(add(add(tf.Pc, mul(tf.lat, l[0])), mul(tf.u, l[1])), mul(tf.f, l[2]));
 
@@ -1317,6 +1325,7 @@ function deadliftPose(P, e) {
   const Lr = BODY.Lu + BODY.Lf - 0.002;
   const girdle = { ret: rad(-8), elev: rad(-5) }; // 負重下肩胛略前伸、下壓
   const dl = shoulderLocal(girdle);
+  const scap = scapulaLocal(girdle);
   const R2 = Lr ** 2 - (gx - dl[0]) ** 2;
   const maxReach = (BODY.Ls + BODY.Lt) * 0.997;
 
@@ -1330,7 +1339,8 @@ function deadliftPose(P, e) {
       const Pc = [0, Sy - (u[1] * dl[1] - u[2] * dl[2]), pcz - (Sz - (bz + dz))];
       const hip = [BODY.hipHalf, Pc[1], Pc[2]];
       const knee = ik2(hip, A, BODY.Lt, BODY.Ls, toe).mid;
-      return { u, Pc, hip, knee, S: [dl[0], Sy, bz + dz], front: legFrontZ(A, hip, knee, barY), d: len(sub(hip, A)) };
+      const scapZ = Pc[2] + u[2] * scap[1] + u[1] * scap[2];
+      return { u, Pc, hip, knee, S: [dl[0], Sy, bz + dz], scapZ, front: legFrontZ(A, hip, knee, barY), d: len(sub(hip, A)) };
     };
     let lo = bz - 1.0, hi = bz + 0.3;
     for (let i = 0; i < 34; i++) { const m = (lo + hi) / 2; if (build(m).front > target) hi = m; else lo = m; }
@@ -1347,10 +1357,9 @@ function deadliftPose(P, e) {
     dlTopCache.set(key, barTopY);
   }
   const barY = lerp(barTopY, 0.225 + blk, e);
-  // H1：在槓片起始高度以小腿貼槓及肩關節位於槓正上方決定軀幹角；段長變動會重新求解。
-  // 肩胛單獨位置沒有骨架自由度，先以肩關節代理；若此幾何與 G1 不可同時成立，稽核照實列出。
+  // H1／G1：槓在足中段、小腿貼槓，肩胛網格中心在槓正上方；肩關節自然位於槓前。
   const startY = 0.225 + blk;
-  const phi0 = bisect((a) => place(a, startY).S[2] - bz, rad(15), rad(85));
+  const phi0 = bisect((a) => place(a, startY).scapZ - bz, rad(15), rad(85));
   const pose = { R: {}, warn: [], ok: true };
   // 原有行程冪次尚無獨立校準來源；維持現值，另以校準組檢查過膝前後的伸膝比例。
   let phi = phi0 * Math.pow(e, 0.45);
