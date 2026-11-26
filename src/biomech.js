@@ -3452,7 +3452,53 @@ function suspendedPose(P, e, type) {
   }
   return pose;
 }
-function dipsPose(P, e) { return suspendedPose(P, e, 'dips'); }
+// 雙槓閉鏈：兩手固定，肩後伸決定上臂方向，前臂傾角由重心平衡決定。
+function dipsPose(P, e) {
+  const hand = [0.32, 1.18, 0];
+  const lean = rad(P.lean);
+  // 50° 是無負重主動肩後伸常模的近似值；預設 depth=0.6 到此角。
+  const extension = rad(5 + (15 + 50 * P.depth) * e);
+  const girdle = { ret: rad(lerp(-5, 9, e)), elev: rad(-5) };
+  const sl = shoulderLocal(girdle);
+  const upperYZ = Math.sqrt(Math.max(0, BODY.Lu ** 2 - (hand[0] - sl[0]) ** 2));
+  const worldAngle = extension + lean;
+  const make = (foreTilt) => {
+    const E = [hand[0], hand[1] + BODY.Lf * Math.cos(foreTilt), hand[2] - BODY.Lf * Math.sin(foreTilt)];
+    const Sy = E[1] + upperYZ * Math.cos(worldAngle);
+    const Sz = E[2] + upperYZ * Math.sin(worldAngle);
+    const u = [0, Math.cos(lean), Math.sin(lean)];
+    const hip = [0, Sy - u[1] * sl[1] + u[2] * sl[2], Sz - u[2] * sl[1] - u[1] * sl[2]];
+    const pose = { R: {}, warn: [], ok: true, ...trunkFrame(hip, u), girdle };
+    const ankle = [0.14, hip[1] - 0.62 * (BODY.Ls + BODY.Lt), hip[2] - lerp(0.12, 0.32, e) * BODY.heightM / DEFAULT_BODY.heightM];
+    if (!legChain(pose, ankle, [0, 0, -1], [BODY.hipHalf, hip[1], hip[2]])) {
+      pose.ok = false; pose.conflict = '腿部姿勢超出可達範圍';
+    }
+    pose.R.shoulder = toWorld(pose, sl);
+    pose.R.elbow = E; pose.R.hand = hand;
+    pose.armPole = [0, 0, -1];
+    pose.loadPt = [BODY.hipHalf / 2, hip[1], hip[2]];
+    return pose;
+  };
+  let lo = rad(-20), hi = rad(50);
+  for (let i = 0; i < 34; i++) {
+    const mid = (lo + hi) / 2;
+    if (bodyweightCenter(make(mid), P).z > hand[2]) lo = mid;
+    else hi = mid;
+  }
+  const pose = make((lo + hi) / 2);
+  if (Math.abs(bodyweightCenter(pose, P).z - hand[2]) > 0.025)
+    pose.warn.push('重心未落在手部支撐線，懸垂姿勢不穩');
+  if (P.depth > 0.6 && e > 0.9)
+    pose.warn.push('肩後伸超過約 50° 主動常模，請依個人活動度調整下放深度');
+  pose.handContact = hand;
+  pose.bar = [0, hand[1], hand[2]]; pose.barW = (P.load || 0) / BODY.mass;
+  pose.barStyle = 'none'; pose.armJoints = ['shoulder', 'elbow'];
+  pose.boxes = [
+    ...[-1, 1].map((s) => box([s * hand[0], hand[1], -0.04], [0.055, 0.055, 0.85], 0, 'frame')),
+    ...[-1, 1].map((s) => box([s * hand[0], hand[1] / 2, -0.34], [0.065, hand[1], 0.065], 0, 'frame')),
+  ];
+  return pose;
+}
 function pullupPose(P, e) { return suspendedPose(P, e, P.assist === undefined ? 'pullup' : 'assistpullup'); }
 
 export function solvePose(lift, P, e) {
