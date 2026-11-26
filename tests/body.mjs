@@ -35,7 +35,7 @@ assert.deepEqual(afterDefault.dem, reference.dem, '硬舉力矩不得依先前�
 assert.equal(afterDefault.pose.ok, reference.pose.ok, '硬舉鏈結狀態一致');
 assert.equal(afterDefault.pose.ok, true, '小身材硬舉可解');
 
-// 全清單以各變化式的預設參數掃描，列出固定器材幾何造成的身材限制。
+// 全清單以各變化式的預設參數掃描，器械可調後兩種身材均須可解。
 assert.equal(CATALOG.length, 63);
 for (const [label, body] of [['160 cm 女性', small], ['190 cm 男性', tall]]) {
   const failures = [];
@@ -50,8 +50,7 @@ for (const [label, body] of [['160 cm 女性', small], ['190 cm 男性', tall]])
       if (failed.length) failures.push(`${item.id}（${failed.join('；')}）`);
     }
   });
-  assert.deepEqual(failures.map((entry) => entry.split('（')[0]), label === '160 cm 女性' ?
-    ['pec-deck', 'reverse-deck', 'calf-raise-standing'] : [], `${label}的已知器材限制`);
+  assert.deepEqual(failures.map((entry) => entry.split('（')[0]), [], `${label}的器材姿勢應可成立`);
   console.log(`${label}：${failures.length} / 63 項有姿勢失敗${failures.length ? `\n${failures.join('\n')}` : ''}`);
 }
 console.log('身體參數 API PASS');
