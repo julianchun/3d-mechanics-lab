@@ -219,10 +219,10 @@ export const MACHINES = {
   machinepress: { seatY: 0.55, pivotY: 1.83, pivotZ: -0.16, loadKg: 40 }, // 假設：肩推機握把與轉軸
   calfraise: { stepY: 0.13, standingKg: 60, seatedKg: 45, padY: 0.64 }, // 假設：前腳掌台階與肩／膝墊配重
   hipabd: { seatY: 0.55, camArm: 0.22, padArm: 0.35, loadKg: 35 }, // 假設：髖外展／內收機槓桿
-  // 假設：啞鈴共用尺寸與預設每顆重量（未查得單一商用廠牌規格，依常見六角／包膠啞鈴估計）
+  // REP Hex KG 握把尺寸已查證；片頭尺寸與預設每顆重量仍為示範估計。
   dumbbell: {
-    handleLen: 0.13,                 // 假設：握把內距 13 cm
-    handleR: 0.016,                  // 假設：握把半徑 1.6 cm（直徑 32 mm）
+    handleLen: 0.132,                // docs/research/machine-data.md §8：REP Hex KG 握把長 5.2" ≈ 13.2 cm
+    handleR: 0.017,                  // docs/research/machine-data.md §8：REP Hex KG 7.5–22.5 kg 握把直徑 34 mm
     benchKg: 22,                     // 假設：啞鈴臥推預設每顆 22 kg（雙手 44 kg，略輕於槓鈴臥推 60 kg）
     pressKg: 14,                     // 假設：坐姿啞鈴肩推預設每顆 14 kg（雙手 28 kg，略輕於站姿槓鈴肩推 37.5 kg）
     latRaiseKg: 8,                   // 假設：側平舉預設每顆 8 kg
