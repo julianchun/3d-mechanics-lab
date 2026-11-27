@@ -87,16 +87,17 @@ export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row:
 // 每個數值均標註 docs/research/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
 export const MACHINES = {
   smith: {
-    railDegDefault: '0',             // docs/research/machine-data.md §2.1：垂直軌道商用款 0°
+    railDegDefault: '0',             // docs/research/machine-data.md §2.1：Hammer Strength HSSMV 垂直軌道
     railDegOptions: [
-      ['0', '0°（垂直軌道）'],       // docs/research/machine-data.md §2.1：力量訓練／健力房常見 0°
+      ['0', '0°（垂直軌道）'],       // docs/research/machine-data.md §2.1：Hammer Strength HSSMV 官方規格
       ['7', '7°（往上微後傾）'],     // docs/research/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
       ['-7', '-7°（反向站位）'],     // docs/research/machine-data.md §2.2：背向／面向使用時斜軌方向相反
     ],
     railZ0: 0,                       // 假設：滑軌於參考高度處之 Z 座標（m）
     railRefY: 1.4,                   // 假設：斜軌參考高度（約站姿扛槓高度，使「腳在槓前方」定義一致）
     railMu: 0,                       // 假設：忽略線性軸承滑軌摩擦
-    barRatio: 0.9,                   // 假設：示範總負重＝0.9× 體重
+    startingKg: 13.6,                // docs/research/machine-data.md §2.1：HSSMV 官方起始阻力 13.6 kg
+    platesRatio: (0.9 * DEFAULT_BODY.mass - 13.6) / DEFAULT_BODY.mass, // 假設：掛片按體重縮放；75 kg 身材總示範阻力維持 67.5 kg
     railHalfSpan: 0.7,               // 假設：左右滑軌半寬（m）
     railHeight: 2.2,                 // 假設：機架高度（m）
   },
@@ -2275,7 +2276,7 @@ function smithPose(P, e) {
   const S = toWorld(r.tf, shoulderLocal(pose.girdle));
   armChainBent(pose, S, [0.34, r.bar[1], r.bar[2]], norm(add(mul(r.tf.f, -1), [0, -1, 0])), SQ_WRIST.high, [0, 1, 0]);
   pose.bar = r.bar;
-  pose.barW = M.barRatio;
+  pose.barW = M.platesRatio + M.startingKg / BODY.mass;
   pose.barOnBack = true;
   pose.contact = { p: [BODY.hipHalf * 0.5, r.bar[1], r.bar[2]], n: railN, mu: M.railMu, bilateral: true, rail: true };
   // 標準槓穿過兩側滑軌（x = ±0.70），外側掛標準槓片（x = ±0.78、±0.84）

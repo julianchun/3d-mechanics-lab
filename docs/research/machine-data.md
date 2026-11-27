@@ -31,13 +31,13 @@
 
 | 類型／代表機型 | 軌道角度 | 空槓起始阻力（Starting Resistance） | 配重系統 | 來源 |
 |---|---|---|---|---|
-| **傾斜軌道商用經典**：Hammer Strength Smith Machine（Life Fitness） | **7° 傾斜**（模擬自由重量推／蹲自然弧線） | **30 lb（13.6 kg）** | 無配重或結構平衡標稱起始 30 lb | [Hammer Strength 官方規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine) |
-| **有配重平衡（Counterbalanced）商用款**（如部分 Life Fitness Signature / Cybex / Technogym 款） | 常見 **0°（垂直）或 7°–12°** | **約 15–25 lb（6.8–11.3 kg）**（部分全平衡款標稱可低至 ~15 lb） | 內部滑輪配重塊抵銷部分槓重與滑套重 | 商業健身器材常見規格（各型號差異大，使用特定型號時應查該型號手冊） |
-| **無配重垂直軌道款**（力量訓練／健力房常見） | **0°（完全垂直）** | **約 35–45 lb（16–20.4 kg）**（含線性軸承滑座重量） | 無配重 | 商業器材常見規格 |
+| **垂直軌道預設機型**：Hammer Strength Plate Loaded Vertical Smith Machine `HSSMV` | **0° 垂直** | **30 lb（13.6 kg）** | 官方列的是起始阻力，未說明實體槓質量或配重平衡結構 | [HSSMV 原廠規格](https://www.lifefitness.com/de-de/produkte/strength-training/stationen-mit-gewichtsscheiben/plate-loaded-vertical-smith-machine) |
+| **可選傾斜軌道**：Hammer Strength Smith Machine `HSSM` | **7° 傾斜** | **30 lb（13.6 kg）** | 同樣是標稱起始阻力；反向站位的 −7° 是模型座標轉向 | [HSSM 原廠規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine) |
+| 其他配重平衡與無配重款 | **未查證** | **未查證** | 機型間差異不能用概括範圍代替單一規格 | 未選作預設 |
 
 ### 2.2 力學意義與模型對照
 - 傾斜 7° 的史密斯機在**面向前或背向前**使用時，斜軌方向相反（往後上方 vs 往前上方），會改變身體站位與滑軌法向反作用力方向。
-- 現行 `src/biomech.js` 的 `smithPose` 預設 **0° 垂直滑軌**，亦可選 ±7°；滑軌承受法向反作用力。示範負重與軌道位置仍是假設。
+- 現行 `src/biomech.js` 的 `smithPose` 預設 **HSSMV 的 0° 垂直滑軌**，亦可選 HSSM 的 ±7°；滑軌承受法向反作用力。起始阻力固定 13.6 kg，示範掛片以體重縮放：75 kg 身材掛片 53.9 kg，總 67.5 kg；掛片選擇、摩擦與軌道空間位置仍是假設。起始阻力是使用者感受的有效量，不宣稱槓本身實體質量。
 
 ---
 
