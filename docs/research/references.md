@@ -6,6 +6,9 @@
 
 - [de Leva（1996），男女節段質量與質心，表 4](https://doi.org/10.1016/0021-9290%2895%2900178-6)：用於身體節段重量與質心；表 1 的平均長度不作個體標準差。
 - [美國陸軍 ANSUR II 官方下載頁](https://ph.health.mil/topics/workplacehealth/ergo/Pages/Anthropometric-Database.aspx)與[陸軍發布說明](https://www.army.mil/article/188601/for_good_measure_natick_releases_raw_data_from_army_wide_anthropometric_survey)：男女匿名逐人測量 CSV，公開 4,082 男、1,986 女；用外觀標記作身材比例代理。[本專案實際採用的 CSV 鏡像](https://github.com/jocimarcan/antopometric-database)與官方檔**尚未以 SHA-256 比對**。
+- [Németh 與 Ohlsén（1989）](https://pubmed.ncbi.nlm.nih.gov/2749375/)（Spine 14(6):604–605，[DOI](https://doi.org/10.1097/00007632-198906000-00011)）：21 人 CT，髖到 L5–S1 三維距離 122 mm，男 6.9%、女 7.5% 身高；用於 `L5S1` 取矩點。摘要只給三維距離，方向與髖參考點定義未查證。
+- ANSUR II `iliocristaleheight` 與 `trochanterionheight`：同上述 ANSUR II 資料，髂嵴高度減大轉子高度除以身高，男 0.0915、女 0.0923，推導腳本 [`tools/derive-lumbar-point.py`](../../tools/derive-lumbar-point.py)；用於 `iliacCrest` 取矩點。
+- [Murphy、Bull 與 McGregor（2011）](https://pubmed.ncbi.nlm.nih.gov/22292206/)（Proc Inst Mech Eng H 225(11)；DOI 10.1177/0954411911416859）：由骨盆標記預測腰薦關節中心，誤差約 8.2 mm；取得頁面只有摘要，回歸係數**未查證**，未採用。
 - [美國法典第 17 篇第 105 節](https://uscode.house.gov/us/usc/t17/s105/)：美國政府職務著作的著作權規則；不等於對第三方鏡像內容的逐位元驗證。
 
 ## 肌肉參數
