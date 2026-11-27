@@ -114,7 +114,7 @@
             "mean": 1.53,
             "sd": 0.25,
             "unit": "Nm/(kg*m)",
-            "definition": "骨盆嵴高度之中央下背內部伸展淨力矩"
+            "definition": "左右髂嵴中點的中央下背內部伸展淨力矩；取遠端節段座標系內外側軸，除受試者體重與身高"
           },
           "modelFactor": 2,
           "normalization": "massHeight",
@@ -123,7 +123,9 @@
           "tolerance": {
             "absolute": 0.35,
             "unit": "Nm/(kg*m)"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "原文 Data Reduction 將下背點定為左右髂嵴中點，力矩在遠端節段座標系表達；模型在髖中心上方沿單一軀幹軸 5 cm 取矩，沒有獨立骨盆座標。體重身高正規化與中央雙側換算相符，但點位與力矩軸未對齊。0.35 為原先門檻，保留供未來定義對齊後使用。"
         },
         {
           "id": "hip",
@@ -287,7 +289,7 @@
             "mean": 1.64,
             "sd": 0.27,
             "unit": "Nm/(kg*m)",
-            "definition": "骨盆嵴高度之中央下背內部伸展淨力矩"
+            "definition": "左右髂嵴中點的中央下背內部伸展淨力矩；取遠端節段座標系內外側軸，除受試者體重與身高"
           },
           "modelFactor": 2,
           "normalization": "massHeight",
@@ -296,7 +298,9 @@
           "tolerance": {
             "absolute": 0.35,
             "unit": "Nm/(kg*m)"
-          }
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "原文 Data Reduction 將下背點定為左右髂嵴中點，力矩在遠端節段座標系表達；模型在髖中心上方沿單一軀幹軸 5 cm 取矩，沒有獨立骨盆座標。體重身高正規化與中央雙側換算相符，但點位與力矩軸未對齊。0.35 為原先門檻，保留供未來定義對齊後使用。"
         },
         {
           "id": "hip",

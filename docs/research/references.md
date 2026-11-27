@@ -42,8 +42,8 @@
 
 ## 驗證研究
 
-- [Goršič 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)：前／背蹲上升期三維運動學與逆動力學，18 人；表 2 的股骨角定點與力矩用於測試。
-- [Gullett 等（2009）](https://doi.org/10.1519/JSC.0b013e31818546bb)：前／背蹲動態膝力矩與肌電，15 人；峰值包含動態條件。
+- [Goršič 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8106690/)：前／背蹲上升期三維運動學與逆動力學，18 人；表 2 的股骨角定點與力矩用於測試。Data Reduction 指出下背點為左右髂嵴中點，內力矩在遠端節段座標系；不能當作 L5/S1 或模型髖上 5 cm 軀幹軸點。
+- [Gullett 等（2009）](https://doi.org/10.1519/JSC.0b013e31818546bb)及[原文 PDF](https://paleostrengthconditioning.weebly.com/uploads/2/6/3/0/26307353/gullet_et_al_2009_-_j_strength__conditioning_research.pdf)：前／背蹲動態膝力矩與肌電，15 人；峰值以受試者體重正規化，含動態條件。圖 3 的 95° 膝角峰值是一位背蹲受試者，不是前蹲群體峰值位置。
 - [Hutchison 與 Caterisano（2019）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6724600/)：10 名男性的鋼槓背蹲動態峰值；平均 1RM 公斤數未報，僅探索展示。
 - [Larsen 等（2021）](https://pmc.ncbi.nlm.nih.gov/articles/PMC8440835/)：18 人高／低槓、窄／寬站 3RM 的軀幹與關節角；只有軀幹角與目前模型直接比較。
 - [Escamilla 等（2000）](https://pubmed.ncbi.nlm.nih.gov/10912892/)及[原文掃描](https://www.academia.edu/127900593/A_three_dimensional_biomechanical_analysis_of_sumo_and_conventional_style_deadlifts)：24 名男性國家級力量舉選手兩式非配對，表 3 槓垂直位移；掃描 OCR 須注意欄位交錯。
@@ -58,6 +58,11 @@
 - [Lu 等（2022）](https://doi.org/10.3390/bioengineering9070301)：鞋跟墊高影響踝角與男性膝力矩方向；沒有量得本模型的 `HEEL_SHANK_SHARE=0.5`。
 - [Zawadka 等（2020）](https://pmc.ncbi.nlm.nih.gov/articles/PMC7429430/)：自然深蹲各關節峰值的時間先後；研究時間比例不等於模型行程 `e`。
 - [Hanen 等（2025），表 1](https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2025.1597209/full)：傳統／相撲硬舉離地至過膝、過膝至鎖定的膝伸行程；目前只作獨立定性校準檢查，沒有以此擬合時序係數，也不屬於 `validation/*.json` 數值測試組。
+
+## 深蹲修正候選的獨立來源（本次未擬合）
+
+- [Sinclair 等（2016）原文](https://knowledge.lancashire.ac.uk/id/eprint/15273/1/CEJSSM_14_2-2016_02_Sinclair_etAl.pdf)：25 名男性前／背蹲，使用同一 70% 前蹲 1RM 負重；圖 1 有角度隨行程曲線，但未提供模型需要的肩關節中心至槓心與膝路徑座標，也非 Goršič 的股骨 70° 定點角度定義，故未用作數值擬合。與四篇測試組不是同一研究。
+- [Lui、Tsang、Kwok（2018）原文](https://pmc.ncbi.nlm.nih.gov/articles/PMC5982040/)：16 人在模擬深蹲姿勢與起立／下蹲任務量腰椎及髖屈角；未量負重前／背蹲的髂嵴中點軌跡及同步骨盆、腰椎分配，故不足以設定骨盆段節律。與四篇測試組不是同一研究。
 
 ## 各動作生物力學與 EMG
 

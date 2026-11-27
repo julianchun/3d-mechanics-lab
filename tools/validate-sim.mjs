@@ -176,7 +176,7 @@ for (const source of sources) {
       const comparableDefinition = category !== 'definition-mismatch';
       const error = comparableDefinition ? actual.value - reference : null;
       const withinTolerance = comparableDefinition ? Math.abs(error) <= measure.tolerance.absolute + 1e-8 : null;
-      if (entry.lift === 'squat' && category === 'comparable' && params.heelHeight > 0) {
+      if (entry.lift === 'squat' && params.heelHeight > 0) {
         heelContexts.set(id, { measure, params, loadRatio: condition.loadRatio, reference });
       }
       comparisons.push({
@@ -212,7 +212,7 @@ const sweep = shares.map((share) => {
 });
 for (const comparison of comparisons) {
   const context = heelContexts.get(comparison.id);
-  if (!context) continue;
+  if (!context || comparison.category !== 'comparable') continue;
   const grid = Array.from({ length: 101 }, (_, i) => heelPass(context, i / 100));
   if (grid.every((pass) => pass === grid[0])) continue;
   let start = grid[0] ? 0 : null;
@@ -253,7 +253,7 @@ const results = { modelVersion: MODEL_VERSION, summary, comparisons };
 const calibrationCaveats = {
   'squat-high': '六點無負重圖讀值擬合；參數種類與方向非對測試組盲選，站距換算未校驗，預設負重與站距屬外推。見 docs/research/results/squat.md。',
   'squat-low': '沿用無負重背蹲校準；低槓偏移未獨立校準，站距換算與負重外推不確定，寬站軀幹比對失敗。見 docs/research/results/squat.md。',
-  'front-squat': '沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/research/results/squat.md。',
+  'front-squat': '沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 群體軀幹角比對失敗。見 docs/research/results/squat.md。',
   'goblet-squat': '沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/research/results/squat.md。',
 };
 const byId = Object.fromEntries(CATALOG.map((entry) => {
@@ -372,8 +372,7 @@ if (mode === '--heel-share-sweep') {
   for (const id of ['gorsic-2020/straight-back/lumbar', 'gorsic-2020/straight-front/lumbar']) {
     const c = comparisons.find((item) => item.id === id);
     const values = sweep.map((row) => row.changed.get(id).value);
-    const passed = values.filter((value) => Math.abs(value - c.reference) <= c.tolerance + 1e-8).length;
-    console.log(`${id}: ${Math.min(...values).toFixed(4)}–${Math.max(...values).toFixed(4)}，${passed}/${shares.length} 通過`);
+    console.log(`${id}: ${Math.min(...values).toFixed(4)}–${Math.max(...values).toFixed(4)}，${c.category === 'definition-mismatch' ? '定義不一致，僅顯示敏感度' : '可比較'}`);
   }
 } else if (mode !== '--check') {
   console.log(`數值驗證：可比較 ${summary.count} 筆，PASS ${summary.pass}，FAIL ${summary.fail}；假設敏感通過 ${summary.assumptionSensitivePass} 筆；定義不一致 ${summary.definitionMismatch}、探索性 ${summary.exploratory}、一致性檢查 ${summary.consistencyCheck}；門檻未變`);

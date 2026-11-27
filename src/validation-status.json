@@ -2,10 +2,10 @@
   "modelVersion": "0.10.0",
   "summary": {
     "total": 75,
-    "count": 44,
+    "count": 42,
     "pass": 32,
-    "fail": 12,
-    "definitionMismatch": 24,
+    "fail": 10,
+    "definitionMismatch": 26,
     "exploratory": 3,
     "consistencyCheck": 4,
     "assumptionSensitivePass": 3,
@@ -31,12 +31,12 @@
         ]
       },
       "moments": {
-        "status": "failed",
+        "status": "partial",
         "total": 8,
-        "count": 5,
+        "count": 4,
         "pass": 4,
-        "fail": 1,
-        "definitionMismatch": 0,
+        "fail": 0,
+        "definitionMismatch": 1,
         "exploratory": 3,
         "consistencyCheck": 0,
         "assumptionSensitivePass": 1,
@@ -106,7 +106,7 @@
       }
     },
     "front-squat": {
-      "calibrationCaveat": "沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 軀幹角比對失敗。見 docs/research/results/squat.md。",
+      "calibrationCaveat": "沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 群體軀幹角比對失敗。見 docs/research/results/squat.md。",
       "kinematics": {
         "status": "partial",
         "total": 3,
@@ -125,10 +125,10 @@
       "moments": {
         "status": "failed",
         "total": 5,
-        "count": 5,
+        "count": 4,
         "pass": 3,
-        "fail": 2,
-        "definitionMismatch": 0,
+        "fail": 1,
+        "definitionMismatch": 1,
         "exploratory": 0,
         "consistencyCheck": 0,
         "assumptionSensitivePass": 1,
