@@ -331,7 +331,7 @@ export const LIFTS = {
       { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'load', label: '腰掛負重', left: '徒手', right: '25 kg', min: 0, max: 25, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
     ],
-    standardNote: '從近乎伸直的懸垂姿勢拉到下巴過槓，雙手共同握住固定單槓。',
+    standardNote: '可踩踏台抓住固定單槓，再讓雙腳離台，從近乎伸直的懸垂姿勢拉到下巴過槓。踏台不參與動作中支撐。',
   },
   assistpullup: {
     forearmContact: 'fixed',
@@ -345,7 +345,7 @@ export const LIFTS = {
       { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'assist', label: '膝墊輔助', left: '0 kg', right: '60 kg', min: 0, max: 60, step: 5, def: 30, joint: 'equip', mech: 'A', unit: ' kg' },
     ],
-    standardNote: '雙膝跪在輔助墊上，膝墊向上托住部分體重。',
+    standardNote: '可踩踏台或器械踏階握住固定握把，再把雙膝放上輔助墊；動作中膝墊向上托住部分體重。',
   },
   squat: {
     name: '深蹲', bottomLabel: '最低點',
@@ -3544,7 +3544,7 @@ function suspendedPose(P, e, type) {
   const handX = dip ? 0.32 : 0.167 * P.width;
   const handZ = 0;
   const lean = rad(P.lean) * (dip ? 1 : -1);
-  const shoulderY = dip ? lerp(1.58, 1.31 - 0.08 * P.depth, e) : lerp(2.17, 1.77, e);
+  let shoulderY = dip ? lerp(1.58, 1.31 - 0.08 * P.depth, e) : lerp(2.17, 1.77, e);
   const make = (shift) => {
     const u = [0, Math.cos(lean), Math.sin(lean)];
     const hip = [0, shoulderY - BODY.Ltr * u[1], shift];
@@ -3565,7 +3565,8 @@ function suspendedPose(P, e, type) {
       pose.toeDir = [0, 0, -1];
       if (Math.abs(dz) >= BODY.Lt) { pose.ok = false; pose.conflict = '骨盆與固定膝墊距離超出大腿長'; }
     } else {
-      const ankle = [0.14, hip[1] - (dip ? 0.52 : 0.7), hip[2] - (dip ? 0.28 : 0.18)];
+      const legScale = dip ? 1 : (BODY.Ls + BODY.Lt) / (DEFAULT_BODY.Ls + DEFAULT_BODY.Lt);
+      const ankle = [0.14, hip[1] - (dip ? 0.52 : 0.7 * legScale), hip[2] - (dip ? 0.28 : 0.18 * legScale)];
       if (!legChain(pose, ankle, [0, 0, -1], [BODY.hipHalf, hip[1], hip[2]])) {
         pose.ok = false; pose.conflict = '腿部姿勢超出可達範圍';
       }
@@ -3585,7 +3586,19 @@ function suspendedPose(P, e, type) {
     if (bodyweightCenter(p, P, assisted ? P.assist : 0).z > handZ) hi = mid;
     else lo = mid;
   }
-  const pose = make((lo + hi) / 2);
+  const shift = (lo + hi) / 2;
+  let pose = make(shift);
+  if (!dip) {
+    // 單槓固定在 2.35 m；懸垂底點肩高由臂長決定，避免手臂超出骨長。
+    // 站上踏台只為抓到槓；踏台不在動作中接觸腳，也不加入支撐反力。
+    const S = pose.R.shoulder, H = [handX, handY, handZ];
+    const horizontal = Math.hypot(H[0] - S[0], H[2] - S[2]);
+    const maxReach = BODY.Lu + BODY.Lf - 0.012;
+    if (horizontal < maxReach) {
+      shoulderY += e * (H[1] - S[1] - Math.sqrt(maxReach ** 2 - horizontal ** 2));
+      pose = make(shift);
+    }
+  }
   if (Math.abs(bodyweightCenter(pose, P, assisted ? P.assist : 0).z - handZ) > 0.025) {
     pose.warn.push('重心未落在手部支撐線，懸垂姿勢不穩');
   }
