@@ -2,23 +2,23 @@
   "modelVersion": "0.10.0",
   "summary": {
     "total": 58,
-    "pass": 52,
-    "fail": 6,
+    "pass": 49,
+    "fail": 9,
     "byEvidence": {
       "direct": {
-        "total": 35,
-        "pass": 30,
+        "total": 33,
+        "pass": 28,
         "fail": 5
       },
       "indirect": {
-        "total": 17,
+        "total": 19,
         "pass": 16,
-        "fail": 1
+        "fail": 3
       },
       "inference": {
         "total": 6,
-        "pass": 6,
-        "fail": 0
+        "pass": 5,
+        "fail": 1
       }
     }
   },
@@ -850,7 +850,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.265 a"
+        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.271 a"
       },
       {
         "index": 38,
@@ -862,7 +862,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.554 a vs 寬握 = 0.493 a"
+        "model": "窄握 V 把 = 0.555 a vs 寬握 = 0.493 a"
       }
     ],
     "cable-row": [
@@ -876,7 +876,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.265 a"
+        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.271 a"
       },
       {
         "index": 38,
@@ -888,7 +888,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.554 a vs 寬握 = 0.493 a"
+        "model": "窄握 V 把 = 0.555 a vs 寬握 = 0.493 a"
       },
       {
         "index": 39,
@@ -952,7 +952,7 @@
         "compare": "窄握 (grip=0.7) vs 寬握 (grip=1.5) — 肱二頭肌活化",
         "expected": "窄握 > 寬握",
         "ref": "McAllister 2013 (PMID 22362088, n=16；僅離心期 50% vs 200% BAB 顯著，向心期不顯著，弱／條件式證據)",
-        "model": "窄握 = 0.040 a vs 寬握 = 0.019 a"
+        "model": "窄握 = 0.268 a vs 寬握 = 0.234 a"
       }
     ],
     "leg-curl": [
@@ -1000,15 +1000,15 @@
     "curl": [
       {
         "index": 46,
-        "pass": true,
-        "tie": false,
+        "pass": false,
+        "tie": true,
         "evidence": "inference",
         "evidenceLabel": "解剖／幾何推論",
         "exercise": "槓鈴彎舉（握法）",
         "compare": "反握 (sup) vs 反手正握 (pro) — 肱二頭肌活化",
         "expected": "反握 > 反手正握",
         "ref": "解剖推論（前臂旋前時二頭肌屈肘效率下降；非文獻結果，Kleiber 2015 PMID 26300781 顯示二頭肌 EMG 在各握法間無顯著差異）",
-        "model": "反握 = 0.834 a vs 反手正握 = 0.106 a"
+        "model": "反握 = 0.694 a vs 反手正握 = 0.688 a"
       },
       {
         "index": 47,
@@ -1020,21 +1020,21 @@
         "compare": "反手正握 (pro) vs 反握 (sup) — 肱肌／肱橈肌活化",
         "expected": "反手正握 > 反握",
         "ref": "Kleiber 2015 (PMID 26300781, n=16，實測肱橈肌旋前貢獻顯著較高；註：模型 brach 為肱肌＋肱橈肌合併)",
-        "model": "反手正握 = 1.169 a vs 反握 = 0.830 a"
+        "model": "反手正握 = 0.632 a vs 反握 = 0.474 a"
       }
     ],
     "reverse-curl": [
       {
         "index": 46,
-        "pass": true,
-        "tie": false,
+        "pass": false,
+        "tie": true,
         "evidence": "inference",
         "evidenceLabel": "解剖／幾何推論",
         "exercise": "槓鈴彎舉（握法）",
         "compare": "反握 (sup) vs 反手正握 (pro) — 肱二頭肌活化",
         "expected": "反握 > 反手正握",
         "ref": "解剖推論（前臂旋前時二頭肌屈肘效率下降；非文獻結果，Kleiber 2015 PMID 26300781 顯示二頭肌 EMG 在各握法間無顯著差異）",
-        "model": "反握 = 0.834 a vs 反手正握 = 0.106 a"
+        "model": "反握 = 0.694 a vs 反手正握 = 0.688 a"
       },
       {
         "index": 47,
@@ -1046,7 +1046,7 @@
         "compare": "反手正握 (pro) vs 反握 (sup) — 肱肌／肱橈肌活化",
         "expected": "反手正握 > 反握",
         "ref": "Kleiber 2015 (PMID 26300781, n=16，實測肱橈肌旋前貢獻顯著較高；註：模型 brach 為肱肌＋肱橈肌合併)",
-        "model": "反手正握 = 1.169 a vs 反握 = 0.830 a"
+        "model": "反手正握 = 0.632 a vs 反握 = 0.474 a"
       }
     ],
     "pec-deck": [
@@ -1072,7 +1072,7 @@
         "compare": "握把式 (handle) vs 前臂墊式 (pad) — 屈肘肌群 (brach) 活化",
         "expected": "握把式 > 前臂墊式",
         "ref": "力學／解剖推論（握把式需屈肘肌等長維持微彎肘角；前臂墊式阻力直接作用於前臂且垂直於屈肘平面，無直接 EMG 對照文獻）",
-        "model": "握把式 = 0.518 a vs 前臂墊式 = 0.000 a"
+        "model": "握把式 = 0.523 a vs 前臂墊式 = 0.000 a"
       }
     ],
     "cable-fly-high": [
@@ -1184,53 +1184,53 @@
     "db-curl": [
       {
         "index": 53,
-        "pass": true,
+        "pass": false,
         "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
         "exercise": "啞鈴彎舉（反握 vs 錘式）",
         "compare": "反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化",
         "expected": "反握 > 錘式對握",
-        "ref": "Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)",
-        "model": "反握 = 0.754 a vs 錘式對握 = 0.275 a"
+        "ref": "Coratella et al. 2023 (PMID 36976950，滑輪雙手短槓反握 vs 雙手繩索對握；向心期二頭肌 sEMG 約 +12%；此處獨立啞鈴為跨器材外推)",
+        "model": "反握 = 0.354 a vs 錘式對握 = 0.470 a"
       },
       {
         "index": 54,
-        "pass": true,
+        "pass": false,
         "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
         "exercise": "啞鈴彎舉（錘式 vs 反握）",
         "compare": "錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化",
         "expected": "錘式對握 > 反握",
-        "ref": "Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)",
-        "model": "錘式對握 = 0.845 a vs 反握 = 0.730 a"
+        "ref": "Coratella et al. 2023 (PMID 36976950，滑輪雙手短槓 vs 雙手繩索；對握前三角肌 sEMG 約 +9%；此處獨立啞鈴為跨器材外推)",
+        "model": "錘式對握 = 0.819 a vs 反握 = 0.843 a"
       }
     ],
     "hammer-curl": [
       {
         "index": 53,
-        "pass": true,
+        "pass": false,
         "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
         "exercise": "啞鈴彎舉（反握 vs 錘式）",
         "compare": "反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化",
         "expected": "反握 > 錘式對握",
-        "ref": "Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)",
-        "model": "反握 = 0.754 a vs 錘式對握 = 0.275 a"
+        "ref": "Coratella et al. 2023 (PMID 36976950，滑輪雙手短槓反握 vs 雙手繩索對握；向心期二頭肌 sEMG 約 +12%；此處獨立啞鈴為跨器材外推)",
+        "model": "反握 = 0.354 a vs 錘式對握 = 0.470 a"
       },
       {
         "index": 54,
-        "pass": true,
+        "pass": false,
         "tie": false,
-        "evidence": "direct",
-        "evidenceLabel": "文獻直接量到",
+        "evidence": "indirect",
+        "evidenceLabel": "文獻相關非直接",
         "exercise": "啞鈴彎舉（錘式 vs 反握）",
         "compare": "錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化",
         "expected": "錘式對握 > 反握",
-        "ref": "Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)",
-        "model": "錘式對握 = 0.845 a vs 反握 = 0.730 a"
+        "ref": "Coratella et al. 2023 (PMID 36976950，滑輪雙手短槓 vs 雙手繩索；對握前三角肌 sEMG 約 +9%；此處獨立啞鈴為跨器材外推)",
+        "model": "錘式對握 = 0.819 a vs 反握 = 0.843 a"
       }
     ],
     "lat-raise": [
