@@ -3821,6 +3821,14 @@ export function analyze(lift, P, e) {
     for (const m of muscles) if (m.group === 'bic') pref[m.id] *= pref.bic;
     delete pref.bic;
   }
+  // 拆分不變的努力成本：同群同活化時，Σ aᵢ²/prefᵢ = a²/pref群組。
+  // F群組只計本動作參與求解的子部位；膝屈時含 bfsh，只有髖伸時不含不跨髖的 bfsh。
+  for (const id of Object.keys(MUSCLE_GROUPS)) {
+    const children = muscles.filter((m) => m.group === id);
+    if (!children.length) continue;
+    const groupF = children.reduce((sum, m) => sum + m.F, 0);
+    for (const m of children) pref[m.id] *= groupF / m.F;
+  }
 
   // 由力臂定義 r(θ) = -∂L/∂θ，對隨角度變化的力臂沿自由度區間積分 ΔL = -∫ r(θ) dθ，
   // 避免端點力臂劇烈變化時以 r(q)·(q - q_ref) 放大位移與被動張力。
