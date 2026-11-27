@@ -2,7 +2,7 @@
 import { analyze, defaultParams, MUSCLES, MUSCLE_GROUPS, MUSCLE_GROUP_IDS, SHOULDER_PARAMETER_SET } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
-const expectedGroups = SHOULDER_PARAMETER_SET === 'das3' ? 34 : 32;
+const expectedGroups = SHOULDER_PARAMETER_SET === 'das3' ? 36 : 34;
 if (MUSCLE_GROUP_IDS.length !== expectedGroups) throw new Error(`一般視圖預期 ${expectedGroups} 群，收到 ${MUSCLE_GROUP_IDS.length}`);
 const byGroup = Object.fromEntries(Object.keys(MUSCLE_GROUPS).map((id) => [id, MUSCLES.filter((m) => m.group === id)]));
 for (const [id, children] of Object.entries(byGroup)) if (children.length < 2) throw new Error(`${id} 子部位不足`);

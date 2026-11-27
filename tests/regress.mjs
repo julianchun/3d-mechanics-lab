@@ -25,7 +25,8 @@ for (const c of CATALOG) {
 const jointBase = JSON.parse(fs.readFileSync(JOINT_FILE));
 for (const [key, expected] of Object.entries(jointBase)) {
   const actual = snap[key]?.dem;
-  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+  const oldAxes = actual && Object.fromEntries(Object.keys(expected).map((axis) => [axis, actual[axis]]));
+  if (JSON.stringify(oldAxes) !== JSON.stringify(expected)) {
     console.error(`關節力矩改變：${key} ${JSON.stringify(expected)} → ${JSON.stringify(actual)}`);
     process.exit(1);
   }

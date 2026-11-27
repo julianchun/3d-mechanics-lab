@@ -2,8 +2,9 @@
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
+import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.9.0';
+export const MODEL_VERSION = '0.10.0';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -397,8 +398,6 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
     pose: rowPose, loads: handBarLoads,
     moving: ['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
-    // 正握時肱二頭肌處於旋前、力臂效率較差，屈肘改由肱肌／肱橈肌多分擔
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.supin === 'sup' ? 1.6 : 0.6; },
     params: [
       { key: 'torso', label: '軀幹前傾', left: '30°（較直立）', right: '85°（接近水平）', min: 30, max: 85, step: 1, def: 60, joint: 'lumbar', mech: 'A', unit: '°' },
       { key: 'grip', label: '握距（× 肩峰寬）', left: '1.0', right: '2.0', min: 1, max: 2, step: 0.01, def: 1.3, joint: 'hand', mech: 'A' },
@@ -468,7 +467,6 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
     pose: curlPose, loads: handBarLoads,
     moving: ['elbExt'],
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.supin === 'pro' ? 0.6 : 1.6; },
     params: [
       { key: 'supin', label: '握法', type: 'select', options: [['sup', '反握（掌心朝上）'], ['pro', '正握（反手彎舉）']], def: 'sup', joint: 'hand', mech: 'A' },
       { key: 'grip', label: '握距（× 肩峰寬）', left: '0.8', right: '1.6', min: 0.8, max: 1.6, step: 0.01, def: 1.1, joint: 'hand', mech: 'A' },
@@ -486,7 +484,6 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
     pose: shrugPose, loads: handBarLoads,
     moving: ['scElev', 'scRet'],
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= 0.6; },
     params: [
       { key: 'grip', label: '握距（× 肩峰寬）', left: '1.0', right: '1.6', min: 1, max: 1.6, step: 0.01, def: 1.15, joint: 'hand', mech: 'A' },
       { key: 'height', label: '聳起高度', left: '小（約 10°）', right: '盡量高（約 30°）', min: 0, max: 1, step: 0.01, def: 0.7, joint: 'scap', mech: 'A' },
@@ -502,7 +499,6 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
     pose: uprowPose, loads: handBarLoads,
     moving: ['shSide', 'scElev', 'elbExt'],
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= 0.6; },
     params: [
       { key: 'grip', label: '握距（× 肩峰寬）', left: '0.6（窄）', right: '1.6（寬）', min: 0.6, max: 1.6, step: 0.01, def: 1.2, joint: 'hand', mech: 'A' },
       { key: 'height', label: '拉到哪裡', left: '下胸', right: '鎖骨', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'bar', mech: 'A' },
@@ -572,7 +568,6 @@ export const LIFTS = {
     seated: true, dofs: ['trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
     pose: pulldownPose, loads: cableLoads,
     moving: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.supin === 'sup' ? 1.6 : 0.6; },
     params: [
       { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.pulldown.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'grip', label: '握距（× 肩峰寬）', left: '1.0', right: '2.2', min: 1, max: 2.2, step: 0.01, def: 1.7, joint: 'hand', mech: 'A' },
@@ -591,7 +586,6 @@ export const LIFTS = {
     seated: true, dofs: ['trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
     pose: cableRowPose, loads: cableLoads,
     moving: ['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.grip === 'v' ? 1.0 : 0.6; },
     params: [
       { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: MACHINES.cablerow.pulleyRatioDefault, joint: 'equip', mech: 'A' },
       { key: 'grip', label: '握把', type: 'select', options: [['v', 'V 把（窄、對握）'], ['wide', '寬握桿（正握）']], def: 'v', joint: 'hand', mech: 'A' },
@@ -840,8 +834,6 @@ export const LIFTS = {
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
     pose: dbCurlPose, loads: dumbbellLoads,
     moving: ['elbExt'],
-    // 沿用現有握法偏好機制：反握（sup）1.6×、對握／錘式（neutral）1.0×（同坐姿划船 V 把）
-    adjust: (P, pref) => { if (pref.bic !== undefined) pref.bic *= P.grip === 'neutral' ? 1.0 : 1.6; },
     params: [
       { key: 'grip', label: '握法', type: 'select', options: [['sup', '反握（掌心朝上）'], ['neutral', '錘式（掌心相對）']], def: 'sup', joint: 'hand', mech: 'A' },
       { key: 'elbFwd', label: '上臂前移角度', left: '0°（貼身）', right: '35°（前移）', min: 0, max: 35, step: 1, def: 10, joint: 'shoulder', mech: 'A', unit: '°' },
@@ -849,7 +841,7 @@ export const LIFTS = {
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
       { key: 'prefBB', label: '屈肘肌偏好', left: '偏二頭', right: '偏肱肌／肱橈肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['bic'], ['brach']] },
     ],
-    standardNote: '站姿雙手各持啞鈴垂於體側（不需受直槓寬度限制），上臂貼身或頂點微前移，控制下放不借力後仰；反握偏二頭、錘式對握由二頭與肱肌／肱橈肌共同分擔。',
+    standardNote: '站姿雙手各持啞鈴垂於體側（不需受直槓寬度限制），上臂貼身或頂點微前移，控制下放不借力後仰；握法會改變前臂旋轉力矩平衡。',
   },
   dbreversefly: {
     name: '俯身啞鈴反向飛鳥', topLabel: '展開頂點', bottomLabel: '垂手下方',
@@ -886,6 +878,8 @@ export const LIFTS = {
     standardNote: '雙手於胸前垂直捧住一顆啞鈴上端、手肘自然下垂靠胸前；前側配重讓軀幹較背蹲直立、膝伸參與比例提高。',
   },
 };
+// 凡分析肘力矩的動作，同時平衡前臂長軸力矩；零外力矩也須由肌肉互相抵銷。
+for (const lift of Object.values(LIFTS)) if (lift.dofs.includes('elbExt')) lift.dofs.push('foreRot');
 // 自由站姿共用的教練控制量：幾何足底中點為 0，正值往腳尖、負值往腳跟。
 const BALANCE_LIFTS = new Set(['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
   'latraise', 'dbcurl', 'dbreversefly', 'pushdown', 'cablefly']);
@@ -1063,11 +1057,14 @@ export const MUSCLES = [
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
   // 二頭肌兩頭的肩屈基值分別取 MOBL_ARMS_41.osim 0° 路徑弦長 16.0／21.6 mm；
   // Landin 2008（PMID 17196396，電刺激＋測力儀）測得上舉 ≥60° 肩上提力矩近零，此處 0°→60° 線性歸零且省略肘角相依為估計。
-  { id: 'bicLong', group: 'bic', name: '肱二頭肌長頭', F: 525.1, Lf: 0.1157, Lmt: 0.3880, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
-  { id: 'bicShort', group: 'bic', name: '肱二頭肌短頭', F: 316.8, Lf: 0.1321, Lmt: 0.3244, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
-  // 肘屈力臂比例取 MoBL-ARMS 的 45° 跨肘路徑弦；加權平均維持原功能群的肘屈能力。
-  { id: 'brachialis', group: 'brach', name: '肱肌', F: 1177.37, Lf: 0.0858, Lmt: 0.1393, arms: { elbExt: (q) => angleSlope(-0.025, 'elbFlex', -0.006)(q) * 0.681 } },
-  { id: 'brachioradialis', group: 'brach', name: '肱橈肌', F: 276.0, Lf: 0.1726, Lmt: 0.3056, arms: { elbExt: (q) => angleSlope(-0.025, 'elbFlex', -0.006)(q) * 2.361 } },
+  { id: 'bicLong', group: 'bic', name: '肱二頭肌長頭', F: 525.1, Lf: 0.1157, Lmt: 0.3880, arms: { elbExt: (q) => forearmArm('bicLong', 'elbExt', q), foreRot: (q) => forearmArm('bicLong', 'foreRot', q), shFwd: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
+  { id: 'bicShort', group: 'bic', name: '肱二頭肌短頭', F: 316.8, Lf: 0.1321, Lmt: 0.3244, arms: { elbExt: (q) => forearmArm('bicShort', 'elbExt', q), foreRot: (q) => forearmArm('bicShort', 'foreRot', q), shFwd: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
+  // 肘屈與旋前／旋後力臂取固定版 MoBL-ARMS 路徑點弦的角度表。
+  { id: 'brachialis', group: 'brach', name: '肱肌', F: 1177.37, Lf: 0.0858, Lmt: 0.1393, arms: { elbExt: (q) => forearmArm('brachialis', 'elbExt', q) } },
+  { id: 'brachioradialis', group: 'brach', name: '肱橈肌', F: 276.0, Lf: 0.1726, Lmt: 0.3056, arms: { elbExt: (q) => forearmArm('brachioradialis', 'elbExt', q), foreRot: (q) => forearmArm('brachioradialis', 'foreRot', q) } },
+  { id: 'pronatorTeres', group: 'pronators', name: '旋前圓肌', F: FOREARM_MUSCLE_SOURCE.pronatorTeres.F, Lf: FOREARM_MUSCLE_SOURCE.pronatorTeres.Lf, Lmt: FOREARM_MUSCLE_SOURCE.pronatorTeres.Lf + FOREARM_MUSCLE_SOURCE.pronatorTeres.Lt, arms: { elbExt: (q) => forearmArm('pronatorTeres', 'elbExt', q), foreRot: (q) => forearmArm('pronatorTeres', 'foreRot', q) } },
+  { id: 'pronatorQuadratus', group: 'pronators', name: '旋前方肌', F: FOREARM_MUSCLE_SOURCE.pronatorQuadratus.F, Lf: FOREARM_MUSCLE_SOURCE.pronatorQuadratus.Lf, Lmt: FOREARM_MUSCLE_SOURCE.pronatorQuadratus.Lf + FOREARM_MUSCLE_SOURCE.pronatorQuadratus.Lt, arms: { foreRot: (q) => forearmArm('pronatorQuadratus', 'foreRot', q) } },
+  { id: 'supinator', name: '旋後肌', F: FOREARM_MUSCLE_SOURCE.supinator.F, Lf: FOREARM_MUSCLE_SOURCE.supinator.Lf, Lmt: FOREARM_MUSCLE_SOURCE.supinator.Lf + FOREARM_MUSCLE_SOURCE.supinator.Lt, arms: { foreRot: (q) => forearmArm('supinator', 'foreRot', q) } },
   { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: fittedArms('tmaj') },
   { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFwd: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'fwd'), shSide: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'side') } },
   { id: 'infra', name: '棘下肌／小圓肌', F: 1345.3, Lf: 0.0752, Lmt: 0.1141, arms: { shRot: -0.025 } },
@@ -1138,7 +1135,7 @@ if (SHOULDER_PARAMETER_SET === 'das3') {
 }
 export const MUSCLE_GROUPS = {
   hams: { name: '膕繩肌' }, gmax: { name: '臀大肌' }, gmed: { name: '臀中肌' }, addmag: { name: '內收大肌' },
-  bic: { name: '肱二頭肌' }, brach: { name: '肱肌／肱橈肌' },
+  bic: { name: '肱二頭肌' }, brach: { name: '肱肌／肱橈肌' }, pronators: { name: '前臂旋前肌' },
   ...(SHOULDER_PARAMETER_SET === 'das3' ? {
     pecs: { name: '胸大肌（中下胸）' }, lat: { name: '背闊肌' }, midtrap: { name: '斜方肌中束／菱形肌' },
     serr: { name: '前鋸肌' }, infra: { name: '棘下肌／小圓肌' },
@@ -1162,7 +1159,8 @@ const FIBER_GEOMETRY = {
   sol: [0.2768, 0.3814], ta: [0.2405, 0.1952], pecs: [0.1075, 0.4463],
   pecc: [0.0028, 0.2967], adelt: [0.0930, 0.3840], pdelt: [0.0380, 0.3142],
   lat: [0.1473, 0.3781], trilong: [0.1430, 0.2094], trilat: [0.0944, 0.1571],
-  bicLong: [0.2723, 0], bicShort: [0.1923, 0], brachialis: [0.0535, 0], brachioradialis: [0.1330, 0], tmaj: [0.0200, 0.2793],
+  bicLong: [0.2723, 0], bicShort: [0.1923, 0], brachialis: [0.0535, 0], brachioradialis: [0.1330, 0],
+  pronatorTeres: [0.0980, 0.1745], pronatorQuadratus: [0.0050, 0.1745], supinator: [0.0280, 0], tmaj: [0.0200, 0.2793],
   corb: [0.0970, 0.4712], infra: [0.0389, 0.3491], supsp: [0.0395, 0.1222], subsc: [0.0330, 0.3491],
   mdelt: [0.1095, 0.2618],
 };
@@ -1170,7 +1168,7 @@ if (SHOULDER_PARAMETER_SET === 'das3') {
   for (const [id, data] of Object.entries(DAS3_SHOULDER)) FIBER_GEOMETRY[id] = [data.Lt, data.alpha];
 }
 
-const DOF_REF = { hipExt: rad(-40), hipAbd: 0, kneeExt: rad(-50), ankPF: rad(-10), trunkExt: 0, shFwd: rad(20), shSide: rad(10), shRot: 0, elbExt: rad(-70), scRet: 0, scElev: 0 };
+const DOF_REF = { hipExt: rad(-40), hipAbd: 0, kneeExt: rad(-50), ankPF: rad(-10), trunkExt: 0, shFwd: rad(20), shSide: rad(10), shRot: 0, elbExt: rad(-70), foreRot: 0, scRet: 0, scElev: 0 };
 // 只在部分動作分析的自由度：沒分析時，肌肉在這些方向的力臂直接忽略（例如背闊肌在臥推只算屈伸）
 const OPTIONAL_DOFS = ['shFwd', 'shSide', 'shRot', 'scRet', 'scElev'];
 export function liftMuscles(lift) {
@@ -3644,6 +3642,14 @@ export function solvePose(lift, P, e) {
     pose.warn.push('手臂無法到達握點，請調整站位或握距');
   pose.lift = lift;
   pose.body = BODY;
+  if (LIFTS[lift].dofs.includes('foreRot')) {
+    // MoBL-ARMS pro_sup 的 0° 是中立位；右前臂旋前為正。
+    const grip = P.supin || (typeof P.grip === 'string' ? P.grip : null);
+    const neutral = grip ? ['neutral', 'v'].includes(grip)
+      : ['dips', 'dbpress', 'dbreversefly', 'latraise', 'cablefly', 'pecdeck'].includes(lift);
+    pose.foreRot = neutral ? 0 : grip === 'sup' ? rad(-80) : rad(80);
+    pose.supinated = pose.foreRot < rad(-40);
+  }
   return pose;
 }
 
@@ -3778,6 +3784,10 @@ function musMoment(forces, J, regions) {
   return neg(M);
 }
 
+export function forearmAxialDemand(forces, elbow, hand) {
+  return dot(musMoment(forces, elbow, ['fore']), norm(sub(hand, elbow)));
+}
+
 function jointAngles(pose) {
   const R = pose.R, q = {};
   const angIn = (v, down, fwd) => Math.atan2(dot(v, fwd), dot(v, down));
@@ -3807,6 +3817,7 @@ function jointAngles(pose) {
   const pole = pose.armPole || pose.f;
   const ref = len(forePlane) > 0.04 ? forePlane : sub(pole, mul(h, dot(pole, h)));
   q.elbFlex = Math.acos(clamp(dot(h, fo), -1, 1));
+  q.foreRot = pose.foreRot || 0;
   // 全域軸旋置信權重：手肘接近伸直時前臂投影極短，軸旋無法可靠辨認；
   // 由 15°→60° 線性改為 15°→110° smoothstep 以消除肩推（8.54°→2.07°）、直立划船（8.44°→2.48°）與寬握划船（5.46°→1.21°）的軸旋步長跳動；
   // 影響所有屈肘含肩動作的 q.shRot 與軸旋肌肉長度代理，對划船、彎舉、下拉前四名排名無變動。
@@ -3815,7 +3826,7 @@ function jointAngles(pose) {
   q.shRot = Math.atan2(dot(ref, refS), dot(ref, refF)) * rotConfidence;
   q.dof = {
     hipExt: -(q.hipFlex || 0), hipAbd: q.hipAbd || 0, kneeExt: -(q.kneeFlex || 0), ankPF: -(q.ankleDorsi || 0),
-    trunkExt: pose.trunkExt || 0, shFwd: q.shFwd, shSide: q.shSide, shRot: q.shRot, elbExt: -q.elbFlex, scRet: pose.girdle?.ret || 0, scElev: pose.girdle?.elev || 0,
+    trunkExt: pose.trunkExt || 0, shFwd: q.shFwd, shSide: q.shSide, shRot: q.shRot, elbExt: -q.elbFlex, foreRot: q.foreRot, scRet: pose.girdle?.ret || 0, scElev: pose.girdle?.elev || 0,
   };
   return q;
 }
@@ -3887,6 +3898,10 @@ export function analyze(lift, P, e) {
     const ef = Math.acos(clamp(dot(norm(sub(R.elbow, R.shoulder)), norm(sub(R.hand, R.elbow))), -1, 1));
     if (dem.elbExt < 0) dem.elbExt *= clamp((deg(ef) - 8) / 17, 0, 1);
   }
+  if (has('foreRot')) {
+    // 只取手與前臂外力在肘至掌心長軸上的分量；握把偏心自然形成軸向偶矩。
+    dem.foreRot = forearmAxialDemand(forces, R.elbow, R.hand);
+  }
   if (has('scRet')) {
     // 手臂的負荷經肩關節傳到肩胛，再由肩胛肌群固定在軀幹上：力矩取在胸鎖關節
     const SCJ = toWorld(pose, girdleForBody().scj);
@@ -3908,13 +3923,6 @@ export function analyze(lift, P, e) {
   const lb = Object.fromEntries(muscles.map((m) => [m.id, 0]));
   if (P.brace && lb.ra !== undefined) lb.ra = 0.3 * P.brace;
   L.lowerBounds?.(P, lb);
-  // 舊動作的二頭肌握法偏好仍以合群 id 表示，再分配到子部位。
-  if (muscles.some((m) => m.group === 'bic')) pref.bic = 1;
-  L.adjust?.(P, pref);
-  if (pref.bic !== undefined) {
-    for (const m of muscles) if (m.group === 'bic') pref[m.id] *= pref.bic;
-    delete pref.bic;
-  }
   // 拆分不變的努力成本：同群同活化時，Σ aᵢ²/prefᵢ = a²/pref群組。
   // F群組只計本動作參與求解的子部位；膝屈時含 bfsh，只有髖伸時不含不跨髖的 bfsh。
   for (const id of Object.keys(MUSCLE_GROUPS)) {
@@ -3928,7 +3936,7 @@ export function analyze(lift, P, e) {
   // 避免端點力臂劇烈變化時以 r(q)·(q - q_ref) 放大位移與被動張力。
   const DOF_ANGLE_MAP = {
     hipExt: ['hipFlex', -1], kneeExt: ['kneeFlex', -1], ankPF: ['ankleDorsi', -1],
-    shFwd: ['shFwd', 1], shSide: ['shSide', 1], shRot: ['shRot', 1], elbExt: ['elbFlex', -1],
+    shFwd: ['shFwd', 1], shSide: ['shSide', 1], shRot: ['shRot', 1], elbExt: ['elbFlex', -1], foreRot: ['foreRot', 1],
   };
   const qSample = { ...q };
   const integrateArm = (armFn, key, sign, lo, hi) => {

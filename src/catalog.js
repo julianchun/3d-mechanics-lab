@@ -96,7 +96,7 @@ export const CATALOG = [
 export const MUSCLE_SHORT = {
   vasti: '股四頭', rf: '股四頭', hams: '膕繩肌', gmax: '臀大肌', gmed: '臀中肌', addl: '內收長／短肌', addmag: '內收大肌', erec: '腰背伸肌',
   pecs: '胸大肌', pecc: '上胸', adelt: '前三角', mdelt: '中三角', pdelt: '後三角', lat: '背闊肌',
-  trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌', gas: '腓腸肌', sol: '比目魚肌',
+  trilat: '三頭', trilong: '三頭', bic: '二頭', brach: '肱肌', pronators: '旋前肌', supinator: '旋後肌', midtrap: '中斜方／菱形', uptrap: '上斜方', serr: '前鋸肌', gas: '腓腸肌', sol: '比目魚肌',
 };
 
 // 目前的動作＋參數對應到哪一個清單項目（參數被改過、對不上任何變化式時回傳 null）

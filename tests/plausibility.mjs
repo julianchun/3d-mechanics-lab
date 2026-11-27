@@ -48,14 +48,6 @@ const KNOWN_ISSUES = [
     cause: '峰值幀髖外展需求為臀推 +30.6、深蹲 −22.4 N·m；中下部在模型中為髖內收肌，深蹲的額狀面需求增加其分配。髖伸共用繞行估計，支撐反力亦未與研究條件校準',
     fix: '以同負重條件的區域肌電與三維力矩重新核對；%MVIC 不與模型活化數值等同',
   },
-  ...[
-    ['curl', '前三角肌 0.831、肱二頭肌 0.780；詳細視圖肱橈肌峰值 0.751'],
-    ['db-curl', '前三角肌 0.744、肱二頭肌 0.690；詳細視圖肱橈肌峰值 0.719'],
-  ].map(([id, current]) => ({
-    id, rule: 'rank:first', kind: '彎舉分配待驗證', current,
-    cause: '現有肱橈肌肘屈力臂按 45° 來源弦比例映射，模型缺前臂旋前／旋後自由度；其分配與肩前舉穩定需求尚未以同條件資料校準',
-    fix: '量測不同握法的肘屈與肩前舉力矩，加入可核對的前臂旋轉模型後再評估',
-  })),
   ...['deadlift', 'deficit-dl'].map((id) => ({
     id, rule: 'activation:erec', kind: '起槓幾何變更',
     current: '離地端腰背伸肌模型活化略高於 1',
@@ -95,9 +87,9 @@ const KNOWN_ISSUES = [
     fix: '待以 OpenSim 肩帶模型與肩推三軸肌電／運動學資料檢核肩胛平面推舉分攤，暫不手調模型參數',
   },
   {
-    id: 'hammer-curl', rule: 'rank:first', kind: '新動作', current: '錘式彎舉前三角肌（0.75）高於肱二頭肌（0.59）與肱肌／肱橈肌（0.51）',
-    cause: '詳細視圖肱橈肌峰值 0.932，肱肌僅 0.269；肘屈力臂採 45° 來源弦比例，缺前臂旋前／旋後自由度，肩前舉穩定需求也集中到前三角肌',
-    fix: '核對對握的肘屈／肩前舉力矩及肱橈肌區域資料，再建立前臂旋轉模型',
+    id: 'hammer-curl', rule: 'rank:first', kind: '前臂旋轉模型', current: '詳細視圖肱橈肌約 1.33，但一般視圖與肱肌合群後前三角肌仍居首',
+    cause: '中立握時肱橈肌與肱肌的力臂及活化差異很大；一般視圖採 F 加權合群，肱肌的較大 F 降低群組平均值',
+    fix: '以同條件量測核對肱橈肌區域肌電與群組呈現方式，暫不調整肌肉力臂或偏好',
   },
   {
     id: 'db-reverse-fly', rule: 'activation:pdelt', kind: '新動作', current: '預設每顆 6 kg 啞鈴於展開頂點時三角肌後束主動活化（1.15）超過 1.0',
@@ -117,14 +109,8 @@ const KNOWN_ISSUES = [
   {
     id: 'uprow', rule: 'rank:notFirst',
     kind: '既有問題', current: '棘下肌／小圓肌仍居首',
-    cause: '握把力線沿上臂軸造成外旋需求；新增棘上肌後仍由棘下肌／小圓肌承擔最多，現有模型缺握把接觸偶矩與旋前自由度',
+    cause: '握把力線沿上臂軸造成外旋需求；新增棘上肌與前臂旋轉自由度後，仍由棘下肌／小圓肌承擔最多，缺可核對的握把接觸偶矩',
     fix: '取得握把軸向力矩量測並拆分肩袖肌束，再校準外旋分攤',
-  },
-  {
-    id: 'reverse-curl', rule: 'rank:first',
-    kind: '既有問題', current: '正握彎舉前三角肌（0.92）高於肱肌／肱橈肌（0.69）與肱二頭肌（0.47）',
-    cause: '詳細視圖肱橈肌峰值 1.210、肱肌 0.349；肘屈力臂按 45° 來源弦比例映射，但模型缺前臂旋前／旋後自由度，肩前舉需求集中到前三角肌',
-    fix: '核對不同握法的肘屈與肩前舉力矩，加入前臂旋轉自由度後再評估分配',
   },
   ...[
     ['pulldown', '胸大肌仍進前四'],
@@ -143,6 +129,25 @@ const KNOWN_ISSUES = [
     current: `${muscle} 未進前四`,
     cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；Seth 路徑的中斜方等效力臂直接替換又使已通過的划船排名失敗',
     fix: '以 OpenSim 逐點驗證肩胛兩軸力矩與中斜方路徑，再校準功能群能力',
+  })),
+  ...[
+    ['db-curl', 'rank:first', '反握啞鈴彎舉的一般視圖肱肌群略高於肱二頭肌群'],
+    ['db-bench-incline', 'rank:allTop3', '上斜啞鈴臥推前三名未同時包含胸大肌與前三角肌'],
+    ['cable-fly-high', 'rank:first', '高位滑輪夾胸的肱肌／肱橈肌高於胸大肌'],
+    ['cable-fly-mid', 'rank:first', '中位滑輪夾胸的肱肌／肱橈肌高於胸大肌'],
+    ['cable-fly-low', 'rank:first', '低位滑輪夾胸的肱肌／肱橈肌高於胸大肌'],
+    ['pullup', 'activation:brach', '正握引體的肱肌／肱橈肌超過 1'],
+    ['pullup-wide', 'activation:brach', '寬握引體的肱肌／肱橈肌超過 1'],
+    ['chinup', 'activation:supinator', '反手引體的旋後肌超過 1'],
+    ['chinup', 'activation:bic', '反手引體的肱二頭肌超過 1'],
+    ['assist-chinup', 'activation:brach', '輔助反手引體的肱肌／肱橈肌超過 1'],
+    ['assist-chinup', 'rank:top2', '輔助反手引體的背闊肌未進前二'],
+    ['reverse-curl', 'activation:adelt', '正握彎舉的前三角肌略超過 1'],
+    ['reverse-curl', 'activation:brach', '正握彎舉的肱肌／肱橈肌超過 1'],
+  ].map(([id, rule, current]) => ({
+    id, rule, kind: '前臂旋轉模型', current,
+    cause: '改用 MoBL-ARMS 路徑點弦力臂並加入旋轉平衡後，屈肘與旋前／旋後肌分配改變；簡化力臂與手部接觸偶矩尚未以同條件資料校準',
+    fix: '取得同姿勢三維肘與前臂力矩、手部接觸偶矩及肌電資料後核對；暫不為通過排名或超載準則調參',
   })),
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));

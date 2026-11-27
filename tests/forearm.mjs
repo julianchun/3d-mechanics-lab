@@ -1,5 +1,5 @@
 // 前臂旋轉角、外力矩與肌肉平衡；文獻門檻先固定，失敗如實列為已知問題。
-import { analyze, defaultParams, LIFTS, liftMuscles, peakAnalysis } from '../src/biomech.js';
+import { analyze, defaultParams, LIFTS, liftMuscles, peakAnalysis, forearmAxialDemand } from '../src/biomech.js';
 import { forearmArm } from '../src/forearm.js';
 
 const near = (a, b, tol, label) => { if (Math.abs(a - b) > tol) throw new Error(`${label}: ${a} ≠ ${b}`); };
@@ -12,6 +12,8 @@ for (const [grip, expected] of [['sup', -80], ['pro', 80]]) {
   near(r.dem.foreRot, 0, 1e-8, `${grip} 掌心通過握把的軸向外力矩`);
 }
 near(analyze('dbcurl', { ...defaultParams('dbcurl'), grip: 'neutral' }, 0.5).q.foreRot, 0, 1e-8, '中立握角度');
+near(forearmAxialDemand([{ p: [0, 1, 0], F: [100, 0, 0], region: 'fore' }], [0, 0, 0], [0, 1, 0]), 0, 1e-8, '掌心通軸');
+near(forearmAxialDemand([{ p: [0, 1, 0.05], F: [100, 0, 0], region: 'fore' }], [0, 0, 0], [0, 1, 0]), -5, 1e-8, '偏心 5 cm 的 100 N 握把');
 const q = { elbFlex: Math.PI / 2, foreRot: 0 };
 if (!(forearmArm('bicLong', 'foreRot', q) < 0 && forearmArm('pronatorTeres', 'foreRot', q) > 0 &&
       forearmArm('pronatorQuadratus', 'foreRot', q) > 0 && forearmArm('supinator', 'foreRot', q) < 0))
