@@ -142,7 +142,6 @@ const KNOWN_ISSUES = [
     fix: '取得同姿勢三維肘肩力矩、手部接觸偶矩及肌電資料後核對；暫不為通過排名或超載準則調參',
   })),
   ...Object.entries({
-    'cable-row': ['brachioradialis'],
     pullup: ['brachioradialis'],
     'pullup-wide': ['brachioradialis'],
     chinup: ['brachialis', 'brachioradialis'],
