@@ -1625,7 +1625,7 @@ function bisect(g, lo, hi, n = 34) {
 // de Leva 表 4：質心自各節段起點往終點。軀幹 SUPR→MIDH 換成骨盆→肩線；
 // 頭頸 VERT→MIDG 的標記骨架未分出，以現有頭部球體的頂端／下顎代理點（肩上 0.34／0.14 m）映射。
 // 手腕在一般動作由肘→手端 74.6% 估計；深蹲折腕姿勢則使用實際求得的腕點。
-function segmentPoints(pose) {
+export function segmentPoints(pose) {
   const R = pose.R;
   const { mass: MF, cm } = SEGMENTS[BODY.sex];
   const toe = pose.toeDir || [0, 0, 1];
@@ -1653,7 +1653,7 @@ function systemComZ(pose, bar, barW) {
 }
 
 // 腳跟與腳尖的幾何中點；G1 的零點使用實際足底，而非世界座標 z=0。
-function footMidZ(pose) { return (pose.R.heel[2] + pose.R.toe[2]) / 2; }
+export function footMidZ(pose) { return (pose.R.heel[2] + pose.R.toe[2]) / 2; }
 function balanceTargetZ(pose, P) { return footMidZ(pose) + (P.balanceCm || 0) / 100; }
 
 // 槓鈴划船：軀幹角固定、髖往後讓手臂垂下時槓在腳掌中段正上方；槓從垂手位置拉到軀幹
@@ -3770,7 +3770,7 @@ function coronalFootForce(hip, cop, verticalForce) {
   return ((hip[0] - cop[0]) / Math.max(0.3, hip[1] - cop[1])) * verticalForce;
 }
 
-function forcesOf(pose, P, lift) {
+export function forcesOf(pose, P, lift) {
   const L = LIFTS[lift];
   const W = BODY.mass * G;
   const R = pose.R, out = [];
