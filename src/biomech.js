@@ -291,6 +291,7 @@ function ik2(root, target, L1, L2, pole) {
 // mech：A 改姿勢／軌跡、B 等長用力、C 協同肌偏好
 export const LIFTS = {
   pushup: {
+    forearmContact: 'fixed',
     name: '伏地挺身', topLabel: '撐起', bottomLabel: '胸口接近地面',
     viewCenter: [0, 0.42, 0], viewScale: 1.55,
     ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
@@ -306,6 +307,7 @@ export const LIFTS = {
     standardNote: '掌根壓穩、腳尖著地，軀幹與腿維持一直線，下放到胸口接近地面。',
   },
   dips: {
+    forearmContact: 'fixed',
     name: '雙槓撐體', topLabel: '撐起', bottomLabel: '下放',
     viewCenter: [0, 1.0, 0], viewScale: 1.45,
     ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
@@ -318,6 +320,7 @@ export const LIFTS = {
     standardNote: '握住兩側平行槓，腿在身後彎曲，前傾程度決定軀幹姿勢。',
   },
   pullup: {
+    forearmContact: 'fixed',
     name: '引體向上', topLabel: '下巴過槓', bottomLabel: '手臂伸直',
     viewCenter: [0, 1.35, 0], viewScale: 1.7,
     ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
@@ -331,6 +334,7 @@ export const LIFTS = {
     standardNote: '從近乎伸直的懸垂姿勢拉到下巴過槓，雙手共同握住固定單槓。',
   },
   assistpullup: {
+    forearmContact: 'fixed',
     name: '輔助引體機', topLabel: '下巴過槓', bottomLabel: '手臂伸直',
     viewCenter: [0, 1.35, 0], viewScale: 1.7,
     ground: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
@@ -394,6 +398,7 @@ export const LIFTS = {
     standardNote: '髖往後推、膝蓋微彎約 15～20° 且角度幾乎不變、槓沿著大腿滑下、背部中立，下放到膝蓋下方。',
   },
   row: {
+    forearmContact: 'sharedRigid',
     name: '槓鈴划船', topLabel: '手臂伸直', bottomLabel: '觸身',
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
     pose: rowPose, loads: handBarLoads,
@@ -411,6 +416,7 @@ export const LIFTS = {
     standardNote: '軀幹前傾約 45～70°、膝微彎、背部中立，槓從腳掌中段正上方拉到上腹，頂點收肩胛。',
   },
   ohp: {
+    forearmContact: 'sharedRigid',
     name: '站姿肩推', topLabel: '鎖死', bottomLabel: '鎖骨',
     viewCenter: [0, 1.12, 0], viewScale: 1.32,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
@@ -428,6 +434,7 @@ export const LIFTS = {
     standardNote: '握距略寬於肩、手肘略在槓前方、臀腿收緊、軀幹微後仰讓槓繞過臉；鎖死時槓在肩膀與腳掌中段正上方、肩胛上提。',
   },
   bench: {
+    forearmContact: 'sharedRigid',
     name: '臥推', bottomLabel: '觸胸',
     ground: false, supine: true, dofs: ['shFwd', 'shSide', 'elbExt'],
     pose: benchPose, loads: benchLoads,
@@ -462,6 +469,7 @@ export const LIFTS = {
     standardNote: '槓扛在上背、膝微彎且角度固定、髖往後推、背部中立，前傾到膕繩肌有明顯拉伸（約 60～80°）。',
   },
   curl: {
+    forearmContact: 'sharedRigid',
     name: '槓鈴彎舉', topLabel: '頂點', bottomLabel: '手臂伸直',
     viewCenter: [0, 0.88, 0.05], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
@@ -479,6 +487,7 @@ export const LIFTS = {
     standardNote: '握距約與肩同寬、反握、上臂貼身幾乎不動、身體不後仰，從手臂伸直彎到前臂接近垂直。',
   },
   shrug: {
+    forearmContact: 'sharedRigid',
     name: '槓鈴聳肩', topLabel: '聳到頂', bottomLabel: '放下',
     viewCenter: [0, 0.88, 0], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
@@ -494,6 +503,7 @@ export const LIFTS = {
     standardNote: '站直、手臂伸直垂在大腿前、握距略寬於肩，肩膀往耳朵方向直直上提，頂點停一下。',
   },
   uprow: {
+    forearmContact: 'sharedRigid',
     name: '直立划船', topLabel: '頂點', bottomLabel: '手臂伸直',
     viewCenter: [0, 0.88, 0], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', ...['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev']],
@@ -563,6 +573,7 @@ export const LIFTS = {
     standardNote: '45° 軌道、腳踩踏板中間略偏高、與髖同寬，下放到膝約 88°；按個人活動度調整深度，臀部不離開椅墊，用整個腳掌推。',
   },
   pulldown: {
+    forearmContact: 'sharedRigid',
     name: '滑輪下拉', topLabel: '手臂伸直', bottomLabel: '拉到胸前',
     viewCenter: [0, 1.1, 0.1], viewScale: 1.15,
     seated: true, dofs: ['trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -581,6 +592,7 @@ export const LIFTS = {
     standardNote: '握距約 1.5～1.8 倍肩寬、軀幹微後仰 10～20°、拉到上胸，底部肩胛下壓後收，頂點讓肩胛上提伸展；專用下拉機多為 1:1 滑輪比。',
   },
   cablerow: {
+    forearmContact: 'sharedRigid',
     name: '坐姿滑輪划船', topLabel: '手臂伸直', bottomLabel: '觸身',
     viewCenter: [0, 0.75, 0.35], viewScale: 1.1,
     seated: true, dofs: ['trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -599,6 +611,7 @@ export const LIFTS = {
     standardNote: '膝微彎、腳踩穩，起點肩胛前伸、軀幹微前傾，拉到肚臍上方、肩胛後收，軀幹回到直立或微後仰，不用身體甩；專用低拉機多為 1:1 滑輪比。',
   },
   pushdown: {
+    forearmContact: 'sharedRigid',
     name: '滑輪三頭下壓', topLabel: '伸直', bottomLabel: '手肘彎曲',
     viewCenter: [0, 0.92, 0.18], viewScale: 1.15,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -643,6 +656,7 @@ export const LIFTS = {
     standardNote: '膝關節對準機器轉軸、墊子在跟腱上方；坐姿時髖屈曲讓膕繩肌處於拉長位置，俯臥時較短；人體膝屈力量呈遞減曲線（拉長端較強）。',
   },
   chestpress: {
+    forearmContact: 'fixed',
     name: '坐姿胸推機', topLabel: '推直', bottomLabel: '最靠近胸口',
     viewCenter: [0, 1.0, 0.2], viewScale: 1.0,
     seated: true, dofs: ['shFwd', 'shSide', 'elbExt'],
@@ -659,6 +673,7 @@ export const LIFTS = {
     standardNote: '椅子調到握把與胸中段同高、肩胛後收貼椅背、手肘外開約 45～60°，推到手臂接近伸直；內聚弧線推直時雙手向中線收攏。',
   },
   pecdeck: {
+    forearmContact: 'fixed',
     name: '蝴蝶機', topLabel: '夾緊', bottomLabel: '外展拉伸',
     viewCenter: [0, 1.05, 0.15], viewScale: 1.08,
     seated: true, dofs: ['shFwd', 'shSide', 'shRot', 'elbExt'],
@@ -676,6 +691,7 @@ export const LIFTS = {
     standardNote: '調整座椅讓握把或前臂墊約與胸中段同高、肩胛穩定後收貼椅背；從肩前側有拉伸感處沿圓弧水平內收至胸前交會。',
   },
   reversedeck: {
+    forearmContact: 'fixed',
     name: '反向蝴蝶機', topLabel: '手臂向外打開', bottomLabel: '握把在身前',
     viewCenter: [0, 1.05, 0.22], viewScale: 1.13,
     seated: true, dofs: ['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -720,6 +736,7 @@ export const LIFTS = {
     standardNote: '背貼滑台、肩抵肩墊，腳踩踏板中段；膝蓋與腳尖同方向，按可控制的深度下蹲。',
   },
   machinepress: {
+    forearmContact: 'fixed',
     name: '器械肩推', topLabel: '推起', bottomLabel: '握把下降',
     viewCenter: [0, 1.12, 0.07], viewScale: 1.1,
     seated: true, dofs: ['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -763,6 +780,7 @@ export const LIFTS = {
     standardNote: '坐穩後用膝側墊慢慢推開或合攏大腿，不用身體甩動機械臂。',
   },
   cablefly: {
+    forearmContact: 'singleFree',
     name: '滑輪夾胸', topLabel: '夾緊交會', bottomLabel: '外展拉伸',
     viewCenter: [0, 1.05, 0.05], viewScale: 1.22,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt'],
@@ -783,6 +801,7 @@ export const LIFTS = {
     standardNote: '雙手各握獨立把手、手肘固定微彎約 20°～30°、前後腳站穩並微前傾；高位往下偏中下胸、中位均衡水平內收、低位往上偏上胸。前後腳畫面為等效支撐示意，未計算左右腳分力。',
   },
   dbbench: {
+    forearmContact: 'singleFree',
     name: '啞鈴臥推', topLabel: '推直', bottomLabel: '下放最低點',
     ground: false, supine: true, dofs: ['shFwd', 'shSide', 'elbExt'],
     pose: dbBenchPose, loads: dumbbellLoads,
@@ -799,6 +818,7 @@ export const LIFTS = {
     standardNote: '雙手各自獨立承重（無剛體槓互推），下放時雙手可比槓鈴略外、略深，推起時向肩膀上方自然微收攏；手肘外展約 45～60°、前臂保持接近垂直。',
   },
   dbpress: {
+    forearmContact: 'singleFree',
     name: '坐姿啞鈴肩推', topLabel: '推直', bottomLabel: '最低點',
     viewCenter: [0, 1.12, 0.08], viewScale: 1.12,
     seated: true, dofs: ['shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -814,6 +834,7 @@ export const LIFTS = {
     standardNote: '背貼微後傾椅背（約 82°），手肘置於肩胛平面（略往前約 30°），下放到耳側至肩旁、前臂接近垂直，向上微內聚推至接近伸直。',
   },
   latraise: {
+    forearmContact: 'singleFree',
     name: '啞鈴側平舉', topLabel: '舉到頂點', bottomLabel: '雙手垂下',
     viewCenter: [0, 0.95, 0], viewScale: 1.25,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -829,6 +850,7 @@ export const LIFTS = {
     standardNote: '站直、雙手持啞鈴垂於體側，手肘固定微彎約 15～25°，於肩胛平面（略向前約 30°）或冠狀面平舉至與肩同高（約 90°）。',
   },
   dbcurl: {
+    forearmContact: 'singleFree',
     name: '啞鈴彎舉', topLabel: '頂點', bottomLabel: '手臂伸直',
     viewCenter: [0, 0.88, 0.05], viewScale: 1.1,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -844,6 +866,7 @@ export const LIFTS = {
     standardNote: '站姿雙手各持啞鈴垂於體側（不需受直槓寬度限制），上臂貼身或頂點微前移，控制下放不借力後仰；握法會改變前臂旋轉力矩平衡。',
   },
   dbreversefly: {
+    forearmContact: 'singleFree',
     name: '俯身啞鈴反向飛鳥', topLabel: '展開頂點', bottomLabel: '垂手下方',
     viewCenter: [0, 0.78, 0.05], viewScale: 1.22,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt', 'scRet', 'scElev'],
@@ -878,8 +901,14 @@ export const LIFTS = {
     standardNote: '雙手於胸前垂直捧住一顆啞鈴上端、手肘自然下垂靠胸前；前側配重讓軀幹較背蹲直立、膝伸參與比例提高。',
   },
 };
-// 凡分析肘力矩的動作，同時平衡前臂長軸力矩；零外力矩也須由肌肉互相抵銷。
-for (const lift of Object.values(LIFTS)) if (lift.dofs.includes('elbExt')) lift.dofs.push('foreRot');
+// 握住單手自由物體時，前臂軸向力矩由肌肉平衡。固定／雙手共握的剛體可承受未知反力偶；
+// 旋轉角仍影響肌肉長度，但此軸不加入肌肉平衡方程。
+for (const [name, lift] of Object.entries(LIFTS)) if (lift.dofs.includes('elbExt')) {
+  if (lift.forearmContact === 'singleFree') lift.dofs.push('foreRot');
+  else if (lift.forearmContact === 'fixed' || lift.forearmContact === 'sharedRigid')
+    lift.optDofs = [...(lift.optDofs || []), 'foreRot'];
+  else throw new Error(`${name} 缺少前臂接觸型態`);
+}
 // 自由站姿共用的教練控制量：幾何足底中點為 0，正值往腳尖、負值往腳跟。
 const BALANCE_LIFTS = new Set(['rdl', 'goodmorning', 'row', 'ohp', 'curl', 'shrug', 'uprow',
   'latraise', 'dbcurl', 'dbreversefly', 'pushdown', 'cablefly']);
@@ -1170,7 +1199,7 @@ if (SHOULDER_PARAMETER_SET === 'das3') {
 
 const DOF_REF = { hipExt: rad(-40), hipAbd: 0, kneeExt: rad(-50), ankPF: rad(-10), trunkExt: 0, shFwd: rad(20), shSide: rad(10), shRot: 0, elbExt: rad(-70), foreRot: 0, scRet: 0, scElev: 0 };
 // 只在部分動作分析的自由度：沒分析時，肌肉在這些方向的力臂直接忽略（例如背闊肌在臥推只算屈伸）
-const OPTIONAL_DOFS = ['shFwd', 'shSide', 'shRot', 'scRet', 'scElev'];
+const OPTIONAL_DOFS = ['shFwd', 'shSide', 'shRot', 'foreRot', 'scRet', 'scElev'];
 export function liftMuscles(lift) {
   const dofs = LIFTS[lift].dofs, opt = LIFTS[lift].optDofs || [];
   return MUSCLES.filter((m) => {
@@ -3642,7 +3671,7 @@ export function solvePose(lift, P, e) {
     pose.warn.push('手臂無法到達握點，請調整站位或握距');
   pose.lift = lift;
   pose.body = BODY;
-  if (LIFTS[lift].dofs.includes('foreRot')) {
+  if (LIFTS[lift].dofs.includes('elbExt')) {
     // MoBL-ARMS pro_sup 的 0° 是中立位；右前臂旋前為正。
     const grip = P.supin || (typeof P.grip === 'string' ? P.grip : null);
     const neutral = grip ? ['neutral', 'v'].includes(grip)
@@ -3898,8 +3927,8 @@ export function analyze(lift, P, e) {
     const ef = Math.acos(clamp(dot(norm(sub(R.elbow, R.shoulder)), norm(sub(R.hand, R.elbow))), -1, 1));
     if (dem.elbExt < 0) dem.elbExt *= clamp((deg(ef) - 8) / 17, 0, 1);
   }
-  if (has('foreRot')) {
-    // 只取手與前臂外力在肘至掌心長軸上的分量；握把偏心自然形成軸向偶矩。
+  if (has('elbExt')) {
+    // 外力的軸向分量仍記錄；固定／共握物體的接觸反力偶由下方反算。
     dem.foreRot = forearmAxialDemand(forces, R.elbow, R.hand);
   }
   if (has('scRet')) {
@@ -4086,7 +4115,10 @@ export function analyze(lift, P, e) {
   if (has('shFwd')) joints.shoulder = shoulderMoment;
   if (has('elbExt')) joints.elbow = Math.abs(dem.elbExt);
   if (has('scRet')) joints.scap = Math.hypot(dem.scRet, dem.scElev);
-  return { pose, dem, q, mus, joints, rom };
+  const forearmContactMoment = has('elbExt') && !has('foreRot')
+    ? dem.foreRot - info.reduce((sum, x) => sum + mus[x.m.id].force * (x.m.arms.foreRot?.(q) || 0), 0)
+    : 0;
+  return { pose, dem, q, mus, joints, rom, forearmContactMoment };
 }
 
 export function peakAnalysis(lift, P, n = 20) {

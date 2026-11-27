@@ -4,7 +4,10 @@ import { forearmArm } from '../src/forearm.js';
 
 const near = (a, b, tol, label) => { if (Math.abs(a - b) > tol) throw new Error(`${label}: ${a} ≠ ${b}`); };
 for (const [name, lift] of Object.entries(LIFTS)) {
-  if (lift.dofs.includes('elbExt') && !lift.dofs.includes('foreRot')) throw new Error(`${name} 缺少前臂旋轉平衡`);
+  if (!lift.dofs.includes('elbExt')) continue;
+  if (!['singleFree', 'fixed', 'sharedRigid'].includes(lift.forearmContact)) throw new Error(`${name} 缺少前臂接觸型態`);
+  if (lift.dofs.includes('foreRot') !== (lift.forearmContact === 'singleFree')) throw new Error(`${name} 前臂接觸平衡型態錯誤`);
+  if (lift.forearmContact !== 'singleFree' && !lift.optDofs.includes('foreRot')) throw new Error(`${name} 旋轉角未作用於肌肉長度`);
 }
 for (const [grip, expected] of [['sup', -80], ['pro', 80]]) {
   const r = analyze('curl', { ...defaultParams('curl'), supin: grip }, 0.5);
@@ -26,7 +29,8 @@ for (const [lift, grip] of [['curl', 'sup'], ['curl', 'pro'], ['dbcurl', 'neutra
       const arm = m.arms.foreRot;
       return sum + (r.mus[m.id]?.force || 0) * (typeof arm === 'function' ? arm(r.q) : arm || 0);
     }, 0);
-    near(produced, r.dem.foreRot, 0.03, `${lift} ${grip}@${i / 20} 前臂力矩平衡`);
+    near(produced + r.forearmContactMoment, r.dem.foreRot, 0.03, `${lift} ${grip}@${i / 20} 前臂力矩平衡`);
+    if (LIFTS[lift].forearmContact === 'singleFree') near(r.forearmContactMoment, 0, 1e-8, `${lift} 不得產生未知握持偶矩`);
   }
 }
 
