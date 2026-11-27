@@ -1,8 +1,9 @@
 // 細分後的合群顯示值，逐動作確認模型力加總與活化、排名指標的 F 加權平均。
-import { analyze, defaultParams, MUSCLES, MUSCLE_GROUPS, MUSCLE_GROUP_IDS } from '../src/biomech.js';
+import { analyze, defaultParams, MUSCLES, MUSCLE_GROUPS, MUSCLE_GROUP_IDS, SHOULDER_PARAMETER_SET } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
-if (MUSCLE_GROUP_IDS.length !== 32) throw new Error(`一般視圖預期 32 群，收到 ${MUSCLE_GROUP_IDS.length}`);
+const expectedGroups = SHOULDER_PARAMETER_SET === 'das3' ? 34 : 32;
+if (MUSCLE_GROUP_IDS.length !== expectedGroups) throw new Error(`一般視圖預期 ${expectedGroups} 群，收到 ${MUSCLE_GROUP_IDS.length}`);
 const byGroup = Object.fromEntries(Object.keys(MUSCLE_GROUPS).map((id) => [id, MUSCLES.filter((m) => m.group === id)]));
 for (const [id, children] of Object.entries(byGroup)) if (children.length < 2) throw new Error(`${id} 子部位不足`);
 let checked = 0;
@@ -25,4 +26,4 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
     }
   }
 }
-console.log(`肌肉細分 PASS：32 個一般群組，${checked} 個合群幀驗證`);
+console.log(`肌肉細分 PASS：${expectedGroups} 個一般群組，${checked} 個合群幀驗證`);
