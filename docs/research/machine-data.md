@@ -6,6 +6,23 @@
 
 > **標示原則**：每個數據均註明來源（文獻 PMID／DOI 或原廠規格）；若因機型差異大或缺乏公開實測值，明確標註「範圍估計」或「未查證」。
 
+## 查證總表（2026-11-27）
+
+表中「已查證」只適用於列明的機型與參數；機架**總高不等於出繩中心或轉軸高度**。所有未查證尺寸維持估計值，不把其他機型的外形尺寸轉成握把坐標。
+
+| 項目 | 已查證並採用或核對 | 未查證、維持估計 |
+|---|---|---|
+| 專用下拉／坐姿划船 | [HDU-DPR](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row) 與 [PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 的 1:1 滑輪比；HDU-DPR 總高 244 cm | 下拉出繩高 235 cm；划船出繩高 42 cm、水平位置 100 cm；均無原廠中心坐標 |
+| 三頭下壓／滑輪夾胸 | [Life Fitness LCM-CC](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)：2:1、滑車 17.8–193.0 cm、總高 239 cm；模型高檔由 210 改 192 cm，夾胸機架高由 215 改 239 cm | 精確出繩中心、柱中心距、站位、短桿尺寸、示範配重；模型中位 134 cm／低位 85 cm 僅為範圍內示例 |
+| 腿推滑台與軌道 | [Titanium Strength GS-45LP](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/)：45°、**空滑台實體質量 50 kg**；模型由 45 改 50 kg | 摩擦、椅背絕對角度及掛片示範重量；其他廠牌標的「起始阻力」不能當實體滑台質量 |
+| 史密斯滑軌與起始阻力 | [Hammer Strength HSSMV](https://www.lifefitness.com/de-de/produkte/strength-training/stationen-mit-gewichtsscheiben/plate-loaded-vertical-smith-machine)：垂直、13.6 kg；[HSSM](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine)：7°、13.6 kg | 摩擦、槓的實體質量、滑軌相對人體站位、示範掛片量；13.6 kg 為有效起始阻力 |
+| 坐姿胸推 | [Life Fitness Axiom OP-CP](https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/axiom-series-chest-press) 證實可調座高 | 模型 43–68 cm 座高、轉軸 172 cm、握把路徑／半徑、靠背位置；無同坐標定義的原廠刻度 |
+| 器械肩推 | [Precor Vitality VSL024BP](https://www.precor.com/en-US/strength/selectorized/vitality) 說明可調起始位置；[Life Fitness Iso-Lateral 手冊](https://resources.lifefitness.com/hub/life-fitness/en-US/1000419-0001-xd_32ce9968be620066-6b5ac64-1817a3e5ec1--7f3d.ditamap?onepage=true) 說明座椅按握把／胸部對齊 | 模型 47 cm 行程、183 cm 轉軸與 43–68 cm 座高數值，沒有同機型量測 |
+| 蝴蝶／反向蝴蝶 | [Precor VSL015BP](https://www.precor.com/en-US/products/VSL015BP) 證實雙用機的可調起始位置與自動適臂機構 | 握把半徑 54／52 cm、前臂墊半徑 29 cm、轉軸位置、42–62 cm 可及範圍、43–68 cm 座高及凸輪力臂，均未查到尺寸刻度 |
+| 腿伸／腿彎舉凸輪 | [Folland 與 Morris 2008](https://pubmed.ncbi.nlm.nih.gov/17885926/) 實測 8 台腿伸機；[Pizzimenti 1992](https://pubmed.ncbi.nlm.nih.gov/1322768/) 實測 Nautilus 俯臥腿彎舉的阻力趨勢 | 未取得可一一對應目前預設機型的逐角度實測力矩表；保留現有示範曲線，不以人體力量曲線代替器械曲線 |
+| 啞鈴握把 | [REP Hex KG](https://repfitness.com/products/hex-dumbbells-kg) 7.5–22.5 kg：長 13.2 cm、直徑 34 mm；模型由 13／32 mm 修正 | 片頭尺寸、示範重量；2.5–5 kg 的 28 mm 細握把未建模 |
+| 引體握點與踏台 | [Life Fitness PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 證實輔助引體機有可折疊踏台 | 模型固定 235 cm 握點、膝墊位置及踏台高度；懸垂肩高與彎腿距離依骨長幾何求解，踏台不參與動作力學 |
+
 ---
 
 ## 1. 45° 腿推機（45° Leg Press）
@@ -134,6 +151,10 @@
 - **商用平均腿伸機（Folland & Morris 2008）**：接近 `flat` 至微幅 `asc`（伸直端相對人體能力偏重）。
 - **理想人體匹配腿伸凸輪（倒 U 型）**：峰值落在膝屈 ~70°（`x ≈ 0.3`），伸直端（膝屈 15°–20°）需降至峰值之 ~40%。
 - **理想人體匹配腿彎舉凸輪（遞減型）**：接近 `desc`（伸直拉長端重、屈曲縮短端輕，約 1.0 → 0.55）。
+
+#### (E) 腿彎舉機的直接量測
+
+[Pizzimenti（1992，PubMed 1322768）](https://pubmed.ncbi.nlm.nih.gov/1322768/) 實測 Nautilus 俯臥腿彎舉機與 20 名男性在兩種等速條件的膝屈力矩趨勢，摘要指出機台阻力曲線與受試者力矩曲線不吻合。可取得的摘要沒有逐角度、可移植到本模型的原始阻力係數；而目前模型還包含坐姿腿彎舉，故此次**不調整凸輪預設或節點**。原有 `legcurl.human` 是人體曲線示例，並非 Nautilus 機台實測凸輪。
 
 ---
 
