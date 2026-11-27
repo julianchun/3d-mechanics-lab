@@ -953,7 +953,7 @@ function updateData(force) {
       el('span', { class: 'pc', style: showDiff ? `color:${right.startsWith('+') ? '#dc2626' : right.startsWith('-') ? '#2563eb' : ''}` : '' }, right),
       el('span', { class: tagCls }, m.len),
       el('div', { class: 'track' },
-        el('i', { style: `width:${(Math.min(m.a, 1.5) / maxS) * 100}%;background:#f28c28` }),
+        el('i', { style: `width:${((m.s - m.p) / maxS) * 100}%;background:#f28c28` }),
         el('i', { style: `width:${(m.p / maxS) * 100}%;background:#a78bfa` }))));
   }
   box.append(list);
