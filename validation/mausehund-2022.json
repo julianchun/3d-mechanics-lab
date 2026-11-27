@@ -1,0 +1,1102 @@
+{
+  "id": "mausehund-2022",
+  "source": {
+    "authors": "Mausehund L, Werkhausen A, Bartsch J, Krosshaug T",
+    "year": 2022,
+    "title": "Understanding Bench Press Biomechanics—The Necessity of Measuring Lateral Barbell Forces",
+    "journal": "J Strength Cond Res 36(10):2685–2695",
+    "doi": "10.1519/jsc.0000000000003948",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/33555823/",
+    "fullTextUrl": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+  },
+  "sourceQuality": {
+    "rating": "good",
+    "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+    "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+  },
+  "participants": {
+    "n": 35,
+    "sex": "19 男、16 女",
+    "training": "力量訓練者（13 位力量舉選手、22 位休閒訓練者）；男須能臥推 ≥1.0×體重、女 ≥0.7×體重",
+    "massKg": {
+      "mean": 79.9,
+      "sd": 16
+    },
+    "heightM": {
+      "mean": 1.71,
+      "sd": 0.09
+    },
+    "note": "Table 1：肩峰間距 0.36 ± 0.03 m；估計 1RM／體重 = 1.22 ± 0.28。"
+  },
+  "protocol": "各變化式做 6–8RM（約 80–85% 1RM）一組，取前三下、左右側平均；槓觸胸不彈起、臀部貼椅、雙腳踩地。握距以「手臂伸直時手臂與槓的內夾角（AB-angle）」標準化：中 75°、寬 65°、窄 85°；窄握分手肘靠身（BPNI）與手肘外開（BPNO，底部肩外展約 45°）。外力 = 儀器化槓的橫向力＋測力板垂直力的合力，力矩 = 合力在「前臂—上臂平面」內的分量 × 力臂（垂直該平面的分量屬肩旋轉力矩，不納入）。",
+  "model": "清單項目 bench（中、寬）與 cg-bench（窄）；握距由模型頂點的 AB 角反解；槓力僅垂直（模型不含橫向力）；力矩只含槓力，不含上肢自重；準靜態，不含動態加速度。",
+  "toleranceBasis": "容許範圍為工程界線，不是研究 SD：關節角 10–12°（約為研究個體 SD 7–12° 並加關節中心回歸與標記定義誤差）；峰值力矩肩 25 Nm、肘 10 Nm（約研究平均的 20–25%，涵蓋準靜態與動態最低點加速度的差距）；力臂 0.03 m（約研究 SD 0.014–0.030 m）。",
+  "conditions": [
+    {
+      "id": "medium",
+      "catalogId": "bench",
+      "params": {},
+      "derivedParams": {
+        "grip": {
+          "rule": "armBarAngleTop",
+          "deg": 75,
+          "range": [
+            0.6,
+            2.6
+          ]
+        }
+      },
+      "referenceLoadKg": 84,
+      "loadRatio": 1.051314,
+      "conditionDerivation": "方法：BPM 的手臂—槓內夾角（AB-angle）為 75°，由模型頂點的肩中心—手點連線與槓軸夾角反解模型握距（同一人體、逐人解；範圍 0.6–2.6，超出模型旋鈕上限 2.0 時不截斷）。手肘外開角度採清單預設值（研究未量化）。負重：Results 第一段（p. 2689）的 6RM 負重平均 84 kg／全體受試者體重平均 79.9 kg = 1.0513×體重（為各變化式實際負重，含槓）；槓觸胸點採清單預設；模型為準靜態，研究為 6–8RM 動態。",
+      "participants": {
+        "n": 35,
+        "sex": "19 男、16 女",
+        "massKg": {
+          "mean": 79.9,
+          "sd": 16
+        },
+        "heightM": {
+          "mean": 1.71,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "elbow-peak-flexion",
+          "layer": "kinematics",
+          "metric": "elbowPeakFlexion",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 101.4,
+            "sd": 8.3,
+            "unit": "deg",
+            "definition": "全程最大肘屈角（伸直 = 0°；原文 Figure 2 定義圖不可由文字核對），左右平均"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 78.3,
+            "sd": 11.9,
+            "unit": "deg",
+            "definition": "肘屈角全程變動範圍"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-abduction-bottom",
+          "layer": "kinematics",
+          "metric": "shoulderAbductionBottom",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 59.3,
+            "sd": 8.2,
+            "unit": "deg",
+            "definition": "最低位置肱骨長軸相對胸廓矢狀面的夾角"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-peak-njm",
+          "layer": "moments",
+          "metric": "shoulderPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 123,
+            "sd": 48.5,
+            "unit": "Nm",
+            "definition": "肩外部淨力矩峰值（伸展／水平外展方向，前臂—上臂平面內），左右平均；峰值在最低點"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder NJM, peak",
+          "tolerance": {
+            "absolute": 25,
+            "unit": "Nm"
+          },
+          "limitations": "研究合力含橫向力且為動態（最低點含加速度）；模型僅垂直槓力、準靜態、不含上肢自重。"
+        },
+        {
+          "id": "elbow-peak-njm",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 37.7,
+            "sd": 13.5,
+            "unit": "Nm",
+            "definition": "肘外部淨力矩峰值（外部肘屈方向，前臂—上臂平面內），左右平均"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow NJM, peak",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "Nm"
+          },
+          "limitations": "同肩：橫向力、動態、上肢自重未對齊。"
+        },
+        {
+          "id": "shoulder-peak-moment-arm",
+          "layer": "moments",
+          "metric": "shoulderPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.221,
+            "sd": 0.023,
+            "unit": "m",
+            "definition": "肩力臂峰值：關節中心到合力線的垂直距離（前臂—上臂平面內）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "研究力臂對合力（含橫向力）；模型合力恆垂直。"
+        },
+        {
+          "id": "elbow-peak-moment-arm",
+          "layer": "moments",
+          "metric": "elbowPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.092,
+            "sd": 0.014,
+            "unit": "m",
+            "definition": "肘力臂峰值：同上"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "同肩：合力方向不同。"
+        },
+        {
+          "id": "shoulder-hadd-peak",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 56.1,
+            "sd": 4.6,
+            "unit": "deg",
+            "definition": "肩水平內收角峰值（原文 Figure 2 的參考軸與零位無法由文字核對；最低點值在 −6.2°～−10.8°，與模型肩部正交基底的水平內收零位不同）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "水平內收角的零位與參考平面未能核對；模型不輸出此定義，不判定。"
+        },
+        {
+          "id": "shoulder-hadd-rom",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 65.8,
+            "sd": 8.9,
+            "unit": "deg",
+            "definition": "肩水平內收角變動範圍（同上定義問題）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "同上。"
+        },
+        {
+          "id": "forearm-angle-mean",
+          "layer": "kinematics",
+          "metric": "forearmAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": -0.8,
+            "sd": 4.7,
+            "unit": "deg",
+            "definition": "全程平均前臂角（符號與參考平面見 Figure 2，文字未載）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 8,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "前臂角的參考軸與正負號未能核對，且為時間平均；不判定。"
+        },
+        {
+          "id": "arch-angle-mean",
+          "layer": "kinematics",
+          "metric": "archAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 29.9,
+            "sd": 6.5,
+            "unit": "deg",
+            "definition": "全程平均拱背角：胸骨線（頸靜脈切跡—劍突）相對水平面"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型沒有胸骨／胸廓拱形節段，軀幹為單一剛體；不判定。"
+        }
+      ]
+    },
+    {
+      "id": "wide",
+      "catalogId": "bench",
+      "params": {},
+      "derivedParams": {
+        "grip": {
+          "rule": "armBarAngleTop",
+          "deg": 65,
+          "range": [
+            0.6,
+            2.6
+          ]
+        }
+      },
+      "referenceLoadKg": 84.8,
+      "loadRatio": 1.061327,
+      "conditionDerivation": "方法：BPW 的手臂—槓內夾角（AB-angle）為 65°，由模型頂點的肩中心—手點連線與槓軸夾角反解模型握距（同一人體、逐人解；範圍 0.6–2.6，超出模型旋鈕上限 2.0 時不截斷）。手肘外開角度採清單預設值（研究未量化）。負重：Results 第一段（p. 2689）的 6RM 負重平均 84.8 kg／全體受試者體重平均 79.9 kg = 1.0613×體重（為各變化式實際負重，含槓）；槓觸胸點採清單預設；模型為準靜態，研究為 6–8RM 動態。",
+      "participants": {
+        "n": 35,
+        "sex": "19 男、16 女",
+        "massKg": {
+          "mean": 79.9,
+          "sd": 16
+        },
+        "heightM": {
+          "mean": 1.71,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "elbow-peak-flexion",
+          "layer": "kinematics",
+          "metric": "elbowPeakFlexion",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 87.4,
+            "sd": 8.1,
+            "unit": "deg",
+            "definition": "全程最大肘屈角（伸直 = 0°；原文 Figure 2 定義圖不可由文字核對），左右平均"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 64.7,
+            "sd": 10.4,
+            "unit": "deg",
+            "definition": "肘屈角全程變動範圍"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-abduction-bottom",
+          "layer": "kinematics",
+          "metric": "shoulderAbductionBottom",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 66.1,
+            "sd": 7,
+            "unit": "deg",
+            "definition": "最低位置肱骨長軸相對胸廓矢狀面的夾角"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-peak-njm",
+          "layer": "moments",
+          "metric": "shoulderPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 135.2,
+            "sd": 52,
+            "unit": "Nm",
+            "definition": "肩外部淨力矩峰值（伸展／水平外展方向，前臂—上臂平面內），左右平均；峰值在最低點"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder NJM, peak",
+          "tolerance": {
+            "absolute": 25,
+            "unit": "Nm"
+          },
+          "limitations": "研究合力含橫向力且為動態（最低點含加速度）；模型僅垂直槓力、準靜態、不含上肢自重。"
+        },
+        {
+          "id": "elbow-peak-njm",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 35.4,
+            "sd": 11.6,
+            "unit": "Nm",
+            "definition": "肘外部淨力矩峰值（外部肘屈方向，前臂—上臂平面內），左右平均"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow NJM, peak",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "Nm"
+          },
+          "limitations": "同肩：橫向力、動態、上肢自重未對齊。"
+        },
+        {
+          "id": "shoulder-peak-moment-arm",
+          "layer": "moments",
+          "metric": "shoulderPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.243,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "肩力臂峰值：關節中心到合力線的垂直距離（前臂—上臂平面內）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "研究力臂對合力（含橫向力）；模型合力恆垂直。"
+        },
+        {
+          "id": "elbow-peak-moment-arm",
+          "layer": "moments",
+          "metric": "elbowPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.084,
+            "sd": 0.015,
+            "unit": "m",
+            "definition": "肘力臂峰值：同上"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "同肩：合力方向不同。"
+        },
+        {
+          "id": "shoulder-hadd-peak",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 47,
+            "sd": 4.4,
+            "unit": "deg",
+            "definition": "肩水平內收角峰值（原文 Figure 2 的參考軸與零位無法由文字核對；最低點值在 −6.2°～−10.8°，與模型肩部正交基底的水平內收零位不同）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "水平內收角的零位與參考平面未能核對；模型不輸出此定義，不判定。"
+        },
+        {
+          "id": "shoulder-hadd-rom",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 56.5,
+            "sd": 8.6,
+            "unit": "deg",
+            "definition": "肩水平內收角變動範圍（同上定義問題）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "同上。"
+        },
+        {
+          "id": "forearm-angle-mean",
+          "layer": "kinematics",
+          "metric": "forearmAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 12.5,
+            "sd": 3.9,
+            "unit": "deg",
+            "definition": "全程平均前臂角（符號與參考平面見 Figure 2，文字未載）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 8,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "前臂角的參考軸與正負號未能核對，且為時間平均；不判定。"
+        },
+        {
+          "id": "arch-angle-mean",
+          "layer": "kinematics",
+          "metric": "archAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 32.3,
+            "sd": 5.5,
+            "unit": "deg",
+            "definition": "全程平均拱背角：胸骨線（頸靜脈切跡—劍突）相對水平面"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型沒有胸骨／胸廓拱形節段，軀幹為單一剛體；不判定。"
+        }
+      ]
+    },
+    {
+      "id": "narrow-in",
+      "catalogId": "cg-bench",
+      "params": {},
+      "derivedParams": {
+        "grip": {
+          "rule": "armBarAngleTop",
+          "deg": 85,
+          "range": [
+            0.6,
+            2.6
+          ]
+        }
+      },
+      "referenceLoadKg": 75.8,
+      "loadRatio": 0.948686,
+      "conditionDerivation": "方法：BPNI 的手臂—槓內夾角（AB-angle）為 85°，由模型頂點的肩中心—手點連線與槓軸夾角反解模型握距（同一人體、逐人解；範圍 0.6–2.6，超出模型旋鈕上限 2.0 時不截斷）。手肘外開角度採清單預設值（研究未量化）。負重：Results 第一段（p. 2689）的 6RM 負重平均 75.8 kg／全體受試者體重平均 79.9 kg = 0.9487×體重（為各變化式實際負重，含槓）；槓觸胸點採清單預設；模型為準靜態，研究為 6–8RM 動態。",
+      "participants": {
+        "n": 35,
+        "sex": "19 男、16 女",
+        "massKg": {
+          "mean": 79.9,
+          "sd": 16
+        },
+        "heightM": {
+          "mean": 1.71,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "elbow-peak-flexion",
+          "layer": "kinematics",
+          "metric": "elbowPeakFlexion",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 110.3,
+            "sd": 7.1,
+            "unit": "deg",
+            "definition": "全程最大肘屈角（伸直 = 0°；原文 Figure 2 定義圖不可由文字核對），左右平均"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 86.2,
+            "sd": 11.5,
+            "unit": "deg",
+            "definition": "肘屈角全程變動範圍"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-abduction-bottom",
+          "layer": "kinematics",
+          "metric": "shoulderAbductionBottom",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 37.9,
+            "sd": 7.2,
+            "unit": "deg",
+            "definition": "最低位置肱骨長軸相對胸廓矢狀面的夾角"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-peak-njm",
+          "layer": "moments",
+          "metric": "shoulderPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 94.7,
+            "sd": 38.3,
+            "unit": "Nm",
+            "definition": "肩外部淨力矩峰值（伸展／水平外展方向，前臂—上臂平面內），左右平均；峰值在最低點"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder NJM, peak",
+          "tolerance": {
+            "absolute": 25,
+            "unit": "Nm"
+          },
+          "limitations": "研究合力含橫向力且為動態（最低點含加速度）；模型僅垂直槓力、準靜態、不含上肢自重。"
+        },
+        {
+          "id": "elbow-peak-njm",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 40,
+            "sd": 15.1,
+            "unit": "Nm",
+            "definition": "肘外部淨力矩峰值（外部肘屈方向，前臂—上臂平面內），左右平均"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow NJM, peak",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "Nm"
+          },
+          "limitations": "同肩：橫向力、動態、上肢自重未對齊。"
+        },
+        {
+          "id": "shoulder-peak-moment-arm",
+          "layer": "moments",
+          "metric": "shoulderPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.195,
+            "sd": 0.019,
+            "unit": "m",
+            "definition": "肩力臂峰值：關節中心到合力線的垂直距離（前臂—上臂平面內）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "研究力臂對合力（含橫向力）；模型合力恆垂直。"
+        },
+        {
+          "id": "elbow-peak-moment-arm",
+          "layer": "moments",
+          "metric": "elbowPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.105,
+            "sd": 0.014,
+            "unit": "m",
+            "definition": "肘力臂峰值：同上"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "同肩：合力方向不同。"
+        },
+        {
+          "id": "shoulder-hadd-peak",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 65.2,
+            "sd": 5.2,
+            "unit": "deg",
+            "definition": "肩水平內收角峰值（原文 Figure 2 的參考軸與零位無法由文字核對；最低點值在 −6.2°～−10.8°，與模型肩部正交基底的水平內收零位不同）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "水平內收角的零位與參考平面未能核對；模型不輸出此定義，不判定。"
+        },
+        {
+          "id": "shoulder-hadd-rom",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 75.9,
+            "sd": 10.6,
+            "unit": "deg",
+            "definition": "肩水平內收角變動範圍（同上定義問題）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "同上。"
+        },
+        {
+          "id": "forearm-angle-mean",
+          "layer": "kinematics",
+          "metric": "forearmAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": -8.5,
+            "sd": 3.3,
+            "unit": "deg",
+            "definition": "全程平均前臂角（符號與參考平面見 Figure 2，文字未載）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 8,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "前臂角的參考軸與正負號未能核對，且為時間平均；不判定。"
+        },
+        {
+          "id": "arch-angle-mean",
+          "layer": "kinematics",
+          "metric": "archAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 25.8,
+            "sd": 4.8,
+            "unit": "deg",
+            "definition": "全程平均拱背角：胸骨線（頸靜脈切跡—劍突）相對水平面"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型沒有胸骨／胸廓拱形節段，軀幹為單一剛體；不判定。"
+        }
+      ]
+    },
+    {
+      "id": "narrow-out",
+      "catalogId": "cg-bench",
+      "params": {},
+      "derivedParams": {
+        "grip": {
+          "rule": "armBarAngleTop",
+          "deg": 85,
+          "range": [
+            0.6,
+            2.6
+          ]
+        },
+        "flare": {
+          "rule": "shoulderAbductionBottom",
+          "deg": 45,
+          "range": [
+            30,
+            90
+          ]
+        }
+      },
+      "referenceLoadKg": 76.9,
+      "loadRatio": 0.962453,
+      "conditionDerivation": "方法：BPNO 的手臂—槓內夾角（AB-angle）為 85°，由模型頂點的肩中心—手點連線與槓軸夾角反解模型握距（同一人體、逐人解；範圍 0.6–2.6，超出模型旋鈕上限 2.0 時不截斷）。手肘外開組方法指示底部肩外展約 45°，故以模型旋鈕「手肘外開角度」(30–90°) 反解使模型底部的肩外展角為 45°，無解則取範圍端點；此為條件設定，因此該列肩外展與條件同量，只列一致性檢查。負重：Results 第一段（p. 2689）的 6RM 負重平均 76.9 kg／全體受試者體重平均 79.9 kg = 0.9625×體重（為各變化式實際負重，含槓）；槓觸胸點採清單預設；模型為準靜態，研究為 6–8RM 動態。",
+      "participants": {
+        "n": 35,
+        "sex": "19 男、16 女",
+        "massKg": {
+          "mean": 79.9,
+          "sd": 16
+        },
+        "heightM": {
+          "mean": 1.71,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "elbow-peak-flexion",
+          "layer": "kinematics",
+          "metric": "elbowPeakFlexion",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 114.1,
+            "sd": 7.6,
+            "unit": "deg",
+            "definition": "全程最大肘屈角（伸直 = 0°；原文 Figure 2 定義圖不可由文字核對），左右平均"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 88.4,
+            "sd": 12.2,
+            "unit": "deg",
+            "definition": "肘屈角全程變動範圍"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 12,
+            "unit": "deg"
+          }
+        },
+        {
+          "id": "shoulder-abduction-bottom",
+          "layer": "kinematics",
+          "metric": "shoulderAbductionBottom",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 56.5,
+            "sd": 7,
+            "unit": "deg",
+            "definition": "最低位置肱骨長軸相對胸廓矢狀面的夾角"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "consistency-check",
+          "limitations": "條件已用底部肩外展約 45° 設定手肘外開角度；研究實測 56.5° 與指示值不同，此列僅檢查模型是否達到被設定的值。"
+        },
+        {
+          "id": "shoulder-peak-njm",
+          "layer": "moments",
+          "metric": "shoulderPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 99,
+            "sd": 40,
+            "unit": "Nm",
+            "definition": "肩外部淨力矩峰值（伸展／水平外展方向，前臂—上臂平面內），左右平均；峰值在最低點"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder NJM, peak",
+          "tolerance": {
+            "absolute": 25,
+            "unit": "Nm"
+          },
+          "limitations": "研究合力含橫向力且為動態（最低點含加速度）；模型僅垂直槓力、準靜態、不含上肢自重。"
+        },
+        {
+          "id": "elbow-peak-njm",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 44.5,
+            "sd": 15.6,
+            "unit": "Nm",
+            "definition": "肘外部淨力矩峰值（外部肘屈方向，前臂—上臂平面內），左右平均"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow NJM, peak",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "Nm"
+          },
+          "limitations": "同肩：橫向力、動態、上肢自重未對齊。"
+        },
+        {
+          "id": "shoulder-peak-moment-arm",
+          "layer": "moments",
+          "metric": "shoulderPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.198,
+            "sd": 0.021,
+            "unit": "m",
+            "definition": "肩力臂峰值：關節中心到合力線的垂直距離（前臂—上臂平面內）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Shoulder moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "研究力臂對合力（含橫向力）；模型合力恆垂直。"
+        },
+        {
+          "id": "elbow-peak-moment-arm",
+          "layer": "moments",
+          "metric": "elbowPeakMomentArm",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.106,
+            "sd": 0.016,
+            "unit": "m",
+            "definition": "肘力臂峰值：同上"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow moment arm, peak",
+          "tolerance": {
+            "absolute": 0.03,
+            "unit": "m"
+          },
+          "limitations": "同肩：合力方向不同。"
+        },
+        {
+          "id": "shoulder-hadd-peak",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 64,
+            "sd": 5.1,
+            "unit": "deg",
+            "definition": "肩水平內收角峰值（原文 Figure 2 的參考軸與零位無法由文字核對；最低點值在 −6.2°～−10.8°，與模型肩部正交基底的水平內收零位不同）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "水平內收角的零位與參考平面未能核對；模型不輸出此定義，不判定。"
+        },
+        {
+          "id": "shoulder-hadd-rom",
+          "layer": "kinematics",
+          "metric": "shoulderHorizontalAdductionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 70.2,
+            "sd": 8.5,
+            "unit": "deg",
+            "definition": "肩水平內收角變動範圍（同上定義問題）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "同上。"
+        },
+        {
+          "id": "forearm-angle-mean",
+          "layer": "kinematics",
+          "metric": "forearmAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": -16.5,
+            "sd": 3.9,
+            "unit": "deg",
+            "definition": "全程平均前臂角（符號與參考平面見 Figure 2，文字未載）"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 8,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "前臂角的參考軸與正負號未能核對，且為時間平均；不判定。"
+        },
+        {
+          "id": "arch-angle-mean",
+          "layer": "kinematics",
+          "metric": "archAngleMean",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 28,
+            "sd": 5.5,
+            "unit": "deg",
+            "definition": "全程平均拱背角：胸骨線（頸靜脈切跡—劍突）相對水平面"
+          },
+          "evidence": "text",
+          "location": "Results, Kinematics, p. 2690–2691",
+          "tolerance": {
+            "absolute": 10,
+            "unit": "deg"
+          },
+          "comparisonRole": "definition-mismatch",
+          "limitations": "模型沒有胸骨／胸廓拱形節段，軀幹為單一剛體；不判定。"
+        }
+      ]
+    }
+  ]
+}

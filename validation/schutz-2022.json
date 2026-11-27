@@ -1,0 +1,411 @@
+{
+  "id": "schutz-2022",
+  "source": {
+    "authors": "Schütz P, Zimmer P, Zeidler F, Plüss M, Oberhofer K, List R, Lorenzetti SR",
+    "year": 2022,
+    "title": "Chest Exercises: Movement and Loading of Shoulder, Elbow and Wrist Joints",
+    "journal": "Sports (Basel) 10(2):19",
+    "doi": "10.3390/sports10020019",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/35202059/",
+    "fullTextUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+  },
+  "sourceQuality": {
+    "rating": "caution",
+    "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+  },
+  "participants": {
+    "n": 20,
+    "sex": "10 男、10 女",
+    "training": "每週 ≥2 小時重量訓練、熟悉動作",
+    "massKg": {
+      "mean": 68.6,
+      "sd": 11.1
+    },
+    "heightM": {
+      "mean": 1.752,
+      "sd": 0.09
+    }
+  },
+  "protocol": "槓鈴平板與上斜臥推（槓重 10 kg 空槓加槓片）；負重 15% 與 30% 體重各六下，捨第一下；握距 = 2×上臂長＋肩寬，平均 88.7 ± 6.7 cm；逆動力學含上肢節段重，力矩除以體重。",
+  "model": "bench 與 incline-bench（清單預設 30°）；握距旋鈕 2.2175 超出旋鈕上限 2.0；上斜角度與槓觸胸要求未報，故全數探索性。",
+  "toleranceBasis": "探索性列的參考界線：肩力矩 0.15 Nm/kg、肘力矩 0.06 Nm/kg、肘活動範圍 15°，約研究 SD 的 2–3 倍；不進通過率。",
+  "conditions": [
+    {
+      "id": "flat-15",
+      "catalogId": "bench",
+      "params": {
+        "grip": 2.2175
+      },
+      "referenceLoadKg": null,
+      "loadBodyFraction": 0.15,
+      "loadBarTareKg": 10,
+      "loadRatio": 0.295773,
+      "conditionDerivation": "負重：方法稱「負重為 15% 體重」並使用 10 kg 空槓；體重最輕者的 15% 低於 10 kg 空槓，故負重只能是槓重 10 kg 之外另加 15% 體重，推定槓總質量 = 10 kg + 0.15×體重（推定，非原文明示）。固定身體採受試者平均體重 68.6 kg：0.2958×體重；群體逐人以 0.15 + 10/體重。握距 88.7 cm／0.4 = 2.2175。上斜角度原文未載（補充檔，未查證），模型採清單 30°（僅上斜組）；槓觸胸與下放深度、手肘外開採清單預設。",
+      "participants": {
+        "n": 20,
+        "sex": "10 男、10 女",
+        "massKg": {
+          "mean": 68.6,
+          "sd": 11.1
+        },
+        "heightM": {
+          "mean": 1.752,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "shoulder-abs-mmax",
+          "layer": "moments",
+          "metric": "shoulderAbsMomentPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.442,
+            "sd": 0.046,
+            "unit": "Nm/kg",
+            "definition": "肩關節三維力矩大小的最大值（Mabs max），單側，除以體重；含上肢節段重量"
+          },
+          "evidence": "table",
+          "location": "Table 1, Shoulder absolute Mmax, flat-15",
+          "tolerance": {
+            "absolute": 0.15,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "上斜角度與負重組成為推定、握距超出旋鈕範圍、動作速度與是否觸胸未規定；動態量測。"
+        },
+        {
+          "id": "elbow-mmax",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.092,
+            "sd": 0.018,
+            "unit": "Nm/kg",
+            "definition": "肘屈伸力矩最大值（正 = 屈），除以體重"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension Mmax, flat-15",
+          "tolerance": {
+            "absolute": 0.06,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "力矩符號為外部或內部未明述；模型只含槓力（不含前臂自重）；其餘同上。"
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 79.5,
+            "sd": 6.2,
+            "unit": "deg",
+            "definition": "肘屈伸活動範圍（最大 − 最小）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension RoM, flat-15",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "槓未必觸胸，原文未規定下放深度。"
+        }
+      ]
+    },
+    {
+      "id": "flat-30",
+      "catalogId": "bench",
+      "params": {
+        "grip": 2.2175
+      },
+      "referenceLoadKg": null,
+      "loadBodyFraction": 0.3,
+      "loadBarTareKg": 10,
+      "loadRatio": 0.445773,
+      "conditionDerivation": "負重：方法稱「負重為 30% 體重」並使用 10 kg 空槓；體重最輕者的 15% 低於 10 kg 空槓，故負重只能是槓重 10 kg 之外另加 30% 體重，推定槓總質量 = 10 kg + 0.3×體重（推定，非原文明示）。固定身體採受試者平均體重 68.6 kg：0.4458×體重；群體逐人以 0.3 + 10/體重。握距 88.7 cm／0.4 = 2.2175。上斜角度原文未載（補充檔，未查證），模型採清單 30°（僅上斜組）；槓觸胸與下放深度、手肘外開採清單預設。",
+      "participants": {
+        "n": 20,
+        "sex": "10 男、10 女",
+        "massKg": {
+          "mean": 68.6,
+          "sd": 11.1
+        },
+        "heightM": {
+          "mean": 1.752,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "shoulder-abs-mmax",
+          "layer": "moments",
+          "metric": "shoulderAbsMomentPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.76,
+            "sd": 0.079,
+            "unit": "Nm/kg",
+            "definition": "肩關節三維力矩大小的最大值（Mabs max），單側，除以體重；含上肢節段重量"
+          },
+          "evidence": "table",
+          "location": "Table 1, Shoulder absolute Mmax, flat-30",
+          "tolerance": {
+            "absolute": 0.15,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "上斜角度與負重組成為推定、握距超出旋鈕範圍、動作速度與是否觸胸未規定；動態量測。"
+        },
+        {
+          "id": "elbow-mmax",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.165,
+            "sd": 0.041,
+            "unit": "Nm/kg",
+            "definition": "肘屈伸力矩最大值（正 = 屈），除以體重"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension Mmax, flat-30",
+          "tolerance": {
+            "absolute": 0.06,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "力矩符號為外部或內部未明述；模型只含槓力（不含前臂自重）；其餘同上。"
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 76.2,
+            "sd": 6.4,
+            "unit": "deg",
+            "definition": "肘屈伸活動範圍（最大 − 最小）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension RoM, flat-30",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "槓未必觸胸，原文未規定下放深度。"
+        }
+      ]
+    },
+    {
+      "id": "incline-15",
+      "catalogId": "incline-bench",
+      "params": {
+        "grip": 2.2175
+      },
+      "referenceLoadKg": null,
+      "loadBodyFraction": 0.15,
+      "loadBarTareKg": 10,
+      "loadRatio": 0.295773,
+      "conditionDerivation": "負重：方法稱「負重為 15% 體重」並使用 10 kg 空槓；體重最輕者的 15% 低於 10 kg 空槓，故負重只能是槓重 10 kg 之外另加 15% 體重，推定槓總質量 = 10 kg + 0.15×體重（推定，非原文明示）。固定身體採受試者平均體重 68.6 kg：0.2958×體重；群體逐人以 0.15 + 10/體重。握距 88.7 cm／0.4 = 2.2175。上斜角度原文未載（補充檔，未查證），模型採清單 30°（僅上斜組）；槓觸胸與下放深度、手肘外開採清單預設。",
+      "participants": {
+        "n": 20,
+        "sex": "10 男、10 女",
+        "massKg": {
+          "mean": 68.6,
+          "sd": 11.1
+        },
+        "heightM": {
+          "mean": 1.752,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "shoulder-abs-mmax",
+          "layer": "moments",
+          "metric": "shoulderAbsMomentPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.418,
+            "sd": 0.041,
+            "unit": "Nm/kg",
+            "definition": "肩關節三維力矩大小的最大值（Mabs max），單側，除以體重；含上肢節段重量"
+          },
+          "evidence": "table",
+          "location": "Table 1, Shoulder absolute Mmax, incline-15",
+          "tolerance": {
+            "absolute": 0.15,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "上斜角度與負重組成為推定、握距超出旋鈕範圍、動作速度與是否觸胸未規定；動態量測。"
+        },
+        {
+          "id": "elbow-mmax",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.112,
+            "sd": 0.023,
+            "unit": "Nm/kg",
+            "definition": "肘屈伸力矩最大值（正 = 屈），除以體重"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension Mmax, incline-15",
+          "tolerance": {
+            "absolute": 0.06,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "力矩符號為外部或內部未明述；模型只含槓力（不含前臂自重）；其餘同上。"
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 84.3,
+            "sd": 6.4,
+            "unit": "deg",
+            "definition": "肘屈伸活動範圍（最大 − 最小）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension RoM, incline-15",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "槓未必觸胸，原文未規定下放深度。"
+        }
+      ]
+    },
+    {
+      "id": "incline-30",
+      "catalogId": "incline-bench",
+      "params": {
+        "grip": 2.2175
+      },
+      "referenceLoadKg": null,
+      "loadBodyFraction": 0.3,
+      "loadBarTareKg": 10,
+      "loadRatio": 0.445773,
+      "conditionDerivation": "負重：方法稱「負重為 30% 體重」並使用 10 kg 空槓；體重最輕者的 15% 低於 10 kg 空槓，故負重只能是槓重 10 kg 之外另加 30% 體重，推定槓總質量 = 10 kg + 0.3×體重（推定，非原文明示）。固定身體採受試者平均體重 68.6 kg：0.4458×體重；群體逐人以 0.3 + 10/體重。握距 88.7 cm／0.4 = 2.2175。上斜角度原文未載（補充檔，未查證），模型採清單 30°（僅上斜組）；槓觸胸與下放深度、手肘外開採清單預設。",
+      "participants": {
+        "n": 20,
+        "sex": "10 男、10 女",
+        "massKg": {
+          "mean": 68.6,
+          "sd": 11.1
+        },
+        "heightM": {
+          "mean": 1.752,
+          "sd": 0.09
+        }
+      },
+      "measurements": [
+        {
+          "id": "shoulder-abs-mmax",
+          "layer": "moments",
+          "metric": "shoulderAbsMomentPeak",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.712,
+            "sd": 0.08,
+            "unit": "Nm/kg",
+            "definition": "肩關節三維力矩大小的最大值（Mabs max），單側，除以體重；含上肢節段重量"
+          },
+          "evidence": "table",
+          "location": "Table 1, Shoulder absolute Mmax, incline-30",
+          "tolerance": {
+            "absolute": 0.15,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "上斜角度與負重組成為推定、握距超出旋鈕範圍、動作速度與是否觸胸未規定；動態量測。"
+        },
+        {
+          "id": "elbow-mmax",
+          "layer": "moments",
+          "metric": "elbowPeakBarMoment",
+          "sample": {
+            "type": "peak"
+          },
+          "reference": {
+            "mean": 0.201,
+            "sd": 0.043,
+            "unit": "Nm/kg",
+            "definition": "肘屈伸力矩最大值（正 = 屈），除以體重"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension Mmax, incline-30",
+          "tolerance": {
+            "absolute": 0.06,
+            "unit": "Nm/kg"
+          },
+          "comparisonRole": "exploratory",
+          "normalization": "mass",
+          "limitations": "力矩符號為外部或內部未明述；模型只含槓力（不含前臂自重）；其餘同上。"
+        },
+        {
+          "id": "elbow-flexion-rom",
+          "layer": "kinematics",
+          "metric": "elbowFlexionRom",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 81.4,
+            "sd": 6.2,
+            "unit": "deg",
+            "definition": "肘屈伸活動範圍（最大 − 最小）"
+          },
+          "evidence": "table",
+          "location": "Table 2, Elbow flexion-extension RoM, incline-30",
+          "tolerance": {
+            "absolute": 15,
+            "unit": "deg"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "槓未必觸胸，原文未規定下放深度。"
+        }
+      ]
+    }
+  ]
+}

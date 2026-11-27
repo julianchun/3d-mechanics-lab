@@ -1,0 +1,458 @@
+{
+  "id": "larsen-bench-2021",
+  "source": {
+    "authors": "Larsen S, Gomo O, van den Tillaar R",
+    "year": 2021,
+    "title": "A Biomechanical Analysis of Wide, Medium, and Narrow Grip Width Effects on Kinematics, Horizontal Kinetics, and Muscle Activity on the Sticking Region in Recreationally Trained Males During 1-RM Bench Pressing",
+    "journal": "Front Sports Act Living 2:637066（2020 年線上發表）",
+    "doi": "10.3389/fspor.2020.637066",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/33554113/",
+    "fullTextUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+  },
+  "sourceQuality": {
+    "rating": "caution",
+    "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+  },
+  "participants": {
+    "n": 14,
+    "sex": "全男",
+    "training": "休閒訓練者，臥推訓練 ≥3 年；能以偏好握距臥推 ≥1.2×體重",
+    "massKg": {
+      "mean": 87.8,
+      "sd": 18.4
+    },
+    "note": "身高未報，無法抽樣群體，只做固定身體。"
+  },
+  "protocol": "三種握距（寬 1.7×、中 1.4×、窄 1.0× 肩峰間距；平均握距 0.71／0.56／0.40 m）各做 1RM；槓觸胸可觸即推、不彈起；v0 = 上推起點（最低點），vmin = 第一個最低速度（黏滯點）。",
+  "model": "寬、中握用 bench，窄握用 cg-bench；握距旋鈕 = 平均握距 m／0.4（模型握點間距 = 0.4×旋鈕）；槓垂直位移取模型頂點至觸胸；力臂取模型槓力（垂直）在前臂—上臂平面內的垂直距離。",
+  "toleranceBasis": "位移 0.05 m（垂直）與 0.04 m（水平），約研究 SD 一倍；力臂 0.04 m，研究 SD 0.02–0.05 m。",
+  "conditions": [
+    {
+      "id": "wide",
+      "catalogId": "bench",
+      "params": {
+        "grip": 1.775
+      },
+      "referenceLoadKg": 109.8,
+      "loadRatio": 1.250569,
+      "conditionDerivation": "握距：原文平均 0.71 m（1.7× 肩峰間距）；模型握點橫向位置 = 0.2×旋鈕，故旋鈕 = 0.71/0.4 = 1.7750（絕對公尺，非逐人比例）。負重：1RM 109.8 kg／體重平均 87.8 kg（僅用於力，位移與力臂與負重無關）。手肘外開與觸胸點採清單預設，研究未量化。",
+      "measurements": [
+        {
+          "id": "bar-vertical-travel",
+          "layer": "kinematics",
+          "metric": "barVerticalTravel",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 0.338,
+            "sd": 0.066,
+            "unit": "m",
+            "definition": "起始（鎖定）到 v0（最低點）槓的垂直位移"
+          },
+          "evidence": "table",
+          "location": "Table 1, vertical displacement from start, v0",
+          "tolerance": {
+            "absolute": 0.05,
+            "unit": "m"
+          }
+        },
+        {
+          "id": "bar-horizontal-travel",
+          "layer": "kinematics",
+          "metric": "barHorizontalTravel",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 0.125,
+            "sd": 0.035,
+            "unit": "m",
+            "definition": "起始到 v0 槓的水平位移（絕對值）"
+          },
+          "evidence": "table",
+          "location": "Table 1, horizontal displacement from start, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          }
+        },
+        {
+          "id": "elbow-arm-v0",
+          "layer": "moments",
+          "metric": "elbowMomentArm",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 0,
+            "sd": 0.02,
+            "unit": "m",
+            "definition": "v0 的肘力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm elbow, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "力臂的平面與是否含橫向力文中未明述；模型僅垂直槓力。"
+        },
+        {
+          "id": "shoulder-arm-v0",
+          "layer": "moments",
+          "metric": "shoulderMomentArm",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 0.24,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "v0 的肩力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm shoulder, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "同上。"
+        },
+        {
+          "id": "elbow-arm-vmin",
+          "layer": "moments",
+          "metric": "elbowMomentArm",
+          "sample": {
+            "type": "barHeightAboveBottom",
+            "meters": 0.154
+          },
+          "reference": {
+            "mean": 0.06,
+            "sd": 0.02,
+            "unit": "m",
+            "definition": "vmin（黏滯點）的肘力臂；事件位置以表 1 的 vmin 垂直位移定位"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm elbow, vmin; Table 1, vmin vertical displacement",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "事件由動態速度最小定義，模型以研究平均位移定位；力臂定義同上。"
+        },
+        {
+          "id": "shoulder-arm-vmin",
+          "layer": "moments",
+          "metric": "shoulderMomentArm",
+          "sample": {
+            "type": "barHeightAboveBottom",
+            "meters": 0.154
+          },
+          "reference": {
+            "mean": 0.22,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "vmin（黏滯點）的肩力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm shoulder, vmin; Table 1, vmin vertical displacement",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "同上。"
+        }
+      ]
+    },
+    {
+      "id": "medium",
+      "catalogId": "bench",
+      "params": {
+        "grip": 1.4
+      },
+      "referenceLoadKg": 108.9,
+      "loadRatio": 1.240319,
+      "conditionDerivation": "握距：原文平均 0.56 m（1.4× 肩峰間距）；模型握點橫向位置 = 0.2×旋鈕，故旋鈕 = 0.56/0.4 = 1.4000（絕對公尺，非逐人比例）。負重：1RM 108.9 kg／體重平均 87.8 kg（僅用於力，位移與力臂與負重無關）。手肘外開與觸胸點採清單預設，研究未量化。",
+      "measurements": [
+        {
+          "id": "bar-vertical-travel",
+          "layer": "kinematics",
+          "metric": "barVerticalTravel",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 0.373,
+            "sd": 0.06,
+            "unit": "m",
+            "definition": "起始（鎖定）到 v0（最低點）槓的垂直位移"
+          },
+          "evidence": "table",
+          "location": "Table 1, vertical displacement from start, v0",
+          "tolerance": {
+            "absolute": 0.05,
+            "unit": "m"
+          }
+        },
+        {
+          "id": "bar-horizontal-travel",
+          "layer": "kinematics",
+          "metric": "barHorizontalTravel",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 0.131,
+            "sd": 0.045,
+            "unit": "m",
+            "definition": "起始到 v0 槓的水平位移（絕對值）"
+          },
+          "evidence": "table",
+          "location": "Table 1, horizontal displacement from start, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          }
+        },
+        {
+          "id": "elbow-arm-v0",
+          "layer": "moments",
+          "metric": "elbowMomentArm",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 0.03,
+            "sd": 0.02,
+            "unit": "m",
+            "definition": "v0 的肘力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm elbow, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "力臂的平面與是否含橫向力文中未明述；模型僅垂直槓力。"
+        },
+        {
+          "id": "shoulder-arm-v0",
+          "layer": "moments",
+          "metric": "shoulderMomentArm",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 0.19,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "v0 的肩力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm shoulder, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "同上。"
+        },
+        {
+          "id": "elbow-arm-vmin",
+          "layer": "moments",
+          "metric": "elbowMomentArm",
+          "sample": {
+            "type": "barHeightAboveBottom",
+            "meters": 0.186
+          },
+          "reference": {
+            "mean": 0.06,
+            "sd": 0.02,
+            "unit": "m",
+            "definition": "vmin（黏滯點）的肘力臂；事件位置以表 1 的 vmin 垂直位移定位"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm elbow, vmin; Table 1, vmin vertical displacement",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "事件由動態速度最小定義，模型以研究平均位移定位；力臂定義同上。"
+        },
+        {
+          "id": "shoulder-arm-vmin",
+          "layer": "moments",
+          "metric": "shoulderMomentArm",
+          "sample": {
+            "type": "barHeightAboveBottom",
+            "meters": 0.186
+          },
+          "reference": {
+            "mean": 0.22,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "vmin（黏滯點）的肩力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm shoulder, vmin; Table 1, vmin vertical displacement",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "同上。"
+        }
+      ]
+    },
+    {
+      "id": "narrow",
+      "catalogId": "cg-bench",
+      "params": {
+        "grip": 1
+      },
+      "referenceLoadKg": 103.7,
+      "loadRatio": 1.181093,
+      "conditionDerivation": "握距：原文平均 0.40 m（1× 肩峰間距）；模型握點橫向位置 = 0.2×旋鈕，故旋鈕 = 0.4/0.4 = 1.0000（絕對公尺，非逐人比例）。負重：1RM 103.7 kg／體重平均 87.8 kg（僅用於力，位移與力臂與負重無關）。手肘外開與觸胸點採清單預設，研究未量化。",
+      "measurements": [
+        {
+          "id": "bar-vertical-travel",
+          "layer": "kinematics",
+          "metric": "barVerticalTravel",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 0.399,
+            "sd": 0.064,
+            "unit": "m",
+            "definition": "起始（鎖定）到 v0（最低點）槓的垂直位移"
+          },
+          "evidence": "table",
+          "location": "Table 1, vertical displacement from start, v0",
+          "tolerance": {
+            "absolute": 0.05,
+            "unit": "m"
+          }
+        },
+        {
+          "id": "bar-horizontal-travel",
+          "layer": "kinematics",
+          "metric": "barHorizontalTravel",
+          "sample": {
+            "type": "range"
+          },
+          "reference": {
+            "mean": 0.128,
+            "sd": 0.043,
+            "unit": "m",
+            "definition": "起始到 v0 槓的水平位移（絕對值）"
+          },
+          "evidence": "table",
+          "location": "Table 1, horizontal displacement from start, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          }
+        },
+        {
+          "id": "elbow-arm-v0",
+          "layer": "moments",
+          "metric": "elbowMomentArm",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 0.08,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "v0 的肘力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm elbow, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "力臂的平面與是否含橫向力文中未明述；模型僅垂直槓力。"
+        },
+        {
+          "id": "shoulder-arm-v0",
+          "layer": "moments",
+          "metric": "shoulderMomentArm",
+          "sample": {
+            "type": "bottom"
+          },
+          "reference": {
+            "mean": 0.12,
+            "sd": 0.03,
+            "unit": "m",
+            "definition": "v0 的肩力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm shoulder, v0",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "同上。"
+        },
+        {
+          "id": "elbow-arm-vmin",
+          "layer": "moments",
+          "metric": "elbowMomentArm",
+          "sample": {
+            "type": "barHeightAboveBottom",
+            "meters": 0.219
+          },
+          "reference": {
+            "mean": 0.07,
+            "sd": 0.02,
+            "unit": "m",
+            "definition": "vmin（黏滯點）的肘力臂；事件位置以表 1 的 vmin 垂直位移定位"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm elbow, vmin; Table 1, vmin vertical displacement",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "事件由動態速度最小定義，模型以研究平均位移定位；力臂定義同上。"
+        },
+        {
+          "id": "shoulder-arm-vmin",
+          "layer": "moments",
+          "metric": "shoulderMomentArm",
+          "sample": {
+            "type": "barHeightAboveBottom",
+            "meters": 0.219
+          },
+          "reference": {
+            "mean": 0.17,
+            "sd": 0.05,
+            "unit": "m",
+            "definition": "vmin（黏滯點）的肩力臂"
+          },
+          "evidence": "table",
+          "location": "Table 2, Moment arm shoulder, vmin; Table 1, vmin vertical displacement",
+          "tolerance": {
+            "absolute": 0.04,
+            "unit": "m"
+          },
+          "comparisonRole": "exploratory",
+          "limitations": "同上。"
+        }
+      ]
+    }
+  ]
+}
