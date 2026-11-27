@@ -1,6 +1,6 @@
 // 固定種子群體模擬；準則見 docs/research/methods.md。
 import fs from 'node:fs';
-import { BODY, DEFAULT_BODY, BAR_RATIO, MODEL_VERSION, analyze, createBody, defaultParams, solvePose, withBody } from '../src/biomech.js';
+import { BODY, DEFAULT_BODY, BAR_RATIO, MODEL_VERSION, analyze, createBody, defaultParams, solvePose, withBody, withLumbarPoint } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
 const mode = process.argv[2] ?? '';
@@ -82,7 +82,11 @@ function withLoad(lift, loadRatio, fn) {
 }
 const dof = { hipExtensionMoment: 'hipExt', kneeExtensionMoment: 'kneeExt',
   anklePlantarflexionMoment: 'ankPF', lumbarExtensionMoment: 'trunkExt' };
+// momentPoint 為研究定義的腰背取矩點；未註記者維持產品預設點。
 function measureValue(lift, m, params, cache) {
+  return withLumbarPoint(m.momentPoint ?? 'model5cm', () => measureValueAtPoint(lift, m, params, cache));
+}
+function measureValueAtPoint(lift, m, params, cache) {
   if (m.metric === 'pelvisAnteriorTilt') return null;
   const at = (e) => { if (!cache.has(e)) cache.set(e, analyze(lift, params, e)); return cache.get(e); };
   const poseAt = (e) => at(e).pose;
@@ -130,12 +134,15 @@ for (const name of sourceNames) {
     const entry = catalog.get(condition.catalogId);
     const bodies = condition.participants ? sampleBodies(condition.participants) : bodiesBySource[name];
     const params = { ...defaultParams(entry.lift), ...entry.set, ...condition.params };
-    const values = condition.measurements.map(() => []), errors = [];
+    const values = condition.measurements.map(() => []), values5 = condition.measurements.map(() => []), errors = [];
     for (const body of bodies) {
       try {
         withBody(body, () => withLoad(entry.lift, condition.loadRatio, () => {
           const cache = new Map();
-          condition.measurements.forEach((m, j) => { const value = measureValue(entry.lift, m, params, cache); if (value !== null) values[j].push(value); });
+          condition.measurements.forEach((m, j) => {
+            const value = measureValue(entry.lift, m, params, cache); if (value !== null) values[j].push(value);
+            if (m.momentPoint) values5[j].push(measureValue(entry.lift, { ...m, momentPoint: undefined }, params, new Map()));
+          });
         }));
       } catch (error) { errors.push(error.message); }
     }
@@ -149,6 +156,7 @@ for (const name of sourceNames) {
       const modelSd = values[j].length ? round(sd(values[j])) : null;
       const pass = category === 'comparable' ? Math.abs(modelMean - reference) <= m.reference.sd : null;
       comparisons.push({ id, category, unit: m.reference.unit, oldModel: prior.model, oldStatus: prior.status,
+        ...(m.momentPoint ? { momentPoint: m.momentPoint, modelMeanAt5cm: round(mean(values5[j])) } : {}),
         modelMean, modelSd, referenceMean: reference, referenceSd: m.reference.sd,
         newStatus: category === 'comparable' ? (pass ? 'pass' : 'fail') : category, pass,
         sampleN: values[j].length });
