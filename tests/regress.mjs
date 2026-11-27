@@ -6,6 +6,7 @@ import { analyze, defaultParams, LIFTS } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
 const FILE = new URL('./snapshots/baseline.json', import.meta.url);
+const JOINT_FILE = new URL('./snapshots/joint-moments.json', import.meta.url);
 const TOL = 1e-3;
 const snap = {};
 for (const c of CATALOG) {
@@ -18,6 +19,15 @@ for (const c of CATALOG) {
       mus: Object.fromEntries(Object.entries(r.mus).map(([k, v]) => [k, +v.a.toFixed(4)])),
       warn: r.pose.warn, ok: r.pose.ok,
     };
+  }
+}
+// 肌肉細分可更新肌肉基準；關節外力矩仍須等於細分前的固定物理基準。
+const jointBase = JSON.parse(fs.readFileSync(JOINT_FILE));
+for (const [key, expected] of Object.entries(jointBase)) {
+  const actual = snap[key]?.dem;
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    console.error(`關節力矩改變：${key} ${JSON.stringify(expected)} → ${JSON.stringify(actual)}`);
+    process.exit(1);
   }
 }
 if (process.argv.includes('--update')) {

@@ -2,7 +2,7 @@
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 
-export const MODEL_VERSION = '0.7.3';
+export const MODEL_VERSION = '0.8.0';
 // 群體常模僅供人工複查；髖角缺骨盆分段，肩後伸代理亦無可直接換算的常模。
 export const ROM_HINTS = Object.freeze({
   hipFlex: 136, kneeFlex: 138, ankleDorsi: 39, shFlex: 160, shAbd: 150,
@@ -1001,11 +1001,17 @@ export const MUSCLES = [
   // R 三束原始 F=9594 N 對本模型膝伸軸的理論力矩過高；按單側等長膝伸力矩校正有效能力。
   { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 5000, Lf: 0.0986, Lmt: 0.3101, arms: { kneeExt: angleSlope(0.045, 'kneeFlex', 0.005) } },
   { id: 'rf', name: '股直肌', F: 2191.7, Lf: 0.0759, Lmt: 0.5244, arms: { kneeExt: angleSlope(0.04, 'kneeFlex', 0.004), hipExt: -0.035 } },
-  { id: 'hams', name: '膕繩肌', F: 4105.5, Lf: 0.0960, Lmt: 0.4220, arms: { hipExt: angleSlope(0.06, 'hipFlex', -0.01), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
-  // 臀大肌的直線弦在深屈髖時穿過骨盆，90° 以後甚至反轉；保留原先繞行估計，避免用錯誤幾何外插。
-  { id: 'gmax', name: '臀大肌', F: 3337.6, Lf: 0.1569, Lmt: 0.2197, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: -0.0051 } },
-  { id: 'gmed', name: '臀中肌', F: 2729.8, Lf: 0.0730, Lmt: 0.1281, arms: { hipAbd: 0.0430 } },
-  { id: 'addmag', name: '內收大肌', F: 2389.2, Lf: 0.1442, Lmt: 0.2418, arms: { hipExt: hipFit(0.0094, 0.0342, 0.0362), hipAbd: -0.0499 } },
+  { id: 'bflh', group: 'hams', name: '股二頭肌長頭', F: 1313.1836, Lf: 0.0976, Lmt: 0.4228, arms: { hipExt: hipFit(0.0488, 0.0617, 0.0398), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
+  { id: 'semis', group: 'hams', name: '內側膕繩肌', F: 2792.2820, Lf: 0.0953, Lmt: 0.4216, arms: { hipExt: hipFit(0.0448, 0.0572, 0.0371), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
+  { id: 'bfsh', group: 'hams', name: '股二頭肌短頭', F: 557.1148, Lf: 0.1103, Lmt: 0.2161, arms: { kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
+  // 臀大肌子部位只拆有來源方向差異的髖外展力臂；髖伸共用原群組繞行估計。
+  // 直線弦在深屈髖時穿過骨盆，90° 以後甚至反轉，不能用來分配髖伸力臂。
+  { id: 'gmaxUpper', group: 'gmax', name: '臀大肌上部', F: 983.7836, Lf: 0.1470, Lmt: 0.1958, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: 0.0175 } },
+  { id: 'gmaxLower', group: 'gmax', name: '臀大肌中下部', F: 2353.8, Lf: 0.1610, Lmt: 0.2296, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: -0.0145 } },
+  { id: 'gmedFront', group: 'gmed', name: '臀中肌前部', F: 1093.4668, Lf: 0.0730, Lmt: 0.1288, arms: { hipAbd: 0.0513, hipExt: hipFit(0.0175, 0.0035, -0.0116) } },
+  { id: 'gmedBack', group: 'gmed', name: '臀中肌中後部', F: 1636.2909, Lf: 0.0730, Lmt: 0.1276, arms: { hipAbd: 0.0375, hipExt: hipFit(0.0225, 0.0185, 0.0059) } },
+  { id: 'addmagIsch', group: 'addmag', name: '內收大肌後部', F: 597.2951, Lf: 0.1562, Lmt: 0.3725, arms: { hipExt: hipFit(0.0389, 0.0611, 0.0464), hipAbd: -0.0357 } },
+  { id: 'addmagOther', group: 'addmag', name: '內收大肌其餘部分', F: 1791.8853, Lf: 0.1402, Lmt: 0.1983, arms: { hipExt: hipFit(-0.0004, 0.0252, 0.0328), hipAbd: -0.0546 } },
   { id: 'addl', name: '內收長／短肌', F: 1542.6, Lf: 0.1061, Lmt: 0.1988, arms: { hipAbd: -0.0568, hipExt: hipFit(-0.0410, -0.0233, 0.0148) } },
   { id: 'ilio', name: '髂腰肌', F: 2447.9, Lf: 0.1126, Lmt: 0.2107, arms: { hipExt: hipFit(-0.0217, -0.0347, -0.0370) } },
   { id: 'gas', name: '腓腸肌', F: 4690.6, Lf: 0.0536, Lmt: 0.4447, arms: { ankPF: angleSlope(0.05, 'ankleDorsi', 0.005), kneeExt: angleSlope(-0.02, 'kneeFlex', -0.003) } },
@@ -1023,10 +1029,13 @@ export const MUSCLES = [
   { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'), shRot: 0.020, scElev: -0.030 } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFwd: shoulderArm(-0.020, -0.010, 0, 'fwd'), shSide: shoulderArm(-0.020, -0.010, 0, 'side') } },
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
-  // 二頭肌肩屈基值取 MOBL_ARMS_41.osim 長頭（16.0 mm）與短頭（21.6 mm）0° 路徑弦長依 F 加權（18.1 mm，屬文獻上緣）；
+  // 二頭肌兩頭的肩屈基值分別取 MOBL_ARMS_41.osim 0° 路徑弦長 16.0／21.6 mm；
   // Landin 2008（PMID 17196396，電刺激＋測力儀）測得上舉 ≥60° 肩上提力矩近零，此處 0°→60° 線性歸零且省略肘角相依為估計。
-  { id: 'bic', name: '肱二頭肌', F: 841.9, Lf: 0.1219, Lmt: 0.3641, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.018 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
-  { id: 'brach', name: '肱肌／肱橈肌', F: 1453.4, Lf: 0.1023, Lmt: 0.1709, arms: { elbExt: angleSlope(-0.025, 'elbFlex', -0.006) } },
+  { id: 'bicLong', group: 'bic', name: '肱二頭肌長頭', F: 525.1, Lf: 0.1157, Lmt: 0.3880, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
+  { id: 'bicShort', group: 'bic', name: '肱二頭肌短頭', F: 316.8, Lf: 0.1321, Lmt: 0.3244, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
+  // 肘屈力臂比例取 MoBL-ARMS 的 45° 跨肘路徑弦；加權平均維持原功能群的肘屈能力。
+  { id: 'brachialis', group: 'brach', name: '肱肌', F: 1177.37, Lf: 0.0858, Lmt: 0.1393, arms: { elbExt: (q) => angleSlope(-0.025, 'elbFlex', -0.006)(q) * 0.681 } },
+  { id: 'brachioradialis', group: 'brach', name: '肱橈肌', F: 276.0, Lf: 0.1726, Lmt: 0.3056, arms: { elbExt: (q) => angleSlope(-0.025, 'elbFlex', -0.006)(q) * 2.361 } },
   { id: 'tmaj', name: '大圓肌', F: 144.0, Lf: 0.1624, Lmt: 0.1824, arms: fittedArms('tmaj') },
   { id: 'corb', name: '喙肱肌', F: 208.2, Lf: 0.0932, Lmt: 0.1902, arms: { shFwd: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'fwd'), shSide: shoulderArm(0.015, (q) => -0.020 * Math.max(0, Math.cos(q.shElev)), 0.012, 'side') } },
   { id: 'infra', name: '棘下肌／小圓肌', F: 1345.3, Lf: 0.0752, Lmt: 0.1141, arms: { shRot: -0.025 } },
@@ -1041,18 +1050,29 @@ export const MUSCLES = [
   // 前鋸肌肩帶兩軸用 Seth 三束路徑 F 加權擬合；1000 N 仍是本模型的有效能力估計。
   { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: fittedScapArms('serr') },
 ];
+export const MUSCLE_GROUPS = {
+  hams: { name: '膕繩肌' }, gmax: { name: '臀大肌' }, gmed: { name: '臀中肌' }, addmag: { name: '內收大肌' },
+  bic: { name: '肱二頭肌' }, brach: { name: '肱肌／肱橈肌' },
+};
 export const MUSCLE_BY_ID = Object.fromEntries(MUSCLES.map((m) => [m.id, m]));
+for (const [id, group] of Object.entries(MUSCLE_GROUPS)) {
+  const children = MUSCLES.filter((m) => m.group === id);
+  MUSCLE_BY_ID[id] = { id, name: group.name, F: children.reduce((s, m) => s + m.F, 0),
+    arms: Object.assign({}, ...children.map((m) => m.arms)) };
+}
+export const MUSCLE_GROUP_IDS = [...new Set(MUSCLES.map((m) => m.group || m.id))];
 
 // R／U 固定版本 .osim：肌腱鬆弛長 Lt、最佳長度羽狀角 alpha，合群時按來源 F 加權。
 // 供剛性肌腱診斷；來源與重算方式見 tools/muscle_params.py。現有姿勢／路徑基準不足以拿它直接算出力。
 const FIBER_GEOMETRY = {
-  vasti: [0.2114, 0.2678], rf: [0.4485, 0.2170], hams: [0.3260, 0.2275],
-  gmax: [0.0628, 0.3677], gmed: [0.0551, 0.3166], addmag: [0.0977, 0.2204],
+  vasti: [0.2114, 0.2678], rf: [0.4485, 0.2170], bflh: [0.3252, 0.1759], semis: [0.3263, 0.2518], bfsh: [0.1058, 0.2642],
+  gmaxUpper: [0.0488, 0.3540], gmaxLower: [0.0686, 0.3734], gmedFront: [0.0558, 0.3166], gmedBack: [0.0546, 0.3166],
+  addmagIsch: [0.2163, 0.1680], addmagOther: [0.0581, 0.2378],
   addl: [0.0927, 0.1284], ilio: [0.0981, 0.2424], gas: [0.3911, 0.1806],
   sol: [0.2768, 0.3814], ta: [0.2405, 0.1952], pecs: [0.1075, 0.4463],
   pecc: [0.0028, 0.2967], adelt: [0.0930, 0.3840], pdelt: [0.0380, 0.3142],
   lat: [0.1473, 0.3781], trilong: [0.1430, 0.2094], trilat: [0.0944, 0.1571],
-  bic: [0.2422, 0], brach: [0.0686, 0], tmaj: [0.0200, 0.2793],
+  bicLong: [0.2723, 0], bicShort: [0.1923, 0], brachialis: [0.0535, 0], brachioradialis: [0.1330, 0], tmaj: [0.0200, 0.2793],
   corb: [0.0970, 0.4712], infra: [0.0389, 0.3491], supsp: [0.0395, 0.1222], subsc: [0.0330, 0.3491],
   mdelt: [0.1095, 0.2618],
 };
@@ -3789,13 +3809,27 @@ export function analyze(lift, P, e) {
   for (const p of L.params) {
     if (p.mech !== 'C') continue;
     const v = P[p.key] || 0;
-    for (const id of p.pref[0]) if (pref[id] !== undefined) pref[id] *= Math.pow(3, -v);
-    for (const id of p.pref[1]) if (pref[id] !== undefined) pref[id] *= Math.pow(3, v);
+    for (const id of p.pref[0]) for (const m of muscles) if (m.id === id || m.group === id) pref[m.id] *= Math.pow(3, -v);
+    for (const id of p.pref[1]) for (const m of muscles) if (m.id === id || m.group === id) pref[m.id] *= Math.pow(3, v);
   }
   const lb = Object.fromEntries(muscles.map((m) => [m.id, 0]));
   if (P.brace && lb.ra !== undefined) lb.ra = 0.3 * P.brace;
   L.lowerBounds?.(P, lb);
+  // 舊動作的二頭肌握法偏好仍以合群 id 表示，再分配到子部位。
+  if (muscles.some((m) => m.group === 'bic')) pref.bic = 1;
   L.adjust?.(P, pref);
+  if (pref.bic !== undefined) {
+    for (const m of muscles) if (m.group === 'bic') pref[m.id] *= pref.bic;
+    delete pref.bic;
+  }
+  // 拆分不變的努力成本：同群同活化時，Σ aᵢ²/prefᵢ = a²/pref群組。
+  // F群組只計本動作參與求解的子部位；膝屈時含 bfsh，只有髖伸時不含不跨髖的 bfsh。
+  for (const id of Object.keys(MUSCLE_GROUPS)) {
+    const children = muscles.filter((m) => m.group === id);
+    if (!children.length) continue;
+    const groupF = children.reduce((sum, m) => sum + m.F, 0);
+    for (const m of children) pref[m.id] *= groupF / m.F;
+  }
 
   // 由力臂定義 r(θ) = -∂L/∂θ，對隨角度變化的力臂沿自由度區間積分 ΔL = -∫ r(θ) dθ，
   // 避免端點力臂劇烈變化時以 r(q)·(q - q_ref) 放大位移與被動張力。
@@ -3922,7 +3956,18 @@ export function analyze(lift, P, e) {
   const mus = {};
   for (const x of info) {
     const a = Math.max(0, act[x.m.id]);
-    mus[x.m.id] = { a, p: x.pas, s: Math.min(a, 1.5) + x.pas, l: x.l, lRigid: x.lRigid, len: x.l > 1.12 ? '拉長' : x.l < 0.9 ? '縮短' : '中段' };
+    mus[x.m.id] = { a, p: x.pas, s: Math.min(a, 1.5) + x.pas, force: x.F * (a * Math.exp(-((x.l - 1) ** 2) / 0.45) + x.pas), l: x.l, lRigid: x.lRigid, len: x.l > 1.12 ? '拉長' : x.l < 0.9 ? '縮短' : '中段' };
+  }
+  // 合群值僅供一般視圖與既有研究檢查；求解器只使用上面的獨立子部位。
+  for (const id of Object.keys(MUSCLE_GROUPS)) {
+    const children = info.filter((x) => x.m.group === id);
+    if (!children.length) continue;
+    const F = children.reduce((s, x) => s + x.F, 0);
+    const weighted = (key) => children.reduce((s, x) => s + x.F * mus[x.m.id][key], 0) / F;
+    const l = weighted('l');
+    mus[id] = { a: weighted('a'), p: weighted('p'), s: weighted('s'),
+      force: children.reduce((s, x) => s + mus[x.m.id].force, 0), l, lRigid: null,
+      len: l > 1.12 ? '拉長' : l < 0.9 ? '縮短' : '中段' };
   }
   // 關節負擔
   const rom = {};

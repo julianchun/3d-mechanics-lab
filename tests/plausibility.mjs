@@ -1,10 +1,10 @@
 // 清單預設姿勢的生理合理性驗收；每條肌肉只比較主動活化 a，避免被動張力與顯示截斷掩蓋超載。
 import { CATALOG } from '../src/catalog.js';
-import { analyze, defaultParams, BODY } from '../src/biomech.js';
+import { analyze, defaultParams, BODY, MUSCLE_GROUP_IDS } from '../src/biomech.js';
 
 // 排名用畫面顯示的 s（主動活化加被動份額）；超載門檻只用未截斷的 a。
 // 文獻趨勢見 docs/research/references.md；同一肌肉的不同動作峰值不等於跨肌肉 EMG 百分比。
-// 臀橋已修正為肩線貼地支撐與地板連續反力模型，臀大肌為第一位（高於腰背伸肌）。
+// 排名檢查保留既有準則，已解決的細分問題從 KNOWN_ISSUES 移除。
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
   'goblet-squat': { first: ['vasti'] },
@@ -42,6 +42,20 @@ const RANKS = {
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  {
+    id: 'hip-thrust', rule: 'trend:gmaxLower', kind: '區域性文獻趨勢',
+    current: '臀推臀大肌中下部峰值 0.495，低於高槓深蹲 0.571；Contreras 2015 實測方向相反',
+    cause: '峰值幀髖外展需求為臀推 +30.6、深蹲 −22.4 N·m；中下部在模型中為髖內收肌，深蹲的額狀面需求增加其分配。髖伸共用繞行估計，支撐反力亦未與研究條件校準',
+    fix: '以同負重條件的區域肌電與三維力矩重新核對；%MVIC 不與模型活化數值等同',
+  },
+  ...[
+    ['curl', '前三角肌 0.831、肱二頭肌 0.780；詳細視圖肱橈肌峰值 0.751'],
+    ['db-curl', '前三角肌 0.744、肱二頭肌 0.690；詳細視圖肱橈肌峰值 0.719'],
+  ].map(([id, current]) => ({
+    id, rule: 'rank:first', kind: '彎舉分配待驗證', current,
+    cause: '現有肱橈肌肘屈力臂按 45° 來源弦比例映射，模型缺前臂旋前／旋後自由度；其分配與肩前舉穩定需求尚未以同條件資料校準',
+    fix: '量測不同握法的肘屈與肩前舉力矩，加入可核對的前臂旋轉模型後再評估',
+  })),
   ...['deadlift', 'deficit-dl'].map((id) => ({
     id, rule: 'activation:erec', kind: '起槓幾何變更',
     current: '離地端腰背伸肌模型活化略高於 1',
@@ -55,12 +69,6 @@ const KNOWN_ISSUES = [
     fix: '取得過膝附近手部反力與肩胛力矩資料後檢核，暫不調整肌肉常數',
   })),
   {
-    id: 'cable-fly-low', rule: 'rank:first', kind: '平衡姿勢變更',
-    current: '低位滑輪夾胸的肱肌與胸大肌模型峰值接近，肱肌略居首',
-    cause: '重心回到兩腳中點後，手臂位置和鋼索方向改變肘屈與肩水平內收需求；兩肌群的等效力臂尚未同條件校準',
-    fix: '先核對低位滑輪的手部路徑、肘矩與阻力方向，再檢討肌肉力臂',
-  },
-  {
     id: 'goblet-squat', rule: 'rank:first', kind: '預設變更',
     current: 'dom=0.25 時全程峰值臀大肌約 0.42，股廣肌約 0.37；最低點股廣肌居全肌第 2',
     cause: '依教練決定還原高腳杯主導預設，較 0.05 減少膝前移並增加髖與軀幹需求；原股廣肌第一名準則仍保留執行',
@@ -68,7 +76,7 @@ const KNOWN_ISSUES = [
   },
   ...Object.entries({
     dips: ['pecs', 'lat', 'tmaj'], 'dips-upright': ['pecs', 'lat', 'tmaj'],
-    pullup: ['lat'], 'pullup-wide': ['pecs', 'lat'], chinup: ['adelt', 'lat', 'bic', 'brach', 'mdelt'],
+    pullup: ['lat'], 'pullup-wide': ['pecs', 'lat'], chinup: ['adelt', 'lat', 'brach', 'mdelt'],
   }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
     id, rule: `activation:${muscle}`, kind: '新動作', current: `${muscle} 的模型主動活化超過 1`,
     cause: muscle === 'lat' && ['dips', 'dips-upright', 'pullup', 'pullup-wide'].includes(id)
@@ -88,8 +96,8 @@ const KNOWN_ISSUES = [
   },
   {
     id: 'hammer-curl', rule: 'rank:first', kind: '新動作', current: '錘式彎舉前三角肌（0.75）高於肱二頭肌（0.59）與肱肌／肱橈肌（0.51）',
-    cause: '沿用既有對握偏好（pref.bic × 1.0）後，二頭肌分擔下降、單關節肱肌／肱橈肌上升，導致二頭肌對抗前臂重力的肩屈貢獻減少、肩前舉穩定集中到前三角肌（與既有反手彎舉 reverse-curl 同源）',
-    fix: '待統一校準上臂貼身彎舉的肩前舉穩定模型並拆分肱肌與肱橈肌後再檢核，暫不加特例',
+    cause: '詳細視圖肱橈肌峰值 0.932，肱肌僅 0.269；肘屈力臂採 45° 來源弦比例，缺前臂旋前／旋後自由度，肩前舉穩定需求也集中到前三角肌',
+    fix: '核對對握的肘屈／肩前舉力矩及肱橈肌區域資料，再建立前臂旋轉模型',
   },
   {
     id: 'db-reverse-fly', rule: 'activation:pdelt', kind: '新動作', current: '預設每顆 6 kg 啞鈴於展開頂點時三角肌後束主動活化（1.15）超過 1.0',
@@ -115,8 +123,8 @@ const KNOWN_ISSUES = [
   {
     id: 'reverse-curl', rule: 'rank:first',
     kind: '既有問題', current: '正握彎舉前三角肌（0.92）高於肱肌／肱橈肌（0.69）與肱二頭肌（0.47）',
-    cause: '正握降低肱二頭肌效率後，屈肘肌群對抗前臂重力的肩屈貢獻減少，肩部前舉穩定需求集中到前三角肌；目前肱肌與肱橈肌合併且未單獨校準',
-    fix: '核對肱肌／肱橈肌與二頭肌的握法差異，以及上臂貼身時的肩關節穩定模型',
+    cause: '詳細視圖肱橈肌峰值 1.210、肱肌 0.349；肘屈力臂按 45° 來源弦比例映射，但模型缺前臂旋前／旋後自由度，肩前舉需求集中到前三角肌',
+    fix: '核對不同握法的肘屈與肩前舉力矩，加入前臂旋轉自由度後再評估分配',
   },
   ...[
     ['pulldown', '胸大肌仍進前四'],
@@ -136,12 +144,6 @@ const KNOWN_ISSUES = [
     cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；Seth 路徑的中斜方等效力臂直接替換又使已通過的划船排名失敗',
     fix: '以 OpenSim 逐點驗證肩胛兩軸力矩與中斜方路徑，再校準功能群能力',
   })),
-  {
-    id: 'cable-row', rule: 'rank:midtrap:top4', kind: '節段參數修改後退步',
-    current: '前四名為 erec、brach、lat、mdelt；中斜方肌跌出前四',
-    cause: 'de Leva 節段質量與手臂質心更新後，握把附近的手臂重力矩與肩胛後收需求改變；原先接近門檻的中斜方肌排名下降',
-    fix: '取得滑輪划船肩胛後收力矩與肌肉活化的獨立量測，再檢核肩胛力臂及器械阻力曲線',
-  },
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));
 if (known.size !== KNOWN_ISSUES.length) throw new Error('KNOWN_ISSUES 有重複的動作與規則');
@@ -167,7 +169,7 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   const overload = new Map();
   for (let i = 0; i <= N; i++) {
     const e = i / N;
-    for (const [id, mus] of Object.entries(analyze(c.lift, P, e).mus)) {
+    for (const [id, mus] of Object.entries(analyze(c.lift, P, e).mus).filter(([id]) => MUSCLE_GROUP_IDS.includes(id))) {
       if (!Number.isFinite(mus.a) || mus.a > 1.000001) {
         const prior = overload.get(id);
         if (!prior || !Number.isFinite(mus.a) || mus.a > prior.a) overload.set(id, { a: mus.a, e });
@@ -244,13 +246,20 @@ for (let i = 0; i <= 100; i++) {
   const P = { ...defaultParams('hacksquat'), stance: i / 100 };
   const peaks = new Map();
   for (let j = 0; j <= N; j++) {
-    for (const [id, muscle] of Object.entries(analyze('hacksquat', P, j / N).mus)) {
+    for (const [id, muscle] of Object.entries(analyze('hacksquat', P, j / N).mus).filter(([id]) => MUSCLE_GROUP_IDS.includes(id))) {
       peaks.set(id, Math.max(peaks.get(id) || 0, muscle.s));
     }
   }
   const first = [...peaks].sort((a, b) => b[1] - a[1])[0][0];
   if (first !== 'vasti') errors.push(`hack-squat 站距 ${(i / 100).toFixed(2)} 第一名 ${first}，預期 vasti`);
 }
+// [Contreras 2015](https://pubmed.ncbi.nlm.nih.gov/26214739/)：臀推上下部峰值皆應高於深蹲；下部目前失敗。
+const lowerGlutePeak = (lift, params) => Math.max(...Array.from({ length: 21 }, (_, i) =>
+  analyze(lift, params, i / 20).mus.gmaxLower.a));
+const hipLower = lowerGlutePeak('hipthrust', { ...defaultParams('hipthrust'), surface: 'bench', kneeTop: 90 });
+const squatLower = lowerGlutePeak('squat', { ...defaultParams('squat'), barPos: 'high' });
+if (hipLower <= squatLower * 1.01) check('hip-thrust', 'trend:gmaxLower', `臀推 ${hipLower.toFixed(3)}，深蹲 ${squatLower.toFixed(3)}；預期臀推至少高 1%`);
+
 // 墊高的需求力矩若日後真的因分段支撐改變，這項已知限制應移除。
 const padBase = defaultParams('backext');
 const lowPad = analyze('backext', { ...padBase, padHeight: -6 }, 0.5).dem;

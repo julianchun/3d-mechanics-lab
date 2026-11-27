@@ -11,6 +11,7 @@
 ## 肌肉參數
 
 - [Rajagopal 等（2016）](https://pubmed.ncbi.nlm.nih.gov/27392337/)及[固定版 OpenSim 下肢模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/Rajagopal2016.osim)：下肢肌束最大等長力、纖維長與肌腱參數的主要來源。
+- [Lai、Arnold、Wakeling（2017）](https://pubmed.ncbi.nlm.nih.gov/28900782/)及[固定版 RajagopalLaiUhlrich2023 模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/RajagopalLaiUhlrich2023.osim)：深屈髖／膝路徑的參考比較；該檔另含 Uhlrich 2022 修正，本版未採用，深蹲底部實際 OpenSim 力臂尚未查證。
 - [Saul 等（2015）MoBL-ARMS](https://pmc.ncbi.nlm.nih.gov/articles/PMC4282829/)及[固定版上肢模型檔](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)：上肢肌束與路徑參數來源；[Holzbaur 等（2005）](https://pubmed.ncbi.nlm.nih.gov/16078622/)是模型前身，並非本專案逐項取值版本。
 - [ISB 肩關節座標建議](https://media.isbweb.org/images/documents/standards/isb_jcs_part_ii.pdf)：肩、肘、腕與手的座標定義；本模型只借用上舉平面等幾何意義，沒有直接使用其 Euler 角。
 - [Christophy 等（2012）](https://doi.org/10.1007/s10237-011-0290-6)：腰背與腹部表列肌束及 L5/S1 力臂；對應 OpenSim 模型檔版本未查證。

@@ -1,6 +1,6 @@
 // 文獻趨勢自動檢查：比對 src/biomech.js 的模型輸出方向是否與 docs/research/references.md 文獻一致
 // 執行方式：
-//   npm run test:trends          → 印出完整 42 項檢查報告
+//   npm run test:trends          → 印出完整趨勢檢查報告
 //   node tests/trends.mjs --write-status → 重新產生靜態狀態檔 src/trend-status.json
 //   node tests/trends.mjs --check        → 重新計算並比對 src/trend-status.json，過時或不一致即失敗
 // 注意：本腳本僅作趨勢報告，不修改力學模型；若模型與文獻不一致，印出 FAIL 供後續調校參考。
@@ -375,6 +375,23 @@ const CHECKS = [
       return { labelA: '臀推', valA: a, labelB: '深蹲', valB: b, unit: 'a', pass: a > b };
     },
   },
+  // Contreras 2015 原文分別比較臀推與深蹲的上、下部峰值，未做上下部互比。
+  // 原文用各動作估計 10RM；模型示範負重／相對負荷不同，%MVIC 不能與模型活化數值等同，只比方向。
+  ...[
+    ['gmaxUpper', '臀大肌上部', '172% vs 84.9% MVIC'],
+    ['gmaxLower', '臀大肌中下部', '216% vs 130% MVIC'],
+  ].map(([muscle, name, numbers]) => ({
+    ids: ['hip-thrust', 'squat-high'],
+    exercise: '臀推 vs 深蹲（區域）',
+    compare: `臀推 vs 高槓深蹲 — ${name}峰值活化`,
+    ref: `Contreras et al. 2015 原始研究（PMID 26214739；${numbers}；各動作估計 10RM，模型負重不同；只比方向、未做上下部互比；https://pubmed.ncbi.nlm.nih.gov/26214739/）`,
+    evidence: 'direct', expected: '臀推至少高 1%',
+    run() {
+      const a = peakMus('hipthrust', P('hipthrust', { surface: 'bench', kneeTop: 90 }), muscle, 'a');
+      const b = peakMus('squat', P('squat', { barPos: 'high' }), muscle, 'a');
+      return { labelA: '臀推', valA: a, labelB: '深蹲', valB: b, unit: 'a', pass: a > b * 1.01 };
+    },
+  })),
 
   // ---------- 12. 臀推腳位 ----------
   {
