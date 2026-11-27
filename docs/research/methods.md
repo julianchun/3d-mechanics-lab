@@ -59,3 +59,7 @@
 ## 群體輸出與一般測試
 
 [`validation/results.json`](../../validation/results.json) 與 [`validation/population-results.json`](../../validation/population-results.json) 留下每筆模型值、研究值、來源、判定及群體模擬輸出。`npm test` 檢查 63 項清單姿勢、身材快取、合理性、回歸基準、文獻趨勢及固定身體驗證產物；`npm run test:validation`、`npm run test:validation-pop -- --check` 可重算兩種數值比對。這些檢查的現況見[深蹲結果](results/squat.md)、[硬舉結果](results/deadlift.md)與[限制](limitations.md)。
+
+## 臥推比對
+
+臥推的握距（手臂—槓內夾角）與手肘外開角度由研究方法逐人反解，槓力矩只含垂直槓力（不含上肢自重與橫向力），力臂為前臂—上臂平面內關節到力線的垂直距離；定義與容許差見[資料格式](../../validation/schema.md)，結果見[臥推結果](results/bench.md)。群體抽樣在深蹲、硬舉及診斷之後進行，既有結果不受影響。

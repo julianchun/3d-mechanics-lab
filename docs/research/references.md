@@ -56,6 +56,9 @@
 - [Lee 等（2018）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/)：21 名男性 70% RDL 1RM 的傳統／羅馬尼亞硬舉，表 3 膝屈角；平均 1RM 公斤數未報。
 - [Hanen 等（2025）](https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2025.1597209/full)：30 名男性配對兩式，表 1–2 的三維關節 ROM 與動態力矩作方向交叉核對；平均 1RM 公斤數未報。
 - [Cholewicki 等（1991）](https://pubmed.ncbi.nlm.nih.gov/1758295/)：競賽選手 L4/L5 力矩及腰椎負荷模型；摘要報相撲關節矩約低 10%，不等於本模型的單一剛體軀幹力矩。
+- [Mausehund 等（2022）](https://pubmed.ncbi.nlm.nih.gov/33555823/)（[全文 PDF](https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf)，DOI 10.1519/jsc.0000000000003948）：35 人 6–8RM 的中、寬、窄（手肘靠身／外開）臥推，三維關節角與含橫向力的肩、肘淨力矩（表 2）。
+- [Larsen 等（2021）](https://pubmed.ncbi.nlm.nih.gov/33554113/)（[全文](https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/)，DOI 10.3389/fspor.2020.637066）：14 名男性寬、中、窄握 1RM 臥推，表 1 槓位移、表 2 力臂；身高未報，關節角與力矩在圖中。
+- [Schütz 等（2022）](https://pubmed.ncbi.nlm.nih.gov/35202059/)（[全文](https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/)，DOI 10.3390/sports10020019）：20 人平板與上斜槓鈴臥推（15%、30% 體重），表 1–2 肩絕對力矩最大值與肘力矩、活動範圍；上斜角度在補充檔（未查證）。
 
 ## 校準研究
 
