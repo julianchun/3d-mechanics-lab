@@ -1,5 +1,7 @@
-// MoBL-ARMS 固定版路徑點的直線弦力臂；角度為右手前臂旋轉，正值旋前。
+// Murray 1995 大體力臂優先；缺量測的 PQ／SUP 暫用 MoBL-ARMS 路徑點弦。
 import { FOREARM_SOURCE, FOREARM_ELBOW_DEG, FOREARM_ROT_DEG } from './forearm-arms.js';
+import { MEASURED_ELBOW_DEG, MEASURED_ROT_DEG, MEASURED_ELBOW_NEUTRAL,
+  MEASURED_BICEPS_ELBOW, MEASURED_ROT_85, BICEPS_ROT_45_TO_85 } from './forearm-measured.js';
 
 const DEG = 180 / Math.PI;
 const interp = (knots, values, x) => {
@@ -11,16 +13,30 @@ const interp = (knots, values, x) => {
 };
 
 export function forearmArm(id, dof, q) {
-  const source = FOREARM_SOURCE[id];
   const elbow = (q.elbFlex || 0) * DEG;
   const fore = (q.foreRot || 0) * DEG;
+  const biceps = id === 'bicLong' || id === 'bicShort';
+  if (dof === 'elbExt') {
+    if (biceps) {
+      const byAngle = ['supinated', 'neutral', 'pronated'].map((key) => interp(MEASURED_ELBOW_DEG, MEASURED_BICEPS_ELBOW[key], elbow));
+      return -interp([-80, 0, 80], byAngle, fore); // 來源角為屈肘，產品軸為伸肘。
+    }
+    if (MEASURED_ELBOW_NEUTRAL[id]) return -interp(MEASURED_ELBOW_DEG, MEASURED_ELBOW_NEUTRAL[id], elbow);
+  } else {
+    const key = biceps ? 'biceps' : id;
+    if (MEASURED_ROT_85[key]) {
+      const measured = interp(MEASURED_ROT_DEG, MEASURED_ROT_85[key], fore);
+      // 只有二頭肌有 45°／85° 的旋後峰值交叉測量；其他肌肉沿用 85° 曲線。
+      return biceps ? measured * interp([45, 85], [BICEPS_ROT_45_TO_85, 1], elbow) : measured;
+    }
+  }
+  const source = FOREARM_SOURCE[id];
   const rows = source[dof === 'elbExt' ? 'elb' : 'rot'];
   const values = FOREARM_ELBOW_DEG.map((_, j) => interp(FOREARM_ROT_DEG, rows.map((row) => row[j]), fore));
   const chord = interp(FOREARM_ELBOW_DEG, values, elbow);
   if (dof === 'elbExt') return -chord; // 來源角為屈肘，產品軸為伸肘。
-  // SUP 的直線弦略過繞橈骨的包覆，於中立後錯誤換向；
-  // 保留來源弦的量級並依該肌的旋後功能定向，數值仍待 OpenSim 包覆路徑核對。
-  if (id === 'supinator') return -Math.max(0.003, Math.abs(chord));
+  // SUP 弦在中立後錯誤換向；僅保留弦的量級與旋後方向，允許為零，沒有假定最低值。
+  if (id === 'supinator') return -Math.abs(chord);
   return chord;
 }
 

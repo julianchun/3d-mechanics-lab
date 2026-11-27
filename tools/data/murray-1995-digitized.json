@@ -1,0 +1,36 @@
+{
+  "source": "Murray WM, Delp SL, Buchanan TS. Variation of muscle moment arms with elbow and forearm position. J Biomech. 1995;28:513-525. doi:10.1016/0021-9290(94)00114-J",
+  "pdf": "https://nmbl.stanford.edu/publications/pdf/Murray1995.pdf",
+  "method": "原 PDF 以 3 倍（1566×2322 px）無裁切轉成影像；逐點讀曲線中心，另一次獨立讀取。x 座標用圖上刻度核對，y 軸以 0 與相鄰 1 cm 刻度校準。每組兩次 y 像素讀數取平均，轉為公尺；虛線空檔取鄰近線段中心。圖 4／6 使用男性大體，圖 5 使用女性大體；兩標本差異大，不把個體差異當數位化誤差。",
+  "graphs": {
+    "fig4_male_elbow_neutral": {
+      "pdfPageZeroBased": 6, "axis": { "x0px": 390, "x0deg": 0, "x120px": 990, "y0px": 474, "y2cmPx": 402 },
+      "anglesDeg": [20, 40, 60, 80, 100, 120],
+      "series": {
+        "brachialis": { "firstYPx": [427, 413, 401, 388, 376, 364], "secondYPx": [428, 411, 400, 390, 375, 366] },
+        "brachioradialis": { "firstYPx": [430, 383, 345, 311, 284, 273], "secondYPx": [432, 385, 344, 310, 286, 272] },
+        "pronatorTeres": { "firstYPx": [427, 420, 409, 402, 394, 382], "secondYPx": [426, 418, 411, 403, 393, 384] }
+      }
+    },
+    "fig6_male_biceps_elbow": {
+      "pdfPageZeroBased": 9, "axis": { "x20px": 600, "x20deg": 20, "x120px": 1136, "y0px": 615, "y5cmPx": 239 },
+      "anglesDeg": [20, 40, 60, 80, 100, 120],
+      "series": {
+        "supinated": { "firstYPx": [457, 380, 317, 294, 315, 417], "secondYPx": [460, 382, 319, 296, 314, 414] },
+        "neutral": { "firstYPx": [460, 408, 359, 339, 336, 390], "secondYPx": [458, 407, 357, 340, 338, 388] },
+        "pronated": { "firstYPx": [483, 441, 395, 348, 340, 383], "secondYPx": [481, 443, 397, 347, 342, 386] }
+      }
+    },
+    "fig5_female_forearm_85": {
+      "pdfPageZeroBased": 8, "axis": { "x0px": 760, "x0deg": 0, "x40px": 920, "y0px": 829, "y1cmPx": 693 },
+      "anglesDeg": [-60, -40, -20, 0, 20, 40],
+      "series": {
+        "biceps": { "firstYPx": [974, 981, 978, 971, 953, 928], "secondYPx": [977, 979, 979, 973, 950, 931] },
+        "pronatorTeres": { "firstYPx": [745, 720, 701, 700, 715, 755], "secondYPx": [748, 722, 699, 702, 713, 752] },
+        "brachioradialis": { "firstYPx": [800, 800, 805, 811, 821, 830], "secondYPx": [802, 801, 803, 812, 820, 832] }
+      }
+    }
+  },
+  "table3_biceps_peak_supination_cm": { "male85": 1.36, "male45": 0.70, "female85": 1.13, "female45": 0.75 },
+  "scope": "Fig. 4/6 肘屈 20–120°；Fig. 5 前臂 -60–40°、肘屈 85°。超界使用邊界值，屬常數外插。二頭肌旋轉力臂 45–85° 按女性表 3 峰值比例線性插值，區外保持最近量測比例。其餘旋轉力臂未有肘角交叉測量，保持 85° 曲線。肱肌／肱橈肌／旋前圓肌的屈肘力臂未有跨前臂角完整圖，保持中立位曲線。"
+}

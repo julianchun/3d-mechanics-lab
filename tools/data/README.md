@@ -1,5 +1,9 @@
 # T29 肩部參數資料取得紀錄
 
+## T30b 前臂大體力臂圖讀點
+
+[`murray-1995-digitized.json`](murray-1995-digitized.json) 記錄 [Murray 等 1995 原文 PDF](https://nmbl.stanford.edu/publications/pdf/Murray1995.pdf) 圖 4／5／6 的兩次像素讀點、軸刻度及表 3 的原表數字。產生產品力臂表：`python3 tools/forearm_measured.py`；核對：`python3 tools/forearm_measured.py --check`。原論文 PDF 未收入儲存庫；只保留衍生的少量讀點與來源連結。角度外插與跨標本限制見 [`muscle-params.md`](../../docs/research/muscle-params.md#前臂旋轉參數0100)。
+
 本目錄保留固定版本的原始模型與來源紀錄。T29b 改以 DAS3 的模型參數作為肩部 F／Lf／Lt 的單一來源；原 T29 階段 0 的缺口仍保留紀錄。
 
 | 資料 | 來源與下載網址 | SHA-256 | 授權／使用範圍 | 核對結果 |

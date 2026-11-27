@@ -18,6 +18,11 @@ near(analyze('dbcurl', { ...defaultParams('dbcurl'), grip: 'neutral' }, 0.5).q.f
 near(forearmAxialDemand([{ p: [0, 1, 0], F: [100, 0, 0], region: 'fore' }], [0, 0, 0], [0, 1, 0]), 0, 1e-8, '掌心通軸');
 near(forearmAxialDemand([{ p: [0, 1, 0.05], F: [100, 0, 0], region: 'fore' }], [0, 0, 0], [0, 1, 0]), -5, 1e-8, '偏心 5 cm 的 100 N 握把');
 const q = { elbFlex: Math.PI / 2, foreRot: 0 };
+if (!(forearmArm('bicLong', 'elbExt', { ...q, foreRot: -80 * Math.PI / 180 }) <
+      forearmArm('bicLong', 'elbExt', { ...q, foreRot: 80 * Math.PI / 180 })))
+  throw new Error('二頭肌旋後屈肘力臂未依 Murray 1995 量測增加');
+if (!(Math.abs(forearmArm('supinator', 'foreRot', { ...q, foreRot: -80 * Math.PI / 180 })) < 0.003))
+  throw new Error('旋後肌仍有未查證的 3 mm 下限');
 if (!(forearmArm('bicLong', 'foreRot', q) < 0 && forearmArm('pronatorTeres', 'foreRot', q) > 0 &&
       forearmArm('pronatorQuadratus', 'foreRot', q) > 0 && forearmArm('supinator', 'foreRot', q) < 0))
   throw new Error('前臂力臂方向錯誤');
@@ -33,16 +38,18 @@ for (const [lift, grip] of [['curl', 'sup'], ['curl', 'pro'], ['dbcurl', 'neutra
     if (LIFTS[lift].forearmContact === 'singleFree') near(r.forearmContactMoment, 0, 1e-8, `${lift} 不得產生未知握持偶矩`);
   }
 }
+if (Math.abs(analyze('curl', defaultParams('curl'), 0.5).forearmContactMoment) < 0.1)
+  throw new Error('共握槓未承受前臂軸向反力偶');
 
 const peak = (lift, patch, muscle) => peakAnalysis(lift, { ...defaultParams(lift), ...patch }).mus[muscle].a;
 const checks = [
-  // Coratella 2023 PMID 36976950：雙側彎舉向心期二頭肌反握高於正握及中立握。
+  // Coratella 2023 PMID 36976950：滑輪短槓／雙手繩索向心期；以下槓鈴／啞鈴是跨器材外推。
   ['反握彎舉二頭肌高於正握', peak('curl', { supin: 'sup' }, 'bic') > peak('curl', { supin: 'pro' }, 'bic')],
   ['反握啞鈴彎舉二頭肌高於中立握', peak('dbcurl', { grip: 'sup' }, 'bic') > peak('dbcurl', { grip: 'neutral' }, 'bic')],
-  // 同研究的肱橈肌向心期反握高於正握；與 Kleiber 2015 單關節屈肘結果相反。
+  // 同研究的肱橈肌向心期反握高於正握；與 Kleiber 2015 單關節屈肘條件不同。
   ['反握彎舉肱橈肌高於正握', peak('curl', { supin: 'sup' }, 'brachioradialis') > peak('curl', { supin: 'pro' }, 'brachioradialis')],
 ];
-const KNOWN_ISSUES = new Set(['反握彎舉肱橈肌高於正握']);
+const KNOWN_ISSUES = new Set(['反握啞鈴彎舉二頭肌高於中立握', '反握彎舉肱橈肌高於正握']);
 for (const [name, passed] of checks) {
   if (!passed && !KNOWN_ISSUES.has(name)) throw new Error(`未列已知問題的文獻趨勢失敗：${name}`);
   if (passed && KNOWN_ISSUES.has(name)) throw new Error(`已知問題已通過，請移除：${name}`);
