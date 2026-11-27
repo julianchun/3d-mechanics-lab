@@ -1,8 +1,12 @@
 // 力學核心：姿勢求解 → 關節力矩（準靜態）→ 肌肉分配（最小化活化平方和）
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
+import { DAS3_SHOULDER } from './das3-shoulder.js';
 
-export const MODEL_VERSION = '0.8.0';
+export const MODEL_VERSION = '0.9.0';
+// DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
+export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
+  import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
 // 群體常模僅供人工複查；髖角缺骨盆分段，肩後伸代理亦無可直接換算的常模。
 export const ROM_HINTS = Object.freeze({
   hipFlex: 136, kneeFlex: 138, ankleDorsi: 39, shFlex: 160, shAbd: 150,
@@ -997,6 +1001,34 @@ const pecClavicularFlex = (q) => {
   if (angle < 70) return 0.0096 + (0.0537 - 0.0096) * angle / 70;
   return 0.0537 - 0.0137 * clamp((angle - 70) / 50, 0, 1);
 };
+// Ackland 2008 Table 1 胸大肌腹部前舉 2.5° +1.9 mm、98° −9.3 mm；範圍外固定端點。
+const pecAbdominalFlex = (q) => {
+  const t = clamp(q.shFlex / rad(1), 2.5, 98);
+  return 0.0019 + (t - 2.5) * (-0.0093 - 0.0019) / 95.5;
+};
+// Ackland 2008 Table 1 胸骨中部前舉極值 2.5° +4.4、45° +15.9 mm；120° 後固定端點。
+const pecSternalDAS3Flex = (q) => {
+  const t = clamp(q.shFlex / rad(1), 2.5, 120);
+  return t <= 45 ? 0.0044 + (t - 2.5) * 0.0115 / 42.5 : 0.0159 - (t - 45) * 0.0115 / 75;
+};
+// Ackland 2008 Table 1 背闊肌前舉上／下束可測 10°–120°，端點外固定避免無依據放大。
+const latUpperFlex = (q) => {
+  const t = clamp(q.shFlex / rad(1), 10, 120);
+  return t <= 45 ? -0.015 - (t - 10) * 0.0071 / 35 : -0.0221 + (t - 45) * 0.022 / 75;
+};
+const latLowerFlex = (q) => {
+  const t = clamp(q.shFlex / rad(1), 10, 120);
+  return t <= 53 ? -0.009 - (t - 10) * 0.0018 / 43 : -0.0108 + (t - 53) * 0.0079 / 67;
+};
+// Ackland 2008 Table 1 小圓肌在前舉由伸肌轉為弱屈肌，外展亦換號；節點間線性近似。
+const teresMinorFlex = (q) => {
+  const t = clamp(q.shFlex / rad(1), 2.5, 120);
+  return -0.0187 + (t - 2.5) * 0.0209 / 117.5;
+};
+const teresMinorAbd = (q) => {
+  const t = clamp(q.shElev / rad(1), 18, 120);
+  return -0.0033 + (t - 18) * 0.0084 / 102;
+};
 export const MUSCLES = [
   // R 三束原始 F=9594 N 對本模型膝伸軸的理論力矩過高；按單側等長膝伸力矩校正有效能力。
   { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 5000, Lf: 0.0986, Lmt: 0.3101, arms: { kneeExt: angleSlope(0.045, 'kneeFlex', 0.005) } },
@@ -1050,9 +1082,67 @@ export const MUSCLES = [
   // 前鋸肌肩帶兩軸用 Seth 三束路徑 F 加權擬合；1000 N 仍是本模型的有效能力估計。
   { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: fittedScapArms('serr') },
 ];
+if (SHOULDER_PARAMETER_SET === 'das3') {
+  const byId = Object.fromEntries(MUSCLES.map((m) => [m.id, m]));
+  const fromDAS3 = (id, base, extra = {}) => ({
+    ...base, ...extra, id, F: DAS3_SHOULDER[id].F, Lf: DAS3_SHOULDER[id].Lf,
+  });
+  const oldPecs = byId.pecs, oldLat = byId.lat, oldTrap = byId.midtrap, oldSerr = byId.serr;
+  const latArms = (flex, abdScale) => ({
+    shFwd: shoulderArm(flex, (q) => abdScale * -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'),
+    shSide: shoulderArm(flex, (q) => abdScale * -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'),
+    shRot: 0.020, scElev: -0.030,
+  });
+  const serrArms = (retScale, elevScale) => ({
+    scRet: (q) => oldSerr.arms.scRet(q) * retScale,
+    scElev: (q) => oldSerr.arms.scElev(q) * elevScale,
+  });
+  const replacements = {
+    pecs: [
+      fromDAS3('pecSternal', oldPecs, { group: 'pecs', name: '胸大肌胸骨部', arms: {
+        ...oldPecs.arms,
+        shFwd: shoulderArm(pecSternalDAS3Flex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'fwd'),
+        shSide: shoulderArm(pecSternalDAS3Flex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'side'),
+      } }),
+      fromDAS3('pecAbdominal', oldPecs, { group: 'pecs', name: '胸大肌腹部', arms: {
+        ...oldPecs.arms,
+        shFwd: shoulderArm(pecAbdominalFlex, -0.0336, 0.055, 'fwd'),
+        shSide: shoulderArm(pecAbdominalFlex, -0.0336, 0.055, 'side'),
+      } }),
+    ],
+    lat: [
+      fromDAS3('latUpper', oldLat, { group: 'lat', name: '背闊肌上部', arms: latArms(latUpperFlex, 0.9) }),
+      fromDAS3('latLower', oldLat, { group: 'lat', name: '背闊肌下部', arms: latArms(latLowerFlex, 1.2) }),
+    ],
+    midtrap: [
+      fromDAS3('midtrapPart', oldTrap, { group: 'midtrap', name: '斜方肌中束', arms: { scRet: 0.070 } }),
+      fromDAS3('rhomboid', oldTrap, { group: 'midtrap', name: '菱形肌', arms: { scRet: 0.037, scElev: -0.010 } }),
+      fromDAS3('levscap', oldTrap, { name: '提肩胛肌', arms: { scElev: 0.043, scRet: -0.005 } }),
+      fromDAS3('pmin', oldTrap, { name: '胸小肌', arms: { scElev: -0.075, scRet: -0.039 } }),
+    ],
+    serr: [
+      fromDAS3('serrUpper', oldSerr, { group: 'serr', name: '前鋸肌上部', arms: serrArms(0.887, 0.972) }),
+      fromDAS3('serrLower', oldSerr, { group: 'serr', name: '前鋸肌下部', arms: serrArms(1.083, 1.018) }),
+    ],
+    infra: [
+      fromDAS3('infraPart', byId.infra, { group: 'infra', name: '棘下肌' }),
+      fromDAS3('tmin', byId.infra, { group: 'infra', name: '小圓肌', arms: { shRot: -0.025,
+        shFwd: shoulderArm(teresMinorFlex, teresMinorAbd, 0, 'fwd'),
+        shSide: shoulderArm(teresMinorFlex, teresMinorAbd, 0, 'side') } }),
+    ],
+  };
+  for (const id of ['pecc', 'adelt', 'mdelt', 'pdelt', 'tmaj', 'corb', 'supsp', 'subsc', 'uptrap', 'lowtrap', 'trilong', 'bicLong', 'bicShort']) {
+    replacements[id] = [fromDAS3(id, byId[id])];
+  }
+  MUSCLES.splice(0, MUSCLES.length, ...MUSCLES.flatMap((m) => replacements[m.id] || [m]));
+}
 export const MUSCLE_GROUPS = {
   hams: { name: '膕繩肌' }, gmax: { name: '臀大肌' }, gmed: { name: '臀中肌' }, addmag: { name: '內收大肌' },
   bic: { name: '肱二頭肌' }, brach: { name: '肱肌／肱橈肌' },
+  ...(SHOULDER_PARAMETER_SET === 'das3' ? {
+    pecs: { name: '胸大肌（中下胸）' }, lat: { name: '背闊肌' }, midtrap: { name: '斜方肌中束／菱形肌' },
+    serr: { name: '前鋸肌' }, infra: { name: '棘下肌／小圓肌' },
+  } : {}),
 };
 export const MUSCLE_BY_ID = Object.fromEntries(MUSCLES.map((m) => [m.id, m]));
 for (const [id, group] of Object.entries(MUSCLE_GROUPS)) {
@@ -1076,6 +1166,9 @@ const FIBER_GEOMETRY = {
   corb: [0.0970, 0.4712], infra: [0.0389, 0.3491], supsp: [0.0395, 0.1222], subsc: [0.0330, 0.3491],
   mdelt: [0.1095, 0.2618],
 };
+if (SHOULDER_PARAMETER_SET === 'das3') {
+  for (const [id, data] of Object.entries(DAS3_SHOULDER)) FIBER_GEOMETRY[id] = [data.Lt, data.alpha];
+}
 
 const DOF_REF = { hipExt: rad(-40), hipAbd: 0, kneeExt: rad(-50), ankPF: rad(-10), trunkExt: 0, shFwd: rad(20), shSide: rad(10), shRot: 0, elbExt: rad(-70), scRet: 0, scElev: 0 };
 // 只在部分動作分析的自由度：沒分析時，肌肉在這些方向的力臂直接忽略（例如背闊肌在臥推只算屈伸）

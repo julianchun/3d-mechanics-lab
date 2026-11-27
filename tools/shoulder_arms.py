@@ -165,7 +165,7 @@ class Model:
                 tas = []
                 for ta in j.iter("TransformAxis"):
                     if ta.attrib["name"].startswith("rotation"):
-                        tas.append((ta.findtext("coordinates").strip(), nums(ta.findtext("axis"))))
+                        tas.append(((ta.findtext("coordinates") or "").strip(), nums(ta.findtext("axis"))))
                 self.joints[child] = dict(
                     name=j.attrib["name"], parent=parent,
                     t=nums(pf.findtext("translation")), R=body_xyz(nums(pf.findtext("orientation"))),

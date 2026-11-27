@@ -2,7 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
-  LIFTS, JOINT_NAMES, MODEL_VERSION, MUSCLES, MUSCLE_BY_ID, MUSCLE_GROUP_IDS, MACHINES, pulleyDivisor,
+  LIFTS, JOINT_NAMES, MODEL_VERSION, SHOULDER_PARAMETER_SET, MUSCLES, MUSCLE_BY_ID, MUSCLE_GROUP_IDS, MACHINES, pulleyDivisor,
   defaultParams, analyze, peakAnalysis, validate, liftMuscles,
 } from './biomech.js';
 import { Rig, heatColor, diffColor, lengthColor, loadBones } from './rig.js';
@@ -976,7 +976,7 @@ function updateData(force) {
 
 // ---------- 啟動 ----------
 $('#infoBtn').onclick = () => $('#info').showModal();
-$('#ver').textContent = MODEL_VERSION;
+$('#ver').textContent = SHOULDER_PARAMETER_SET === 'das3' ? `${MODEL_VERSION}（肩部 DAS3 實驗組）` : MODEL_VERSION;
 renderAll();
 resize();
 setView('oblique');
