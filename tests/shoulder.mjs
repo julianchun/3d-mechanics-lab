@@ -1,6 +1,6 @@
 // 肩部軌跡：以真實上臂方向量角，避免把近 180° 的旋轉向量分量誤當成物理跳動。
 import { CATALOG } from '../src/catalog.js';
-import { LIFTS, MUSCLES, analyze, defaultParams } from '../src/biomech.js';
+import { LIFTS, MUSCLES, analyze, defaultParams, forcesOf, add, sub, mul, dot, cross } from '../src/biomech.js';
 
 const rad = (d) => d * Math.PI / 180;
 const failures = [];
@@ -44,6 +44,31 @@ for (const item of CATALOG.filter((c) => c.lift && LIFTS[c.lift].dofs.includes('
       }
     }
     previous = { r, u };
+  }
+}
+// 高上舉與一般角度皆用獨立的外力叉積核對正交肩部力矩平衡。
+// 未列 shRot 的動作，長軸由固定自由度的反力矩承受，僅檢查兩個主動切向軸。
+for (const [id, e] of [['pullup', 0], ['pullup', 0.5], ['pullup', 1], ['pullup-wide', 1], ['chinup', 1], ['ohp', 0], ['lat-raise', 0], ['pulldown', 0]]) {
+  const item = CATALOG.find((c) => c.id === id);
+  const P = { ...defaultParams(item.lift), ...item.set };
+  const r = analyze(item.lift, P, e), q = r.q, p = q.shPlane, t = q.shElev;
+  const c = Math.cos(p), s = Math.sin(p), ct = Math.cos(t), st = Math.sin(t);
+  const axes = [[-c, 0, s], [-ct * s, -st, -ct * c], [st * s, -ct, st * c]];
+  const M = forcesOf(r.pose, P, item.lift).filter((f) => f.region === 'upper' || f.region === 'fore')
+    .reduce((sum, f) => sub(sum, cross(sub(f.p, r.pose.R.shoulder), f.F)), [0, 0, 0]);
+  const world = (v) => add(add(mul(r.pose.lat, v[0]), mul(r.pose.u, v[1])), mul(r.pose.f, v[2]));
+  for (let j = 0; j < (LIFTS[item.lift].dofs.includes('shRot') ? 3 : 2); j++) {
+    const demand = dot(M, world(axes[j]));
+    const supplied = MUSCLES.reduce((sum, m) => {
+      const force = r.mus[m.id]?.force || 0;
+      if (j === 2) {
+        const rot = m.arms.shRot;
+        return sum + force * (typeof rot === 'function' ? rot(q) : rot || 0);
+      }
+      const v = m.arms.shFwd?.shoulderVec?.(q);
+      return sum + force * (v ? dot(v, axes[j]) : 0);
+    }, 0);
+    if (Math.abs(demand - supplied) > 0.25) failures.push(`${id}@${e} 正交肩力矩第 ${j + 1} 軸殘差 ${(demand - supplied).toFixed(3)} N·m`);
   }
 }
 // 肩推鎖死前 10% 行程以 1/400 細步檢查軸旋與肌肉長度，確認無 rotConfidence 或 180° 分支跳變。

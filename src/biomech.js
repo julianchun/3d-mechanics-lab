@@ -4,7 +4,7 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.10.1';
+export const MODEL_VERSION = '0.10.2';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -933,16 +933,22 @@ export function defaultParams(lift) {
 // 在垂臂附近這兩軸仍有定義，不會出現舉臂平面方位的奇異點。
 // 先以屈、外展、水平內收三個解剖力矩分量近似肌肉力線，再投影到實際轉軸。
 function shoulderAxes(q) {
+  const { elev, hadd, sinc, c, s } = shoulderBasis(q);
+  return {
+    fwd: add(mul(elev, c), mul(hadd, s * sinc)),
+    side: add(mul(elev, s), mul(hadd, -c * sinc)),
+  };
+}
+// 正交肩部力矩基底不使用旋轉向量的退化切向軸；長軸沿肩至肘方向。
+function shoulderBasis(q) {
   const x = q.shFwd, y = q.shSide, t = Math.hypot(x, y);
   const c = t < 1e-8 ? 1 : x / t, s = t < 1e-8 ? 0 : y / t;
   const ct = Math.cos(t), st = Math.sin(t);
   const sinc = t < 1e-5 ? 1 - (t * t) / 6 : st / t;
   const elev = [-c, 0, s];
-  const plane = [ct * s, st, ct * c];
-  return {
-    fwd: add(mul(elev, c), mul(plane, -s * sinc)),
-    side: add(mul(elev, s), mul(plane, c * sinc)),
-  };
+  const hadd = [-ct * s, -st, -ct * c];
+  const long = [st * s, -ct, st * c];
+  return { elev, hadd, long, sinc, c, s };
 }
 // 在上臂正交基底（上舉軸 e_elev、水平內收軸 e_hadd）定義三維力臂向量：
 // - r_elev = f cosφ + a sinφ（矢狀面屈曲 f 與額狀面外展 a 依上舉平面 φ 過渡）
@@ -3903,7 +3909,7 @@ export function analyze(lift, P, e) {
   const R = pose.R, L = LIFTS[lift];
   const dofs = L.dofs, has = (d) => dofs.includes(d);
   const dem = {};
-  let shoulderMoment = 0;
+  let shoulderMoment = 0, shoulderPhysical = null;
   if (has('hipExt') || has('hipAbd')) {
     const Mh = musMoment(forces, R.hip, ['foot', 'shank', 'thigh']);
     if (has('hipExt')) dem.hipExt = dot(Mh, norm(cross(neg(pose.u), neg(pose.f))));
@@ -3929,6 +3935,8 @@ export function analyze(lift, P, e) {
     shoulderMoment = len(Ms);
     const qShoulder = jointAngles(pose), axes = shoulderAxes(qShoulder);
     const worldAxis = (v) => add(add(mul(pose.lat, v[0]), mul(pose.u, v[1])), mul(pose.f, v[2]));
+    const basis = shoulderBasis(qShoulder);
+    shoulderPhysical = [basis.elev, basis.hadd, basis.long].map((axis) => dot(Ms, worldAxis(axis)));
     dem.shFwd = dot(Ms, worldAxis(axes.fwd));
     if (has('shSide')) dem.shSide = dot(Ms, worldAxis(axes.side));
     if (has('shRot')) dem.shRot = dot(Ms, norm(sub(R.elbow, R.shoulder)));
@@ -3955,6 +3963,19 @@ export function analyze(lift, P, e) {
 
   const q = jointAngles(pose);
   const muscles = liftMuscles(lift);
+  // 保留 dem.shFwd／shSide 的廣義座標語意供介面與關節快照；肌肉平衡改用
+  // 同一胸廓正交基底的外力矩與三維力臂，避免高上舉時 sinc(t) 壓縮方程。
+  // 未列 shRot 的動作仍由固定的軸旋自由度承受長軸反力矩。
+  // 單一 shFwd 自由度（硬舉）仍代表原本的旋轉向量切向軸；只有雙軸同時存在
+  // 才能做可逆的二維基底轉換。shRot 若存在，已是正交長軸的物理分量。
+  const shoulderFrame = has('shFwd') && has('shSide') ? shoulderBasis(q) : null;
+  const balanceDofs = dofs.map((d) => shoulderFrame ? ({ shFwd: 'shElev3d', shSide: 'shHadd3d', shRot: 'shLong3d' }[d] || d) : d);
+  const balanceDemand = balanceDofs.map((d) => {
+    if (d === 'shElev3d') return shoulderPhysical[0];
+    if (d === 'shHadd3d') return shoulderPhysical[1];
+    if (d === 'shLong3d') return shoulderPhysical[2];
+    return dem[d] || 0;
+  });
   // 偏好與共同收縮
   const pref = Object.fromEntries(muscles.map((m) => [m.id, 1]));
   for (const p of L.params) {
@@ -4032,9 +4053,15 @@ export function analyze(lift, P, e) {
   const shW = shAng > 1e-7 && shSin > 1e-9 ? mul(shAxis, 1 / shSin) : null;
 
   const info = muscles.map((m) => {
-    const arms = dofs.map((d) => { const a = m.arms[d]; return typeof a === 'function' ? a(q) : a || 0; });
-    let displacement = 0;
     const shVec = m.arms.shFwd?.shoulderVec;
+    const v = shoulderFrame && shVec ? shVec(q) : null;
+    const arms = balanceDofs.map((d) => {
+      if (d === 'shElev3d') return v ? dot(v, shoulderFrame.elev) : 0;
+      if (d === 'shHadd3d') return v ? dot(v, shoulderFrame.hadd) : 0;
+      const a = m.arms[d === 'shLong3d' ? 'shRot' : d];
+      return typeof a === 'function' ? a(q) : a || 0;
+    });
+    let displacement = 0;
     if (shVec && hRef) {
       if (shW) {
         const N = 10;
@@ -4070,13 +4097,13 @@ export function analyze(lift, P, e) {
     const Feff = m.F * fl;
     return { m, arms, l, lRigid: rigidFiberLength, pas, A: arms.map((r) => r * Feff), F: m.F };
   });
-  const b0 = dofs.map((d, j) => (dem[d] || 0) - info.reduce((s, x) => s + x.pas * x.F * x.arms[j], 0));
+  const b0 = balanceDemand.map((d, j) => d - info.reduce((s, x) => s + x.pas * x.F * x.arms[j], 0));
   const act = Object.fromEntries(info.map((x) => [x.m.id, 0]));
   const fixed = new Set();
   for (let it = 0; it < 80; it++) {
     const free = info.filter((x) => !fixed.has(x.m.id));
     const b = b0.map((v, j) => v - info.filter((x) => fixed.has(x.m.id)).reduce((s, x) => s + act[x.m.id] * x.A[j], 0));
-    const n = dofs.length;
+    const n = balanceDofs.length;
     const K = Array.from({ length: n }, () => Array(n).fill(0));
     let tr = 0;
     for (const x of free) {
