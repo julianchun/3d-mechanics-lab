@@ -38,7 +38,11 @@ for (const entry of active) {
   const results = Array.from({ length: 21 }, (_, i) => analyze(entry.lift, P, i / 20));
   const pattern = data.patterns[data.entries[entry.id]];
   const peaks = {};
-  for (const r of results) for (const [id, m] of Object.entries(r.mus)) peaks[id] = Math.max(peaks[id] ?? 0, m.a);
+  // 只排名一般視圖的群組與未細分肌肉；細分子部位（有 group）已併入群組值，避免同群重複佔名次。
+  for (const r of results) for (const [id, m] of Object.entries(r.mus)) {
+    if (MUSCLE_BY_ID[id]?.group) continue;
+    peaks[id] = Math.max(peaks[id] ?? 0, m.a);
+  }
   const order = Object.keys(peaks).sort((a, b) => peaks[b] - peaks[a] || a.localeCompare(b));
   const excluded = new Set(pattern.stabilizers.flatMap((g) => g.ids));
   const workingOrder = order.filter((id) => !excluded.has(id));
