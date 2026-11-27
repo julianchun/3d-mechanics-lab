@@ -131,7 +131,7 @@ export const MACHINES = {
   pushdown: {
     pulleyRatioDefault: '2:1',       // docs/research/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
     stackKg: 38,                     // 假設：示範配重片＝38 kg（2:1 實感 19 kg ≈ 0.25× 體重；1:1 實感 38 kg）
-    pulleyY: 2.1,                    // docs/research/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
+    pulleyY: 1.92,                   // docs/research/machine-data.md §3.1：LCM-CC 可調滑車 17.8–193.0 cm，預設高檔 192 cm
     pulleyZ: 0.58,                   // 假設：站位距滑輪水平距離（m）
     barLen: 0.45,                    // 假設：短直桿寬度（m）
   },
@@ -211,7 +211,7 @@ export const MACHINES = {
     pulleyZ: -0.10,                  // 假設：滑輪柱位於雙腳站位後方 10 cm（人站在大飛鳥門框略前方）
     // docs/research/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
     pulleyY: { high: 1.92, mid: 1.34, low: 0.85 },
-    towerH: 2.15,                    // 假設：雙側龍門架高度（m）
+    towerH: 2.39,                    // docs/research/machine-data.md §3.1：Life Fitness LCM-CC 機架總高 239 cm
   },
   reversedeck: { seatY: 0.55, handleR: 0.52, pivotX: 0.18, pivotZ: 0.02, pivotY: 1.76, camArm: 0.22, loadKg: 40, chestZ: 0.13 }, // 假設：反向蝴蝶機尺寸與 1:1 配重
   backext: { hipY: 0.92, thighPadZ: -0.16, ankleZ: -0.50, loadKg: 10, padMu: 0.5 }, // 假設：45° 羅馬椅及胸前槓片
