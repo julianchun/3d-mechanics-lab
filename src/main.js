@@ -526,7 +526,7 @@ function sourcesBlock() {
       el('div', { class: 'src-hd' }, '模型假設'),
       el('p', { class: 'src-empty' }, state.muscleView === 'detail'
         ? '詳細視圖依固定版 Rajagopal 與 MoBL-ARMS 模型顯示可分辨的子部位；力臂仍是本工具的簡化映射。'
-        : '一般視圖將子部位受力相加；活化度是各子部位以最大等長力 F 加權的平均。'),
+        : '一般視圖將子部位模型力相加，再除以群組最大等長力顯示相對受力；活化度是各子部位以最大等長力 F 加權的平均。'),
       el('a', { class: 'src-link', href: './docs/research/muscle-params.md', target: '_blank', rel: 'noopener noreferrer' }, '肌肉參數與細分依據 ↗'),
       el('ul', { class: 'src-list' }, info.assumptions.map((txt) => el('li', {}, txt))),
       el('div', { class: 'src-hd' }, '與文獻趨勢比對'),
