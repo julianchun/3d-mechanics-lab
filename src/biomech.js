@@ -332,7 +332,7 @@ export const LIFTS = {
       { key: 'lean', label: '腿相對軀幹後收', left: '較少', right: '較多', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'load', label: '腰掛負重', left: '徒手', right: '25 kg', min: 0, max: 25, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
     ],
-    standardNote: '可踩踏台抓住固定單槓，再讓雙腳離台。腿往身後收的設定改變身體形狀；軀幹角度由重心平衡求出，從近乎伸直的懸垂姿勢拉到下巴過槓。',
+    standardNote: '可踩踏台抓住固定單槓，再讓雙腳離台。腿往身後收的設定改變身體形狀；軀幹角度由重心平衡求出（滑桿主要改變腿角，0～20° 只讓軀幹角變約 5°），從近乎伸直的懸垂姿勢拉到下巴過槓。',
   },
   assistpullup: {
     forearmContact: 'fixed',
@@ -3557,7 +3557,7 @@ function suspendedPose(P, e, type) {
     // 輔助機：固定膝墊在握線前 5 cm，以髖的平移滿足含膝墊反力的力矩平衡。
     const hip = assisted
       ? [0, shoulderY - BODY.Ltr * u[1], shift]
-      : [0, shoulderY - (u[1] * sl[1] - u[2] * sl[2]), -(u[2] * sl[1] + u[1] * sl[2])];
+      : [0, shoulderY - (u[1] * sl[1] - u[2] * sl[2]), (P.diagShoulderOffset || 0) - (u[2] * sl[1] + u[1] * sl[2])];
     const pose = { R: {}, warn: [], ok: true, ...trunkFrame(hip, u), girdle };
     const S = toWorld(pose, sl), H = [handX, handY, handZ];
     if (assisted) {

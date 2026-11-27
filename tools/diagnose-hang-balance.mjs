@@ -29,3 +29,15 @@ for (const item of CATALOG.filter((c) => ids.has(c.id))) {
   }
 }
 console.log(JSON.stringify({ bodyKg: BODY.mass, convention: 'Z 正向為身體前方；力偶為雙側合計，正值繞 +X。', rows }, null, 2));
+
+// 敏感度（僅診斷）：把肩從握線向前移 offset，重新平衡後看後三角／背闊肌活化。
+// 產品預設仍是肩在握線正下方；P.diagShoulderOffset 只供本診斷使用。
+if (process.argv.includes('--sensitivity')) {
+  const item = CATALOG.find((c) => c.id === 'pullup');
+  console.log('| 肩在握線前 cm | e | pdelt a | lat a | 軀幹角 ° |\n| ---: | ---: | ---: | ---: | ---: |');
+  for (const cm of [-3, 0, 3, 4.6]) for (const e of [0.5, 1]) {
+    const P = { ...defaultParams(item.lift), ...item.set, diagShoulderOffset: cm / 100 };
+    const r = analyze(item.lift, P, e);
+    console.log(`| ${cm} | ${e} | ${r.mus.pdelt.a.toFixed(2)} | ${r.mus.lat.a.toFixed(2)} | ${(Math.atan2(r.pose.u[2], r.pose.u[1]) * 180 / Math.PI).toFixed(1)} |`);
+  }
+}
