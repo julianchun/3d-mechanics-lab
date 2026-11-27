@@ -1020,6 +1020,15 @@ const latLowerFlex = (q) => {
   const t = clamp(q.shFlex / rad(1), 10, 120);
   return t <= 53 ? -0.009 - (t - 10) * 0.0018 / 43 : -0.0108 + (t - 53) * 0.0079 / 67;
 };
+// Ackland 2008 Table 1 小圓肌在前舉由伸肌轉為弱屈肌，外展亦換號；節點間線性近似。
+const teresMinorFlex = (q) => {
+  const t = clamp(q.shFlex / rad(1), 2.5, 120);
+  return -0.0187 + (t - 2.5) * 0.0209 / 117.5;
+};
+const teresMinorAbd = (q) => {
+  const t = clamp(q.shElev / rad(1), 18, 120);
+  return -0.0033 + (t - 18) * 0.0084 / 102;
+};
 export const MUSCLES = [
   // R 三束原始 F=9594 N 對本模型膝伸軸的理論力矩過高；按單側等長膝伸力矩校正有效能力。
   { id: 'vasti', name: '股四頭肌（股廣肌群）', F: 5000, Lf: 0.0986, Lmt: 0.3101, arms: { kneeExt: angleSlope(0.045, 'kneeFlex', 0.005) } },
@@ -1118,7 +1127,8 @@ if (SHOULDER_PARAMETER_SET === 'das3') {
     infra: [
       fromDAS3('infraPart', byId.infra, { group: 'infra', name: '棘下肌' }),
       fromDAS3('tmin', byId.infra, { group: 'infra', name: '小圓肌', arms: { shRot: -0.025,
-        shFwd: shoulderArm(-0.0187, 0, 0, 'fwd'), shSide: shoulderArm(-0.0187, 0, 0, 'side') } }),
+        shFwd: shoulderArm(teresMinorFlex, teresMinorAbd, 0, 'fwd'),
+        shSide: shoulderArm(teresMinorFlex, teresMinorAbd, 0, 'side') } }),
     ],
   };
   for (const id of ['pecc', 'adelt', 'mdelt', 'pdelt', 'tmaj', 'corb', 'supsp', 'subsc', 'uptrap', 'lowtrap', 'trilong', 'bicLong', 'bicShort']) {
