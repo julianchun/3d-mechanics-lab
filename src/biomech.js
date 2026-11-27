@@ -3964,7 +3964,7 @@ export function analyze(lift, P, e) {
     const F = children.reduce((s, x) => s + x.F, 0);
     const weighted = (key) => children.reduce((s, x) => s + x.F * mus[x.m.id][key], 0) / F;
     const l = weighted('l');
-    mus[id] = { a: weighted('a'), p: weighted('p'), s: children.reduce((s, x) => s + mus[x.m.id].force, 0) / F,
+    mus[id] = { a: weighted('a'), p: weighted('p'), s: weighted('s'),
       force: children.reduce((s, x) => s + mus[x.m.id].force, 0), l, lRigid: null,
       len: l > 1.12 ? '拉長' : l < 0.9 ? '縮短' : '中段' };
   }

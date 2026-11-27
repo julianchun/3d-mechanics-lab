@@ -1,4 +1,4 @@
-// 細分後的合群顯示值，逐動作確認等於同一幀各子部位的加總／F 加權平均。
+// 細分後的合群顯示值，逐動作確認模型力加總與活化、排名指標的 F 加權平均。
 import { analyze, defaultParams, MUSCLES, MUSCLE_GROUPS, MUSCLE_GROUP_IDS } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 
@@ -17,7 +17,8 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
       const F = included.reduce((s, m) => s + m.F, 0);
       const force = included.reduce((s, m) => s + mus[m.id].force, 0);
       const a = included.reduce((s, m) => s + m.F * mus[m.id].a, 0) / F;
-      if (Math.abs(mus[id].force - force) > 1e-7 || Math.abs(mus[id].a - a) > 1e-10) {
+      const rank = included.reduce((s, m) => s + m.F * (Math.min(mus[m.id].a, 1.5) + mus[m.id].p), 0) / F;
+      if (Math.abs(mus[id].force - force) > 1e-7 || Math.abs(mus[id].a - a) > 1e-10 || Math.abs(mus[id].s - rank) > 1e-10) {
         throw new Error(`${c.id}@${e} ${id} 合群數值不一致`);
       }
       checked++;

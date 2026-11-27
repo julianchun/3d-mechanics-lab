@@ -9,7 +9,7 @@
 - **C**：[Christophy et al. (2012)](https://link.springer.com/content/pdf/10.1007/s10237-011-0290-6.pdf)，Table 1 的單側肌束表與 Fig. 7 的 L5/S1 力臂。SimTK `Lumbar_C_210.osim` 下載需登入，未取得可核對的模型檔版本；因此軀幹值標示為「論文表格」，**模型檔版本未查證**。
 - **S**：[Seth et al. (2016)](https://pubmed.ncbi.nlm.nih.gov/26734761/) 與 [Seth et al. (2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6856649/) 說明肩胛胸廓模型；目前使用 [TSM 模型檔](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/b47b06cd23c872e69f92687270e47d4c560bb14b/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim) 的斜方肌、前鋸肌、菱形肌路徑點，固定 commit `b47b06cd23c872e69f92687270e47d4c560bb14b`；對應到本模型肩帶軸仍是近似，未經 OpenSim 執行驗證。
 
-`python3 tools/muscle_params.py` 以固定 commit 下載 R、U 檔案，重算來源模型的組合 `F`、`Lf`、肌腱鬆弛長 `Lt`、最佳長度羽狀角 `alpha` 與髖路徑弦力臂；標「調整」的有效 `F` 應以本表與程式為準。原始來源採樣對應：`F來源=ΣFᵢ`；`Lf=Σ(Fᵢ Lfᵢ)/ΣFᵢ`；`Lmt=Σ[Fᵢ(Lfᵢ+Ltᵢ)]/ΣFᵢ`；`Lt` 與 `alpha` 也按來源 F 加權。仍合併的功能群各成分共用一個活化度；已細分的子部位各自求解。一般視圖的群組力為子部位實際模型力（主動＋被動）相加，活化度為以各子部位 F 加權平均。現行出力仍用 `Lmt` 當長度位移的代理分母；它**不是**最佳纖維長，也不是完整的肌纖維／肌腱求解。
+`python3 tools/muscle_params.py` 以固定 commit 下載 R、U 檔案，重算來源模型的組合 `F`、`Lf`、肌腱鬆弛長 `Lt`、最佳長度羽狀角 `alpha` 與髖路徑弦力臂；標「調整」的有效 `F` 應以本表與程式為準。原始來源採樣對應：`F來源=ΣFᵢ`；`Lf=Σ(Fᵢ Lfᵢ)/ΣFᵢ`；`Lmt=Σ[Fᵢ(Lfᵢ+Ltᵢ)]/ΣFᵢ`；`Lt` 與 `alpha` 也按來源 F 加權。仍合併的功能群各成分共用一個活化度；已細分的子部位各自求解。一般視圖的排名／曲線 `s=ΣFᵢ[min(aᵢ,1.5)+pᵢ]/ΣFᵢ`，不含力長折減；活化度 `a=Σ(Fᵢaᵢ)/ΣFᵢ`。群組模型力 `force` 另為子部位實際出力（主動乘力長係數＋被動）相加，不用於排名。現行出力仍用 `Lmt` 當長度位移的代理分母；它**不是**最佳纖維長，也不是完整的肌纖維／肌腱求解。
 
 ## F、Lf、Lmt 逐條資料
 
@@ -59,7 +59,7 @@
 
 ## 細分判斷與一般視圖
 
-`tools/muscle_params.py` 從固定版 R／U 檔案列印每一子部位的 `F、Lf、Lmt、Lt、alpha`，以及能以路徑弦近似的髖／肘力臂。C 的 Christophy 模型檔仍未取得可核對版本，軀幹只能沿原論文表格與原有效功能群。39 個求解項在一般視圖合成原來 32 群；`force` 為子部位模型力相加，`a` 為 `Σ(Fᵢaᵢ)/ΣFᵢ`。曲線與熱圖沿用這個群組定義。詳細視圖使用各子部位自身的活化、長度與力。各子部位各有 3D 附著點；畫面位置只做解剖示意，並非 OpenSim 網格的精確肌束線。
+`tools/muscle_params.py` 從固定版 R／U 檔案列印每一子部位的 `F、Lf、Lmt、Lt、alpha`，以及能以路徑弦近似的髖／肘力臂。C 的 Christophy 模型檔仍未取得可核對版本，軀幹只能沿原論文表格與原有效功能群。39 個求解項在一般視圖合成原來 32 群；`force` 為子部位模型力相加，`a` 為 `Σ(Fᵢaᵢ)/ΣFᵢ`，`s` 為各子部位 `s` 的 F 加權平均。曲線與熱圖沿用 `s`，力加總只供模型力提示。詳細視圖使用各子部位自身的活化、長度與力。各子部位各有 3D 附著點；畫面位置只做解剖示意，並非 OpenSim 網格的精確肌束線。
 
 | 候選 | 判斷 | 依據與限制 |
 |---|---|---|
