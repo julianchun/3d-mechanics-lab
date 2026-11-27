@@ -527,7 +527,9 @@ function sourcesBlock() {
       el('p', { class: 'src-empty' }, state.muscleView === 'detail'
         ? '詳細視圖依固定版 Rajagopal 與 MoBL-ARMS 模型顯示可分辨的子部位；力臂仍是本工具的簡化映射。'
         : '一般視圖將子部位模型力相加，再除以群組最大等長力顯示相對受力；活化度是各子部位以最大等長力 F 加權的平均。'),
-      el('a', { class: 'src-link', href: './docs/research/muscle-params.md', target: '_blank', rel: 'noopener noreferrer' }, '肌肉參數與細分依據 ↗'),
+      state.muscleView === 'detail' ? el('p', { class: 'src-empty' }, '子部位參數來源：',
+        el('a', { class: 'src-link', href: 'https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/Rajagopal2016.osim', target: '_blank', rel: 'noopener noreferrer' }, '下肢固定版 ↗'), '、',
+        el('a', { class: 'src-link', href: 'https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim', target: '_blank', rel: 'noopener noreferrer' }, '上肢固定版 ↗')) : null,
       el('ul', { class: 'src-list' }, info.assumptions.map((txt) => el('li', {}, txt))),
       el('div', { class: 'src-hd' }, '與文獻趨勢比對'),
       info.trends.length
