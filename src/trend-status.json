@@ -72,7 +72,7 @@
         "compare": "腳踩高 (footHigh=0.8) vs 腳踩低 (footHigh=0.2) — 臀大肌活化",
         "expected": "腳踩高 > 腳踩低",
         "ref": "Da Silva 2008 (PMID 18545207, n=14，高腳位臀大肌 EMG 顯著高於低腳位)",
-        "model": "高腳位 = 0.330 a vs 低腳位 = 0.000 a"
+        "model": "高腳位 = 0.356 a vs 低腳位 = 0.000 a"
       },
       {
         "index": 5,
@@ -108,7 +108,7 @@
         "compare": "高槓深蹲 vs 45° 腿推機 — 膕繩肌活化",
         "expected": "深蹲 > 腿推機",
         "ref": "Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)",
-        "model": "深蹲 = 0.450 a vs 腿推機 = 0.117 a"
+        "model": "深蹲 = 0.407 a vs 腿推機 = 0.121 a"
       }
     ],
     "squat-high": [
@@ -122,7 +122,7 @@
         "compare": "高槓深蹲 vs 45° 腿推機 — 膕繩肌活化",
         "expected": "深蹲 > 腿推機",
         "ref": "Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)",
-        "model": "深蹲 = 0.450 a vs 腿推機 = 0.117 a"
+        "model": "深蹲 = 0.407 a vs 腿推機 = 0.121 a"
       },
       {
         "index": 8,
@@ -134,7 +134,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 膕繩肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股二頭肌 +26%)",
-        "model": "自由深蹲 = 0.450 a vs 史密斯 = 0.127 a"
+        "model": "自由深蹲 = 0.407 a vs 史密斯 = 0.067 a"
       },
       {
         "index": 9,
@@ -146,7 +146,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 股四頭肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股內側肌 +49%)",
-        "model": "自由深蹲 = 0.680 a vs 史密斯 = 0.660 a"
+        "model": "自由深蹲 = 0.646 a vs 史密斯 = 0.602 a"
       },
       {
         "index": 10,
@@ -182,7 +182,7 @@
         "compare": "高槓 vs 低槓 — 股四頭肌活化",
         "expected": "高槓 > 低槓",
         "ref": "Glassbrook 2017 (PMID 28570490)",
-        "model": "高槓 = 0.680 a vs 低槓 = 0.645 a"
+        "model": "高槓 = 0.646 a vs 低槓 = 0.617 a"
       },
       {
         "index": 13,
@@ -218,7 +218,7 @@
         "compare": "全蹲 (depth=0.9) vs 淺蹲 (depth=0.1) — 臀大肌負荷 s",
         "expected": "全蹲 > 淺蹲",
         "ref": "Kubo 2019 (PMID 31230110，實測 MRI 體積 +6.7% vs +2.2%); Bryanton 2012 (PMID 22797000，髖 RME)",
-        "model": "全蹲 = 0.572 s vs 淺蹲 = 0.509 s"
+        "model": "全蹲 = 0.781 s vs 淺蹲 = 0.678 s"
       },
       {
         "index": 16,
@@ -230,7 +230,7 @@
         "compare": "全蹲 (depth=0.9) vs 淺蹲 (depth=0.1) — 內收大肌負荷 s",
         "expected": "全蹲 > 淺蹲",
         "ref": "Kubo 2019 (PMID 31230110，實測 MRI 體積 +6.2% vs +2.7%，對照模型負荷指標 s)",
-        "model": "全蹲 = 0.270 s vs 淺蹲 = 0.178 s"
+        "model": "全蹲 = 0.370 s vs 淺蹲 = 0.251 s"
       },
       {
         "index": 17,
@@ -242,7 +242,7 @@
         "compare": "寬站距 (stance=0.9) vs 窄站距 (stance=0.1) — 臀大肌活化",
         "expected": "寬站距 > 窄站距",
         "ref": "Paoli 2009 (PMID 19130646, n=6；僅 0%/70% 1RM 顯著)｜模型限制：寬站距受股骨矢狀投影縮短影響，軀幹反少傾約 16° 且髖力矩下降（與 Escamilla 2001 PMID 11404665 矛盾），另缺髖外旋與臀大肌上束外展力臂",
-        "model": "寬站距 = 0.525 a vs 窄站距 = 0.582 a"
+        "model": "寬站距 = 0.527 a vs 窄站距 = 0.601 a"
       },
       {
         "index": 24,
@@ -254,7 +254,7 @@
         "compare": "臀推 vs 高槓深蹲 — 臀大肌活化",
         "expected": "臀推 > 深蹲",
         "ref": "Contreras 2015 (PMID 26214739, n=13, 69.5/86.8% vs 29.4/45.4% MVIC)",
-        "model": "臀推 = 0.546 a vs 深蹲 = 0.577 a"
+        "model": "臀推 = 0.569 a vs 深蹲 = 0.591 a"
       },
       {
         "index": 25,
@@ -265,8 +265,8 @@
         "exercise": "臀推 vs 深蹲（區域）",
         "compare": "臀推 vs 高槓深蹲 — 臀大肌上部峰值活化",
         "expected": "臀推至少高 1%",
-        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；172% vs 84.9% MVIC；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
-        "model": "臀推 = 0.419 a vs 深蹲 = 0.337 a"
+        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；172% vs 84.9% MVIC；各動作估計 10RM，模型負重不同；只比方向、未做上下部互比；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
+        "model": "臀推 = 0.746 a vs 深蹲 = 0.645 a"
       },
       {
         "index": 26,
@@ -277,8 +277,8 @@
         "exercise": "臀推 vs 深蹲（區域）",
         "compare": "臀推 vs 高槓深蹲 — 臀大肌中下部峰值活化",
         "expected": "臀推至少高 1%",
-        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；216% vs 130% MVIC；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
-        "model": "臀推 = 0.599 a vs 深蹲 = 0.679 a"
+        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；216% vs 130% MVIC；各動作估計 10RM，模型負重不同；只比方向、未做上下部互比；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
+        "model": "臀推 = 0.495 a vs 深蹲 = 0.571 a"
       },
       {
         "index": 45,
@@ -316,7 +316,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 膕繩肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股二頭肌 +26%)",
-        "model": "自由深蹲 = 0.450 a vs 史密斯 = 0.127 a"
+        "model": "自由深蹲 = 0.407 a vs 史密斯 = 0.067 a"
       },
       {
         "index": 9,
@@ -328,7 +328,7 @@
         "compare": "高槓深蹲 vs 史密斯深蹲 — 股四頭肌活化",
         "expected": "自由深蹲 > 史密斯",
         "ref": "Schwanbeck 2009 (PMID 19855308, n=6, 股內側肌 +49%)",
-        "model": "自由深蹲 = 0.680 a vs 史密斯 = 0.660 a"
+        "model": "自由深蹲 = 0.646 a vs 史密斯 = 0.602 a"
       }
     ],
     "squat-low": [
@@ -366,7 +366,7 @@
         "compare": "高槓 vs 低槓 — 股四頭肌活化",
         "expected": "高槓 > 低槓",
         "ref": "Glassbrook 2017 (PMID 28570490)",
-        "model": "高槓 = 0.680 a vs 低槓 = 0.645 a"
+        "model": "高槓 = 0.646 a vs 低槓 = 0.617 a"
       }
     ],
     "front-squat": [
@@ -406,7 +406,7 @@
         "compare": "相撲 vs 傳統 — 股四頭肌活化",
         "expected": "相撲 > 傳統",
         "ref": "Escamilla 2002 (PMID 11932579)",
-        "model": "相撲 = 0.840 a vs 傳統 = 0.587 a"
+        "model": "相撲 = 0.800 a vs 傳統 = 0.569 a"
       },
       {
         "index": 19,
@@ -432,7 +432,7 @@
         "compare": "相撲 vs 傳統 — 股四頭肌活化",
         "expected": "相撲 > 傳統",
         "ref": "Escamilla 2002 (PMID 11932579)",
-        "model": "相撲 = 0.840 a vs 傳統 = 0.587 a"
+        "model": "相撲 = 0.800 a vs 傳統 = 0.569 a"
       },
       {
         "index": 19,
@@ -458,19 +458,19 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 股四頭肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.641 a vs 墊高 = 0.497 a"
+        "model": "赤字 = 0.621 a vs 墊高 = 0.481 a"
       },
       {
         "index": 21,
         "pass": false,
-        "tie": false,
+        "tie": true,
         "evidence": "indirect",
         "evidenceLabel": "文獻相關非直接",
         "exercise": "赤字 vs 墊高硬舉",
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 臀大肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.742 a vs 墊高 = 0.750 a"
+        "model": "赤字 = 0.732 a vs 墊高 = 0.738 a"
       },
       {
         "index": 22,
@@ -482,7 +482,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 膕繩肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.702 a vs 墊高 = 0.655 a"
+        "model": "赤字 = 0.674 a vs 墊高 = 0.630 a"
       }
     ],
     "block-pull": [
@@ -496,19 +496,19 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 股四頭肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.641 a vs 墊高 = 0.497 a"
+        "model": "赤字 = 0.621 a vs 墊高 = 0.481 a"
       },
       {
         "index": 21,
         "pass": false,
-        "tie": false,
+        "tie": true,
         "evidence": "indirect",
         "evidenceLabel": "文獻相關非直接",
         "exercise": "赤字 vs 墊高硬舉",
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 臀大肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.742 a vs 墊高 = 0.750 a"
+        "model": "赤字 = 0.732 a vs 墊高 = 0.738 a"
       },
       {
         "index": 22,
@@ -520,7 +520,7 @@
         "compare": "赤字 (start=-5) vs 墊高 (start=+10) — 膕繩肌活化",
         "expected": "赤字 > 墊高",
         "ref": "Rogacion 2024 研討會摘要 (WKU IJES 14(4):68，非期刊全文)",
-        "model": "赤字 = 0.702 a vs 墊高 = 0.655 a"
+        "model": "赤字 = 0.674 a vs 墊高 = 0.630 a"
       }
     ],
     "good-morning": [
@@ -548,7 +548,7 @@
         "compare": "臀推 vs 高槓深蹲 — 臀大肌活化",
         "expected": "臀推 > 深蹲",
         "ref": "Contreras 2015 (PMID 26214739, n=13, 69.5/86.8% vs 29.4/45.4% MVIC)",
-        "model": "臀推 = 0.546 a vs 深蹲 = 0.577 a"
+        "model": "臀推 = 0.569 a vs 深蹲 = 0.591 a"
       },
       {
         "index": 25,
@@ -559,8 +559,8 @@
         "exercise": "臀推 vs 深蹲（區域）",
         "compare": "臀推 vs 高槓深蹲 — 臀大肌上部峰值活化",
         "expected": "臀推至少高 1%",
-        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；172% vs 84.9% MVIC；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
-        "model": "臀推 = 0.419 a vs 深蹲 = 0.337 a"
+        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；172% vs 84.9% MVIC；各動作估計 10RM，模型負重不同；只比方向、未做上下部互比；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
+        "model": "臀推 = 0.746 a vs 深蹲 = 0.645 a"
       },
       {
         "index": 26,
@@ -571,8 +571,8 @@
         "exercise": "臀推 vs 深蹲（區域）",
         "compare": "臀推 vs 高槓深蹲 — 臀大肌中下部峰值活化",
         "expected": "臀推至少高 1%",
-        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；216% vs 130% MVIC；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
-        "model": "臀推 = 0.599 a vs 深蹲 = 0.679 a"
+        "ref": "Contreras et al. 2015 原始研究（PMID 26214739；216% vs 130% MVIC；各動作估計 10RM，模型負重不同；只比方向、未做上下部互比；https://pubmed.ncbi.nlm.nih.gov/26214739/）",
+        "model": "臀推 = 0.495 a vs 深蹲 = 0.571 a"
       },
       {
         "index": 27,
@@ -584,7 +584,7 @@
         "compare": "腳放遠 (kneeTop=70°) vs 腳放近 (kneeTop=120°) — 膕繩肌活化",
         "expected": "腳放遠 > 腳放近",
         "ref": "Collazo García 2020 (DOI 10.1519/JSC.0000000000002859)",
-        "model": "腳遠 70° = 0.521 a vs 腳近 120° = 0.305 a"
+        "model": "腳遠 70° = 0.504 a vs 腳近 120° = 0.232 a"
       },
       {
         "index": 28,
@@ -596,7 +596,7 @@
         "compare": "臀推 vs 槓鈴臀橋 — 股四頭肌活化",
         "expected": "臀推 > 臀橋",
         "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)",
-        "model": "臀推 = 0.368 a vs 臀橋 = 0.255 a"
+        "model": "臀推 = 0.344 a vs 臀橋 = 0.234 a"
       },
       {
         "index": 29,
@@ -608,7 +608,7 @@
         "compare": "槓鈴臀橋 vs 臀推 — 臀大肌活化",
         "expected": "臀橋 > 臀推",
         "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)｜模型限制：Lmt 長度代理未反映臀橋膕繩肌主動不足",
-        "model": "臀橋 = 0.254 a vs 臀推 = 0.546 a"
+        "model": "臀橋 = 0.289 a vs 臀推 = 0.569 a"
       }
     ],
     "glute-bridge": [
@@ -622,7 +622,7 @@
         "compare": "臀推 vs 槓鈴臀橋 — 股四頭肌活化",
         "expected": "臀推 > 臀橋",
         "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)",
-        "model": "臀推 = 0.368 a vs 臀橋 = 0.255 a"
+        "model": "臀推 = 0.344 a vs 臀橋 = 0.234 a"
       },
       {
         "index": 29,
@@ -634,7 +634,7 @@
         "compare": "槓鈴臀橋 vs 臀推 — 臀大肌活化",
         "expected": "臀橋 > 臀推",
         "ref": "Kennedy 2024 (PMID 35586943, Sports Biomech 23(12):2935–2949, n=10)｜模型限制：Lmt 長度代理未反映臀橋膕繩肌主動不足",
-        "model": "臀橋 = 0.254 a vs 臀推 = 0.546 a"
+        "model": "臀橋 = 0.289 a vs 臀推 = 0.569 a"
       }
     ],
     "incline-bench": [
@@ -850,7 +850,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.281 a"
+        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.268 a"
       },
       {
         "index": 38,
@@ -862,7 +862,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.578 a vs 寬握 = 0.493 a"
+        "model": "窄握 V 把 = 0.559 a vs 寬握 = 0.493 a"
       }
     ],
     "cable-row": [
@@ -876,7 +876,7 @@
         "compare": "寬握高外展 (wide) vs 窄握低外展 (v) — 三角肌後束活化",
         "expected": "寬握高外展 > 窄握低外展",
         "ref": "de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，比較肩外展 0°/30°/60°/90°，外展越高後三角越高；Padovan 2025 未報告後三角振幅較高)",
-        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.281 a"
+        "model": "寬握 = 0.532 a vs 窄握 V 把 = 0.268 a"
       },
       {
         "index": 38,
@@ -888,7 +888,7 @@
         "compare": "窄握低外展 (v) vs 寬握高外展 (wide) — 背闊肌活化",
         "expected": "窄握低外展 > 寬握高外展",
         "ref": "Padovan 2025 (DOI 10.5114/jhk/209550, n=14，窄握背闊較高 ES=1.08); de Abreu Vasconcelos 2023 (DOI 10.47206/ijsc.v3i1.190, n=21，肩外展接近 0° 背闊較高)",
-        "model": "窄握 V 把 = 0.578 a vs 寬握 = 0.493 a"
+        "model": "窄握 V 把 = 0.559 a vs 寬握 = 0.493 a"
       },
       {
         "index": 39,
@@ -952,7 +952,7 @@
         "compare": "窄握 (grip=0.7) vs 寬握 (grip=1.5) — 肱二頭肌活化",
         "expected": "窄握 > 寬握",
         "ref": "McAllister 2013 (PMID 22362088, n=16；僅離心期 50% vs 200% BAB 顯著，向心期不顯著，弱／條件式證據)",
-        "model": "窄握 = 0.227 a vs 寬握 = 0.178 a"
+        "model": "窄握 = 0.173 a vs 寬握 = 0.131 a"
       }
     ],
     "leg-curl": [
@@ -1008,7 +1008,7 @@
         "compare": "反握 (sup) vs 反手正握 (pro) — 肱二頭肌活化",
         "expected": "反握 > 反手正握",
         "ref": "解剖推論（前臂旋前時二頭肌屈肘效率下降；非文獻結果，Kleiber 2015 PMID 26300781 顯示二頭肌 EMG 在各握法間無顯著差異）",
-        "model": "反握 = 0.778 a vs 反手正握 = 0.424 a"
+        "model": "反握 = 0.780 a vs 反手正握 = 0.402 a"
       },
       {
         "index": 47,
@@ -1020,7 +1020,7 @@
         "compare": "反手正握 (pro) vs 反握 (sup) — 肱肌／肱橈肌活化",
         "expected": "反手正握 > 反握",
         "ref": "Kleiber 2015 (PMID 26300781, n=16，實測肱橈肌旋前貢獻顯著較高；註：模型 brach 為肱肌＋肱橈肌合併)",
-        "model": "反手正握 = 0.756 a vs 反握 = 0.480 a"
+        "model": "反手正握 = 0.513 a vs 反握 = 0.318 a"
       }
     ],
     "reverse-curl": [
@@ -1034,7 +1034,7 @@
         "compare": "反握 (sup) vs 反手正握 (pro) — 肱二頭肌活化",
         "expected": "反握 > 反手正握",
         "ref": "解剖推論（前臂旋前時二頭肌屈肘效率下降；非文獻結果，Kleiber 2015 PMID 26300781 顯示二頭肌 EMG 在各握法間無顯著差異）",
-        "model": "反握 = 0.778 a vs 反手正握 = 0.424 a"
+        "model": "反握 = 0.780 a vs 反手正握 = 0.402 a"
       },
       {
         "index": 47,
@@ -1046,7 +1046,7 @@
         "compare": "反手正握 (pro) vs 反握 (sup) — 肱肌／肱橈肌活化",
         "expected": "反手正握 > 反握",
         "ref": "Kleiber 2015 (PMID 26300781, n=16，實測肱橈肌旋前貢獻顯著較高；註：模型 brach 為肱肌＋肱橈肌合併)",
-        "model": "反手正握 = 0.756 a vs 反握 = 0.480 a"
+        "model": "反手正握 = 0.513 a vs 反握 = 0.318 a"
       }
     ],
     "pec-deck": [
@@ -1072,7 +1072,7 @@
         "compare": "握把式 (handle) vs 前臂墊式 (pad) — 屈肘肌群 (brach) 活化",
         "expected": "握把式 > 前臂墊式",
         "ref": "力學／解剖推論（握把式需屈肘肌等長維持微彎肘角；前臂墊式阻力直接作用於前臂且垂直於屈肘平面，無直接 EMG 對照文獻）",
-        "model": "握把式 = 0.470 a vs 前臂墊式 = 0.000 a"
+        "model": "握把式 = 0.355 a vs 前臂墊式 = 0.000 a"
       }
     ],
     "cable-fly-high": [
@@ -1192,7 +1192,7 @@
         "compare": "反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化",
         "expected": "反握 > 錘式對握",
         "ref": "Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)",
-        "model": "反握 = 0.700 a vs 錘式對握 = 0.537 a"
+        "model": "反握 = 0.689 a vs 錘式對握 = 0.512 a"
       },
       {
         "index": 54,
@@ -1204,7 +1204,7 @@
         "compare": "錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化",
         "expected": "錘式對握 > 反握",
         "ref": "Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)",
-        "model": "錘式對握 = 0.784 a vs 反握 = 0.748 a"
+        "model": "錘式對握 = 0.785 a vs 反握 = 0.744 a"
       }
     ],
     "hammer-curl": [
@@ -1218,7 +1218,7 @@
         "compare": "反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化",
         "expected": "反握 > 錘式對握",
         "ref": "Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)",
-        "model": "反握 = 0.700 a vs 錘式對握 = 0.537 a"
+        "model": "反握 = 0.689 a vs 錘式對握 = 0.512 a"
       },
       {
         "index": 54,
@@ -1230,7 +1230,7 @@
         "compare": "錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化",
         "expected": "錘式對握 > 反握",
         "ref": "Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)",
-        "model": "錘式對握 = 0.784 a vs 反握 = 0.748 a"
+        "model": "錘式對握 = 0.785 a vs 反握 = 0.744 a"
       }
     ],
     "lat-raise": [
