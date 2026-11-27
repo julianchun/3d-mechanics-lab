@@ -42,6 +42,12 @@ const RANKS = {
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  {
+    id: 'hip-thrust', rule: 'trend:gmaxLower', kind: '區域性文獻趨勢',
+    current: '臀推臀大肌中下部峰值 0.599，低於高槓深蹲 0.679；Contreras 2015 實測方向相反',
+    cause: '臀推與深蹲的幾何、支撐反力及臀大肌髖伸力臂仍為簡化估計；細分後中下部需求在深蹲偏高',
+    fix: '以同負重條件的區域肌電與三維力矩重新核對，不為趨勢調整功能群 F 或力臂',
+  },
   ...[
     ['glute-bridge', 'rank:top2', '臀大肌上、下部分流後，合群受力比率未進前二'],
     ['leg-curl', 'rank:first', '新增僅跨膝的股二頭肌短頭後，膕繩肌合群 F 加權活化低於腓腸肌'],
@@ -262,6 +268,13 @@ for (let i = 0; i <= 100; i++) {
   const first = [...peaks].sort((a, b) => b[1] - a[1])[0][0];
   if (first !== 'vasti') errors.push(`hack-squat 站距 ${(i / 100).toFixed(2)} 第一名 ${first}，預期 vasti`);
 }
+// [Contreras 2015](https://pubmed.ncbi.nlm.nih.gov/26214739/)：臀推上下部峰值皆應高於深蹲；下部目前失敗。
+const lowerGlutePeak = (lift, params) => Math.max(...Array.from({ length: 21 }, (_, i) =>
+  analyze(lift, params, i / 20).mus.gmaxLower.a));
+const hipLower = lowerGlutePeak('hipthrust', { ...defaultParams('hipthrust'), surface: 'bench', kneeTop: 90 });
+const squatLower = lowerGlutePeak('squat', { ...defaultParams('squat'), barPos: 'high' });
+if (hipLower <= squatLower * 1.01) check('hip-thrust', 'trend:gmaxLower', `臀推 ${hipLower.toFixed(3)}，深蹲 ${squatLower.toFixed(3)}；預期臀推至少高 1%`);
+
 // 墊高的需求力矩若日後真的因分段支撐改變，這項已知限制應移除。
 const padBase = defaultParams('backext');
 const lowPad = analyze('backext', { ...padBase, padHeight: -6 }, 0.5).dem;
