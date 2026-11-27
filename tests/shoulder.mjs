@@ -32,7 +32,14 @@ for (const item of CATALOG.filter((c) => c.lift && LIFTS[c.lift].dofs.includes('
       }
       for (const [id, muscle] of Object.entries(r.mus)) {
         const before = previous.r.mus[id];
-        if (before && Math.abs(muscle.a - before.a) > 0.3) failures.push(`${item.id}@${i / 80} ${id} 活化單步跳動超過 0.3`);
+        if (before && Math.abs(muscle.a - before.a) > 0.3) {
+          // 靠近行程端點時，肘部負載可在 1/80 行程內快速但連續地上升；
+          // 用中點確認兩個 1/160 細步均無突跳，而非把斜率誤判為不連續。
+          const mid = analyze(item.lift, P, (i - 0.5) / 80).mus[id].a;
+          if (Math.max(Math.abs(mid - before.a), Math.abs(muscle.a - mid)) > 0.3) {
+            failures.push(`${item.id}@${i / 80} ${id} 活化 1/160 細步跳動超過 0.3`);
+          }
+        }
         if (before && Math.abs(muscle.l - before.l) > 0.1) failures.push(`${item.id}@${i / 80} ${id} 長度單步跳動超過 0.1`);
       }
     }
@@ -59,4 +66,4 @@ if (failures.length) {
   for (const failure of failures) console.error(failure);
   process.exit(1);
 }
-console.log('shoulder PASS：所有含肩動作的上臂方向／軸旋每 1/80 行程 ≤5°、肩推鎖死 1/400 細步連續，力臂、長度與活化連續');
+console.log('shoulder PASS：所有含肩動作的上臂方向／軸旋每 1/80 行程 ≤5°、肩推鎖死 1/400 細步連續，力臂、長度與活化（必要時以 1/160 細步）連續');

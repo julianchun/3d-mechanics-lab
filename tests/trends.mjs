@@ -765,8 +765,8 @@ const CHECKS = [
     ids: ['db-curl', 'hammer-curl'],
     exercise: '啞鈴彎舉（反握 vs 錘式）',
     compare: '反握 (sup) vs 錘式對握 (neutral) — 肱二頭肌活化',
-    ref: 'Coratella et al. 2023 (PMID 36976950，向心期反握肱二頭肌 sEMG 顯著高於對握約 12%)',
-    evidence: 'direct',
+    ref: 'Coratella et al. 2023 (PMID 36976950，滑輪雙手短槓反握 vs 雙手繩索對握；向心期二頭肌 sEMG 約 +12%；此處獨立啞鈴為跨器材外推)',
+    evidence: 'indirect',
     expected: '反握 > 錘式對握',
     run() {
       const a = peakMus('dbcurl', P('dbcurl', { grip: 'sup' }), 'bic', 'a');
@@ -778,8 +778,8 @@ const CHECKS = [
     ids: ['hammer-curl', 'db-curl'],
     exercise: '啞鈴彎舉（錘式 vs 反握）',
     compare: '錘式對握 (neutral) vs 反握 (sup) — 前三角肌活化',
-    ref: 'Coratella et al. 2023 (PMID 36976950，對握前三角肌穩定活化顯著高於反握約 9%)',
-    evidence: 'direct',
+    ref: 'Coratella et al. 2023 (PMID 36976950，滑輪雙手短槓 vs 雙手繩索；對握前三角肌 sEMG 約 +9%；此處獨立啞鈴為跨器材外推)',
+    evidence: 'indirect',
     expected: '錘式對握 > 反握',
     run() {
       const a = peakMus('dbcurl', P('dbcurl', { grip: 'neutral' }), 'adelt', 'a');

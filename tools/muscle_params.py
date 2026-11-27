@@ -63,6 +63,9 @@ SUBGROUPS = {
     "bicShort": ("U", "BICshort"),
     "brachialis": ("U", "BRA"),
     "brachioradialis": ("U", "BRD"),
+    "pronatorTeres": ("U", "PT"),
+    "pronatorQuadratus": ("U", "PQ"),
+    "supinator": ("U", "SUP"),
 }
 
 # 跨膝肌的中立脛骨原點：Walker knee 的股骨／脛骨 offset 相減；僅供直線弦診斷。

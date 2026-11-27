@@ -40,6 +40,9 @@ const ATTACH = {
   bicShort: { a: ['sh', 0.07, -0.035, 0.037], b: ['fore', 0.12, -0.012, 0.025], r: 0.020 },
   brachialis: { a: ['upper', 0.49, 0.001, 0.012], b: ['fore', 0.11, 0.0, 0.01], r: 0.024 },
   brachioradialis: { a: ['upper', 0.46, 0.035, 0.008], b: ['fore', 0.36, 0.04, 0.01], r: 0.016 },
+  pronatorTeres: { a: ['upper', 0.89, -0.024, 0.012], b: ['fore', 0.38, 0.024, 0.012], r: 0.016 },
+  pronatorQuadratus: { a: ['fore', 0.74, -0.017, 0.008], b: ['fore', 0.87, 0.018, 0.008], r: 0.012 },
+  supinator: { a: ['fore', 0.04, 0.020, -0.015], b: ['fore', 0.30, 0.020, 0.014], r: 0.013 },
   tmaj: { a: ['sh', -0.7, -0.07, -0.07], b: ['upper', 0.13, -0.005, 0.0], r: 0.024 },
   corb: { a: ['sh', 0.05, -0.04, 0.05], b: ['upper', 0.45, -0.012, 0.005], r: 0.014 },
   infra: { a: ['sh', -0.3, -0.08, -0.075], b: ['upper', 0.05, 0.01, -0.02], r: 0.026 },
@@ -285,7 +288,7 @@ export class Rig {
       _m.elements[15] = 1;
       const grip = pose.supinated ? -1 : 1; // 右手：正握時小指在外側（+x）
       const barPt = pose.R.grip || [pose.R.hand[0], pose.bar[1], pose.bar[2]];
-      const out = this.hand.solve(_m, barPt, grip, pose.R.wrist, pose.gripAxis);
+      const out = this.hand.solve(_m, barPt, grip, pose.R.wrist, pose.gripAxis, pose.foreRot);
       const put = (name, M) => {
         const arr = this.boneMeshes[name];
         arr[0].matrix.copy(M);
@@ -513,7 +516,7 @@ export class HandRig {
       let psi = Math.atan2(n0.clone().cross(n1).dot(this.k), n0.dot(n1));
       if (psi > PSI_WRAP) psi -= 2 * Math.PI;
       this.psiWant = psi;
-      this.psi = Math.max(PSI_MIN, Math.min(PSI_MAX, psi));
+      this.psi = this.targetPsi === null ? Math.max(PSI_MIN, Math.min(PSI_MAX, psi)) : this.targetPsi;
       if (this.psi !== psi) {
         // 超過前臂旋轉範圍：手掌沿著 W→槓 的軸轉回來，槓更斜地躺在掌心
         const nR = this.palmN.clone().applyMatrix4(new THREE.Matrix4().makeRotationAxis(this.k, this.psi)).applyMatrix3(Fn).normalize();
@@ -536,8 +539,11 @@ export class HandRig {
     const pn = this.palmN.clone().addScaledVector(h0, -this.palmN.dot(h0)).addScaledVector(tp, -this.palmN.dot(tp)).normalize();
     return { ext: Math.atan2(-h1.dot(pn), h1.dot(h0)), uln: Math.atan2(h1.dot(tp), h1.dot(h0)) };
   }
-  solve(foreM0, barPt, grip, wristPt, gripAxis = null) {
+  solve(foreM0, barPt, grip, wristPt, gripAxis = null, foreRot = null) {
     const { out } = this;
+    // 畫面零點採完全旋後；力學零點採旋前／旋後中立，兩端對齊約 165° 手掌活動範圍。
+    this.targetPsi = foreRot === null || foreRot === undefined ? null
+      : Math.max(PSI_MIN, Math.min(PSI_MAX, -(foreRot + 80 * deg2rad) * 165 / 160));
     const axis = gripAxis ? V3(gripAxis).normalize() : new THREE.Vector3(1, 0, 0);
     const mk = (fm) => {
       const L = new THREE.Vector3().setFromMatrixColumn(fm, 0).length();
