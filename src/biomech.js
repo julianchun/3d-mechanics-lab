@@ -2,7 +2,7 @@
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 
-export const MODEL_VERSION = '0.7.3';
+export const MODEL_VERSION = '0.8.0';
 // 群體常模僅供人工複查；髖角缺骨盆分段，肩後伸代理亦無可直接換算的常模。
 export const ROM_HINTS = Object.freeze({
   hipFlex: 136, kneeFlex: 138, ankleDorsi: 39, shFlex: 160, shAbd: 150,
@@ -1028,7 +1028,7 @@ export const MUSCLES = [
   { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'), shRot: 0.020, scElev: -0.030 } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFwd: shoulderArm(-0.020, -0.010, 0, 'fwd'), shSide: shoulderArm(-0.020, -0.010, 0, 'side') } },
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
-  // 二頭肌肩屈基值取 MOBL_ARMS_41.osim 長頭（16.0 mm）與短頭（21.6 mm）0° 路徑弦長依 F 加權（18.1 mm，屬文獻上緣）；
+  // 二頭肌兩頭的肩屈基值分別取 MOBL_ARMS_41.osim 0° 路徑弦長 16.0／21.6 mm；
   // Landin 2008（PMID 17196396，電刺激＋測力儀）測得上舉 ≥60° 肩上提力矩近零，此處 0°→60° 線性歸零且省略肘角相依為估計。
   { id: 'bicLong', group: 'bic', name: '肱二頭肌長頭', F: 525.1, Lf: 0.1157, Lmt: 0.3880, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0160 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },
   { id: 'bicShort', group: 'bic', name: '肱二頭肌短頭', F: 316.8, Lf: 0.1321, Lmt: 0.3244, arms: { elbExt: angleSlope(-0.03, 'elbFlex', -0.01), shFwd: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'fwd'), shSide: shoulderArm((q) => 0.0216 * clamp((rad(60) - q.shElev) / rad(60), 0, 1), 0, 0, 'side') } },

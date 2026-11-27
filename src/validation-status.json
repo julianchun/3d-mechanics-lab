@@ -1,5 +1,5 @@
 {
-  "modelVersion": "0.7.3",
+  "modelVersion": "0.8.0",
   "summary": {
     "total": 75,
     "count": 44,
@@ -52,9 +52,9 @@
         "count": 0,
         "pass": 0,
         "fail": 0,
-        "qualitativeCount": 8,
+        "qualitativeCount": 10,
         "qualitativePass": 7,
-        "qualitativeFail": 1,
+        "qualitativeFail": 3,
         "links": [
           "docs/research/results/squat.md",
           "docs/research/references.md"
