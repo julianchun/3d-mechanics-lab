@@ -44,3 +44,30 @@ for (const id of ['deadlift', 'sumo', 'deficit-dl', 'block-pull']) {
   for (const [region, z, m] of rows) console.log(`    ${region.padEnd(6)} z=${cm(z)} 力臂(踝)=${cm(z - A[2])} cm 重量=${(m * W / 1).toFixed(0)} N`);
   console.log(`    槓 z=${cm(pose.bar[2])} 力臂(踝)=${cm(pose.bar[2] - A[2])} cm 重量=${(barF * W).toFixed(0)} N`);
 }
+
+// 相撲：每腳額狀面水平地面力、其在膝高的力矩，及投影到 40° 外轉膝軸的分量
+{
+  const P = { ...defaultParams('deadlift'), style: 'sumo' };
+  const pose = solvePose('deadlift', P, 1);
+  const forces = forcesOf(pose, P, 'deadlift');
+  const g = forces.find((f) => f.region === 'foot' && f.F[1] > 0);
+  const K = pose.R.knee;
+  const Fx = g.F[0], Fy = g.F[1];
+  const hKnee = K[1] - g.p[1];
+  const frontal = Math.abs(Fx) * hKnee; // 水平力 × 膝離地面高度（額狀面力矩）
+  const ax = [Math.cos(Math.atan2(pose.toeDir[0], pose.toeDir[2])), 0, -Math.sin(Math.atan2(pose.toeDir[0], pose.toeDir[2]))];
+  // 完整向量力矩（足＋小腿力對膝），再投影到膝軸（與 analyze 相同定義）
+  let M = [0, 0, 0];
+  for (const f of forces) if (f.region === 'foot' || f.region === 'shank') {
+    const r = [f.p[0] - K[0], f.p[1] - K[1], f.p[2] - K[2]];
+    const c = [r[1] * f.F[2] - r[2] * f.F[1], r[2] * f.F[0] - r[0] * f.F[2], r[0] * f.F[1] - r[1] * f.F[0]];
+    M = [M[0] - c[0], M[1] - c[1], M[2] - c[2]];
+  }
+  const proj = -(M[0] * ax[0] + M[1] * ax[1] + M[2] * ax[2]);
+  console.log('\n== 相撲：額狀面水平地面力（每腳）');
+  console.log(`  水平力 Fx = ${Fx.toFixed(1)} N，垂直力 Fy = ${Fy.toFixed(1)} N，Fx/Fy = ${(Fx / Fy).toFixed(3)}`);
+  console.log(`  膝離地高 = ${cm(hKnee)} cm；額狀面力矩 |Fx|×h = ${frontal.toFixed(1)} N·m`);
+  console.log(`  膝軸方向（外轉 ${(Math.atan2(pose.toeDir[0], pose.toeDir[2]) * 180 / Math.PI).toFixed(0)}°）：[${ax.map((v) => v.toFixed(3)).join(', ')}]`);
+  console.log(`  足＋小腿力對膝的力矩向量 = [${M.map((v) => v.toFixed(1)).join(', ')}] N·m；投影到膝軸（膝伸矩）= ${proj.toFixed(1)} N·m`);
+  console.log(`  其中 Fx 貢獻（Fx×膝高×sin 外轉角）≈ ${(frontal * Math.sin(Math.atan2(pose.toeDir[0], pose.toeDir[2]))).toFixed(1)} N·m`);
+}
