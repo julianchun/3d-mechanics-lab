@@ -84,7 +84,10 @@ const dof = { hipExtensionMoment: 'hipExt', kneeExtensionMoment: 'kneeExt',
   anklePlantarflexionMoment: 'ankPF', lumbarExtensionMoment: 'trunkExt' };
 // momentPoint 為研究定義的腰背取矩點；未註記者維持產品預設點。
 function measureValue(lift, m, params, cache) {
-  return withLumbarPoint(m.momentPoint ?? 'model5cm', () => measureValueAtPoint(lift, m, params, cache));
+  // 快取依取矩點分開，避免腰背力矩重用其他點算出的 analyze 結果。
+  const point = m.momentPoint ?? 'model5cm', key = `point:${point}`;
+  if (!cache.has(key)) cache.set(key, new Map());
+  return withLumbarPoint(point, () => measureValueAtPoint(lift, m, params, cache.get(key)));
 }
 function measureValueAtPoint(lift, m, params, cache) {
   if (m.metric === 'pelvisAnteriorTilt') return null;
