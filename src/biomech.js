@@ -1382,7 +1382,7 @@ function squatPose(P, e) {
     const bar = add(add(Pc, mul(u, Lb)), mul(tf.f, -ob));
     const S = toWorld(tf, dl);
     // 握點 = 槓中心（手掌與手指在 rig.js 依槓的位置擺放）
-    // 手腕往後折（背伸），手肘才會落在合理位置：高槓手肘朝下後方、低槓上臂往後下約 45°（世界座標，不隨軀幹前傾翹起）、前槓手肘在前略低於肩（手掌朝上托槓）
+    // 手腕往後折（背伸），手肘才會落在合理位置：高槓手肘朝下後方、低槓上臂往後下約 45°（世界座標，不隨軀幹前傾翹起）、前槓手肘抬起，求解結果約在肩上方 11 cm（手掌朝上托槓，對應「手肘抬高」的前槓口令）
     const B = [handX, bar[1], bar[2]];
     const arm = { R: {} };
     if (front) armChainBent(arm, S, B, norm([0.45, -0.05, 1]), SQ_WRIST.front, norm(add(tf.u, mul(tf.f, -0.4))));

@@ -6,11 +6,11 @@
   "criterion": "|模型群體平均−研究平均| ≤ 研究個體標準差",
   "summary": {
     "pass": 21,
-    "comparable": 44,
+    "comparable": 42,
     "byStudy": {
       "gorsic-2020": {
         "pass": 4,
-        "comparable": 10
+        "comparable": 8
       },
       "gullett-2009": {
         "pass": 1,
@@ -83,16 +83,16 @@
     },
     {
       "id": "gorsic-2020/straight-back/lumbar",
-      "category": "comparable",
+      "category": "definition-mismatch",
       "unit": "Nm/(kg*m)",
       "oldModel": 2.0789,
-      "oldStatus": "fail",
+      "oldStatus": "definition-mismatch",
       "modelMean": 2.061,
       "modelSd": 0.2035,
-      "referenceMean": 1.53,
+      "referenceMean": null,
       "referenceSd": 0.25,
-      "newStatus": "fail",
-      "pass": false,
+      "newStatus": "definition-mismatch",
+      "pass": null,
       "sampleN": 200
     },
     {
@@ -181,16 +181,16 @@
     },
     {
       "id": "gorsic-2020/straight-front/lumbar",
-      "category": "comparable",
+      "category": "definition-mismatch",
       "unit": "Nm/(kg*m)",
       "oldModel": 2.0794,
-      "oldStatus": "fail",
+      "oldStatus": "definition-mismatch",
       "modelMean": 2.0593,
       "modelSd": 0.2009,
-      "referenceMean": 1.64,
+      "referenceMean": null,
       "referenceSd": 0.27,
-      "newStatus": "fail",
-      "pass": false,
+      "newStatus": "definition-mismatch",
+      "pass": null,
       "sampleN": 200
     },
     {
