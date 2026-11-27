@@ -43,6 +43,88 @@ GROUPS = {
     "mdelt": ("U", "DELT2"),
 }
 
+# 教學上可獨立求解的子部位；數字只從上面的固定版本模型讀取。
+SUBGROUPS = {
+    "vaslat": ("R", "vaslat_r"), "vasmed": ("R", "vasmed_r"), "vasint": ("R", "vasint_r"),
+    "bflh": ("R", "bflh_r"),
+    "semis": ("R", "semimem_r semiten_r"),
+    "bfsh": ("R", "bfsh_r"),
+    "gmaxUpper": ("R", "glmax1_r"),
+    "gmaxLower": ("R", "glmax2_r glmax3_r"),
+    "gmedFront": ("R", "glmed1_r"),
+    "gmedBack": ("R", "glmed2_r glmed3_r"),
+    "addmagIsch": ("R", "addmagIsch_r"),
+    "addmagOther": ("R", "addmagDist_r addmagMid_r addmagProx_r"),
+    "addlong": ("R", "addlong_r"), "addbrev": ("R", "addbrev_r"),
+    "iliacus": ("R", "iliacus_r"), "psoas": ("R", "psoas_r"),
+    "gaslat": ("R", "gaslat_r"), "gasmed": ("R", "gasmed_r"),
+    "tricepsLat": ("U", "TRIlat"), "tricepsMed": ("U", "TRImed"),
+    "bicLong": ("U", "BIClong"),
+    "bicShort": ("U", "BICshort"),
+    "brachialis": ("U", "BRA"),
+    "brachioradialis": ("U", "BRD"),
+}
+
+# 跨膝肌的中立脛骨原點：Walker knee 的股骨／脛骨 offset 相減；僅供直線弦診斷。
+TIBIA_NEUTRAL = (-0.00000046, -0.4044252, -0.00126526)
+
+
+def hamstring_hip_chord(el, angle):
+    points = [(p.findtext("socket_parent_frame"), p.findtext("location"))
+              for p in el.findall(".//PathPointSet/objects/*")]
+    proximal = next(tuple(map(float, loc.split())) for frame, loc in points if frame and frame.endswith("/pelvis") and loc)
+    distal = next(tuple(map(float, loc.split())) for frame, loc in points if frame and frame.endswith("/tibia_r") and loc)
+    distal = tuple(distal[i] + TIBIA_NEUTRAL[i] for i in range(3))
+    c, s = math.cos(angle), math.sin(angle)
+    moved = (distal[0] * c - distal[1] * s, distal[0] * s + distal[1] * c, distal[2])
+    return math.dist(proximal, tuple(HIP_CENTER[i] + moved[i] for i in range(3)))
+
+
+def hamstring_hip_arm(models, key, angle):
+    source, names = SUBGROUPS[key]
+    pairs = []
+    for name in names.split():
+        el = models[source][name]
+        f = float(el.findtext("max_isometric_force"))
+        h = 0.0001
+        arm = (hamstring_hip_chord(el, angle + h) - hamstring_hip_chord(el, angle - h)) / (2 * h)
+        pairs.append((f, arm))
+    return sum(f * r for f, r in pairs) / sum(f for f, _ in pairs)
+
+
+# MoBL-ARMS 肘屈角 45° 的兩路徑點直線弦；沒有包覆曲面，不拿深屈端外插。
+ELBOW_CENTER = (0.0061, -0.2904, -0.0123)
+ELBOW_AXIS = (0.04940001, 0.03660001, 0.99810825)
+RADIUS_OFFSET = (0.0004, -0.011503, 0.019999)
+
+
+def elbow_chord(el, angle):
+    points = [(p.findtext("socket_parent_frame"), p.findtext("location"))
+              for p in el.findall(".//PathPointSet/objects/*")]
+    prox = next(tuple(map(float, loc.split())) for frame, loc in reversed(points) if frame and frame.endswith("/humerus") and loc)
+    frame, loc = next((frame, loc) for frame, loc in points if frame and (frame.endswith("/ulna") or frame.endswith("/radius")) and loc)
+    dist = tuple(map(float, loc.split()))
+    if frame.endswith("/radius"):
+        dist = tuple(dist[i] + RADIUS_OFFSET[i] for i in range(3))
+    c, s = math.cos(angle), math.sin(angle)
+    dot = sum(ELBOW_AXIS[i] * dist[i] for i in range(3))
+    cross = (ELBOW_AXIS[1] * dist[2] - ELBOW_AXIS[2] * dist[1],
+             ELBOW_AXIS[2] * dist[0] - ELBOW_AXIS[0] * dist[2],
+             ELBOW_AXIS[0] * dist[1] - ELBOW_AXIS[1] * dist[0])
+    moved = tuple(ELBOW_CENTER[i] + c * dist[i] + s * cross[i] + (1 - c) * dot * ELBOW_AXIS[i] for i in range(3))
+    return math.dist(prox, moved)
+
+
+def elbow_arm(models, key, angle):
+    source, names = (GROUPS | SUBGROUPS)[key]
+    pairs = []
+    for name in names.split():
+        el = models[source][name]
+        f = float(el.findtext("max_isometric_force"))
+        h = 0.0001
+        pairs.append((f, (elbow_chord(el, angle + h) - elbow_chord(el, angle - h)) / (2 * h)))
+    return sum(f * r for f, r in pairs) / sum(f for f, _ in pairs)
+
 
 def read_models():
     out = {}
@@ -58,7 +140,7 @@ def read_models():
 
 
 def group_values(models, key):
-    source, names = GROUPS[key]
+    source, names = (GROUPS | SUBGROUPS)[key]
     els = [models[source][name] for name in names.split()]
     forces = [float(el.findtext("max_isometric_force")) for el in els]
     lengths = [float(el.findtext("optimal_fiber_length")) for el in els]
@@ -94,7 +176,7 @@ def hip_chord_length(el, angle, axis):
 
 
 def hip_arm(models, key, angle, axis):
-    source, names = GROUPS[key]
+    source, names = (GROUPS | SUBGROUPS)[key]
     assert source == "R"
     pairs = []
     for name in names.split():
@@ -109,11 +191,15 @@ def hip_arm(models, key, angle, axis):
 
 if __name__ == "__main__":
     models = read_models()
-    for key in GROUPS:
+    for key in GROUPS | SUBGROUPS:
         force, length, total_length, tendon, pennation = group_values(models, key)
         extras = ""
-        if key in ("gmax", "addmag", "addl", "ilio"):
+        if key in ("gmax", "addmag", "addl", "ilio", "gmaxUpper", "gmaxLower", "gmedFront", "gmedBack", "addmagIsch", "addmagOther"):
             extras += " hipExt@0/45/90=" + "/".join(f"{hip_arm(models, key, math.radians(deg), 'flex'):.4f}" for deg in (0, 45, 90))
-        if key in ("gmax", "gmed", "addmag", "addl"):
+        if key in ("gmax", "gmed", "addmag", "addl", "gmaxUpper", "gmaxLower", "gmedFront", "gmedBack", "addmagIsch", "addmagOther"):
             extras += f" hipAbd@0={hip_arm(models, key, 0, 'abd'):.4f}"
+        if key in ("bflh", "semis"):
+            extras += " hipExtChord@0/45/90=" + "/".join(f"{hamstring_hip_arm(models, key, math.radians(deg)):.4f}" for deg in (0, 45, 90))
+        if key in ("bicLong", "bicShort", "brachialis", "brachioradialis", "tricepsLat", "tricepsMed"):
+            extras += f" elbowChord@45={elbow_arm(models, key, math.radians(45)):.4f}"
         print(f"{key:10s} F={force:.1f} Lf={length:.4f} Lmt={total_length:.4f} Lt={tendon:.4f} alpha={pennation:.4f}{extras}")
