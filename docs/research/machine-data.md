@@ -14,14 +14,14 @@
 
 | 參數 | 數值／範圍 | 來源與備註 |
 |---|---|---|
-| 滑台軌道傾角 | **45°**（有效重力分量 $\sin 45^\circ \approx 0.7071$） | 標準 45° 掛片腿推機；Escamilla et al. (1998, [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)) 與 Escamilla et al. (2001, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 採用 Body Masters, Inc.（Rayne, LA）設備 |
-| 空滑台重量（Carriage / Sled Weight） | 約 34–57 kg（75–125+ lb）；重型商用款（如 Hammer Strength Linear Leg Press）約 53–60 kg（**無出處的假設**） | **無出處的假設**（未查核單一原廠規格表或同儕審查實測值，僅為常見商用範圍估計；各廠牌結構差異大，實際使用應查該型號手冊） |
+| 滑台軌道傾角 | **45°**（有效重力分量 $\sin 45^\circ \approx 0.7071$） | 預設機型 [Titanium Strength Genesis GS-45LP 官方規格](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/) 明示 45°；Escamilla et al. (1998, [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)) 與 Escamilla et al. (2001, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 使用不同的 Body Masters 設備 |
+| 空滑台實體質量（Carriage / Sled Mass） | **50 kg（預設）** | [Titanium Strength Genesis GS-45LP 官方規格](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/) 明列「Sled Weight (unloaded): 50 kg」。選此機型因其同時公布 45° 與**實體滑台重量**；模型掛片 1.8× 體重仍為示例。20–65 kg 滑桿範圍為**未查證的示範界線**，不能推及其他機型。[Hammer Strength HSLLP](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-linear-leg-press) 的 53 kg 是「Starting Resistance」，未說明是否為實體滑台質量，不與本欄混用。 |
 | 滑台導軌摩擦係數 $\mu$ | 線性培林／滾輪動態值約 0.05–0.15（**無出處的假設**） | **無出處的假設**；**Escamilla 2001 全文內使用之 Body Masters 特定機台實測摩擦係數未查證**（需查原紙本附錄）。注意：摩擦力方向永遠反於運動方向——向心推起時增加阻力 $(mg(\sin\theta + \mu\cos\theta))$，離心下放時減少阻力 $(mg(\sin\theta - \mu\cos\theta))$ |
 | 椅背與座椅夾角 | 常見可調範圍：靠背與水平約 25°–45°（即離垂直約 45°–65°）（**無出處的假設**） | **無出處的假設**（未查單一原廠規格書）；目前模型 `seat` 參數為離垂直 35°–65°（預設 50°） |
 | 腳位與肌電／關節變化（Escamilla 2001 與 Da Silva 2008 分別支持） | • **寬站距＋高腳位（WS-LPH）**：膕繩肌 EMG 高於窄站距＋高腳位（NS-LPH）；LPH 與 LPL 之間膝關節受力無顯著差異（Escamilla 2001，**未量臀大肌**）<br>• **高腳位（LPH）vs 低腳位（LPL）**：高腳位之**臀大肌** EMG 顯著高於低腳位；低腳位於高負荷（80% 1RM）下**股四頭肌（股直肌、股外側肌）**高於高腳位（Da Silva 2008） | Escamilla et al. (2001, n=10 男性, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 只支持「寬站距＋高腳位 → 膕繩肌較多」；臀大肌與低腳位股四頭肌差異由 Da Silva et al. (2008, n=14 女性, [PubMed 18545207](https://pubmed.ncbi.nlm.nih.gov/18545207/)) 支持 |
 
 ### 1.2 目前模型
-- 現行 `src/biomech.js` 採 45° 軌道且忽略導軌摩擦（僅算 $\sin 45^\circ$），準靜態下屬合理一階近似；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu$ 數值屬無出處的假設，需以實機測力校正）。
+- 現行 `src/biomech.js` 採 GS-45LP 的 45° 軌道與 50 kg 空滑台；預設 75 kg 身材的 135 kg 示範掛片加滑台共 185 kg，沿軌道準靜態重力約 1,283 N（前版本 180 kg、約 1,249 N）。忽略導軌摩擦；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu$ 數值屬無出處的假設，需以實機測力校正）。
 
 ---
 

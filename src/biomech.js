@@ -81,7 +81,7 @@ const SEGMENTS = {
 //   因本模型以深蹲 1.0× 體重為基準，採用 1.70／1.83 可同時反映「臀推負重顯著高於深蹲」與「臀橋 5RM 略高於臀推」之實測排序，取代原無出處之 1.3× 假設。
 export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row: 0.7, ohp: 0.5, goodmorning: 0.45, curl: 0.35, shrug: 1.2, uprow: 0.35, hipthrust: 1.7, glutebridge: 1.83,
   // 器械示範負重基準（× 體重；細部設定集中在下方 MACHINES）
-  smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
+  smith: 0.9, legpress: 2.47, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
 
 // ---------- 器械規格與參數設定 ----------
 // 每個數值均標註 docs/research/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
@@ -101,10 +101,10 @@ export const MACHINES = {
     railHeight: 2.2,                 // 假設：機架高度（m）
   },
   legpress: {
-    railDeg: 45,                     // docs/research/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
-    sledKgDefault: 45,               // 假設：docs/research/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
+    railDeg: 45,                     // docs/research/machine-data.md §1.1：Titanium Strength GS-45LP 原廠 45° 軌道
+    sledKgDefault: 50,               // docs/research/machine-data.md §1.1：GS-45LP 原廠空滑台實體質量 50 kg
     sledKgRange: [20, 65],           // 假設：輕型至重型商用滑台重量範圍（kg）
-    platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加預設 45 kg 滑台 ＝ 總重 180 kg ＝ 2.4× 體重）
+    platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加已查證 50 kg 滑台 ＝ 總重 185 kg）
     railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/research/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
     railMuRange: [0, 0.15],          // 假設：docs/research/machine-data.md §1.1
     seatDegDefault: 50,              // 假設：docs/research/machine-data.md §1.1 椅背離垂直估計 45°–65°
@@ -565,7 +565,7 @@ export const LIFTS = {
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'ankle', mech: 'A' },
       { key: 'depth', label: '下放深度（最低點膝角度）', left: '75°', right: '125°', min: 0, max: 1, step: 0.01, def: 0.25, joint: 'knee', mech: 'A' },
       { key: 'seat', label: '椅背角度（離垂直）', left: '35°（較直立）', right: '65°（較躺）', min: MACHINES.legpress.seatDegRange[0], max: MACHINES.legpress.seatDegRange[1], step: 1, def: MACHINES.legpress.seatDegDefault, joint: 'equip', mech: 'A', unit: '°' },
-      { key: 'sledKg', label: '空滑台重量（假設）', left: '20 kg（輕型）', right: '65 kg（重型）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'sledKg', label: '空滑台重量', left: '20 kg（示例）', right: '65 kg（示例）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'friction', label: '導軌摩擦 μ（假設・向心上限）', left: '0（準靜態參考）', right: '0.15', min: MACHINES.legpress.railMuRange[0], max: MACHINES.legpress.railMuRange[1], step: 0.01, def: MACHINES.legpress.railMuDefault, joint: 'equip', mech: 'A', fmt: 'dec2' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },

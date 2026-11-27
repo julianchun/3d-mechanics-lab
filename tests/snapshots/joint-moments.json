@@ -175,34 +175,34 @@
   "trunkExt": 83.1008
  },
  "leg-press@0": {
-  "hipExt": 51.3039,
-  "hipAbd": -1.897,
-  "kneeExt": -17.627,
-  "ankPF": 18.2914
+  "hipExt": 53.4803,
+  "hipAbd": -2.0512,
+  "kneeExt": -18.3006,
+  "ankPF": 18.8029
  },
  "leg-press@0.25": {
-  "hipExt": 55.5114,
-  "hipAbd": -1.9324,
-  "kneeExt": 26.431,
-  "ankPF": 18.2914
+  "hipExt": 57.6878,
+  "hipAbd": -2.0865,
+  "kneeExt": 26.9509,
+  "ankPF": 18.8029
  },
  "leg-press@0.5": {
-  "hipExt": 60.4895,
-  "hipAbd": -1.9694,
-  "kneeExt": 68.3931,
-  "ankPF": 18.2914
+  "hipExt": 62.6659,
+  "hipAbd": -2.1236,
+  "kneeExt": 70.055,
+  "ankPF": 18.8029
  },
  "leg-press@0.75": {
-  "hipExt": 66.1283,
-  "hipAbd": -2.0152,
-  "kneeExt": 107.0261,
-  "ankPF": 18.2914
+  "hipExt": 68.3047,
+  "hipAbd": -2.1694,
+  "kneeExt": 109.745,
+  "ankPF": 18.8029
  },
  "leg-press@1": {
-  "hipExt": 72.3134,
-  "hipAbd": -2.0824,
-  "kneeExt": 141.1756,
-  "ankPF": 18.2914
+  "hipExt": 74.4898,
+  "hipAbd": -2.2366,
+  "kneeExt": 144.8345,
+  "ankPF": 18.8029
  },
  "hack-squat@0": {
   "hipExt": 45.1862,
