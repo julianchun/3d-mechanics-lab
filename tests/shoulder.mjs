@@ -68,7 +68,8 @@ for (const [id, e] of [['pullup', 0], ['pullup', 0.5], ['pullup', 1], ['pullup-w
       const v = m.arms.shFwd?.shoulderVec?.(q);
       return sum + force * (v ? dot(v, axes[j]) : 0);
     }, 0);
-    const reaction = j === 2 ? r.shoulderLongReaction : 0;
+    const reaction = j === 2 ? r.shoulderLong?.constraint : 0;
+    if (j === 2 && Math.abs(r.shoulderLong.external - demand) > 0.05) failures.push(`${id}@${e} 長軸外力矩回報 ${r.shoulderLong.external.toFixed(3)} 與重算 ${demand.toFixed(3)} 不符`);
     if (Math.abs(demand - supplied - reaction) > 0.25) failures.push(`${id}@${e} 正交肩力矩第 ${j + 1} 軸殘差 ${(demand - supplied - reaction).toFixed(3)} N·m`);
     if (j === 2 && LIFTS[item.lift].dofs.includes('shRot') && Math.abs(reaction) > 0.25) {
       failures.push(`${id}@${e} 已求解的肩長軸殘差 ${reaction.toFixed(3)} N·m`);

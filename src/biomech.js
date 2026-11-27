@@ -4150,16 +4150,19 @@ export function analyze(lift, P, e) {
   const forearmContactMoment = has('elbExt') && !has('foreRot')
     ? dem.foreRot - info.reduce((sum, x) => sum + mus[x.m.id].force * (x.m.arms.foreRot?.(q) || 0), 0)
     : 0;
-  // 未求解軸旋的肩動作仍有完整三維外力矩；把固定軸旋承受的剩餘長軸偶矩
-  // 明列出來，避免誤認為肌肉已平衡這一軸。若 shRot 參與求解，此值僅是數值殘差。
-  const shoulderLongReaction = shoulderFrame
-    ? shoulderPhysical[2] - info.reduce((sum, x) => {
-      // liftMuscles 會移除未列自由度的力臂；反力矩仍須扣除原肌肉的實際軸向作用。
+  // 未求解軸旋的肩動作仍有完整三維外力矩：長軸外力矩與肌肉軸向扭矩分開列出，
+  // 差額 constraint 是固定軸旋所需的約束／被動反力矩（未驗證，不是肌肉輸出）。
+  // 若 shRot 參與求解，constraint 僅是數值殘差。
+  let shoulderLong = null;
+  if (shoulderFrame) {
+    // liftMuscles 會移除未列自由度的力臂；肌肉軸向扭矩須用原肌肉的實際軸向作用。
+    const muscle = info.reduce((sum, x) => {
       const arm = MUSCLE_BY_ID[x.m.id].arms.shRot;
       return sum + mus[x.m.id].force * (typeof arm === 'function' ? arm(q) : arm || 0);
-    }, 0)
-    : null;
-  return { pose, dem, q, mus, joints, rom, forearmContactMoment, shoulderLongReaction };
+    }, 0);
+    shoulderLong = { external: shoulderPhysical[2], muscle, constraint: shoulderPhysical[2] - muscle };
+  }
+  return { pose, dem, q, mus, joints, rom, forearmContactMoment, shoulderLong };
 }
 
 export function peakAnalysis(lift, P, n = 20) {
