@@ -329,10 +329,10 @@ export const LIFTS = {
     params: [
       { key: 'grip', label: '握法', type: 'select', options: [['pro', '正握'], ['sup', '反握']], def: 'pro', joint: 'hand', mech: 'A' },
       { key: 'width', label: '握距（× 肩寬）', left: '1.0', right: '2.0', min: 1, max: 2, step: 0.05, def: 1.35, joint: 'hand', mech: 'A' },
-      { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
+      { key: 'lean', label: '腿相對軀幹後收', left: '較少', right: '較多', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'load', label: '腰掛負重', left: '徒手', right: '25 kg', min: 0, max: 25, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
     ],
-    standardNote: '可踩踏台抓住固定單槓，再讓雙腳離台，從近乎伸直的懸垂姿勢拉到下巴過槓。踏台不參與動作中支撐。',
+    standardNote: '可踩踏台抓住固定單槓，再讓雙腳離台。腿往身後收的設定改變身體形狀；軀幹角度由重心平衡求出，從近乎伸直的懸垂姿勢拉到下巴過槓。',
   },
   assistpullup: {
     forearmContact: 'fixed',
@@ -3544,24 +3544,23 @@ function pushupPose(P, e) {
   return pose;
 }
 
-// 固定握點後，沿前後方向平移軀幹與腿，再用同一節段質量求重心落在握點支撐線。
+// 固定握點後，以節段質量和外力求矢狀面平衡；徒手懸垂由平衡反求軀幹角。
 function suspendedPose(P, e, type) {
-  const dip = type === 'dips', assisted = type === 'assistpullup';
-  const handY = dip ? 1.18 : 2.35;
-  const handX = dip ? 0.32 : 0.167 * P.width;
-  const handZ = 0;
-  const lean = rad(P.lean) * (dip ? 1 : -1);
-  let shoulderY = dip ? lerp(1.58, 1.31 - 0.08 * P.depth, e) : lerp(2.17, 1.77, e);
-  const make = (shift) => {
-    const u = [0, Math.cos(lean), Math.sin(lean)];
-    const hip = [0, shoulderY - BODY.Ltr * u[1], shift];
-    const pose = { R: {}, warn: [], ok: true, ...trunkFrame(hip, u) };
-    pose.girdle = { ret: rad(dip ? lerp(-5, 9, e) : lerp(10, -5, e)), elev: rad(dip ? -5 : lerp(-8, 16, e)) };
-    const S = toWorld(pose, shoulderLocal(pose.girdle));
-    const H = [handX, handY, handZ];
-    // 跪墊時小腿折在身後；徒手懸垂則雙膝微彎、腳離地。
+  const assisted = type === 'assistpullup';
+  const handY = 2.35, handX = 0.167 * P.width, handZ = 0;
+  let shoulderY = lerp(2.17, 1.77, e);
+  const girdle = { ret: rad(lerp(10, -5, e)), elev: rad(lerp(-8, 16, e)) };
+  const make = (phi, shift = 0) => {
+    const u = [0, Math.cos(phi), Math.sin(phi)];
+    const sl = shoulderLocal(girdle);
+    // 徒手：肩落在握線下方，腿相對軀幹後收；軀幹傾角由全身平衡決定。
+    // 輔助機：固定膝墊在握線前 5 cm，以髖的平移滿足含膝墊反力的力矩平衡。
+    const hip = assisted
+      ? [0, shoulderY - BODY.Ltr * u[1], shift]
+      : [0, shoulderY - (u[1] * sl[1] - u[2] * sl[2]), -(u[2] * sl[1] + u[1] * sl[2])];
+    const pose = { R: {}, warn: [], ok: true, ...trunkFrame(hip, u), girdle };
+    const S = toWorld(pose, sl), H = [handX, handY, handZ];
     if (assisted) {
-      // 輔助機的膝墊固定在握點略前方；膝蓋落在固定墊上，髖與踝由腿長決定。
       const kneeZ = 0.05, dz = kneeZ - hip[2];
       const kneeY = hip[1] - Math.sqrt(Math.max(0.01, BODY.Lt ** 2 - dz ** 2));
       const ankle = [0.14, kneeY - Math.sqrt(BODY.Ls ** 2 - 0.12 ** 2), kneeZ - 0.12];
@@ -3572,13 +3571,14 @@ function suspendedPose(P, e, type) {
       pose.toeDir = [0, 0, -1];
       if (Math.abs(dz) >= BODY.Lt) { pose.ok = false; pose.conflict = '骨盆與固定膝墊距離超出大腿長'; }
     } else {
-      const legScale = dip ? 1 : (BODY.Ls + BODY.Lt) / (DEFAULT_BODY.Ls + DEFAULT_BODY.Lt);
-      const ankle = [0.14, hip[1] - (dip ? 0.52 : 0.7 * legScale), hip[2] - (dip ? 0.28 : 0.18 * legScale)];
+      const legScale = (BODY.Ls + BODY.Lt) / (DEFAULT_BODY.Ls + DEFAULT_BODY.Lt);
+      const legAngle = phi + rad(15 + P.lean);
+      const ankle = [0.14, hip[1] - 0.7 * legScale * Math.cos(legAngle), hip[2] - 0.7 * legScale * Math.sin(legAngle)];
       if (!legChain(pose, ankle, [0, 0, -1], [BODY.hipHalf, hip[1], hip[2]])) {
         pose.ok = false; pose.conflict = '腿部姿勢超出可達範圍';
       }
     }
-    const pole = dip ? [1, 0, -0.25] : P.grip === 'sup' ? [0.5, 0, 1] : [1, 0, 0.1];
+    const pole = P.grip === 'sup' ? [0.5, 0, 1] : [1, 0, 0.1];
     if (!armChain(pose, S, H, pole)) {
       pose.ok = false; pose.conflict = '手臂長度無法到達固定握點';
     }
@@ -3586,52 +3586,43 @@ function suspendedPose(P, e, type) {
     if (assisted) pose.kneePad = pose.R.knee;
     return pose;
   };
-  let lo = -0.45, hi = 0.45;
-  for (let i = 0; i < 34; i++) {
-    const mid = (lo + hi) / 2;
-    const p = make(mid);
-    if (bodyweightCenter(p, P, assisted ? P.assist : 0).z > handZ) hi = mid;
-    else lo = mid;
-  }
-  const shift = (lo + hi) / 2;
-  let pose = make(shift);
-  if (!dip) {
-    // 單槓固定在 2.35 m；懸垂底點肩高由臂長決定，避免手臂超出骨長。
-    // 站上踏台只為抓到槓；踏台不在動作中接觸腳，也不加入支撐反力。
-    const S = pose.R.shoulder, H = [handX, handY, handZ];
-    const horizontal = Math.hypot(H[0] - S[0], H[2] - S[2]);
-    const maxReach = BODY.Lu + BODY.Lf - 0.005;
-    if (horizontal < maxReach) {
-      shoulderY += e * (H[1] - S[1] - Math.sqrt(maxReach ** 2 - horizontal ** 2));
-      pose = make(shift);
+  const balance = () => {
+    let lo = assisted ? -0.45 : rad(-45), hi = assisted ? 0.45 : rad(45);
+    for (let i = 0; i < 34; i++) {
+      const mid = (lo + hi) / 2;
+      const z = bodyweightCenter(make(assisted ? -rad(P.lean) : mid, assisted ? mid : 0), P, assisted ? P.assist : 0).z;
+      if ((z > handZ) === assisted) hi = mid;
+      else lo = mid;
     }
+    return make(assisted ? -rad(P.lean) : (lo + hi) / 2, assisted ? (lo + hi) / 2 : 0);
+  };
+  let pose = balance();
+  // 單槓固定在 2.35 m；底點肩高由臂長決定，姿勢改變後重新平衡。
+  const S = pose.R.shoulder, H = [handX, handY, handZ];
+  const horizontal = Math.hypot(H[0] - S[0], H[2] - S[2]);
+  const maxReach = BODY.Lu + BODY.Lf - 0.005;
+  if (horizontal < maxReach) {
+    shoulderY += e * (H[1] - S[1] - Math.sqrt(maxReach ** 2 - horizontal ** 2));
+    pose = balance();
   }
-  if (Math.abs(bodyweightCenter(pose, P, assisted ? P.assist : 0).z - handZ) > 0.025) {
+  if (Math.abs(bodyweightCenter(pose, P, assisted ? P.assist : 0).z - handZ) > 0.002) {
     pose.warn.push('重心未落在手部支撐線，懸垂姿勢不穩');
   }
   pose.handContact = pose.R.hand;
   pose.bar = [0, handY, handZ];
   pose.barW = (P.load || 0) / BODY.mass;
   pose.armJoints = ['shoulder', 'elbow'];
-  if (dip) {
-    pose.barStyle = 'none';
-    pose.boxes = [
-      ...[-1, 1].map((s) => box([s * handX, handY, -0.04], [0.055, 0.055, 0.85], 0, 'frame')),
-      ...[-1, 1].map((s) => box([s * handX, handY / 2, -0.34], [0.065, handY, 0.065], 0, 'frame')),
-    ];
-  } else {
-    pose.bar = [0, handY, handZ]; pose.barStyle = { len: Math.max(1.2, 2 * handX + 0.18) };
-    pose.supinated = P.grip === 'sup';
-    pose.boxes = [
-      ...[-1, 1].map((s) => box([s * 0.75, handY / 2, -0.4], [0.055, handY, 0.055], 0, 'frame')),
-      ...[-1, 1].map((s) => box([s * 0.75, 0.025, -0.4], [0.35, 0.05, 0.5], 0, 'frame')),
-      ...[-1, 1].map((s) => box([s * 0.75, handY, -0.2], [0.055, 0.055, 0.45], 0, 'frame')),
-    ];
-    if (assisted) {
-      pose.boxes.push(box([0, pose.R.knee[1] - 0.065, pose.R.knee[2]], [0.46, 0.1, 0.34]));
-      pose.boxes.push(box([0, (pose.R.knee[1] - 0.1) / 2, -0.4], [0.09, pose.R.knee[1] - 0.1, 0.09], 0, 'frame'));
-      pose.boxes.push(box([0, pose.R.knee[1] - 0.1, -0.175], [0.09, 0.06, 0.45], 0, 'frame'));
-    }
+  pose.barStyle = { len: Math.max(1.2, 2 * handX + 0.18) };
+  pose.supinated = P.grip === 'sup';
+  pose.boxes = [
+    ...[-1, 1].map((s) => box([s * 0.75, handY / 2, -0.4], [0.055, handY, 0.055], 0, 'frame')),
+    ...[-1, 1].map((s) => box([s * 0.75, 0.025, -0.4], [0.35, 0.05, 0.5], 0, 'frame')),
+    ...[-1, 1].map((s) => box([s * 0.75, handY, -0.2], [0.055, 0.055, 0.45], 0, 'frame')),
+  ];
+  if (assisted) {
+    pose.boxes.push(box([0, pose.R.knee[1] - 0.065, pose.R.knee[2]], [0.46, 0.1, 0.34]));
+    pose.boxes.push(box([0, (pose.R.knee[1] - 0.1) / 2, -0.4], [0.09, pose.R.knee[1] - 0.1, 0.09], 0, 'frame'));
+    pose.boxes.push(box([0, pose.R.knee[1] - 0.1, -0.175], [0.09, 0.06, 0.45], 0, 'frame'));
   }
   return pose;
 }
