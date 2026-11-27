@@ -783,7 +783,7 @@ export const LIFTS = {
   cablefly: {
     forearmContact: 'singleFree',
     name: '滑輪夾胸', topLabel: '夾緊交會', bottomLabel: '外展拉伸',
-    viewCenter: [0, 1.05, 0.05], viewScale: 1.22,
+    viewCenter: [0, 1.20, 0.05], viewScale: 1.55,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt'],
     pose: cableFlyPose, loads: cableLoads,
     moving: ['shFwd', 'shSide', 'shRot'],
@@ -3594,7 +3594,7 @@ function suspendedPose(P, e, type) {
     // 站上踏台只為抓到槓；踏台不在動作中接觸腳，也不加入支撐反力。
     const S = pose.R.shoulder, H = [handX, handY, handZ];
     const horizontal = Math.hypot(H[0] - S[0], H[2] - S[2]);
-    const maxReach = BODY.Lu + BODY.Lf - 0.012;
+    const maxReach = BODY.Lu + BODY.Lf - 0.005;
     if (horizontal < maxReach) {
       shoulderY += e * (H[1] - S[1] - Math.sqrt(maxReach ** 2 - horizontal ** 2));
       pose = make(shift);

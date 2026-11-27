@@ -29,8 +29,8 @@ for (const body of bodies) withBody(body, () => {
         assert.ok(pose.ok && pose.armOk !== false, `${body.heightM} m ${entry.id} ${i}/20：握點不可達`);
         if (i === 20) {
           const reach = Math.hypot(...pose.R.hand.map((v, axis) => v - pose.R.shoulder[axis]));
-          assert.ok(Math.abs(reach - (body.Lu + body.Lf)) < 0.02,
-            `${body.heightM} m ${entry.id}：懸垂起點手臂未近乎伸直`);
+          assert.ok(Math.abs(reach - (body.Lu + body.Lf)) < 0.01,
+            `${body.heightM} m ${entry.id}：懸垂起點手臂未伸直`);
           assert.ok(pose.R.toe[1] > 0.01, `${body.heightM} m ${entry.id}：懸垂起點腳碰地`);
         }
       }

@@ -231,6 +231,6 @@
 | 站姿提踵肩墊 | 腳台固定 13 cm；肩墊隨肩高逐幀移動，三身材在行程中約 1.34–1.84 m | [Cybex VR1 產品資料](https://kb.cybexintl.com/Product_Info/VR1_Product_Info.pdf) 指出輸入臂可依身高調整。具體高度與本模型逐幀接觸追蹤屬**示範假設**。 |
 | 45° 羅馬椅大腿墊 | 模型可調髖參考高 72–106 cm（總行程 34 cm）；三身材為 81.3／92.0／102.7 cm；踝部滾輪位置固定 | [Cybex Prestige 45° Back Extension 官方規格](https://www.lifefitness.com/en-us/catalog/cybex/cybex-products/cybex-prestige-series-45%C2%BA-back-extension) 公布可調行程 34 cm；72–106 cm 的絕對高度及腿長對應為**示範假設**。 |
 | 三頭下壓、槓鈴彎舉 | 三頭下壓使用 LCM-CC 滑車高檔 1.92 m；握距與前臂矢狀面投影由閉鏈幾何求出，避免少數身材把手推到臂長之外 | 1.92 m 在原廠可調滑車範圍內；實際出繩中心、站位與短桿尺寸仍**未查證**。若姿勢不可達，介面顯示繁中警告。 |
-| 引體向上／輔助引體的懸垂起點 | 固定握點 2.35 m；按臂長與握距求近乎伸直的肩高，腿部彎曲距離按腿長縮放。三身材底點腳尖離地約 72／44／16 cm（徒手），輔助機約 62／32／3 cm | 由握點—肩—臂長及腿長的幾何必要條件推得；2.35 m 握點及輔助機膝墊高度仍為**未查證的示範值**。矮身材可踩踏台抓槓，懸吊後離台；踏台不計入運動中的支撐或負重。原廠 [Life Fitness PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 說明輔助引體站有可折疊腳踏，但未公布握點與腳踏距離。 |
+| 引體向上／輔助引體的懸垂起點 | 固定握點 2.35 m；按臂長與握距求近乎伸直的肩高，腿部彎曲距離按腿長縮放。三身材底點腳尖離地約 71／43／15 cm（徒手），輔助機約 61／32／2.5 cm | 由握點—肩—臂長及腿長的幾何必要條件推得；2.35 m 握點及輔助機膝墊高度仍為**未查證的示範值**。矮身材可踩踏台抓槓，懸吊後離台；踏台不計入運動中的支撐或負重。原廠 [Life Fitness PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 說明輔助引體站有可折疊腳踏，但未公布握點與腳踏距離；1.5 m 身材需要能讓腳到約 0.7 m 高的上槓輔助，其實機可用性尚未核對。 |
 
 三身材 × 63 項 × 21 點掃描：1.5 m／50 kg 女性、預設及 2.0 m／110 kg 男性各正常 1323 點、警告 0 點。先前矮身材的 66 點不可達已由骨長幾何修正；器械實際握點、膝墊與踏台刻度仍須以實機核對。
