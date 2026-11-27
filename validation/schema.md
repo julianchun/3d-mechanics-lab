@@ -36,3 +36,20 @@
 Henning 的槓重來自方法頁 8，受試者 SD 用表 1 逐人值計算；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致，負重比例採本文明示的 89.9 kg。其站距、腳尖、鞋型與模型不能完整對齊，來源品質另註記學位論文及表 2 單位錯標。Lee 的平均 1RM 未報，只有最低點膝屈角列可比較；骨盆—大腿髖角及欠站立零位的踝角列定義不一致。Escamilla 的槓位移採原文表 3，來源掃描 OCR 有欄位交錯疑慮。
 
 固定身體容許差按指標在來源資料中事先固定：Henning 軀幹／膝／踝角分別 15°／15°／12°，髖／膝／踝力矩 100／65／60 Nm；Escamilla 槓位移 5% 身高；Lee 膝角 15°。容許差是建模與量測代理的工程界線，不是研究 SD 或安全門檻。群體仍沿用 `|模型平均−研究平均| ≤ 研究個體 SD`；兩準則分開呈現。RDL 底點研究事件不完全明示且有人未觸地，膝角結果須連同此限制解讀。
+
+## T36 臥推預先固定條件
+
+`mausehund-2022.json`、`larsen-bench-2021.json`、`schutz-2022.json` 的研究數值、比較角色、條件推導與絕對容許差須先獨立提交，再執行任何模型比對；之後不依結果修改。臥推 `catalogId` 可為 `bench`、`cg-bench`、`incline-bench`；`params` 為 `defaultParams('bench')` 的覆寫；啞鈴與地板臥推沒有可比較的量測資料。
+
+**條件推導欄位。**`derivedParams` 由研究方法在模型人體上逐人反解：`grip.rule = "armBarAngleTop"`：Mausehund 以手臂伸直時手臂與槓的內夾角（AB-angle）標準化握距，模型在頂點（e = 0）取肩中心到手點的連線，與槓軸（左右方向）在手點處朝內側的夾角 = AB 角，以二分法求握距旋鈕（`range` 內，不截斷到旋鈕上限 2.0）；`flare.rule = "shoulderAbductionBottom"`：方法指示底部肩外展約 45°，反解「手肘外開角度」使模型最低點（e = 1）的肩外展角為 45°，範圍 30–90°，無解取最近端點；先以清單預設手肘外開解握距，再解手肘外開，再重解握距一次。`loadBarTareKg`／`loadBodyFraction`：槓質量 = 空槓 kg + 比例×體重，固定身體用 `loadRatio`（以研究平均體重換算），群體逐人重算；`loadRatio` 暫時覆寫 `BAR_RATIO.bench`（槓質量／體重，含槓）。
+
+**幾何指標**（皆取右側；R.shoulder、R.elbow、R.hand 為模型關節中心與前臂延長線上的握點）：
+
+- `elbowPeakFlexion`／`elbowFlexionRom`／`shoulderAbductionBottom`：肘屈角 = 肩→肘與肘→手方向的夾角（伸直 = 0°）；取全程（401 點）最大值或最大減最小；肩外展角 = 肱骨（肩→肘）與胸廓矢狀面的夾角 = asin(肱骨單位向量 · 左右軸)，取最低點（e = 1）。
+- `shoulderPeakBarMoment`／`elbowPeakBarMoment`：外部力矩只含槓力，每手 F = BAR_RATIO.bench × 體重 × g／2，垂直向下作用在 R.hand；前臂—上臂平面法向量 n = (肘−肩)×(手−肘)，力矩 = |(r × F)·n|，r 為關節中心到手點；不含上肢自重（研究以槓合力定義）。`Nm/kg` 時除以模型體重。
+- `shoulderPeakMomentArm`／`elbowPeakMomentArm`／`shoulderMomentArm`／`elbowMomentArm`：力矩 ÷ F 在前臂—上臂平面內的分量大小，即關節中心到力線的垂直距離；`peak` 取全程最大，`bottom` 取 e = 1，`barHeightAboveBottom` 取槓高於最低點指定公尺數處（二分搜尋，槓高單調）。
+- `barVerticalTravel`／`barHorizontalTravel`：槓心在頂點與最低點的垂直差／水平（前後方向）差的絕對值（m）。
+- `shoulderAbsMomentPeak`：`analyze()` 的 `joints.shoulder`（肩三維力矩大小，含上肢節段重量與槓力）全程最大，右側單側，再除以體重。
+- `shoulderHorizontalAdductionPeak`／`shoulderHorizontalAdductionRom`／`forearmAngleMean`／`archAngleMean`：研究定義（Figure 2 的零位與參考平面不可由文字核對；胸骨拱形）模型沒有對應量，一律 `definition-mismatch`，不輸出模型值，預記容許差供未來使用。
+
+**取樣型別**：`bottom`（e = 1）、`peak`（401 點最大）、`range`（401 點最大減最小；位移指標取頂點與最低點差）、`barHeightAboveBottom`。`consistency-check` 用於條件已設定同一量（BPNO 底部肩外展）。模型為準靜態、僅垂直槓力、不含橫向力。群體比對的準則不變（|模型群體平均 − 研究平均| ≤ 研究個體 SD）；Larsen 未報身高，只做固定身體。

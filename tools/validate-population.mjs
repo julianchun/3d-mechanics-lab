@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import { BODY, DEFAULT_BODY, BAR_RATIO, MODEL_VERSION, analyze, createBody, defaultParams, solvePose, withBody, withLumbarPoint } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
+import { benchValue, loadRatioFor, resolveBenchParams } from './bench-validation.mjs';
 
 const mode = process.argv[2] ?? '';
 if (!['', '--check'].includes(mode) || process.argv.length > 3) throw new Error('用法：node tools/validate-population.mjs [--check]');
@@ -10,7 +11,9 @@ const output = new URL('population-results.json', path);
 // 舊研究維持原抽樣順序，使深蹲的固定種子結果逐筆不變。
 const sourceNames = ['gorsic-2020', 'gullett-2009', 'hutchison-2019', 'larsen-2021',
   'escamilla-2000', 'henning-2023', 'lee-2018'];
-const source = Object.fromEntries(sourceNames.map((name) => [name, JSON.parse(fs.readFileSync(new URL(`${name}.json`, path)))]));
+// 臥推研究在深蹲、硬舉及 Demers 診斷之後才抽樣，既有固定種子序列與結果不變。
+const benchNames = ['larsen-bench-2021', 'mausehund-2022', 'schutz-2022'];
+const source = Object.fromEntries([...sourceNames, ...benchNames].map((name) => [name, JSON.parse(fs.readFileSync(new URL(`${name}.json`, path)))]));
 const old = JSON.parse(fs.readFileSync(new URL('results.json', path)));
 const oldById = new Map(old.comparisons.map((c) => [c.id, c]));
 const anthro = JSON.parse(fs.readFileSync(new URL('anthropometry/ansur-ii-ratios.json', path)));
@@ -213,11 +216,46 @@ const calibration = demers.conditions.flatMap((condition) => {
       withinFigureTolerance: Math.abs(mean(xs) - m.reference.mean) <= m.tolerance.absolute };
   });
 });
+// 臥推：同一研究的各條件使用同一批虛擬受試者（受試者內設計）；未報身高的研究不抽樣。
+const benchSkipped = [];
+for (const name of benchNames) {
+  const study = source[name];
+  if (!study.participants.heightM) { benchSkipped.push(name); continue; }
+  const bodies = sampleBodies(study.participants);
+  for (const condition of study.conditions) {
+    const entry = catalog.get(condition.catalogId);
+    const values = condition.measurements.map(() => []), resolved = [];
+    for (const body of bodies) {
+      withBody(body, () => withLoad(entry.lift, loadRatioFor(condition, body.mass), () => {
+        const { params, notes } = resolveBenchParams({ ...defaultParams(entry.lift), ...entry.set, ...condition.params }, condition.derivedParams);
+        resolved.push({ grip: params.grip, flare: params.flare, notes });
+        condition.measurements.forEach((m, j) => {
+          const v = benchValue(m, params).value;
+          if (v !== null) values[j].push(v);
+        });
+      }));
+    }
+    condition.measurements.forEach((m, j) => {
+      const id = `${name}/${condition.id}/${m.id}`, prior = oldById.get(id);
+      if (!prior) throw new Error(`找不到舊固定身體比對：${id}`);
+      const category = m.comparisonRole ?? 'comparable', reference = category === 'definition-mismatch' ? null : referenceValue(m);
+      const modelMean = values[j].length ? round(mean(values[j])) : null;
+      const modelSd = values[j].length ? round(sd(values[j])) : null;
+      const pass = category === 'comparable' ? Math.abs(modelMean - reference) <= m.reference.sd : null;
+      comparisons.push({ id, category, unit: m.reference.unit, oldModel: prior.model, oldStatus: prior.status,
+        modelMean, modelSd, referenceMean: reference, referenceSd: m.reference.sd,
+        newStatus: category === 'comparable' ? (pass ? 'pass' : 'fail') : category, pass, sampleN: values[j].length,
+        ...(j === 0 ? { resolvedGripMean: round(mean(resolved.map((r) => r.grip))), resolvedFlareMean: round(mean(resolved.map((r) => r.flare))) } : {}) });
+    });
+  }
+  const rows = comparisons.filter((c) => c.id.startsWith(`${name}/`) && c.category === 'comparable');
+  summaries[name] = { pass: rows.filter((c) => c.pass).length, comparable: rows.length };
+}
 const comparable = comparisons.filter((c) => c.category === 'comparable');
 const result = { modelVersion: MODEL_VERSION, seed: SEED, virtualN: N,
   source: 'ANSUR II 2012', criterion: '|模型群體平均−研究平均| ≤ 研究個體標準差',
   summary: { pass: comparable.filter((c) => c.pass).length, comparable: comparable.length, byStudy: summaries },
-  comparisons, sensitivity, calibration };
+  comparisons, sensitivity, calibration, ...(benchSkipped.length ? { benchSkippedNoHeight: benchSkipped } : {}) };
 const serialized = JSON.stringify(result, null, 2) + '\n';
 if (mode === '--check') {
   if (fs.readFileSync(output, 'utf8') !== serialized) throw new Error('群體結果與固定種子重算不一致');

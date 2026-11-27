@@ -1,15 +1,15 @@
 {
   "modelVersion": "0.10.4",
   "summary": {
-    "total": 75,
-    "count": 42,
-    "pass": 32,
-    "fail": 10,
-    "definitionMismatch": 26,
-    "exploratory": 3,
-    "consistencyCheck": 4,
+    "total": 149,
+    "count": 75,
+    "pass": 40,
+    "fail": 35,
+    "definitionMismatch": 42,
+    "exploratory": 27,
+    "consistencyCheck": 5,
     "assumptionSensitivePass": 3,
-    "sources": 7
+    "sources": 10
   },
   "comparisons": [
     {
@@ -2603,6 +2603,2662 @@
       "evidence": "table",
       "location": "Table 3, RD, ankle",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6323186/"
+    },
+    {
+      "id": "larsen-bench-2021/wide/bar-vertical-travel",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "barVerticalTravel",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 1.775
+      },
+      "resolvedParams": {
+        "grip": 1.775,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.250569,
+      "modelE": 1,
+      "model": 0.3989,
+      "reference": 0.338,
+      "referenceRaw": 0.338,
+      "referenceSd": 0.066,
+      "unit": "m",
+      "error": 0.0609,
+      "tolerance": 0.05,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 1, vertical displacement from start, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/wide/bar-horizontal-travel",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "barHorizontalTravel",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 1.775
+      },
+      "resolvedParams": {
+        "grip": 1.775,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.250569,
+      "modelE": 1,
+      "model": 0.057,
+      "reference": 0.125,
+      "referenceRaw": 0.125,
+      "referenceSd": 0.035,
+      "unit": "m",
+      "error": -0.068,
+      "tolerance": 0.04,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 1, horizontal displacement from start, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/wide/elbow-arm-v0",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowMomentArm",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "grip": 1.775
+      },
+      "resolvedParams": {
+        "grip": 1.775,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.250569,
+      "modelE": 1,
+      "model": 0.0039,
+      "reference": 0,
+      "referenceRaw": 0,
+      "referenceSd": 0.02,
+      "unit": "m",
+      "error": 0.0039,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm elbow, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/wide/shoulder-arm-v0",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderMomentArm",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "grip": 1.775
+      },
+      "resolvedParams": {
+        "grip": 1.775,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.250569,
+      "modelE": 1,
+      "model": 0.2418,
+      "reference": 0.24,
+      "referenceRaw": 0.24,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": 0.0018,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm shoulder, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/wide/elbow-arm-vmin",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowMomentArm",
+      "sample": {
+        "type": "barHeightAboveBottom",
+        "meters": 0.154
+      },
+      "modelParams": {
+        "grip": 1.775
+      },
+      "resolvedParams": {
+        "grip": 1.775,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.250569,
+      "modelE": 0.614,
+      "model": 0.0552,
+      "reference": 0.06,
+      "referenceRaw": 0.06,
+      "referenceSd": 0.02,
+      "unit": "m",
+      "error": -0.0048,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm elbow, vmin; Table 1, vmin vertical displacement",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/wide/shoulder-arm-vmin",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderMomentArm",
+      "sample": {
+        "type": "barHeightAboveBottom",
+        "meters": 0.154
+      },
+      "modelParams": {
+        "grip": 1.775
+      },
+      "resolvedParams": {
+        "grip": 1.775,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.250569,
+      "modelE": 0.614,
+      "model": 0.2318,
+      "reference": 0.22,
+      "referenceRaw": 0.22,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": 0.0118,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm shoulder, vmin; Table 1, vmin vertical displacement",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/medium/bar-vertical-travel",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "barVerticalTravel",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 1.4
+      },
+      "resolvedParams": {
+        "grip": 1.4,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.240319,
+      "modelE": 1,
+      "model": 0.422,
+      "reference": 0.373,
+      "referenceRaw": 0.373,
+      "referenceSd": 0.06,
+      "unit": "m",
+      "error": 0.049,
+      "tolerance": 0.05,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 1, vertical displacement from start, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/medium/bar-horizontal-travel",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "barHorizontalTravel",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 1.4
+      },
+      "resolvedParams": {
+        "grip": 1.4,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.240319,
+      "modelE": 1,
+      "model": 0.057,
+      "reference": 0.131,
+      "referenceRaw": 0.131,
+      "referenceSd": 0.045,
+      "unit": "m",
+      "error": -0.074,
+      "tolerance": 0.04,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 1, horizontal displacement from start, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/medium/elbow-arm-v0",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowMomentArm",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "grip": 1.4
+      },
+      "resolvedParams": {
+        "grip": 1.4,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.240319,
+      "modelE": 1,
+      "model": 0.0584,
+      "reference": 0.03,
+      "referenceRaw": 0.03,
+      "referenceSd": 0.02,
+      "unit": "m",
+      "error": 0.0284,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm elbow, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/medium/shoulder-arm-v0",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderMomentArm",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "grip": 1.4
+      },
+      "resolvedParams": {
+        "grip": 1.4,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.240319,
+      "modelE": 1,
+      "model": 0.181,
+      "reference": 0.19,
+      "referenceRaw": 0.19,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": -0.009,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm shoulder, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/medium/elbow-arm-vmin",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowMomentArm",
+      "sample": {
+        "type": "barHeightAboveBottom",
+        "meters": 0.186
+      },
+      "modelParams": {
+        "grip": 1.4
+      },
+      "resolvedParams": {
+        "grip": 1.4,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.240319,
+      "modelE": 0.5593,
+      "model": 0.1144,
+      "reference": 0.06,
+      "referenceRaw": 0.06,
+      "referenceSd": 0.02,
+      "unit": "m",
+      "error": 0.0544,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm elbow, vmin; Table 1, vmin vertical displacement",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/medium/shoulder-arm-vmin",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderMomentArm",
+      "sample": {
+        "type": "barHeightAboveBottom",
+        "meters": 0.186
+      },
+      "modelParams": {
+        "grip": 1.4
+      },
+      "resolvedParams": {
+        "grip": 1.4,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.240319,
+      "modelE": 0.5593,
+      "model": 0.1693,
+      "reference": 0.22,
+      "referenceRaw": 0.22,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": -0.0507,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm shoulder, vmin; Table 1, vmin vertical displacement",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/narrow/bar-vertical-travel",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "barVerticalTravel",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 1
+      },
+      "resolvedParams": {
+        "grip": 1,
+        "flare": 32
+      },
+      "modelLoadRatio": 1.181093,
+      "modelE": 1,
+      "model": 0.4417,
+      "reference": 0.399,
+      "referenceRaw": 0.399,
+      "referenceSd": 0.064,
+      "unit": "m",
+      "error": 0.0427,
+      "tolerance": 0.05,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 1, vertical displacement from start, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/narrow/bar-horizontal-travel",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "barHorizontalTravel",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 1
+      },
+      "resolvedParams": {
+        "grip": 1,
+        "flare": 32
+      },
+      "modelLoadRatio": 1.181093,
+      "modelE": 1,
+      "model": 0.0675,
+      "reference": 0.128,
+      "referenceRaw": 0.128,
+      "referenceSd": 0.043,
+      "unit": "m",
+      "error": -0.0605,
+      "tolerance": 0.04,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 1, horizontal displacement from start, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/narrow/elbow-arm-v0",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "elbowMomentArm",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "grip": 1
+      },
+      "resolvedParams": {
+        "grip": 1,
+        "flare": 32
+      },
+      "modelLoadRatio": 1.181093,
+      "modelE": 1,
+      "model": 0.0935,
+      "reference": 0.08,
+      "referenceRaw": 0.08,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": 0.0135,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm elbow, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/narrow/shoulder-arm-v0",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "shoulderMomentArm",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {
+        "grip": 1
+      },
+      "resolvedParams": {
+        "grip": 1,
+        "flare": 32
+      },
+      "modelLoadRatio": 1.181093,
+      "modelE": 1,
+      "model": 0.1471,
+      "reference": 0.12,
+      "referenceRaw": 0.12,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": 0.0271,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm shoulder, v0",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/narrow/elbow-arm-vmin",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "elbowMomentArm",
+      "sample": {
+        "type": "barHeightAboveBottom",
+        "meters": 0.219
+      },
+      "modelParams": {
+        "grip": 1
+      },
+      "resolvedParams": {
+        "grip": 1,
+        "flare": 32
+      },
+      "modelLoadRatio": 1.181093,
+      "modelE": 0.5042,
+      "model": 0.1496,
+      "reference": 0.07,
+      "referenceRaw": 0.07,
+      "referenceSd": 0.02,
+      "unit": "m",
+      "error": 0.0796,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm elbow, vmin; Table 1, vmin vertical displacement",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "larsen-bench-2021/narrow/shoulder-arm-vmin",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "shoulderMomentArm",
+      "sample": {
+        "type": "barHeightAboveBottom",
+        "meters": 0.219
+      },
+      "modelParams": {
+        "grip": 1
+      },
+      "resolvedParams": {
+        "grip": 1,
+        "flare": 32
+      },
+      "modelLoadRatio": 1.181093,
+      "modelE": 0.5042,
+      "model": 0.1248,
+      "reference": 0.17,
+      "referenceRaw": 0.17,
+      "referenceSd": 0.05,
+      "unit": "m",
+      "error": -0.0452,
+      "tolerance": 0.04,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；14 位男性、8 台攝影機三維捕捉＋儀器化槓（橫向力）。身高未報、關節角與力矩只在圖中；表 2 力臂的平面與合力定義文中未明述。年齡於摘要（5.4）與方法（5.2）不一致。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862765/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Moment arm shoulder, vmin; Table 1, vmin vertical displacement",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33554113/"
+    },
+    {
+      "id": "mausehund-2022/medium/elbow-peak-flexion",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "elbowPeakFlexion",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": 131.5069,
+      "reference": 101.4,
+      "referenceRaw": 101.4,
+      "referenceSd": 8.3,
+      "unit": "deg",
+      "error": 30.1069,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/elbow-flexion-rom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": 111.5809,
+      "reference": 78.3,
+      "referenceRaw": 78.3,
+      "referenceSd": 11.9,
+      "unit": "deg",
+      "error": 33.2809,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/shoulder-abduction-bottom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "shoulderAbductionBottom",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": 40.2409,
+      "reference": 59.3,
+      "referenceRaw": 59.3,
+      "referenceSd": 8.2,
+      "unit": "deg",
+      "error": -19.0591,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/shoulder-peak-njm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": 75.2165,
+      "reference": 123,
+      "referenceRaw": 123,
+      "referenceSd": 48.5,
+      "unit": "Nm",
+      "error": -47.7835,
+      "tolerance": 25,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/elbow-peak-njm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 0.6025,
+      "model": 39.405,
+      "reference": 37.7,
+      "referenceRaw": 37.7,
+      "referenceSd": 13.5,
+      "unit": "Nm",
+      "error": 1.705,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/shoulder-peak-moment-arm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": 0.1946,
+      "reference": 0.221,
+      "referenceRaw": 0.221,
+      "referenceSd": 0.023,
+      "unit": "m",
+      "error": -0.0264,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/elbow-peak-moment-arm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 0.6025,
+      "model": 0.102,
+      "reference": 0.092,
+      "referenceRaw": 0.092,
+      "referenceSd": 0.014,
+      "unit": "m",
+      "error": 0.01,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/shoulder-hadd-peak",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 56.1,
+      "referenceSd": 4.6,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/shoulder-hadd-rom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 65.8,
+      "referenceSd": 8.9,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/forearm-angle-mean",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "forearmAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": -0.8,
+      "referenceSd": 4.7,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 8,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/medium/arch-angle-mean",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "archAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.4861,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.051314,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 29.9,
+      "referenceSd": 6.5,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/elbow-peak-flexion",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "elbowPeakFlexion",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": 116.4213,
+      "reference": 87.4,
+      "referenceRaw": 87.4,
+      "referenceSd": 8.1,
+      "unit": "deg",
+      "error": 29.0213,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/elbow-flexion-rom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": 96.4953,
+      "reference": 64.7,
+      "referenceRaw": 64.7,
+      "referenceSd": 10.4,
+      "unit": "deg",
+      "error": 31.7953,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/shoulder-abduction-bottom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "shoulderAbductionBottom",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": 38.0404,
+      "reference": 66.1,
+      "referenceRaw": 66.1,
+      "referenceSd": 7,
+      "unit": "deg",
+      "error": -28.0596,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/shoulder-peak-njm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": 104.0667,
+      "reference": 135.2,
+      "referenceRaw": 135.2,
+      "referenceSd": 52,
+      "unit": "Nm",
+      "error": -31.1333,
+      "tolerance": 25,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/elbow-peak-njm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 0,
+      "model": 31.4212,
+      "reference": 35.4,
+      "referenceRaw": 35.4,
+      "referenceSd": 11.6,
+      "unit": "Nm",
+      "error": -3.9788,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/shoulder-peak-moment-arm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": 0.2775,
+      "reference": 0.243,
+      "referenceRaw": 0.243,
+      "referenceSd": 0.03,
+      "unit": "m",
+      "error": 0.0345,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/elbow-peak-moment-arm",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 0,
+      "model": 0.0819,
+      "reference": 0.084,
+      "referenceRaw": 0.084,
+      "referenceSd": 0.015,
+      "unit": "m",
+      "error": -0.0021,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/shoulder-hadd-peak",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 47,
+      "referenceSd": 4.4,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/shoulder-hadd-rom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 56.5,
+      "referenceSd": 8.6,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/forearm-angle-mean",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "forearmAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 12.5,
+      "referenceSd": 3.9,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 8,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/wide/arch-angle-mean",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "archAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 1.9855,
+        "flare": 52
+      },
+      "modelLoadRatio": 1.061327,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 32.3,
+      "referenceSd": 5.5,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/elbow-peak-flexion",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "elbowPeakFlexion",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": 139.7997,
+      "reference": 110.3,
+      "referenceRaw": 110.3,
+      "referenceSd": 7.1,
+      "unit": "deg",
+      "error": 29.4997,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/elbow-flexion-rom",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": 119.8737,
+      "reference": 86.2,
+      "referenceRaw": 86.2,
+      "referenceSd": 11.5,
+      "unit": "deg",
+      "error": 33.6737,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/shoulder-abduction-bottom",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "shoulderAbductionBottom",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": 28.9759,
+      "reference": 37.9,
+      "referenceRaw": 37.9,
+      "referenceSd": 7.2,
+      "unit": "deg",
+      "error": -8.9241,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "pass",
+      "pass": true,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/shoulder-peak-njm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "shoulderPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": 49.6195,
+      "reference": 94.7,
+      "referenceRaw": 94.7,
+      "referenceSd": 38.3,
+      "unit": "Nm",
+      "error": -45.0805,
+      "tolerance": 25,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/elbow-peak-njm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 0.635,
+      "model": 55.1025,
+      "reference": 40,
+      "referenceRaw": 40,
+      "referenceSd": 15.1,
+      "unit": "Nm",
+      "error": 15.1025,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/shoulder-peak-moment-arm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "shoulderPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": 0.1435,
+      "reference": 0.195,
+      "referenceRaw": 0.195,
+      "referenceSd": 0.019,
+      "unit": "m",
+      "error": -0.0515,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/elbow-peak-moment-arm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "elbowPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 0.6375,
+      "model": 0.1581,
+      "reference": 0.105,
+      "referenceRaw": 0.105,
+      "referenceSd": 0.014,
+      "unit": "m",
+      "error": 0.0531,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/shoulder-hadd-peak",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 65.2,
+      "referenceSd": 5.2,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/shoulder-hadd-rom",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 75.9,
+      "referenceSd": 10.6,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/forearm-angle-mean",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "forearmAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": -8.5,
+      "referenceSd": 3.3,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 8,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-in/arch-angle-mean",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "archAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 32
+      },
+      "modelLoadRatio": 0.948686,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 25.8,
+      "referenceSd": 4.8,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/elbow-peak-flexion",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "elbowPeakFlexion",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": 139.7997,
+      "reference": 114.1,
+      "referenceRaw": 114.1,
+      "referenceSd": 7.6,
+      "unit": "deg",
+      "error": 25.6997,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/elbow-flexion-rom",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": 119.8737,
+      "reference": 88.4,
+      "referenceRaw": 88.4,
+      "referenceSd": 12.2,
+      "unit": "deg",
+      "error": 31.4737,
+      "tolerance": 12,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/shoulder-abduction-bottom",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "shoulderAbductionBottom",
+      "sample": {
+        "type": "bottom"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": 45,
+      "reference": 56.5,
+      "referenceRaw": 56.5,
+      "referenceSd": 7,
+      "unit": "deg",
+      "error": -11.5,
+      "tolerance": 10,
+      "category": "consistency-check",
+      "status": "consistency-check",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/shoulder-peak-njm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "shoulderPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": 45.3483,
+      "reference": 99,
+      "referenceRaw": 99,
+      "referenceSd": 40,
+      "unit": "Nm",
+      "error": -53.6517,
+      "tolerance": 25,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/elbow-peak-njm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 0.65,
+      "model": 57.8592,
+      "reference": 44.5,
+      "referenceRaw": 44.5,
+      "referenceSd": 15.6,
+      "unit": "Nm",
+      "error": 13.3592,
+      "tolerance": 10,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow NJM, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/shoulder-peak-moment-arm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "shoulderPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": 0.1349,
+      "reference": 0.198,
+      "referenceRaw": 0.198,
+      "referenceSd": 0.021,
+      "unit": "m",
+      "error": -0.0631,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Shoulder moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/elbow-peak-moment-arm",
+      "catalogId": "cg-bench",
+      "layer": "moments",
+      "metric": "elbowPeakMomentArm",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 0.66,
+      "model": 0.1652,
+      "reference": 0.106,
+      "referenceRaw": 0.106,
+      "referenceSd": 0.016,
+      "unit": "m",
+      "error": 0.0592,
+      "tolerance": 0.03,
+      "category": "comparable",
+      "status": "fail",
+      "pass": false,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow moment arm, peak",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/shoulder-hadd-peak",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 64,
+      "referenceSd": 5.1,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/shoulder-hadd-rom",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "shoulderHorizontalAdductionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 70.2,
+      "referenceSd": 8.5,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/forearm-angle-mean",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "forearmAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": -16.5,
+      "referenceSd": 3.9,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 8,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "mausehund-2022/narrow-out/arch-angle-mean",
+      "catalogId": "cg-bench",
+      "layer": "kinematics",
+      "metric": "archAngleMean",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {},
+      "resolvedParams": {
+        "grip": 0.9628,
+        "flare": 47.812
+      },
+      "modelLoadRatio": 0.962453,
+      "modelE": 1,
+      "model": null,
+      "reference": null,
+      "referenceRaw": 28,
+      "referenceSd": 5.5,
+      "unit": "deg",
+      "error": null,
+      "tolerance": 10,
+      "category": "definition-mismatch",
+      "status": "definition-mismatch",
+      "pass": null,
+      "withinTolerance": null,
+      "sourceQuality": {
+        "rating": "good",
+        "reason": "同儕審查期刊；35 人；16 台攝影機三維動作捕捉＋自製儀器化槓（量測橫向力）＋測力板，淨關節力矩含橫向力。限制：Figure 2 的關節角定義圖不能從文字取得，水平內收與前臂角的零位與符號未能核對；力矩為動態量測（含加速度），左右平均。",
+        "source": "https://www.klokeavskade.no/globalassets/publications/mausehund_2022_understanding-bench-press.pdf"
+      },
+      "evidence": "text",
+      "location": "Results, Kinematics, p. 2690–2691",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+    },
+    {
+      "id": "schutz-2022/flat-15/shoulder-abs-mmax",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderAbsMomentPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.295773,
+      "modelE": 0.75,
+      "model": 0.5719,
+      "reference": 0.442,
+      "referenceRaw": 0.442,
+      "referenceSd": 0.046,
+      "unit": "Nm/kg",
+      "error": 0.1299,
+      "tolerance": 0.15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 1, Shoulder absolute Mmax, flat-15",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/flat-15/elbow-mmax",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.295773,
+      "modelE": 0,
+      "model": 0.1478,
+      "reference": 0.092,
+      "referenceRaw": 0.092,
+      "referenceSd": 0.018,
+      "unit": "Nm/kg",
+      "error": 0.0558,
+      "tolerance": 0.06,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension Mmax, flat-15",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/flat-15/elbow-flexion-rom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.295773,
+      "modelE": 1,
+      "model": 88.0232,
+      "reference": 79.5,
+      "referenceRaw": 79.5,
+      "referenceSd": 6.2,
+      "unit": "deg",
+      "error": 8.5232,
+      "tolerance": 15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension RoM, flat-15",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/flat-30/shoulder-abs-mmax",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "shoulderAbsMomentPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.445773,
+      "modelE": 0.8425,
+      "model": 0.8086,
+      "reference": 0.76,
+      "referenceRaw": 0.76,
+      "referenceSd": 0.079,
+      "unit": "Nm/kg",
+      "error": 0.0486,
+      "tolerance": 0.15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 1, Shoulder absolute Mmax, flat-30",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/flat-30/elbow-mmax",
+      "catalogId": "bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.445773,
+      "modelE": 0,
+      "model": 0.2228,
+      "reference": 0.165,
+      "referenceRaw": 0.165,
+      "referenceSd": 0.041,
+      "unit": "Nm/kg",
+      "error": 0.0578,
+      "tolerance": 0.06,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension Mmax, flat-30",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/flat-30/elbow-flexion-rom",
+      "catalogId": "bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.445773,
+      "modelE": 1,
+      "model": 88.0232,
+      "reference": 76.2,
+      "referenceRaw": 76.2,
+      "referenceSd": 6.4,
+      "unit": "deg",
+      "error": 11.8232,
+      "tolerance": 15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension RoM, flat-30",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/incline-15/shoulder-abs-mmax",
+      "catalogId": "incline-bench",
+      "layer": "moments",
+      "metric": "shoulderAbsMomentPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.295773,
+      "modelE": 0.725,
+      "model": 0.5923,
+      "reference": 0.418,
+      "referenceRaw": 0.418,
+      "referenceSd": 0.041,
+      "unit": "Nm/kg",
+      "error": 0.1743,
+      "tolerance": 0.15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 1, Shoulder absolute Mmax, incline-15",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/incline-15/elbow-mmax",
+      "catalogId": "incline-bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.295773,
+      "modelE": 1,
+      "model": 0.1948,
+      "reference": 0.112,
+      "referenceRaw": 0.112,
+      "referenceSd": 0.023,
+      "unit": "Nm/kg",
+      "error": 0.0828,
+      "tolerance": 0.06,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension Mmax, incline-15",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/incline-15/elbow-flexion-rom",
+      "catalogId": "incline-bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.295773,
+      "modelE": 1,
+      "model": 90.017,
+      "reference": 84.3,
+      "referenceRaw": 84.3,
+      "referenceSd": 6.4,
+      "unit": "deg",
+      "error": 5.717,
+      "tolerance": 15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension RoM, incline-15",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/incline-30/shoulder-abs-mmax",
+      "catalogId": "incline-bench",
+      "layer": "moments",
+      "metric": "shoulderAbsMomentPeak",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.445773,
+      "modelE": 0.8575,
+      "model": 0.8397,
+      "reference": 0.712,
+      "referenceRaw": 0.712,
+      "referenceSd": 0.08,
+      "unit": "Nm/kg",
+      "error": 0.1277,
+      "tolerance": 0.15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 1, Shoulder absolute Mmax, incline-30",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/incline-30/elbow-mmax",
+      "catalogId": "incline-bench",
+      "layer": "moments",
+      "metric": "elbowPeakBarMoment",
+      "sample": {
+        "type": "peak"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.445773,
+      "modelE": 1,
+      "model": 0.2937,
+      "reference": 0.201,
+      "referenceRaw": 0.201,
+      "referenceSd": 0.043,
+      "unit": "Nm/kg",
+      "error": 0.0927,
+      "tolerance": 0.06,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": false,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension Mmax, incline-30",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+    },
+    {
+      "id": "schutz-2022/incline-30/elbow-flexion-rom",
+      "catalogId": "incline-bench",
+      "layer": "kinematics",
+      "metric": "elbowFlexionRom",
+      "sample": {
+        "type": "range"
+      },
+      "modelParams": {
+        "grip": 2.2175
+      },
+      "resolvedParams": {
+        "grip": 2.2175,
+        "flare": 52
+      },
+      "modelLoadRatio": 0.445773,
+      "modelE": 1,
+      "model": 90.017,
+      "reference": 81.4,
+      "referenceRaw": 81.4,
+      "referenceSd": 6.2,
+      "unit": "deg",
+      "error": 8.617,
+      "tolerance": 15,
+      "category": "exploratory",
+      "status": "exploratory",
+      "pass": null,
+      "withinTolerance": true,
+      "sourceQuality": {
+        "rating": "caution",
+        "reason": "同儕審查開放期刊；20 人、22 台攝影機、Kistler 測力板。上斜角度與動作指引在補充檔（未取得，未查證）；負重以體重 %（非 %1RM）；肩關節無肩胛／鎖骨節段；肩力矩只報絕對值最大值。",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8877248/"
+      },
+      "evidence": "table",
+      "location": "Table 2, Elbow flexion-extension RoM, incline-30",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/35202059/"
     }
   ]
 }

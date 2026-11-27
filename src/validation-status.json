@@ -1,15 +1,15 @@
 {
   "modelVersion": "0.10.4",
   "summary": {
-    "total": 75,
-    "count": 42,
-    "pass": 32,
-    "fail": 10,
-    "definitionMismatch": 26,
-    "exploratory": 3,
-    "consistencyCheck": 4,
+    "total": 149,
+    "count": 75,
+    "pass": 40,
+    "fail": 35,
+    "definitionMismatch": 42,
+    "exploratory": 27,
+    "consistencyCheck": 5,
     "assumptionSensitivePass": 3,
-    "sources": 7
+    "sources": 10
   },
   "byId": {
     "squat-high": {
@@ -626,104 +626,144 @@
     },
     "bench": {
       "kinematics": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
-        "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
-        "exploratory": 0,
+        "status": "failed",
+        "total": 20,
+        "count": 10,
+        "pass": 1,
+        "fail": 9,
+        "definitionMismatch": 8,
+        "exploratory": 2,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/bench.md",
+          "https://pubmed.ncbi.nlm.nih.gov/33554113/",
+          "https://pubmed.ncbi.nlm.nih.gov/33555823/",
+          "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+        ]
       },
       "moments": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
-        "pass": 0,
-        "fail": 0,
+        "status": "failed",
+        "total": 20,
+        "count": 8,
+        "pass": 5,
+        "fail": 3,
         "definitionMismatch": 0,
-        "exploratory": 0,
+        "exploratory": 12,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/bench.md",
+          "https://pubmed.ncbi.nlm.nih.gov/33554113/",
+          "https://pubmed.ncbi.nlm.nih.gov/33555823/",
+          "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+        ]
       },
       "muscles": {
-        "status": "unvalidated",
+        "status": "partial",
         "count": 0,
         "pass": 0,
         "fail": 0,
-        "qualitativeCount": 0,
-        "qualitativePass": 0,
+        "qualitativeCount": 7,
+        "qualitativePass": 7,
         "qualitativeFail": 0,
-        "links": []
+        "links": [
+          "docs/research/results/bench.md",
+          "docs/research/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "incline-bench": {
       "kinematics": {
-        "status": "unvalidated",
-        "total": 0,
+        "status": "exploratory",
+        "total": 2,
         "count": 0,
         "pass": 0,
         "fail": 0,
         "definitionMismatch": 0,
-        "exploratory": 0,
+        "exploratory": 2,
         "consistencyCheck": 0,
-        "links": []
+        "links": [
+          "docs/research/results/bench.md",
+          "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+        ]
       },
       "moments": {
-        "status": "unvalidated",
-        "total": 0,
+        "status": "exploratory",
+        "total": 4,
         "count": 0,
         "pass": 0,
         "fail": 0,
         "definitionMismatch": 0,
-        "exploratory": 0,
+        "exploratory": 4,
         "consistencyCheck": 0,
-        "links": []
+        "links": [
+          "docs/research/results/bench.md",
+          "https://pubmed.ncbi.nlm.nih.gov/35202059/"
+        ]
       },
       "muscles": {
-        "status": "unvalidated",
+        "status": "partial",
         "count": 0,
         "pass": 0,
         "fail": 0,
-        "qualitativeCount": 0,
-        "qualitativePass": 0,
+        "qualitativeCount": 3,
+        "qualitativePass": 3,
         "qualitativeFail": 0,
-        "links": []
+        "links": [
+          "docs/research/results/bench.md",
+          "docs/research/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "cg-bench": {
       "kinematics": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
-        "pass": 0,
-        "fail": 0,
-        "definitionMismatch": 0,
+        "status": "failed",
+        "total": 16,
+        "count": 7,
+        "pass": 2,
+        "fail": 5,
+        "definitionMismatch": 8,
         "exploratory": 0,
-        "consistencyCheck": 0,
-        "links": []
+        "consistencyCheck": 1,
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/bench.md",
+          "https://pubmed.ncbi.nlm.nih.gov/33554113/",
+          "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+        ]
       },
       "moments": {
-        "status": "unvalidated",
-        "total": 0,
-        "count": 0,
+        "status": "failed",
+        "total": 12,
+        "count": 8,
         "pass": 0,
-        "fail": 0,
+        "fail": 8,
         "definitionMismatch": 0,
-        "exploratory": 0,
+        "exploratory": 4,
         "consistencyCheck": 0,
-        "links": []
+        "assumptionSensitivePass": 0,
+        "links": [
+          "docs/research/results/bench.md",
+          "https://pubmed.ncbi.nlm.nih.gov/33554113/",
+          "https://pubmed.ncbi.nlm.nih.gov/33555823/"
+        ]
       },
       "muscles": {
-        "status": "unvalidated",
+        "status": "partial",
         "count": 0,
         "pass": 0,
         "fail": 0,
-        "qualitativeCount": 0,
-        "qualitativePass": 0,
+        "qualitativeCount": 2,
+        "qualitativePass": 2,
         "qualitativeFail": 0,
-        "links": []
+        "links": [
+          "docs/research/results/bench.md",
+          "docs/research/references.md"
+        ],
+        "note": "僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證"
       }
     },
     "floor-press": {

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BAR_RATIO, BODY, HEEL_SHANK_SHARE, MODEL_VERSION, analyze, defaultParams, solvePose, withHeelShankShareForValidation, withLumbarPoint } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
+import { benchMetrics, benchValue, resolveBenchParams } from './bench-validation.mjs';
 import trendStatus from '../src/trend-status.json' with { type: 'json' };
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -25,6 +26,11 @@ const round = (v) => Number(v.toFixed(4));
 const metricLayer = {
   trunkInclination: 'kinematics', pelvisAnteriorTilt: 'kinematics', hipFlexion: 'kinematics', kneeFlexion: 'kinematics', ankleDorsiflexion: 'kinematics',
   barVerticalTravelPctHeight: 'kinematics',
+  elbowPeakFlexion: 'kinematics', elbowFlexionRom: 'kinematics', shoulderAbductionBottom: 'kinematics', barVerticalTravel: 'kinematics',
+  barHorizontalTravel: 'kinematics', shoulderHorizontalAdductionPeak: 'kinematics', shoulderHorizontalAdductionRom: 'kinematics',
+  forearmAngleMean: 'kinematics', archAngleMean: 'kinematics',
+  shoulderPeakBarMoment: 'moments', elbowPeakBarMoment: 'moments', shoulderPeakMomentArm: 'moments', elbowPeakMomentArm: 'moments',
+  shoulderMomentArm: 'moments', elbowMomentArm: 'moments', shoulderAbsMomentPeak: 'moments',
   hipExtensionMoment: 'moments', kneeExtensionMoment: 'moments', anklePlantarflexionMoment: 'moments', lumbarExtensionMoment: 'moments',
 };
 const momentDof = { hipExtensionMoment: 'hipExt', kneeExtensionMoment: 'kneeExt', anklePlantarflexionMoment: 'ankPF', lumbarExtensionMoment: 'trunkExt' };
@@ -108,6 +114,11 @@ function modelValue(lift, measure, params) {
 }
 function modelValueAtPoint(lift, measure, params) {
   const { metric, sample } = measure;
+  if (lift === 'bench') {
+    if (!benchMetrics.has(metric)) throw new Error(`臥推不支援指標：${metric}`);
+    const r = benchValue(measure, params);
+    return { value: r.value === null ? null : round(r.value), atE: round(r.atE) };
+  }
   // 模型沒有獨立骨盆；保留文獻定點，但不虛構骨盆角模型值。
   if (metric === 'pelvisAnteriorTilt') return { value: null, atE: round(sampleE(lift, sample.type, sample, params)) };
   let value, atE;
@@ -152,7 +163,10 @@ function referenceValue(measure) {
   return raw;
 }
 
-const filenames = fs.readdirSync(validationDir).filter((f) => f.endsWith('.json') && !['results.json', 'population-results.json'].includes(f)).sort();
+// 臥推研究排在最後，既有深蹲與硬舉列的順序與內容不變。
+const benchFiles = ['larsen-bench-2021.json', 'mausehund-2022.json', 'schutz-2022.json'];
+const filenames = fs.readdirSync(validationDir).filter((f) => f.endsWith('.json') && !['results.json', 'population-results.json'].includes(f))
+  .sort((a, b) => (benchFiles.includes(a) - benchFiles.includes(b)) || (a < b ? -1 : a > b ? 1 : 0));
 if (!filenames.length) throw new Error('validation/ 沒有文獻資料');
 const entries = new Map(CATALOG.map((c) => [c.id, c]));
 const comparisons = [], ids = new Set(), heelContexts = new Map();
@@ -161,8 +175,9 @@ for (const source of sources) {
   if (!source.id || !source.source?.url || !source.participants || !source.protocol || !source.model || !Array.isArray(source.conditions)) throw new Error(`${source.id ?? '?'} 資料格式不完整`);
   for (const condition of source.conditions) {
     const entry = entries.get(condition.catalogId);
-    if (!entry || !['squat', 'deadlift', 'rdl'].includes(entry.lift)) throw new Error(`未知驗證清單項目：${condition.catalogId}`);
-    const params = { ...defaultParams(entry.lift), ...entry.set, ...condition.params };
+    if (!entry || !['squat', 'deadlift', 'rdl', 'bench'].includes(entry.lift)) throw new Error(`未知驗證清單項目：${condition.catalogId}`);
+    let params = { ...defaultParams(entry.lift), ...entry.set, ...condition.params };
+    if (entry.lift === 'bench') params = resolveBenchParams(params, condition.derivedParams).params;
     if (entry.lift === 'squat' && params.barPos !== entry.set.barPos) throw new Error(`${condition.catalogId} 槓位與清單不符`);
     if (entry.lift === 'deadlift' && (params.style !== entry.set.style || params.start !== entry.set.start)) throw new Error(`${condition.catalogId} 站姿或起槓高度與清單不符`);
     if (!condition.conditionDerivation || !Object.hasOwn(condition, 'loadRatio')) throw new Error(`${source.id}/${condition.id} 缺少條件推導或負重`);
@@ -188,7 +203,8 @@ for (const source of sources) {
       }
       comparisons.push({
         id, catalogId: condition.catalogId, layer: measure.layer, metric: measure.metric,
-        sample: measure.sample, modelParams: condition.params, modelLoadRatio: condition.loadRatio ?? BAR_RATIO[entry.lift], modelE: actual.atE,
+        sample: measure.sample, modelParams: condition.params,
+        ...(entry.lift === 'bench' ? { resolvedParams: { grip: round(params.grip), flare: round(params.flare) } } : {}), modelLoadRatio: condition.loadRatio ?? BAR_RATIO[entry.lift], modelE: actual.atE,
         model: actual.value, ...(measure.momentPoint ? { momentPoint: measure.momentPoint, modelAt5cm: at5.value } : {}), reference: comparableDefinition ? round(reference) : null,
         referenceRaw: measure.reference.mean, referenceSd: measure.reference.sd,
         unit: measure.reference.unit, error: comparableDefinition ? round(error) : null, tolerance: measure.tolerance.absolute,
@@ -263,6 +279,7 @@ const calibrationCaveats = {
   'front-squat': '沿用無負重背蹲校準；前槓偏移未獨立校準，姿勢可疑偏直立，Goršič 群體軀幹角比對失敗。見 docs/research/results/squat.md。',
   'goblet-squat': '沿用無負重背蹲校準；高腳杯姿勢與負重未獨立校準，站距換算及參數可辨識性有限。見 docs/research/results/squat.md。',
 };
+const resultDoc = (entry) => entry.cat === 'hinge' ? 'docs/research/results/deadlift.md' : entry.cat === 'hpush' ? 'docs/research/results/bench.md' : 'docs/research/results/squat.md';
 const byId = Object.fromEntries(CATALOG.map((entry) => {
   const make = (layer) => {
     const items = comparisons.filter((c) => c.catalogId === entry.id && c.layer === layer);
@@ -272,18 +289,18 @@ const byId = Object.fromEntries(CATALOG.map((entry) => {
       status: stats.count ? (stats.fail ? 'failed' : 'partial') : stats.definitionMismatch ? 'definition-mismatch' : stats.exploratory ? 'exploratory' : 'unvalidated',
       ...baseStats,
       ...(stats.count ? { assumptionSensitivePass } : {}),
-      links: items.length ? [entry.cat === 'hinge' ? 'docs/research/results/deadlift.md' : 'docs/research/results/squat.md', ...new Set(items.map((c) => c.source))] : [],
+      links: items.length ? [resultDoc(entry), ...new Set(items.map((c) => c.source))] : [],
     };
   };
   const muscle = { status: 'unvalidated', count: 0, pass: 0, fail: 0, qualitativeCount: 0, qualitativePass: 0, qualitativeFail: 0, links: [] };
-  if (['squat-high', 'squat-low', 'front-squat', 'deadlift', 'sumo'].includes(entry.id)) {
+  if (['squat-high', 'squat-low', 'front-squat', 'deadlift', 'sumo', 'bench', 'cg-bench', 'incline-bench'].includes(entry.id)) {
     const qualitative = (trendStatus.byId[entry.id] || []).filter((t) => /活化|肌.*負荷/.test(t.compare));
     muscle.status = qualitative.length ? (qualitative.some((t) => !t.pass) ? 'failed' : 'partial') : 'unvalidated';
     muscle.qualitativeCount = qualitative.length;
     muscle.qualitativePass = qualitative.filter((t) => t.pass).length;
     muscle.qualitativeFail = qualitative.filter((t) => !t.pass).length;
     muscle.note = '僅有定性趨勢檢查；肌肉分工為模型估計，無數值驗證';
-    muscle.links = qualitative.length ? [entry.cat === 'hinge' ? 'docs/research/results/deadlift.md' : 'docs/research/results/squat.md', 'docs/research/references.md'] : [];
+    muscle.links = qualitative.length ? [resultDoc(entry), 'docs/research/references.md'] : [];
   }
   return [entry.id, {
     ...(calibrationCaveats[entry.id] ? { calibrationCaveat: calibrationCaveats[entry.id] } : {}),
