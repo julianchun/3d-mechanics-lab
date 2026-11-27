@@ -40,6 +40,10 @@ const REFS = {
   krzyszkowski2020: { authors: 'Krzyszkowski J, Kipp K', year: 2020, title: 'Load-dependent mechanical demands of the lower extremity during the back and front squat', venue: 'J Sports Sci, 38(17):2005–2012', url: 'https://pubmed.ncbi.nlm.nih.gov/32544021/', tag: 'PubMed 32544021' },
   schwanbeck2009: { authors: 'Schwanbeck S, Chilibeck PD, Binsted G', year: 2009, title: 'A comparison of free weight squat to Smith machine squat using electromyography', venue: 'J Strength Cond Res, 23(9):2588–2591', url: 'https://pubmed.ncbi.nlm.nih.gov/19855308/', tag: 'PubMed 19855308' },
   lifefitness_smith: { authors: 'Hammer Strength / Life Fitness', year: null, title: 'Smith Machine（7° 傾斜滑軌規格）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-us/catalog/strength-training/benches/smith-machine', tag: '原廠規格' },
+  lifefitness_smith_vertical: { authors: 'Hammer Strength / Life Fitness', year: null, title: 'Plate Loaded Vertical Smith Machine（HSSMV）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/de-de/produkte/strength-training/stationen-mit-gewichtsscheiben/plate-loaded-vertical-smith-machine', tag: '原廠規格' },
+  titanium_legpress: { authors: 'Titanium Strength', year: null, title: 'Genesis 45-Degree Leg Press（GS-45LP）', venue: '原廠產品規格 PDF', url: 'https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/', tag: '原廠規格' },
+  lifefitness_crossover: { authors: 'Life Fitness', year: null, title: 'Adjustable Cable Crossover（LCM-CC）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover', tag: '原廠規格' },
+  rep_hex: { authors: 'REP Fitness', year: null, title: 'Hex Dumbbells（KG）', venue: '原廠產品規格頁', url: 'https://repfitness.com/products/hex-dumbbells-kg', tag: '原廠規格' },
   lifefitness_pulldown: { authors: 'Hammer Strength / Life Fitness', year: null, title: 'Select Lat Pulldown（HS-PD，1:1 滑輪下拉機規格）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/hammer-strength-select-lat-pulldown', tag: '原廠規格' },
   lifefitness_pulldown_row: { authors: 'Hammer Strength / Life Fitness', year: null, title: 'Pulldown Row（1:1 下拉與低拉划船機規格）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/hammer-strength-pulldown-row', tag: '原廠規格' },
   lifefitness_pwrplay: { authors: 'Life Fitness', year: null, title: 'PWR Play Cable Stations（1:1 低拉與 2:1 多功能可調滑輪柱規格）', venue: '原廠產品規格頁', url: 'https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play', tag: '原廠規格' },
@@ -139,13 +143,13 @@ export const SOURCES = {
   pullup: {
     assumptions: [
       '雙手握固定剛體單槓，手部向上反力等於全身與腰掛負重；每幀調整身體前後位置使質心落在握點支撐線。左右各承擔一半，允許兩手沿單槓互推／互拉以減少肩肘橫向力矩（上限為單手反力一半）。',
-      '槓高 2.35 m、近伸直懸垂到下巴過槓及膝微彎為示範幾何假設；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
+      '槓高 2.35 m 為未查證示範值；依臂長與握距求伸直懸垂起點，彎腿距離按腿長縮放。矮身材可踩踏台上槓，動作中腳離台，踏台不計支撐；只分析肩、肘、肩胛力矩，不含肱骨內外旋自由度。',
     ], refs: ['dickie2017'], trendNote: 'Dickie 等人的正握與反握比較未發現背闊肌或二頭肌全行程峰值的明確差異；不加該方向的趨勢。',
   },
   'pullup-wide': { assumptions: ['正握寬距 1.8× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
   chinup: { assumptions: ['反握 1.1× 肩寬；固定槓與手部支撐平衡假設同一般引體向上。'], refs: ['dickie2017'] },
   'assist-pullup': {
-    assumptions: ['雙膝跪在機台墊上，膝墊向上推力等於所選輔助公斤數乘重力加速度；手部反力等於全身重量減膝墊推力。每幀以身體重量、腰掛負重與膝墊力求重心落在手部支撐線；機台柱高與墊尺寸為未查證估計。', '其餘握槓與肩肘肩胛分析同引體向上。'], refs: ['dickie2017'], trendNote: '輔助重量的單調檢查為模型內部物理檢查，未找到直接比較各配重輔助引體機全身 EMG 的研究。',
+    assumptions: ['雙膝跪在機台墊上，膝墊向上推力等於所選輔助公斤數乘重力加速度；手部反力等於全身重量減膝墊推力。每幀以身體重量、腰掛負重與膝墊力求重心落在手部支撐線；機台柱高與墊尺寸為未查證估計。', 'PWR Play 輔助引體站有折疊踏台；模型用其上槓後離台的方式求解，不假定踏台高度，也不把踏台反力算進動作。其餘握槓與肩肘肩胛分析同引體向上。'], refs: ['dickie2017', 'lifefitness_pwrplay'], trendNote: '輔助重量的單調檢查為模型內部物理檢查，未找到直接比較各配重輔助引體機全身 EMG 的研究。',
   },
   'assist-chinup': { assumptions: ['反握 1.1× 肩寬、膝墊向上輔助；其餘支撐平衡同輔助引體機。'], refs: ['dickie2017'] },
   'squat-high': {
@@ -192,21 +196,21 @@ export const SOURCES = {
   'smith-squat': {
     assumptions: [
       '雙接觸點反作用力（腳底＋滑軌法向反作用力），假設線性軸承滑軌無摩擦（μ = 0）且可推可拉。',
-      '軌道傾角提供 0°（垂直）與 ±7°（Hammer Strength 官方規格）；示範總負重（0.9× 體重）為假設。',
+      '預設 HSSMV 垂直軌道與 13.6 kg 起始阻力；可選 HSSM 的 ±7°。75 kg 身材另配示範掛片 53.9 kg，合計 67.5 kg（0.9× 體重）；掛片量仍為假設。',
       '腳底壓力中心由「用力點」參數決定，重心不必落在腳掌正上方。',
       '鞋跟墊高採相同的 25 cm 足底傾斜幾何；腳與槓受滑軌約束，由幾何求小腿角，不另套用自由深蹲的各半策略；壓力中心在 y=0 的外鞋底接觸面。',
       '腳在槓前方預設 2 cm 為示範幾何，未找到可通用的史密斯腳位距離常模。預設踝背屈峰值約 37.9°，接近 Baumbach 等 2014 屈膝負重量測平均 39°；該研究不是史密斯深蹲研究。',
     ],
-    refs: ['schwanbeck2009', 'lifefitness_smith', 'lu2022heel', 'baumbach2014'],
+    refs: ['schwanbeck2009', 'lifefitness_smith_vertical', 'lifefitness_smith', 'lu2022heel', 'baumbach2014'],
   },
   'leg-press': {
     assumptions: [
       '坐姿器械：椅背與座墊承擔身體重量，不算地面反作用力。',
       '滑台只沿 45° 軌道方向出力；預設導軌摩擦 μ = 0 為準靜態參考（sin 45°），設定 μ 時代表向心階段的上限（sinθ + μcosθ），離心時為 sinθ − μcosθ。',
-      '空滑台重量（預設 45 kg）、導軌摩擦係數範圍（0–0.15）與椅背角度範圍屬常見商用假設，未查得單一原廠實測值。',
+      '預設 GS-45LP 原廠空滑台實體質量 50 kg、45° 軌道；示範掛片 1.8× 體重、導軌摩擦係數範圍（0–0.15）與椅背角度範圍仍未查證。',
       '踏板高低預設 0.52、深度 0.25 為中間示範幾何，非研究指定的標準腳位。預設髖屈峰值約 135.3°、踝背屈約 38.0°。Da Silva 等 2008 支持高低腳位改變肌群參與；Martín-Fuentes 等 2022 比較站距與腳尖角，未見受測肌群肌電顯著差異。兩者都不能指定中間腳位；Baumbach 等 2014 的屈膝負重踝角亦非腿推安全線。',
     ],
-    refs: ['escamilla1998', 'escamilla2001_var', 'dasilva2008', 'martinfuentes2022lp', 'baumbach2014'],
+    refs: ['titanium_legpress', 'escamilla1998', 'escamilla2001_var', 'dasilva2008', 'martinfuentes2022lp', 'baumbach2014'],
   },
   deadlift: {
     assumptions: [
@@ -300,9 +304,9 @@ export const SOURCES = {
     assumptions: [
       '仰臥於平板臥推椅（不算地面反作用力），兩手各自獨立承重（無剛體槓互推），僅分析肩屈伸、肩水平內收與肘伸展。',
       '手部路徑假設：下放時雙手依手肘外展角落在胸兩側並可低於胸面，推起時向肩膀上方微內聚（頂點間距 36 cm）；對握與正握僅改變握把方向與微調底端手距，模型不含肱骨內外旋自由度。',
-      '啞鈴尺寸（握把內距 13 cm、直徑 32 mm）與預設每顆 22 kg（雙手 44 kg）為假設。',
+      '握把尺寸採 REP Hex KG 7.5–22.5 kg 段：長 13.2 cm、直徑 34 mm；片頭尺寸及預設每顆 22 kg（雙手 44 kg）仍為示範假設。',
     ],
-    refs: ['saeterbakken2011', 'welsch2005', 'farias2017', 'rodriguezridao2020'],
+    refs: ['rep_hex', 'saeterbakken2011', 'welsch2005', 'farias2017', 'rodriguezridao2020'],
   },
   'db-bench-incline': {
     assumptions: [
@@ -412,26 +416,26 @@ export const SOURCES = {
     assumptions: [
       '站姿雙側獨立滑輪（高位滑輪 192 cm，左右柱距 260 cm），每手各握獨立把手連向同側滑輪，不套用剛體握把互推。',
       '兩側鋼索的左右分量（X）對稱相消；前後與上下分量（Y、Z）計入站姿重心與壓力中心平衡。預設前後腳各偏離原站位 10 cm 作視覺示意，僅以兩腳外緣作等效支撐面；力學仍是左右對稱半身與鏡像，不能求出前後腳各自反力。前後腳選擇為教練共識，錯開距離未查證。',
-      '手肘維持固定微彎角並對齊鋼索力線平面（S–手–滑輪共面），符合教學原則並減少肩關節異常扭轉力矩；滑輪比預設 2:1（Life Fitness 可調滑輪柱主流規格），單側示範配重 18 kg（2:1 實感單手 9 kg）與機架尺寸為假設。',
+      '手肘維持固定微彎角並對齊鋼索力線平面（S–手–滑輪共面）；LCM-CC 原廠滑輪比 2:1、機架總高 239 cm，單側示範配重 18 kg（實感單手 9 kg）與柱距仍為假設。',
       '目前缺乏直接於同儕審查期刊比較高／中／低三檔動態滑輪夾胸之 EMG 全文，高位偏中下胸、低位偏上胸之趨勢主要依據斜向水平內收等長 EMG（Lee 2019）、肩關節力臂（Ackland 2008）與臥推傾角研究（Rodríguez-Ridao 2020）間接支持。',
     ],
-    refs: ['lee2019', 'ackland2008', 'rodriguezridao2020', 'signorile2017', 'lifefitness_pwrplay'],
+    refs: ['lee2019', 'ackland2008', 'rodriguezridao2020', 'signorile2017', 'lifefitness_crossover'],
   },
   'cable-fly-mid': {
     assumptions: [
       '站姿雙側獨立滑輪（中位滑輪 134 cm，與肩約同高；左右柱距 260 cm），每手各握獨立把手，不套用剛體握把互推。',
       '兩側鋼索左右分量相消，前後分量影響壓力中心；預設前後腳，等效支撐面與左右對稱力學限制同高位夾胸。',
-      '滑輪比預設 2:1，單側示範配重 18 kg（實感單手 9 kg）與機架尺寸為假設。',
+      'LCM-CC 滑輪比 2:1、機架總高 239 cm；單側示範配重 18 kg（實感單手 9 kg）與柱距仍為假設。',
     ],
-    refs: ['lee2019', 'ackland2008', 'signorile2017', 'welsch2005', 'lifefitness_pwrplay'],
+    refs: ['lee2019', 'ackland2008', 'signorile2017', 'welsch2005', 'lifefitness_crossover'],
   },
   'cable-fly-low': {
     assumptions: [
       '站姿雙側獨立滑輪（低位滑輪 85 cm，髖部高度，由下往上斜向夾胸；左右柱距 260 cm），每手各握獨立把手，不套用剛體握把互推。',
       '兩側鋼索左右分量相消，向下與向後分量計入站姿重心平衡；預設前後腳，等效支撐面與左右對稱力學限制同高位夾胸。',
-      '滑輪比預設 2:1，單側示範配重 18 kg（實感單手 9 kg）與機架尺寸為假設；低位往上斜向夾胸預期較偏上胸（鎖骨部）與前三角肌——此為依肌肉力臂方向的推論，尚無直接比較滑輪高低位的研究。',
+      'LCM-CC 滑輪比 2:1、機架總高 239 cm；單側示範配重 18 kg（實感單手 9 kg）與柱距仍為假設；低位往上斜向夾胸預期較偏上胸（鎖骨部）與前三角肌——此為依肌肉力臂方向的推論，尚無直接比較滑輪高低位的研究。',
     ],
-    refs: ['lee2019', 'ackland2008', 'rodriguezridao2020', 'lauver2016', 'signorile2017', 'lifefitness_pwrplay'],
+    refs: ['lee2019', 'ackland2008', 'rodriguezridao2020', 'lauver2016', 'signorile2017', 'lifefitness_crossover'],
   },
   ohp: {
     assumptions: [
@@ -459,7 +463,7 @@ export const SOURCES = {
   },
   'cable-row': {
     assumptions: [
-      '坐姿器械（腳踩踏板），不算地面反作用力；鋼索張力沿握把中心指向低滑輪（高 42 cm，典型範圍 35–45 cm）。',
+      '坐姿器械（腳踩踏板），不算地面反作用力；鋼索張力沿握把中心指向低滑輪，出繩高 42 cm 是未查證示範值。',
       '雙手透過剛體握把可橫向互推／互拉（上限為單手拉力一半），以最小化肩肘總力矩。',
       '滑輪比 1:1（專用低拉機）或 2:1（多功能滑輪柱），實際手拉力＝配重片重量 ÷ 滑輪比；示範配重 56 kg 為假設。',
       '腳踏點距骨盆前方 74 cm、高 32 cm 與膝屈峰值 49.6° 為示範幾何，未找到器材通用腳踏與膝角常模。踝背屈峰值 37.8° 與屈膝負重常模 39° 同量級，但坐姿踏板不等同站姿負重測試；因此維持原預設。',
@@ -483,7 +487,7 @@ export const SOURCES = {
   },
   pulldown: {
     assumptions: [
-      '坐姿器械（大腿壓墊固定），不算地面反作用力；鋼索張力沿握把中心指向高滑輪（高 235 cm，對應商用機身 216–244 cm）。',
+      '坐姿器械（大腿壓墊固定），不算地面反作用力；鋼索張力沿握把中心指向高滑輪。出繩高 235 cm 低於 HDU-DPR 的機架總高 244 cm，但精確出繩中心未查證。',
       '雙手透過剛體握把可橫向互推／互拉（上限為單手拉力一半）；正握二頭肌偏好設為 0.6×。',
       '滑輪比 1:1（專用下拉機）或 2:1（多功能滑輪柱），實際手拉力＝配重片重量 ÷ 滑輪比；示範配重 45 kg 為假設。',
     ],
@@ -522,11 +526,11 @@ export const SOURCES = {
   pushdown: {
     assumptions: [
       '站姿滑輪動作，含地面反作用力與重心平衡；滑輪向上拉手時自動微增軀幹前傾維持小腿穩定。',
-      '預設雙腳併站的壓力中心最大偏後約 4.4 cm，仍落在腳底；前後腳可選，但無證據要求此動作必須改為前後腳。前後腳僅用兩腳外緣作等效支撐範圍，不能推算左右腳分力。',
-      '雙手透過剛體短槓可橫向互推／互拉；滑輪高 210 cm（對應多功能可調滑輪柱 210–240 cm）。',
+      '預設採前後腳站姿；前後腳僅用兩腳外緣作等效支撐範圍，不能推算左右腳分力。',
+      '雙手透過剛體短槓可橫向互推／互拉；出繩高 192 cm，位於 LCM-CC 原廠滑車 17.8–193.0 cm 的可調範圍內；精確出繩中心仍未查證。',
       '滑輪比預設 2:1（多功能滑輪柱主流），可切 1:1；實際手拉力＝配重片重量 ÷ 滑輪比；示範配重 38 kg 為假設。',
     ],
-    refs: ['maeo2023', 'hussain2020', 'lifefitness_pwrplay'],
+    refs: ['maeo2023', 'hussain2020', 'lifefitness_crossover'],
     trendNote: '已有三頭長頭長度與下壓疲勞文獻參考，目前尚未列入自動化趨勢比對項目。',
   },
   curl: {
