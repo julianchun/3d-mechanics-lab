@@ -2,7 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
-  LIFTS, JOINT_NAMES, MODEL_VERSION, MUSCLES, MUSCLE_BY_ID, MACHINES, pulleyDivisor,
+  LIFTS, JOINT_NAMES, MODEL_VERSION, MUSCLES, MUSCLE_BY_ID, MUSCLE_GROUP_IDS, MACHINES, pulleyDivisor,
   defaultParams, analyze, peakAnalysis, validate, liftMuscles,
 } from './biomech.js';
 import { Rig, heatColor, diffColor, lengthColor, loadBones } from './rig.js';
@@ -41,6 +41,7 @@ const state = {
   tab: 'adjust',
   view: 'oblique',
   sourcesOpen: false,
+  muscleView: new URLSearchParams(location.search).get('muscles') === 'detail' ? 'detail' : 'general',
   cuesOpen: false,
   baseline: prefs.baseline || {}, // lift -> preset id（無 = 內建預設）
   ab: { A: null, B: null, side: false, showing: 'A' },
@@ -523,6 +524,10 @@ function sourcesBlock() {
       el('span', { class: `src-badge src-${info.badge.kind}` }, info.badge.text)),
     el('div', { class: 'src-body' },
       el('div', { class: 'src-hd' }, '模型假設'),
+      el('p', { class: 'src-empty' }, state.muscleView === 'detail'
+        ? '詳細視圖依固定版 Rajagopal 與 MoBL-ARMS 模型顯示可分辨的子部位；力臂仍是本工具的簡化映射。'
+        : '一般視圖將子部位受力相加；活化度是各子部位以最大等長力 F 加權的平均。'),
+      el('a', { class: 'src-link', href: './docs/research/muscle-params.md', target: '_blank', rel: 'noopener noreferrer' }, '肌肉參數與細分依據 ↗'),
       el('ul', { class: 'src-list' }, info.assumptions.map((txt) => el('li', {}, txt))),
       el('div', { class: 'src-hd' }, '與文獻趨勢比對'),
       info.trends.length
@@ -565,17 +570,32 @@ function renderAdjust(box) {
 }
 
 let dataBox = null;
+const visibleMuscleIds = (lift) => {
+  const fine = liftMuscles(lift).map((m) => m.id);
+  return state.muscleView === 'detail' ? fine : MUSCLE_GROUP_IDS.filter((id) => fine.some((child) => (MUSCLE_BY_ID[child].group || child) === id));
+};
+function muscleViewControl() {
+  return el('div', { class: 'row' }, [['general', '一般'], ['detail', '詳細']].map(([key, label]) =>
+    el('button', { class: 'chip sm' + (state.muscleView === key ? ' on' : ''), onclick: () => {
+      state.muscleView = key;
+      const url = new URL(location.href);
+      if (key === 'detail') url.searchParams.set('muscles', 'detail'); else url.searchParams.delete('muscles');
+      history.replaceState(null, '', url);
+      curveKey = ''; renderPanel();
+    } }, label)));
+}
 // ---------- 全行程曲線 ----------
 let curveChart = null, curveKey = '', curveMode = 'joints', curveWrap = null;
 function curveSection() {
-  const key = curveMode + pkey(state.lift, P());
+  const key = curveMode + state.muscleView + pkey(state.lift, P());
   if (key !== curveKey || !curveWrap) {
     const L = LIFTS[state.lift];
     const data = sampleCurve(pkey(state.lift, P()), state.lift, P(), analyze);
     curveChart = buildCurve({
       mode: curveMode, data, lift: state.lift, L, jointNames: JOINT_NAMES,
       muscleName: (id) => MUSCLE_SHORT[id] || MUSCLE_BY_ID[id].name.replace(/（.*）/, ''),
-      muscleOrder: MUSCLES.map((m) => m.id), liftSet: new Set(liftMuscles(state.lift).map((m) => m.id)),
+      muscleOrder: state.muscleView === 'detail' ? MUSCLES.map((m) => m.id) : MUSCLE_GROUP_IDS,
+      liftSet: new Set(visibleMuscleIds(state.lift)),
     });
     curveWrap = el('div', {},
       el('div', { class: 'sec' }, '整個動作的變化（100%＝整個動作中最高的那一刻；圓點＝目前位置）'),
@@ -698,6 +718,7 @@ function renderPanel() {
   renderLifts();
   const cues = cuesBlock();
   if (cues) box.append(cues);
+  box.append(el('div', { class: 'sec' }, '肌肉顯示'), muscleViewControl());
   ({ adjust: renderAdjust, data: renderData, layers: renderLayers, compare: renderCompare, save: renderSave })[state.tab](box);
 }
 function renderAll() {
@@ -735,7 +756,8 @@ function frame(now) {
   const peakBase = state.peak && state.diff ? getPeak(lift, bParams) : null;
   const peakB = state.peak && side ? getPeak(lift, state.ab.B.params) : null;
 
-  const set = new Set(liftMuscles(lift).map((m) => m.id));
+  const fineSet = new Set(liftMuscles(lift).map((m) => m.id));
+  const set = new Set(visibleMuscleIds(lift));
   const vA = muscleValues(res, peakA);
   const vB = resB ? muscleValues(resB, peakB) : null;
   const vBase = base ? muscleValues(base, peakBase) : null;
@@ -747,12 +769,13 @@ function frame(now) {
 
   const colorsFor = (v) => {
     const c = {};
-    for (const id of set) {
+    for (const id of fineSet) {
+      const key = state.muscleView === 'detail' ? id : MUSCLE_BY_ID[id].group || id;
       if (state.diff && vBase && state.colorMode !== 'length') {
-        const ref = Math.max(vBase[id] || 0, 0.15 * Math.max(...[...set].map((k) => vBase[k] || 0)));
-        c[id] = diffColor(((v[id] || 0) - (vBase[id] || 0)) / (ref || 1));
-      } else if (state.colorMode === 'length') c[id] = lengthColor(v[id]);
-      else c[id] = heatColor((v[id] || 0) / maxV);
+        const ref = Math.max(vBase[key] || 0, 0.15 * Math.max(...[...set].map((k) => vBase[k] || 0)));
+        c[id] = diffColor(((v[key] || 0) - (vBase[key] || 0)) / (ref || 1));
+      } else if (state.colorMode === 'length') c[id] = lengthColor(v[key]);
+      else c[id] = heatColor((v[key] || 0) / maxV);
     }
     return c;
   };
@@ -791,7 +814,7 @@ function frame(now) {
   rigA.group.position.x = offA; ghost.group.position.x = offA; benchGroup.position.x = offA;
   const aLinesA = armLines(res);
   rigA.update(res.pose, {
-    layers: state.layers, colors: colorsFor(vA), jointLoad: jointNorm(res, peakA), rom: res.rom, liftSet: set,
+    layers: state.layers, colors: colorsFor(vA), jointLoad: jointNorm(res, peakA), rom: res.rom, liftSet: fineSet,
     armLines: aLinesA.map((x) => [x[1], x[2]]),
   });
   ghost.setVisible(!!(state.layers.overlay && base));
@@ -805,7 +828,7 @@ function frame(now) {
     updateProps(propsB, resB.pose);
     rigB.group.position.x = 0.85; benchB.position.x = 0.85; propsB.position.x = 0.85;
     rigB.update(resB.pose, {
-      layers: state.layers, colors: colorsFor(vB), jointLoad: jointNorm(resB, peakB), rom: resB.rom, liftSet: set,
+      layers: state.layers, colors: colorsFor(vB), jointLoad: jointNorm(resB, peakB), rom: resB.rom, liftSet: fineSet,
       armLines: armLines(resB).map((x) => [x[1], x[2]]),
     });
   }
@@ -867,10 +890,10 @@ function drawLabels(res, aLines, vA, maxV, set, offA, B) {
     if (state.layers.muscles && state.colorMode !== 'length' && !state.diff) {
       const top = [...set].sort((a, b) => (vA[b] || 0) - (vA[a] || 0)).slice(0, 2);
       for (const id of top.filter((k) => (vA[k] || 0) / maxV > 0.08)) {
-        const mesh = rigA.muscles[id][0];
+        const mesh = rigA.muscles[MUSCLE_BY_ID[id].group ? id : (MUSCLES.find((m) => m.group === id)?.id || id)][0];
         const dir = new THREE.Vector3(0, 1, 0).applyQuaternion(mesh.quaternion).multiplyScalar(mesh.scale.y / 2);
         const p = mesh.position.clone().add(dir);
-        put([p.x, p.y, p.z], `${LABEL_NAME[id]} ${Math.round(((vA[id] || 0) / maxV) * 100)}%`, 'mus', offA);
+        put([p.x, p.y, p.z], `${LABEL_NAME[id] || MUSCLE_BY_ID[id].name} ${Math.round(((vA[id] || 0) / maxV) * 100)}%`, 'mus', offA);
       }
     }
     if (B) {
