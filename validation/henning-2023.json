@@ -206,7 +206,8 @@
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
-          "referenceTransform": "negate"
+          "referenceTransform": "negate",
+          "momentPoint": "L5S1"
         },
         {
           "id": "kneePassing-trunk",
@@ -374,7 +375,8 @@
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
-          "referenceTransform": "negate"
+          "referenceTransform": "negate",
+          "momentPoint": "L5S1"
         }
       ]
     },
@@ -556,7 +558,8 @@
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
-          "referenceTransform": "negate"
+          "referenceTransform": "negate",
+          "momentPoint": "L5S1"
         },
         {
           "id": "kneePassing-trunk",
@@ -724,7 +727,8 @@
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
-          "referenceTransform": "negate"
+          "referenceTransform": "negate",
+          "momentPoint": "L5S1"
         }
       ]
     }
