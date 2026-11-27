@@ -1004,7 +1004,8 @@ export const MUSCLES = [
   { id: 'bflh', group: 'hams', name: '股二頭肌長頭', F: 1313.1836, Lf: 0.0976, Lmt: 0.4228, arms: { hipExt: hipFit(0.0488, 0.0617, 0.0398), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
   { id: 'semis', group: 'hams', name: '內側膕繩肌', F: 2792.2820, Lf: 0.0953, Lmt: 0.4216, arms: { hipExt: hipFit(0.0448, 0.0572, 0.0371), kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
   { id: 'bfsh', group: 'hams', name: '股二頭肌短頭', F: 557.1148, Lf: 0.1103, Lmt: 0.2161, arms: { kneeExt: angleSlope(-0.03, 'kneeFlex', -0.005) } },
-  // 臀大肌的直線弦在深屈髖時穿過骨盆，90° 以後甚至反轉；保留原先繞行估計，避免用錯誤幾何外插。
+  // 臀大肌子部位只拆有來源方向差異的髖外展力臂；髖伸共用原群組繞行估計。
+  // 直線弦在深屈髖時穿過骨盆，90° 以後甚至反轉，不能用來分配髖伸力臂。
   { id: 'gmaxUpper', group: 'gmax', name: '臀大肌上部', F: 983.7836, Lf: 0.1470, Lmt: 0.1958, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: 0.0175 } },
   { id: 'gmaxLower', group: 'gmax', name: '臀大肌中下部', F: 2353.8, Lf: 0.1610, Lmt: 0.2296, arms: { hipExt: (q) => 0.075 - 0.02 * clamp(q.hipFlex / rad(100), 0, 1.2), hipAbd: -0.0145 } },
   { id: 'gmedFront', group: 'gmed', name: '臀中肌前部', F: 1093.4668, Lf: 0.0730, Lmt: 0.1288, arms: { hipAbd: 0.0513, hipExt: hipFit(0.0175, 0.0035, -0.0116) } },
