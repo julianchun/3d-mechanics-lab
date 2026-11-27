@@ -4159,7 +4159,16 @@ export function analyze(lift, P, e) {
   const forearmContactMoment = has('elbExt') && !has('foreRot')
     ? dem.foreRot - info.reduce((sum, x) => sum + mus[x.m.id].force * (x.m.arms.foreRot?.(q) || 0), 0)
     : 0;
-  return { pose, dem, q, mus, joints, rom, forearmContactMoment };
+  // 未求解軸旋的肩動作仍有完整三維外力矩；把固定軸旋承受的剩餘長軸偶矩
+  // 明列出來，避免誤認為肌肉已平衡這一軸。若 shRot 參與求解，此值僅是數值殘差。
+  const shoulderLongReaction = shoulderFrame
+    ? shoulderPhysical[2] - info.reduce((sum, x) => {
+      // liftMuscles 會移除未列自由度的力臂；反力矩仍須扣除原肌肉的實際軸向作用。
+      const arm = MUSCLE_BY_ID[x.m.id].arms.shRot;
+      return sum + mus[x.m.id].force * (typeof arm === 'function' ? arm(q) : arm || 0);
+    }, 0)
+    : null;
+  return { pose, dem, q, mus, joints, rom, forearmContactMoment, shoulderLongReaction };
 }
 
 export function peakAnalysis(lift, P, n = 20) {

@@ -57,7 +57,7 @@ for (const [id, e] of [['pullup', 0], ['pullup', 0.5], ['pullup', 1], ['pullup-w
   const M = forcesOf(r.pose, P, item.lift).filter((f) => f.region === 'upper' || f.region === 'fore')
     .reduce((sum, f) => sub(sum, cross(sub(f.p, r.pose.R.shoulder), f.F)), [0, 0, 0]);
   const world = (v) => add(add(mul(r.pose.lat, v[0]), mul(r.pose.u, v[1])), mul(r.pose.f, v[2]));
-  for (let j = 0; j < (LIFTS[item.lift].dofs.includes('shRot') ? 3 : 2); j++) {
+  for (let j = 0; j < 3; j++) {
     const demand = dot(M, world(axes[j]));
     const supplied = MUSCLES.reduce((sum, m) => {
       const force = r.mus[m.id]?.force || 0;
@@ -68,7 +68,11 @@ for (const [id, e] of [['pullup', 0], ['pullup', 0.5], ['pullup', 1], ['pullup-w
       const v = m.arms.shFwd?.shoulderVec?.(q);
       return sum + force * (v ? dot(v, axes[j]) : 0);
     }, 0);
-    if (Math.abs(demand - supplied) > 0.25) failures.push(`${id}@${e} 正交肩力矩第 ${j + 1} 軸殘差 ${(demand - supplied).toFixed(3)} N·m`);
+    const reaction = j === 2 ? r.shoulderLongReaction : 0;
+    if (Math.abs(demand - supplied - reaction) > 0.25) failures.push(`${id}@${e} 正交肩力矩第 ${j + 1} 軸殘差 ${(demand - supplied - reaction).toFixed(3)} N·m`);
+    if (j === 2 && LIFTS[item.lift].dofs.includes('shRot') && Math.abs(reaction) > 0.25) {
+      failures.push(`${id}@${e} 已求解的肩長軸殘差 ${reaction.toFixed(3)} N·m`);
+    }
   }
 }
 // 肩推鎖死前 10% 行程以 1/400 細步檢查軸旋與肌肉長度，確認無 rotConfidence 或 180° 分支跳變。
