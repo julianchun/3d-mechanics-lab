@@ -46,7 +46,30 @@ export function createBody({ heightM = DEFAULT_BODY.heightM, massKg = DEFAULT_BO
   const body = { heightM, sex, mass: massKg };
   for (const key of BODY_LENGTHS) body[key] = ratios[key] === undefined ?
     DEFAULT_BODY[key] * (heightM / DEFAULT_BODY.heightM) : heightM * ratios[key];
+  body.lumbar = Object.freeze({ model5cm: lumbarOffsetM('model5cm', body), iliacCrest: lumbarOffsetM('iliacCrest', body), L5S1: lumbarOffsetM('L5S1', body) });
   return Object.freeze(body);
+}
+// ---------- 腰背力矩取矩點 ----------
+// 取矩點位於髖中心上方、沿單一軀幹軸 u 的距離（m）。模型沒有獨立骨盆，只能沿 u 取點。
+// - model5cm：原產品設定，固定 0.05 m（不隨身材縮放，沒有出處；產品預設，保持舊數字不變）。
+// - iliacCrest：髂嵴高度減大轉子高度。ANSUR II 公開逐人資料（iliocristaleheight − trochanterionheight）
+//   除以身高，男 0.0915、女 0.0923（SD 約 0.012、0.011）；模型髖中心高度本來就由大轉子高度定義，兩者相減一致。
+//   資料來源與推導見 docs/research/lumbar-point.md。
+// - L5S1：Németh & Ohlsén 1989（Spine 14(6):604–605，PMID 2749375，CT 21 人）髖到 L5–S1 的三維距離 122 mm，
+//   男 6.9%、女 7.5% 身高。原文只給三維距離，沒有垂直／前後分量；此處假設沿軀幹軸（方向未查證）。
+export const LUMBAR_POINTS = Object.freeze({ model5cm: null, iliacCrest: { male: 0.0915, female: 0.0923 }, L5S1: { male: 0.069, female: 0.075 } });
+export function lumbarOffsetM(name, body = BODY) {
+  if (!Object.hasOwn(LUMBAR_POINTS, name)) throw new Error(`未知腰背取矩點：${name}`);
+  const ratio = LUMBAR_POINTS[name];
+  return ratio ? ratio[body.sex] * body.heightM : 0.05; // 以身高比例隨身材縮放；model5cm 保持固定值
+}
+let lumbarPoint = 'model5cm';
+export const lumbarPointName = () => lumbarPoint;
+// 僅供驗證／診斷：暫時改用研究定義的取矩點；產品路徑維持 model5cm，finally 還原。
+export function withLumbarPoint(name, run) {
+  lumbarOffsetM(name);
+  const original = lumbarPoint;
+  try { lumbarPoint = name; return run(); } finally { lumbarPoint = original; }
 }
 // 模型幾何使用同步的動態身體範圍；可巢狀呼叫，finally 保證恢復。
 // 不可在 run 內 await。此 API 適合批次驗證，也可供日後 UI 在單次運算中使用。
@@ -3917,7 +3940,7 @@ export function analyze(lift, P, e) {
     dem.ankPF = dot(Ma, pose.hinge || norm(cross(pose.toeDir, [0, -1, 0])));
   }
   if (has('trunkExt')) {
-    const L5 = add(pose.Pc, mul(pose.u, 0.05));
+    const L5 = add(pose.Pc, mul(pose.u, lumbarOffsetM(lumbarPoint)));
     const Mu = musMoment(forces, L5, ['trunk', 'upper', 'fore']);
     dem.trunkExt = dot(Mu, norm(cross(pose.u, neg(pose.f)))); // 肌肉作用在上半身的伸展力矩
   }
