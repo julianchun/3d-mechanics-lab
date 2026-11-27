@@ -15,6 +15,9 @@
 - [Rajagopal 等（2016）](https://pubmed.ncbi.nlm.nih.gov/27392337/)及[固定版 OpenSim 下肢模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/Rajagopal2016.osim)：下肢肌束最大等長力、纖維長與肌腱參數的主要來源。
 - [Lai、Arnold、Wakeling（2017）](https://pubmed.ncbi.nlm.nih.gov/28900782/)及[固定版 RajagopalLaiUhlrich2023 模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/RajagopalLaiUhlrich2023.osim)：深屈髖／膝路徑的參考比較；該檔另含 Uhlrich 2022 修正，本版未採用，深蹲底部實際 OpenSim 力臂尚未查證。
 - [Saul 等（2015）MoBL-ARMS](https://pmc.ncbi.nlm.nih.gov/articles/PMC4282829/)及[固定版上肢模型檔](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)：上肢肌束與路徑參數來源；[Holzbaur 等（2005）](https://pubmed.ncbi.nlm.nih.gov/16078622/)是模型前身，並非本專案逐項取值版本。
+- [Murray、Delp、Buchanan（1995）](https://pubmed.ncbi.nlm.nih.gov/7775488/)：屍體肌腱位移與電腦模型的肘屈、旋前／旋後力臂；二頭肌屈肘峰值在旋後時較大，作本模型直線弦的獨立方向核對。
+- [Murray、Buchanan、Delp（2000）](https://doi.org/10.1016/S0021-9290(00)00051-8)：同批屍體的肘肌架構、力臂與等長功能容量；長頭二頭肌與肱橈肌的量級對照。[同作者 2002 年研究](https://pubmed.ncbi.nlm.nih.gov/11747879/)另討論骨尺寸與峰值力臂比例，年份不可混淆。
+- [前臂中立位量角指引](https://www.orthopt.org/uploads/content_files/files/lucado_et_al_2022_lateral_elbow_pain_and_muscle_function_impairments.pdf)：肘屈 90°、上臂靠身側且拇指朝上為中立起點；本模型正／反握 ±80° 為示範設定，不是該指引的量測值。
 - [ISB 肩關節座標建議](https://media.isbweb.org/images/documents/standards/isb_jcs_part_ii.pdf)：肩、肘、腕與手的座標定義；本模型只借用上舉平面等幾何意義，沒有直接使用其 Euler 角。
 - [Christophy 等（2012）](https://doi.org/10.1007/s10237-011-0290-6)：腰背與腹部表列肌束及 L5/S1 力臂；對應 OpenSim 模型檔版本未查證。
 - [Seth 等（2016）](https://pubmed.ncbi.nlm.nih.gov/26734761/)、[Seth 等（2019）](https://pmc.ncbi.nlm.nih.gov/articles/PMC6856649/)及[固定版 TSM 肩胛模型](https://github.com/ComputationalBiomechanicsLab/rmr-solver/blob/b47b06cd23c872e69f92687270e47d4c560bb14b/OpenSim%20Models/for%20RMR%20solver/TSM_subject_noWeight.osim)：肩胛肌束路徑；等效軸轉換未與 OpenSim 原模型逐點驗證。
@@ -438,7 +441,7 @@
     - 三種握距之間，**背闊肌整體 EMG 大致相近**（差異小）。
 - **可檢驗趨勢**
   - 滑輪下拉正握（`supin: 'pro'`）背闊肌（`lat`）活化 > 反握（`supin: 'sup'`）（Lusk 2010, n=12）。
-  - 反握滑輪下拉肱二頭肌（`bic`）活化 > 正握（本模型 `adjust` 假設；註：Lusk 2010 與 Lehman 2004 中二頭肌差異未達統計顯著，可一併紀錄對照）。
+  - 反握滑輪下拉肱二頭肌（`bic`）活化 > 正握（模型前臂旋轉平衡的結果；Lusk 2010 與 Lehman 2004 的二頭肌差異未達統計顯著，故不把此方向視為文獻驗證）。
 
 ---
 
@@ -491,8 +494,9 @@
 - **可比較量化結果**
   - Kleiber et al. (2015, n=16 健康受試者，20°/s 單關節屈肘，比較旋後、中立、旋前握法)：**肱二頭肌（biceps brachii）sEMG 活動在三種握法間沒有顯著差異**；僅**肱橈肌（brachioradialis）**於**旋前（正握）**時對屈肘的相對肌電貢獻顯著高於旋後與中立握法（反映二頭肌於旋前處於生物力學劣勢時由肱橈肌代償）。
   - Marcolin et al. (2018)：直槓彎舉與 EZ 曲槓彎舉之二頭肌與肱橈肌向心／離心 EMG 普遍高於啞鈴彎舉。
+  - [Coratella et al. (2023)](https://pubmed.ncbi.nlm.nih.gov/36976950/)：10 位健美選手、8RM 條件的雙側彎舉；向心期反握二頭肌高於正握約 19%、高於中立握約 12%，肱橈肌反握亦高於正握約 5% 與中立握約 6%。此肱橈肌方向與 Kleiber 的單關節屈肘條件不同。
 - **可檢驗趨勢**
-  - 槓鈴彎舉反握（`supin: 'sup'`）肱二頭肌（`bic`）活化 > 反手彎舉（`supin: 'pro'`）：**屬解剖推論**（前臂旋前時二頭肌屈肘效率下降；**非文獻實測結果**，Kleiber 2015 實測顯示二頭肌 EMG 在各握法間無顯著差異）。
+  - 槓鈴彎舉反握（`supin: 'sup'`）肱二頭肌（`bic`）活化 > 反手彎舉（`supin: 'pro'`）：[Coratella 等 2023](https://pubmed.ncbi.nlm.nih.gov/36976950/) 的雙側彎舉向心期直接量得此方向；Kleiber 2015 的單關節屈肘則未見二頭肌顯著握法差，條件不同。
   - 反手彎舉（`supin: 'pro'`）肱肌／肱橈肌（`brach`）活化 > 槓鈴彎舉（`supin: 'sup'`）（Kleiber 2015, n=16；註：文獻實測為肱橈肌，本模型 `brach` 為肱肌＋肱橈肌合併）。
 
 #### `shrug` 槓鈴聳肩
