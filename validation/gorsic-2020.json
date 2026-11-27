@@ -125,7 +125,8 @@
             "unit": "Nm/(kg*m)"
           },
           "comparisonRole": "definition-mismatch",
-          "limitations": "原文 Data Reduction 將下背點定為左右髂嵴中點，力矩在遠端節段座標系表達；模型在髖中心上方沿單一軀幹軸 5 cm 取矩，沒有獨立骨盆座標。體重身高正規化與中央雙側換算相符，但點位與力矩軸未對齊。0.35 為原先門檻，保留供未來定義對齊後使用。"
+          "limitations": "原文 Data Reduction 將下背點定為左右髂嵴中點，力矩在遠端節段座標系表達；模型在髖中心上方沿單一軀幹軸 5 cm 取矩，沒有獨立骨盆座標。體重身高正規化與中央雙側換算相符，但點位與力矩軸未對齊。0.35 為原先門檻，保留供未來定義對齊後使用。",
+          "momentPoint": "iliacCrest"
         },
         {
           "id": "hip",
@@ -300,7 +301,8 @@
             "unit": "Nm/(kg*m)"
           },
           "comparisonRole": "definition-mismatch",
-          "limitations": "原文 Data Reduction 將下背點定為左右髂嵴中點，力矩在遠端節段座標系表達；模型在髖中心上方沿單一軀幹軸 5 cm 取矩，沒有獨立骨盆座標。體重身高正規化與中央雙側換算相符，但點位與力矩軸未對齊。0.35 為原先門檻，保留供未來定義對齊後使用。"
+          "limitations": "原文 Data Reduction 將下背點定為左右髂嵴中點，力矩在遠端節段座標系表達；模型在髖中心上方沿單一軀幹軸 5 cm 取矩，沒有獨立骨盆座標。體重身高正規化與中央雙側換算相符，但點位與力矩軸未對齊。0.35 為原先門檻，保留供未來定義對齊後使用。",
+          "momentPoint": "iliacCrest"
         },
         {
           "id": "hip",

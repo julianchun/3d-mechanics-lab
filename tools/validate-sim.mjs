@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BAR_RATIO, BODY, HEEL_SHANK_SHARE, MODEL_VERSION, analyze, defaultParams, solvePose, withHeelShankShareForValidation } from '../src/biomech.js';
+import { BAR_RATIO, BODY, HEEL_SHANK_SHARE, MODEL_VERSION, analyze, defaultParams, solvePose, withHeelShankShareForValidation, withLumbarPoint } from '../src/biomech.js';
 import { CATALOG } from '../src/catalog.js';
 import trendStatus from '../src/trend-status.json' with { type: 'json' };
 
@@ -101,7 +101,12 @@ function peakEndE(sample, params) {
   return (lo + hi) / 2;
 }
 
+// 研究定義的腰背取矩點（momentPoint）只用於重算模型值，不改產品設定；未註記者維持產品預設點。
 function modelValue(lift, measure, params) {
+  if (measure.momentPoint !== undefined && measure.metric !== 'lumbarExtensionMoment') throw new Error('momentPoint 只適用腰背力矩');
+  return withLumbarPoint(measure.momentPoint ?? 'model5cm', () => modelValueAtPoint(lift, measure, params));
+}
+function modelValueAtPoint(lift, measure, params) {
   const { metric, sample } = measure;
   // 模型沒有獨立骨盆；保留文獻定點，但不虛構骨盆角模型值。
   if (metric === 'pelvisAnteriorTilt') return { value: null, atE: round(sampleE(lift, sample.type, sample, params)) };
@@ -171,6 +176,8 @@ for (const source of sources) {
       if (!(measure.tolerance?.absolute >= 0) || measure.tolerance.unit !== measure.reference.unit) throw new Error(`${id} 容許範圍無效`);
       const reference = referenceValue(measure);
       const actual = withLoad(entry.lift, condition.loadRatio, () => modelValue(entry.lift, measure, params));
+      // 有指定研究取矩點時，另列產品預設 5 cm 的值供對照（診斷用，不進判定）。
+      const at5 = measure.momentPoint ? withLoad(entry.lift, condition.loadRatio, () => modelValue(entry.lift, { ...measure, momentPoint: undefined }, params)) : null;
       const category = measure.comparisonRole ?? 'comparable';
       if (!['comparable', 'definition-mismatch', 'exploratory', 'consistency-check'].includes(category)) throw new Error(`${id} 比對類別無效`);
       const comparableDefinition = category !== 'definition-mismatch';
@@ -182,7 +189,7 @@ for (const source of sources) {
       comparisons.push({
         id, catalogId: condition.catalogId, layer: measure.layer, metric: measure.metric,
         sample: measure.sample, modelParams: condition.params, modelLoadRatio: condition.loadRatio ?? BAR_RATIO[entry.lift], modelE: actual.atE,
-        model: actual.value, reference: comparableDefinition ? round(reference) : null,
+        model: actual.value, ...(measure.momentPoint ? { momentPoint: measure.momentPoint, modelAt5cm: at5.value } : {}), reference: comparableDefinition ? round(reference) : null,
         referenceRaw: measure.reference.mean, referenceSd: measure.reference.sd,
         unit: measure.reference.unit, error: comparableDefinition ? round(error) : null, tolerance: measure.tolerance.absolute,
         category, status: category === 'comparable' ? (withinTolerance ? 'pass' : 'fail') : category,

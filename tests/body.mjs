@@ -54,3 +54,20 @@ for (const [label, body] of [['160 cm 女性', small], ['190 cm 男性', tall]])
   console.log(`${label}：${failures.length} / 63 項有姿勢失敗${failures.length ? `\n${failures.join('\n')}` : ''}`);
 }
 console.log('身體參數 API PASS');
+
+// 腰背取矩點：預設 model5cm 不變；其餘兩點隨身高與性別縮放，且可巢狀還原。
+{
+  const { LUMBAR_POINTS, lumbarOffsetM, lumbarPointName, withLumbarPoint } = await import('../src/biomech.js');
+  assert.equal(lumbarPointName(), 'model5cm');
+  assert.equal(lumbarOffsetM('model5cm', small), 0.05);
+  assert.ok(Math.abs(lumbarOffsetM('iliacCrest', tall) / lumbarOffsetM('iliacCrest', createBody({ heightM: 1.7, sex: 'male' })) - 1.9 / 1.7) < 1e-9);
+  assert.ok(lumbarOffsetM('L5S1', createBody({ sex: 'female' })) > lumbarOffsetM('L5S1', createBody({ sex: 'male' })) * 0.99);
+  assert.equal(createBody().lumbar.iliacCrest, lumbarOffsetM('iliacCrest', createBody()));
+  const Psq = defaultParams('squat');
+  const base = analyze('squat', Psq, 1).dem.trunkExt;
+  const crest = withLumbarPoint('iliacCrest', () => analyze('squat', Psq, 1).dem.trunkExt);
+  assert.notEqual(base, crest);
+  assert.equal(analyze('squat', Psq, 1).dem.trunkExt, base, '離開作用域後還原');
+  assert.throws(() => withLumbarPoint('x', () => {}), /未知腰背取矩點/);
+  assert.equal(Object.keys(LUMBAR_POINTS).length, 3);
+}
