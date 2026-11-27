@@ -10,6 +10,8 @@
 
 ## 肌肉參數
 
+- [DAS3 固定版 `das3.osim`](https://github.com/dasproject/DAS3/blob/d6f2ff0d49ada37bd6c3c1edbacc101ea8d9af92/model/das3.osim)（Apache-2.0）：可切換肩部參數組的 138 條肌肉元素 F／Lf／Lt／羽狀角與路徑點；[Chadwick 等（2014）](https://pubmed.ncbi.nlm.nih.gov/24956613/)描述模型，[Klein Breteler 等（1999）](https://pubmed.ncbi.nlm.nih.gov/10541069/)是其上游解剖資料。逐元素 F 換算鏈未查證；見[肩部參數](shoulder-params.md)。
+
 - [Rajagopal 等（2016）](https://pubmed.ncbi.nlm.nih.gov/27392337/)及[固定版 OpenSim 下肢模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/Rajagopal2016.osim)：下肢肌束最大等長力、纖維長與肌腱參數的主要來源。
 - [Lai、Arnold、Wakeling（2017）](https://pubmed.ncbi.nlm.nih.gov/28900782/)及[固定版 RajagopalLaiUhlrich2023 模型檔](https://github.com/opensim-org/opensim-models/blob/d9b05d470b1a481c222372c85b75772faf8f7792/Models/Rajagopal/RajagopalLaiUhlrich2023.osim)：深屈髖／膝路徑的參考比較；該檔另含 Uhlrich 2022 修正，本版未採用，深蹲底部實際 OpenSim 力臂尚未查證。
 - [Saul 等（2015）MoBL-ARMS](https://pmc.ncbi.nlm.nih.gov/articles/PMC4282829/)及[固定版上肢模型檔](https://github.com/CEINMS-RT/UpperLimbModel/blob/459e2ebbf47acb72b0ecbc59950a2d0a983d28db/MOBL_ARMS_41.osim)：上肢肌束與路徑參數來源；[Holzbaur 等（2005）](https://pubmed.ncbi.nlm.nih.gov/16078622/)是模型前身，並非本專案逐項取值版本。
