@@ -2,9 +2,26 @@
 
 本文件列出目前 [`src/biomech.js`](../../src/biomech.js) 使用的器械幾何、軌道角、配重比例、凸輪阻力曲線與滑輪位置，並標明來源或估計。文獻與原廠資料索引見[參考資料](references.md#器材與阻力曲線)。
 
-目前蝴蝶機、反向蝴蝶機、胸推、肩推、站姿提踵與羅馬椅的座椅／靠墊／握把示範位置會按身材調整；滑軌角、滑輪位置、單槓高度和雙槓握點維持固定。可調部件、範圍與出處狀態見[第 9 節](#9-身材適配與可調範圍)。
+目前蝴蝶機、反向蝴蝶機、胸推、肩推、站姿提踵與羅馬椅的座椅／靠墊／握把示範位置會按身材調整；引體懸垂的肩高與腿姿勢亦依骨長求解。滑軌角、滑輪位置、單槓高度和雙槓握點維持固定。可調部件、範圍與出處狀態見[第 9 節](#9-身材適配與可調範圍)。
 
 > **標示原則**：每個數據均註明來源（文獻 PMID／DOI 或原廠規格）；若因機型差異大或缺乏公開實測值，明確標註「範圍估計」或「未查證」。
+
+## 查證總表（2026-11-27）
+
+表中「已查證」只適用於列明的機型與參數；機架**總高不等於出繩中心或轉軸高度**。所有未查證尺寸維持估計值，不把其他機型的外形尺寸轉成握把坐標。
+
+| 項目 | 已查證並採用或核對 | 未查證、維持估計 |
+|---|---|---|
+| 專用下拉／坐姿划船 | [HDU-DPR](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row) 與 [PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 的 1:1 滑輪比；HDU-DPR 總高 244 cm | 下拉出繩高 235 cm；划船出繩高 42 cm、水平位置 100 cm；均無原廠中心坐標 |
+| 三頭下壓／滑輪夾胸 | [Life Fitness LCM-CC](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)：2:1、滑車 17.8–193.0 cm、總高 239 cm；模型高檔由 210 改 192 cm，夾胸機架高由 215 改 239 cm | 精確出繩中心、柱中心距、站位、短桿尺寸、示範配重；模型中位 134 cm／低位 85 cm 僅為範圍內示例 |
+| 腿推滑台與軌道 | [Titanium Strength GS-45LP](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/)：45°、**空滑台實體質量 50 kg**；模型由 45 改 50 kg | 摩擦、椅背絕對角度及掛片示範重量；其他廠牌標的「起始阻力」不能當實體滑台質量 |
+| 史密斯滑軌與起始阻力 | [Hammer Strength HSSMV](https://www.lifefitness.com/de-de/produkte/strength-training/stationen-mit-gewichtsscheiben/plate-loaded-vertical-smith-machine)：垂直、13.6 kg；[HSSM](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine)：7°、13.6 kg | 摩擦、槓的實體質量、滑軌相對人體站位、示範掛片量；13.6 kg 為有效起始阻力 |
+| 坐姿胸推 | [Life Fitness Axiom OP-CP](https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/axiom-series-chest-press) 證實可調座高 | 模型 43–68 cm 座高、轉軸 172 cm、握把路徑／半徑、靠背位置；無同坐標定義的原廠刻度 |
+| 器械肩推 | [Precor Vitality VSL024BP](https://www.precor.com/en-US/strength/selectorized/vitality) 說明可調起始位置；[Life Fitness Iso-Lateral 手冊](https://resources.lifefitness.com/hub/life-fitness/en-US/1000419-0001-xd_32ce9968be620066-6b5ac64-1817a3e5ec1--7f3d.ditamap?onepage=true) 說明座椅按握把／胸部對齊 | 模型 47 cm 行程、183 cm 轉軸與 43–68 cm 座高數值，沒有同機型量測 |
+| 蝴蝶／反向蝴蝶 | [Precor VSL015BP](https://www.precor.com/en-US/products/VSL015BP) 證實雙用機的可調起始位置與自動適臂機構 | 握把半徑 54／52 cm、前臂墊半徑 29 cm、轉軸位置、42–62 cm 可及範圍、43–68 cm 座高及凸輪力臂，均未查到尺寸刻度 |
+| 腿伸／腿彎舉凸輪 | [Folland 與 Morris 2008](https://pubmed.ncbi.nlm.nih.gov/17885926/) 實測 8 台腿伸機；[Pizzimenti 1992](https://pubmed.ncbi.nlm.nih.gov/1322768/) 實測 Nautilus 俯臥腿彎舉的阻力趨勢 | 未取得可一一對應目前預設機型的逐角度實測力矩表；保留現有示範曲線，不以人體力量曲線代替器械曲線 |
+| 啞鈴握把 | [REP Hex KG](https://repfitness.com/products/hex-dumbbells-kg) 7.5–22.5 kg：長 13.2 cm、直徑 34 mm；模型由 13／32 mm 修正 | 片頭尺寸、示範重量；2.5–5 kg 的 28 mm 細握把未建模 |
+| 引體握點與踏台 | [Life Fitness PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 證實輔助引體機有可折疊踏台 | 模型固定 235 cm 握點、膝墊位置及踏台高度；懸垂肩高與彎腿距離依骨長幾何求解，踏台不參與動作力學 |
 
 ---
 
@@ -14,14 +31,14 @@
 
 | 參數 | 數值／範圍 | 來源與備註 |
 |---|---|---|
-| 滑台軌道傾角 | **45°**（有效重力分量 $\sin 45^\circ \approx 0.7071$） | 標準 45° 掛片腿推機；Escamilla et al. (1998, [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)) 與 Escamilla et al. (2001, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 採用 Body Masters, Inc.（Rayne, LA）設備 |
-| 空滑台重量（Carriage / Sled Weight） | 約 34–57 kg（75–125+ lb）；重型商用款（如 Hammer Strength Linear Leg Press）約 53–60 kg（**無出處的假設**） | **無出處的假設**（未查核單一原廠規格表或同儕審查實測值，僅為常見商用範圍估計；各廠牌結構差異大，實際使用應查該型號手冊） |
+| 滑台軌道傾角 | **45°**（有效重力分量 $\sin 45^\circ \approx 0.7071$） | 預設機型 [Titanium Strength Genesis GS-45LP 官方規格](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/) 明示 45°；Escamilla et al. (1998, [PubMed 9565938](https://pubmed.ncbi.nlm.nih.gov/9565938/)) 與 Escamilla et al. (2001, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 使用不同的 Body Masters 設備 |
+| 空滑台實體質量（Carriage / Sled Mass） | **50 kg（預設）** | [Titanium Strength Genesis GS-45LP 官方規格](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/) 明列「Sled Weight (unloaded): 50 kg」。選此機型因其同時公布 45° 與**實體滑台重量**；模型掛片 1.8× 體重仍為示例。20–65 kg 滑桿範圍為**未查證的示範界線**，不能推及其他機型。[Hammer Strength HSLLP](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-linear-leg-press) 的 53 kg 是「Starting Resistance」，未說明是否為實體滑台質量，不與本欄混用。 |
 | 滑台導軌摩擦係數 $\mu$ | 線性培林／滾輪動態值約 0.05–0.15（**無出處的假設**） | **無出處的假設**；**Escamilla 2001 全文內使用之 Body Masters 特定機台實測摩擦係數未查證**（需查原紙本附錄）。注意：摩擦力方向永遠反於運動方向——向心推起時增加阻力 $(mg(\sin\theta + \mu\cos\theta))$，離心下放時減少阻力 $(mg(\sin\theta - \mu\cos\theta))$ |
 | 椅背與座椅夾角 | 常見可調範圍：靠背與水平約 25°–45°（即離垂直約 45°–65°）（**無出處的假設**） | **無出處的假設**（未查單一原廠規格書）；目前模型 `seat` 參數為離垂直 35°–65°（預設 50°） |
 | 腳位與肌電／關節變化（Escamilla 2001 與 Da Silva 2008 分別支持） | • **寬站距＋高腳位（WS-LPH）**：膕繩肌 EMG 高於窄站距＋高腳位（NS-LPH）；LPH 與 LPL 之間膝關節受力無顯著差異（Escamilla 2001，**未量臀大肌**）<br>• **高腳位（LPH）vs 低腳位（LPL）**：高腳位之**臀大肌** EMG 顯著高於低腳位；低腳位於高負荷（80% 1RM）下**股四頭肌（股直肌、股外側肌）**高於高腳位（Da Silva 2008） | Escamilla et al. (2001, n=10 男性, [PubMed 11528346](https://pubmed.ncbi.nlm.nih.gov/11528346/)) 只支持「寬站距＋高腳位 → 膕繩肌較多」；臀大肌與低腳位股四頭肌差異由 Da Silva et al. (2008, n=14 女性, [PubMed 18545207](https://pubmed.ncbi.nlm.nih.gov/18545207/)) 支持 |
 
 ### 1.2 目前模型
-- 現行 `src/biomech.js` 採 45° 軌道且忽略導軌摩擦（僅算 $\sin 45^\circ$），準靜態下屬合理一階近似；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu$ 數值屬無出處的假設，需以實機測力校正）。
+- 現行 `src/biomech.js` 採 GS-45LP 的 45° 軌道與 50 kg 空滑台；預設 75 kg 身材的 135 kg 示範掛片加滑台共 185 kg，沿軌道準靜態重力約 1,283 N（前版本 180 kg、約 1,249 N）。忽略導軌摩擦；若未來需區分向心／離心差異，可加入 $\pm\mu\cos 45^\circ$（$\mu$ 數值屬無出處的假設，需以實機測力校正）。
 
 ---
 
@@ -31,13 +48,13 @@
 
 | 類型／代表機型 | 軌道角度 | 空槓起始阻力（Starting Resistance） | 配重系統 | 來源 |
 |---|---|---|---|---|
-| **傾斜軌道商用經典**：Hammer Strength Smith Machine（Life Fitness） | **7° 傾斜**（模擬自由重量推／蹲自然弧線） | **30 lb（13.6 kg）** | 無配重或結構平衡標稱起始 30 lb | [Hammer Strength 官方規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine) |
-| **有配重平衡（Counterbalanced）商用款**（如部分 Life Fitness Signature / Cybex / Technogym 款） | 常見 **0°（垂直）或 7°–12°** | **約 15–25 lb（6.8–11.3 kg）**（部分全平衡款標稱可低至 ~15 lb） | 內部滑輪配重塊抵銷部分槓重與滑套重 | 商業健身器材常見規格（各型號差異大，使用特定型號時應查該型號手冊） |
-| **無配重垂直軌道款**（力量訓練／健力房常見） | **0°（完全垂直）** | **約 35–45 lb（16–20.4 kg）**（含線性軸承滑座重量） | 無配重 | 商業器材常見規格 |
+| **垂直軌道預設機型**：Hammer Strength Plate Loaded Vertical Smith Machine `HSSMV` | **0° 垂直** | **30 lb（13.6 kg）** | 官方列的是起始阻力，未說明實體槓質量或配重平衡結構 | [HSSMV 原廠規格](https://www.lifefitness.com/de-de/produkte/strength-training/stationen-mit-gewichtsscheiben/plate-loaded-vertical-smith-machine) |
+| **可選傾斜軌道**：Hammer Strength Smith Machine `HSSM` | **7° 傾斜** | **30 lb（13.6 kg）** | 同樣是標稱起始阻力；反向站位的 −7° 是模型座標轉向 | [HSSM 原廠規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine) |
+| 其他配重平衡與無配重款 | **未查證** | **未查證** | 機型間差異不能用概括範圍代替單一規格 | 未選作預設 |
 
 ### 2.2 力學意義與模型對照
 - 傾斜 7° 的史密斯機在**面向前或背向前**使用時，斜軌方向相反（往後上方 vs 往前上方），會改變身體站位與滑軌法向反作用力方向。
-- 現行 `src/biomech.js` 的 `smithPose` 預設 **0° 垂直滑軌**，亦可選 ±7°；滑軌承受法向反作用力。示範負重與軌道位置仍是假設。
+- 現行 `src/biomech.js` 的 `smithPose` 預設 **HSSMV 的 0° 垂直滑軌**，亦可選 HSSM 的 ±7°；滑軌承受法向反作用力。起始阻力固定 13.6 kg，示範掛片以體重縮放：75 kg 身材掛片 53.9 kg，總 67.5 kg；掛片選擇、摩擦與軌道空間位置仍是假設。起始阻力是使用者感受的有效量，不宣稱槓本身實體質量。
 
 ---
 
@@ -47,15 +64,15 @@
 
 | 動作／設備類型 | 常見滑輪比（配重：實感阻力） | 實際感受到的力 | 典型機架／滑輪高度 | 來源 |
 |---|---|---|---|---|
-| **專用滑輪下拉機（Lat Pulldown）**<br>Hammer Strength HD Elite Dual Pulldown/Row (`HDU-DPR`)<br>Technogym Selection Lat Machine | **1:1**（HDU-DPR 的配重與手感比） | HDU-DPR 選 100 kg 約為手感 100 kg（忽略摩擦） | HDU-DPR：96"（244 cm）；Technogym Selection：90"（228 cm） | [Hammer Strength HDU-DPR 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row)；[Technogym Selection 官方規格](https://www.technogym.com/de-DE/product/selection-lat-machine-med_C91200-ANVK.html) |
-| **專用坐姿低拉划船機（Seated Low Row）**<br>Life Fitness PWR Play 等 | **1:1 為模型預設** | 選 100 kg 約為手感 100 kg（忽略摩擦） | 低滑輪出繩口約 **35–45 cm**，與坐墊同高或略低，為未查證的典型設計估算 | 本模型的機型與尺寸估計；單一原廠出繩中心尺寸未查證 |
-| **多功能可調滑輪柱／大飛鳥（Functional Trainer / Cable Crossover）**（常用於三頭下壓） | **2:1**（所引機型） | 2:1 時選 50 kg 約為手感 25 kg | Life Fitness 滑車高度 **7"–76"（17.8–193.0 cm）**；模型機架頂部約 210–240 cm 為估計 | [Life Fitness Adjustable Cable Crossover 官方規格](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)；[PWR Play 官方手冊](https://support.lifefitness.com/hc/en-us/articles/30762202977431-Life-Fitness-PWR-Play-Assembly-Manual) |
+| **專用滑輪下拉機（Lat Pulldown）**<br>Hammer Strength HD Elite Pulldown/Row `HDU-DPR` | **1:1** | 選 100 kg 約為手感 100 kg（忽略摩擦） | 機架總高 **244 cm**；出繩中心精確高度**未查證**，模型 235 cm 是估計 | [HDU-DPR 原廠規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row) 同列 1:1 與總高；[Life Fitness PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 亦列專用下拉 1:1 |
+| **專用坐姿低拉划船機（Seated Low Row）**<br>Life Fitness PWR Play Row | **1:1** | 選 100 kg 約為手感 100 kg（忽略摩擦） | 模型低出繩中心 **42 cm**、距骨盆前方 100 cm，均**未查證** | [Life Fitness PWR Play 官方頁](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 列專用 Row 1:1，未提供出繩點坐標 |
+| **雙側可調滑輪柱／大飛鳥**<br>Life Fitness Signature Adjustable Cable Crossover `LCM-CC`；三頭下壓示範用單側高檔並接短桿 | **2:1** | 2:1 時選 50 kg 約為手感 25 kg | 官方滑車可調 **7"–76"（17.8–193.0 cm）**、機架總高 **239 cm**；模型高檔 192 cm 在調整區間內，精確出繩中心與滑車標記的偏差**未查證** | [LCM-CC 原廠規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover) 列 2:1、滑車範圍、機架總高；[PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 的**專用**三頭下壓站另為 1:1，並非模型預設機型 |
 
 ### 3.2 與現行模型對照
 - 現行 `src/biomech.js`：
-  - `pulldown`：滑輪高度 `y = 2.35 m`（位於商用 216–244 cm 範圍內，合理）。
-  - `cablerow`：滑輪高度 `y = 0.42 m`、距骨盆中心 `z = 1.0 m`（合理，對應坐墊高 0.47 m）。
-  - `pushdown`：滑輪高度 `y = 2.10 m`（對應可調滑輪高檔或高拉柱，合理）。
+  - `pulldown`：出繩高度 `y = 2.35 m`，低於 HDU-DPR 機架總高 2.44 m，但出繩中心高度仍**未查證**。
+  - `cablerow`：出繩高度 `y = 0.42 m`、距骨盆中心 `z = 1.0 m`，均**未查證**。
+  - `pushdown`：可調滑車高檔 `y = 1.92 m`，對應 LCM-CC 的 17.8–193.0 cm 可調區間；前版本 2.10 m 超出該區間。
 - 注意：現行模型以配重片公斤數除以選定滑輪比求手感鋼索張力；下拉、划船、三頭下壓及滑輪夾胸均可選滑輪比。機架尺寸仍是教學示意值。
 
 ---
@@ -135,6 +152,10 @@
 - **理想人體匹配腿伸凸輪（倒 U 型）**：峰值落在膝屈 ~70°（`x ≈ 0.3`），伸直端（膝屈 15°–20°）需降至峰值之 ~40%。
 - **理想人體匹配腿彎舉凸輪（遞減型）**：接近 `desc`（伸直拉長端重、屈曲縮短端輕，約 1.0 → 0.55）。
 
+#### (E) 腿彎舉機的直接量測
+
+[Pizzimenti（1992，PubMed 1322768）](https://pubmed.ncbi.nlm.nih.gov/1322768/) 實測 Nautilus 俯臥腿彎舉機與 20 名男性在兩種等速條件的膝屈力矩趨勢，摘要指出機台阻力曲線與受試者力矩曲線不吻合。可取得的摘要沒有逐角度、可移植到本模型的原始阻力係數；而目前模型還包含坐姿腿彎舉，故此次**不調整凸輪預設或節點**。原有 `legcurl.human` 是人體曲線示例，並非 Nautilus 機台實測凸輪。
+
 ---
 
 ## 5. 坐姿胸推機（Seated Chest Press Machine）
@@ -159,7 +180,7 @@
 | 設備類型 | 機構與傳動特徵 | 參數／範圍 | 來源與備註 |
 |---|---|---|---|
 | **蝴蝶機（握把式／前臂墊式）** | 雙側獨立機械臂繞位於肩關節正上方附近的**垂直軸**轉動；阻力經凸輪傳動，方向恆為圓弧切線（頂點夾緊時仍維持向外的水平張力） | 傳動多為 1:1 凸輪直連；機械臂半徑（握把 54 cm／前臂墊 29 cm）、等效凸輪基準力臂（22 cm）與溫和鐘型凸輪曲線表皆屬**無出處假設** | 商用雙用蝴蝶機／經典前臂墊式蝴蝶機結構；**未查得單一商用機台公開實測凸輪阻力曲線表** |
-| **雙側可調滑輪柱／大飛鳥（Cable Crossover / Dual Adjustable Pulley）** | 兩手各握獨立 D 型把手、各連一條獨立鋼索（無剛體握把互推）；滑輪可於低／中／高檔調整 | 商用主流滑輪比為 **2:1**（部分四線系統為 4:1）；滑輪高度範圍 **17.8–193.0 cm**（7"–76"），機架高約 **210–240 cm**；柱距 260 cm 與單側 18 kg 配重為假設 | Life Fitness PWR Play / Signature Cable Crossover 規格表（見 §3.1）；站位距離與配重屬模型假設 |
+| **雙側可調滑輪柱／大飛鳥（Cable Crossover / Dual Adjustable Pulley）** | 兩手各握獨立 D 型把手、各連一條獨立鋼索（無剛體握把互推）；滑輪可於低／中／高檔調整 | 所選 Life Fitness `LCM-CC` 的滑輪比 **2:1**、滑車範圍 **17.8–193.0 cm**（7"–76"）、機架總高 **239 cm**；柱距 260 cm、單側 18 kg 示範配重及出繩中心與滑車刻度的對應仍**未查證** | [LCM-CC 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)；站位距離與配重屬模型假設 |
 
 ### 6.2 模型對應
 - `src/biomech.js` 的 `pecDeckPose` 與 `MACHINES.pecdeck` 實作坐姿垂直轉軸圓弧阻力（`padLoads` 搭配切線方向），提供握把式（`style: 'handle'`）與前臂墊式（`style: 'pad'`）。
@@ -182,13 +203,13 @@
 
 ---
 
-## 8. 啞鈴器材與預設負重（未查證單一商用規格）
+## 8. 啞鈴器材與預設負重
 
-啞鈴沒有剛體橫槓連接雙手，模型採共用負重函式 `dumbbellLoads`：每隻手各自承受自己那顆啞鈴的垂直重力（`barAxial = false`，不套用 `minimizeAxialMoment`），高腳杯深蹲則由雙手平分單顆啞鈴重量。以下尺寸與預設重量集中於 `MACHINES.dumbbell`，皆屬教學示意假設：
+啞鈴沒有剛體橫槓連接雙手，模型採共用負重函式 `dumbbellLoads`：每隻手各自承受自己那顆啞鈴的垂直重力（`barAxial = false`，不套用 `minimizeAxialMoment`），高腳杯深蹲則由雙手平分單顆啞鈴重量。握把尺寸採 [REP Fitness Hex Dumbbells (KG) 原廠規格](https://repfitness.com/products/hex-dumbbells-kg) 的 7.5–22.5 kg 段：握把長 5.2"（約 13.2 cm）、直徑 34 mm。這一款與模型常用 8–22 kg 示範負重相近，適合作為外觀預設；2.5–5 kg 段的原廠直徑是 28 mm，模型未做重量分段。片頭尺寸與負重仍屬示範假設：
 
 | 項目 | 模型尺寸與負重假設 | 備註 |
 |---|---|---|
-| 啞鈴共用尺寸 | 握把內距 13 cm、握把直徑 32 mm（半徑 1.6 cm）；兩端八角片半徑 5.5–11.5 cm、寬度 3.2–8.5 cm 隨重量線性縮放 | 無單一原廠出處假設，依常見商用六角／包膠啞鈴外觀估計 |
+| 啞鈴共用尺寸 | 握把長 13.2 cm、直徑 34 mm（半徑 1.7 cm）；兩端八角片半徑 5.5–11.5 cm、寬度 3.2–8.5 cm 隨重量線性縮放 | 握把取 REP Hex KG 7.5–22.5 kg 原廠規格；片頭形狀與尺寸未查證，仍為示範外觀 |
 | 啞鈴臥推（平板／上斜 30°） | 預設每顆 22 kg（雙手 44 kg，略輕於槓鈴臥推 60 kg） | 下放時手可比槓鈴更外、更深並維持前臂接近垂直，頂點向肩上方微內聚（間距 44 cm） |
 | 坐姿啞鈴肩推 | 預設每顆 14 kg（雙手 28 kg）；椅座高 50 cm、椅背後傾 8°（82°） | 手肘預設於肩胛平面（前偏 30°），下放至耳側／肩旁、頂點微內聚（間距 42 cm） |
 | 啞鈴側平舉 | 預設每顆 8 kg | 站姿重心平衡（`standingHands` 且 `barAxial = false`），自體側 14° 沿肩胛或冠狀面平舉至 90° |
@@ -209,6 +230,7 @@
 | 蝴蝶機背墊、反向蝴蝶機胸墊 | 背墊前後距 13.3／15.5／17.7 cm；胸墊前後距 11.1／13.0／14.9 cm，胸墊接點高度隨座高移動 | [Precor Vitality Rear Delt / Pec Fly 官方頁](https://www.precor.com/en-US/products/VSL015BP) 證實同一靠墊提供胸／背支撐；本模型按身高移動接點的距離與範圍**未查證**，為示範假設。 |
 | 站姿提踵肩墊 | 腳台固定 13 cm；肩墊隨肩高逐幀移動，三身材在行程中約 1.34–1.84 m | [Cybex VR1 產品資料](https://kb.cybexintl.com/Product_Info/VR1_Product_Info.pdf) 指出輸入臂可依身高調整。具體高度與本模型逐幀接觸追蹤屬**示範假設**。 |
 | 45° 羅馬椅大腿墊 | 模型可調髖參考高 72–106 cm（總行程 34 cm）；三身材為 81.3／92.0／102.7 cm；踝部滾輪位置固定 | [Cybex Prestige 45° Back Extension 官方規格](https://www.lifefitness.com/en-us/catalog/cybex/cybex-products/cybex-prestige-series-45%C2%BA-back-extension) 公布可調行程 34 cm；72–106 cm 的絕對高度及腿長對應為**示範假設**。 |
-| 三頭下壓、槓鈴彎舉 | 保持滑輪中心 2.10 m／握距設定；以固定握距的橫向位移扣除前臂矢狀面投影，避免少數身材把手推到臂長之外 | 由閉鏈幾何導出；滑輪高度、站位與握把尺寸仍是 §3 的估計值。若姿勢仍不可達，介面顯示繁中警告。 |
+| 三頭下壓、槓鈴彎舉 | 三頭下壓使用 LCM-CC 滑車高檔 1.92 m；握距與前臂矢狀面投影由閉鏈幾何求出，避免少數身材把手推到臂長之外 | 1.92 m 在原廠可調滑車範圍內；實際出繩中心、站位與短桿尺寸仍**未查證**。若姿勢不可達，介面顯示繁中警告。 |
+| 引體向上／輔助引體的懸垂起點 | 固定握點 2.35 m；按臂長與握距求近乎伸直的肩高，腿部彎曲距離按腿長縮放。三身材底點腳尖離地約 71／43／15 cm（徒手），輔助機約 61／32／2.5 cm | 由握點—肩—臂長及腿長的幾何必要條件推得；2.35 m 握點及輔助機膝墊高度仍為**未查證的示範值**。矮身材可踩踏台抓槓，懸吊後離台；踏台不計入運動中的支撐或負重。原廠 [Life Fitness PWR Play](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play) 說明輔助引體站有可折疊腳踏，但未公布握點與腳踏距離；1.5 m 身材需要能讓腳到約 0.7 m 高的上槓輔助，其實機可用性尚未核對。 |
 
-三身材 × 63 項 × 21 點掃描：1.5 m／50 kg 女性正常 1257 點、警告 66 點；預設及 2.0 m／110 kg 男性各正常 1323 點。66 點均為固定高度單槓引體或輔助引體的可及限制；固定握點與膝墊未隨身材伸縮，不代表個人運動禁忌。
+三身材 × 63 項 × 21 點掃描：1.5 m／50 kg 女性、預設及 2.0 m／110 kg 男性各正常 1323 點、警告 0 點。先前矮身材的 66 點不可達已由骨長幾何修正；器械實際握點、膝墊與踏台刻度仍須以實機核對。

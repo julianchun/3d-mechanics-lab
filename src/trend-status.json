@@ -1,5 +1,5 @@
 {
-  "modelVersion": "0.10.0",
+  "modelVersion": "0.10.1",
   "summary": {
     "total": 58,
     "pass": 50,
@@ -72,7 +72,7 @@
         "compare": "腳踩高 (footHigh=0.8) vs 腳踩低 (footHigh=0.2) — 臀大肌活化",
         "expected": "腳踩高 > 腳踩低",
         "ref": "Da Silva 2008 (PMID 18545207, n=14，高腳位臀大肌 EMG 顯著高於低腳位)",
-        "model": "高腳位 = 0.356 a vs 低腳位 = 0.000 a"
+        "model": "高腳位 = 0.370 a vs 低腳位 = 0.000 a"
       },
       {
         "index": 5,
@@ -84,7 +84,7 @@
         "compare": "腳踩高 (footHigh=0.8) vs 腳踩低 (footHigh=0.2) — 髖伸力矩",
         "expected": "腳踩高 > 腳踩低",
         "ref": "Da Silva 2008 (PMID 18545207, n=14，實測臀大肌 EMG 較高，推論髖伸力矩較高)",
-        "model": "高腳位 = 130.3 N·m vs 低腳位 = 6.4 N·m"
+        "model": "高腳位 = 133.9 N·m vs 低腳位 = 6.9 N·m"
       },
       {
         "index": 6,
@@ -96,7 +96,7 @@
         "compare": "腳踩低 (footHigh=0.2) vs 腳踩高 (footHigh=0.8) — 膝伸力矩",
         "expected": "腳踩低 > 腳踩高",
         "ref": "Da Silva 2008 (PMID 18545207, n=14，實測低腳位股四頭肌 EMG 較高，推論膝伸力矩較高)",
-        "model": "低腳位 = 170.4 N·m vs 高腳位 = 111.6 N·m"
+        "model": "低腳位 = 174.8 N·m vs 高腳位 = 114.4 N·m"
       },
       {
         "index": 7,
@@ -108,7 +108,7 @@
         "compare": "高槓深蹲 vs 45° 腿推機 — 膕繩肌活化",
         "expected": "深蹲 > 腿推機",
         "ref": "Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)",
-        "model": "深蹲 = 0.407 a vs 腿推機 = 0.121 a"
+        "model": "深蹲 = 0.407 a vs 腿推機 = 0.127 a"
       }
     ],
     "squat-high": [
@@ -122,7 +122,7 @@
         "compare": "高槓深蹲 vs 45° 腿推機 — 膕繩肌活化",
         "expected": "深蹲 > 腿推機",
         "ref": "Escamilla 1998 (PMID 9565938, n=10, 約 2 倍); Escamilla 2001 (PMID 11528346, n=10)",
-        "model": "深蹲 = 0.407 a vs 腿推機 = 0.121 a"
+        "model": "深蹲 = 0.407 a vs 腿推機 = 0.127 a"
       },
       {
         "index": 8,

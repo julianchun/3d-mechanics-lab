@@ -4,7 +4,7 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.10.0';
+export const MODEL_VERSION = '0.10.1';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -81,30 +81,31 @@ const SEGMENTS = {
 //   因本模型以深蹲 1.0× 體重為基準，採用 1.70／1.83 可同時反映「臀推負重顯著高於深蹲」與「臀橋 5RM 略高於臀推」之實測排序，取代原無出處之 1.3× 假設。
 export const BAR_RATIO = { squat: 1.0, deadlift: 1.2, rdl: 0.9, bench: 0.8, row: 0.7, ohp: 0.5, goodmorning: 0.45, curl: 0.35, shrug: 1.2, uprow: 0.35, hipthrust: 1.7, glutebridge: 1.83,
   // 器械示範負重基準（× 體重；細部設定集中在下方 MACHINES）
-  smith: 0.9, legpress: 2.4, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
+  smith: 0.9, legpress: 2.47, pulldown: 0.6, cablerow: 0.75, pushdown: 0.25, legext: 1.2, legcurl: 0.45, chestpress: 0.9, pecdeck: 0.6, cablefly: 0.24 };
 
 // ---------- 器械規格與參數設定 ----------
 // 每個數值均標註 docs/research/machine-data.md 出處或「假設」（未查得單一原廠／論文實測值）
 export const MACHINES = {
   smith: {
-    railDegDefault: '0',             // docs/research/machine-data.md §2.1：垂直軌道商用款 0°
+    railDegDefault: '0',             // docs/research/machine-data.md §2.1：Hammer Strength HSSMV 垂直軌道
     railDegOptions: [
-      ['0', '0°（垂直軌道）'],       // docs/research/machine-data.md §2.1：力量訓練／健力房常見 0°
+      ['0', '0°（垂直軌道）'],       // docs/research/machine-data.md §2.1：Hammer Strength HSSMV 官方規格
       ['7', '7°（往上微後傾）'],     // docs/research/machine-data.md §2.1：Hammer Strength Smith Machine（Life Fitness 官方規格 7°）
       ['-7', '-7°（反向站位）'],     // docs/research/machine-data.md §2.2：背向／面向使用時斜軌方向相反
     ],
     railZ0: 0,                       // 假設：滑軌於參考高度處之 Z 座標（m）
     railRefY: 1.4,                   // 假設：斜軌參考高度（約站姿扛槓高度，使「腳在槓前方」定義一致）
     railMu: 0,                       // 假設：忽略線性軸承滑軌摩擦
-    barRatio: 0.9,                   // 假設：示範總負重＝0.9× 體重
+    startingKg: 13.6,                // docs/research/machine-data.md §2.1：HSSMV 官方起始阻力 13.6 kg
+    platesRatio: (0.9 * DEFAULT_BODY.mass - 13.6) / DEFAULT_BODY.mass, // 假設：掛片按體重縮放；75 kg 身材總示範阻力維持 67.5 kg
     railHalfSpan: 0.7,               // 假設：左右滑軌半寬（m）
     railHeight: 2.2,                 // 假設：機架高度（m）
   },
   legpress: {
-    railDeg: 45,                     // docs/research/machine-data.md §1.1：標準 45° 掛片腿推機（Escamilla 1998 PMID 9565938、2001 PMID 11528346）
-    sledKgDefault: 45,               // 假設：docs/research/machine-data.md §1.1 空滑台估計 34–57 kg（無單一原廠出處）
+    railDeg: 45,                     // docs/research/machine-data.md §1.1：Titanium Strength GS-45LP 原廠 45° 軌道
+    sledKgDefault: 50,               // docs/research/machine-data.md §1.1：GS-45LP 原廠空滑台實體質量 50 kg
     sledKgRange: [20, 65],           // 假設：輕型至重型商用滑台重量範圍（kg）
-    platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加預設 45 kg 滑台 ＝ 總重 180 kg ＝ 2.4× 體重）
+    platesRatio: 1.8,                // 假設：示範掛片重＝1.8× 體重（135 kg，加已查證 50 kg 滑台 ＝ 總重 185 kg）
     railMuDefault: 0,                // 預設 0（準靜態參考，見 docs/research/machine-data.md §1.2）；設定 μ 時代表向心上限 sinθ + μcosθ，離心為 sinθ − μcosθ（0.05–0.15 為假設範圍）
     railMuRange: [0, 0.15],          // 假設：docs/research/machine-data.md §1.1
     seatDegDefault: 50,              // 假設：docs/research/machine-data.md §1.1 椅背離垂直估計 45°–65°
@@ -130,7 +131,7 @@ export const MACHINES = {
   pushdown: {
     pulleyRatioDefault: '2:1',       // docs/research/machine-data.md §3.1：多功能可調滑輪柱／大飛鳥主流為 2:1（Life Fitness PWR Play 規格表）
     stackKg: 38,                     // 假設：示範配重片＝38 kg（2:1 實感 19 kg ≈ 0.25× 體重；1:1 實感 38 kg）
-    pulleyY: 2.1,                    // docs/research/machine-data.md §3.1：多功能可調滑輪柱機架頂高約 210–240 cm（Life Fitness PWR Play）
+    pulleyY: 1.92,                   // docs/research/machine-data.md §3.1：LCM-CC 可調滑車 17.8–193.0 cm，預設高檔 192 cm
     pulleyZ: 0.58,                   // 假設：站位距滑輪水平距離（m）
     barLen: 0.45,                    // 假設：短直桿寬度（m）
   },
@@ -210,7 +211,7 @@ export const MACHINES = {
     pulleyZ: -0.10,                  // 假設：滑輪柱位於雙腳站位後方 10 cm（人站在大飛鳥門框略前方）
     // docs/research/machine-data.md §3.1：Life Fitness 可調滑輪柱滑車高度範圍 17.8–193.0 cm、機架頂高約 210–240 cm
     pulleyY: { high: 1.92, mid: 1.34, low: 0.85 },
-    towerH: 2.15,                    // 假設：雙側龍門架高度（m）
+    towerH: 2.39,                    // docs/research/machine-data.md §3.1：Life Fitness LCM-CC 機架總高 239 cm
   },
   reversedeck: { seatY: 0.55, handleR: 0.52, pivotX: 0.18, pivotZ: 0.02, pivotY: 1.76, camArm: 0.22, loadKg: 40, chestZ: 0.13 }, // 假設：反向蝴蝶機尺寸與 1:1 配重
   backext: { hipY: 0.92, thighPadZ: -0.16, ankleZ: -0.50, loadKg: 10, padMu: 0.5 }, // 假設：45° 羅馬椅及胸前槓片
@@ -218,10 +219,10 @@ export const MACHINES = {
   machinepress: { seatY: 0.55, pivotY: 1.83, pivotZ: -0.16, loadKg: 40 }, // 假設：肩推機握把與轉軸
   calfraise: { stepY: 0.13, standingKg: 60, seatedKg: 45, padY: 0.64 }, // 假設：前腳掌台階與肩／膝墊配重
   hipabd: { seatY: 0.55, camArm: 0.22, padArm: 0.35, loadKg: 35 }, // 假設：髖外展／內收機槓桿
-  // 假設：啞鈴共用尺寸與預設每顆重量（未查得單一商用廠牌規格，依常見六角／包膠啞鈴估計）
+  // REP Hex KG 握把尺寸已查證；片頭尺寸與預設每顆重量仍為示範估計。
   dumbbell: {
-    handleLen: 0.13,                 // 假設：握把內距 13 cm
-    handleR: 0.016,                  // 假設：握把半徑 1.6 cm（直徑 32 mm）
+    handleLen: 0.132,                // docs/research/machine-data.md §8：REP Hex KG 握把長 5.2" ≈ 13.2 cm
+    handleR: 0.017,                  // docs/research/machine-data.md §8：REP Hex KG 7.5–22.5 kg 握把直徑 34 mm
     benchKg: 22,                     // 假設：啞鈴臥推預設每顆 22 kg（雙手 44 kg，略輕於槓鈴臥推 60 kg）
     pressKg: 14,                     // 假設：坐姿啞鈴肩推預設每顆 14 kg（雙手 28 kg，略輕於站姿槓鈴肩推 37.5 kg）
     latRaiseKg: 8,                   // 假設：側平舉預設每顆 8 kg
@@ -331,7 +332,7 @@ export const LIFTS = {
       { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'load', label: '腰掛負重', left: '徒手', right: '25 kg', min: 0, max: 25, step: 5, def: 0, joint: 'equip', mech: 'A', unit: ' kg' },
     ],
-    standardNote: '從近乎伸直的懸垂姿勢拉到下巴過槓，雙手共同握住固定單槓。',
+    standardNote: '可踩踏台抓住固定單槓，再讓雙腳離台，從近乎伸直的懸垂姿勢拉到下巴過槓。踏台不參與動作中支撐。',
   },
   assistpullup: {
     forearmContact: 'fixed',
@@ -345,7 +346,7 @@ export const LIFTS = {
       { key: 'lean', label: '身體後仰', left: '垂直', right: '後仰', min: 0, max: 20, step: 1, def: 5, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'assist', label: '膝墊輔助', left: '0 kg', right: '60 kg', min: 0, max: 60, step: 5, def: 30, joint: 'equip', mech: 'A', unit: ' kg' },
     ],
-    standardNote: '雙膝跪在輔助墊上，膝墊向上托住部分體重。',
+    standardNote: '可踩踏台或器械踏階握住固定握把，再把雙膝放上輔助墊；動作中膝墊向上托住部分體重。',
   },
   squat: {
     name: '深蹲', bottomLabel: '最低點',
@@ -565,7 +566,7 @@ export const LIFTS = {
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.4, joint: 'ankle', mech: 'A' },
       { key: 'depth', label: '下放深度（最低點膝角度）', left: '75°', right: '125°', min: 0, max: 1, step: 0.01, def: 0.25, joint: 'knee', mech: 'A' },
       { key: 'seat', label: '椅背角度（離垂直）', left: '35°（較直立）', right: '65°（較躺）', min: MACHINES.legpress.seatDegRange[0], max: MACHINES.legpress.seatDegRange[1], step: 1, def: MACHINES.legpress.seatDegDefault, joint: 'equip', mech: 'A', unit: '°' },
-      { key: 'sledKg', label: '空滑台重量（假設）', left: '20 kg（輕型）', right: '65 kg（重型）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'sledKg', label: '空滑台重量', left: '20 kg（示例）', right: '65 kg（示例）', min: MACHINES.legpress.sledKgRange[0], max: MACHINES.legpress.sledKgRange[1], step: 1, def: MACHINES.legpress.sledKgDefault, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'friction', label: '導軌摩擦 μ（假設・向心上限）', left: '0（準靜態參考）', right: '0.15', min: MACHINES.legpress.railMuRange[0], max: MACHINES.legpress.railMuRange[1], step: 0.01, def: MACHINES.legpress.railMuDefault, joint: 'equip', mech: 'A', fmt: 'dec2' },
       { key: 'push', label: '用力點', left: '腳跟', right: '前腳掌', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'B' },
       { key: 'prefGH', label: '髖伸肌偏好', left: '偏臀大肌', right: '偏膕繩肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'hip', mech: 'C', pref: [['gmax'], ['hams']] },
@@ -782,7 +783,7 @@ export const LIFTS = {
   cablefly: {
     forearmContact: 'singleFree',
     name: '滑輪夾胸', topLabel: '夾緊交會', bottomLabel: '外展拉伸',
-    viewCenter: [0, 1.05, 0.05], viewScale: 1.22,
+    viewCenter: [0, 1.20, 0.05], viewScale: 1.55,
     ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'shRot', 'elbExt'],
     pose: cableFlyPose, loads: cableLoads,
     moving: ['shFwd', 'shSide', 'shRot'],
@@ -2275,7 +2276,7 @@ function smithPose(P, e) {
   const S = toWorld(r.tf, shoulderLocal(pose.girdle));
   armChainBent(pose, S, [0.34, r.bar[1], r.bar[2]], norm(add(mul(r.tf.f, -1), [0, -1, 0])), SQ_WRIST.high, [0, 1, 0]);
   pose.bar = r.bar;
-  pose.barW = M.barRatio;
+  pose.barW = M.platesRatio + M.startingKg / BODY.mass;
   pose.barOnBack = true;
   pose.contact = { p: [BODY.hipHalf * 0.5, r.bar[1], r.bar[2]], n: railN, mu: M.railMu, bilateral: true, rail: true };
   // 標準槓穿過兩側滑軌（x = ±0.70），外側掛標準槓片（x = ±0.78、±0.84）
@@ -3544,7 +3545,7 @@ function suspendedPose(P, e, type) {
   const handX = dip ? 0.32 : 0.167 * P.width;
   const handZ = 0;
   const lean = rad(P.lean) * (dip ? 1 : -1);
-  const shoulderY = dip ? lerp(1.58, 1.31 - 0.08 * P.depth, e) : lerp(2.17, 1.77, e);
+  let shoulderY = dip ? lerp(1.58, 1.31 - 0.08 * P.depth, e) : lerp(2.17, 1.77, e);
   const make = (shift) => {
     const u = [0, Math.cos(lean), Math.sin(lean)];
     const hip = [0, shoulderY - BODY.Ltr * u[1], shift];
@@ -3565,7 +3566,8 @@ function suspendedPose(P, e, type) {
       pose.toeDir = [0, 0, -1];
       if (Math.abs(dz) >= BODY.Lt) { pose.ok = false; pose.conflict = '骨盆與固定膝墊距離超出大腿長'; }
     } else {
-      const ankle = [0.14, hip[1] - (dip ? 0.52 : 0.7), hip[2] - (dip ? 0.28 : 0.18)];
+      const legScale = dip ? 1 : (BODY.Ls + BODY.Lt) / (DEFAULT_BODY.Ls + DEFAULT_BODY.Lt);
+      const ankle = [0.14, hip[1] - (dip ? 0.52 : 0.7 * legScale), hip[2] - (dip ? 0.28 : 0.18 * legScale)];
       if (!legChain(pose, ankle, [0, 0, -1], [BODY.hipHalf, hip[1], hip[2]])) {
         pose.ok = false; pose.conflict = '腿部姿勢超出可達範圍';
       }
@@ -3585,7 +3587,19 @@ function suspendedPose(P, e, type) {
     if (bodyweightCenter(p, P, assisted ? P.assist : 0).z > handZ) hi = mid;
     else lo = mid;
   }
-  const pose = make((lo + hi) / 2);
+  const shift = (lo + hi) / 2;
+  let pose = make(shift);
+  if (!dip) {
+    // 單槓固定在 2.35 m；懸垂底點肩高由臂長決定，避免手臂超出骨長。
+    // 站上踏台只為抓到槓；踏台不在動作中接觸腳，也不加入支撐反力。
+    const S = pose.R.shoulder, H = [handX, handY, handZ];
+    const horizontal = Math.hypot(H[0] - S[0], H[2] - S[2]);
+    const maxReach = BODY.Lu + BODY.Lf - 0.005;
+    if (horizontal < maxReach) {
+      shoulderY += e * (H[1] - S[1] - Math.sqrt(maxReach ** 2 - horizontal ** 2));
+      pose = make(shift);
+    }
+  }
   if (Math.abs(bodyweightCenter(pose, P, assisted ? P.assist : 0).z - handZ) > 0.025) {
     pose.warn.push('重心未落在手部支撐線，懸垂姿勢不穩');
   }
