@@ -141,6 +141,19 @@ const KNOWN_ISSUES = [
     cause: 'Murray 1995 兩標本力臂與固定／共握接觸反力偶改變肌肉分配；肩部穩定與單手把手力矩仍未以同條件資料校準',
     fix: '取得同姿勢三維肘肩力矩、手部接觸偶矩及肌電資料後核對；暫不為通過排名或超載準則調參',
   })),
+  ...Object.entries({
+    'cable-row': ['brachioradialis'],
+    pullup: ['brachioradialis'],
+    'pullup-wide': ['brachioradialis'],
+    chinup: ['brachialis', 'brachioradialis'],
+    'assist-chinup': ['brachioradialis'],
+    'db-curl': ['brachioradialis'],
+  }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
+    id, rule: `activation:${muscle}`, kind: '前臂細分超載',
+    current: `${muscle} 的獨立主動活化超過 1，可能被 F 加權一般群組掩蓋`,
+    cause: 'Murray 1995 大體力臂只涵蓋兩標本與部分角度；同負重的肘肩力矩、握持力偶與肌力上限尚未驗證',
+    fix: '取得同條件的前臂肌肉能力、肌電及接觸偶矩後核對；暫不調 F 或設定動作特例',
+  }))),
 ];
 const known = new Map(KNOWN_ISSUES.map((issue) => [`${issue.id}|${issue.rule}`, issue]));
 if (known.size !== KNOWN_ISSUES.length) throw new Error('KNOWN_ISSUES 有重複的動作與規則');
@@ -158,6 +171,7 @@ const check = (id, rule, result) => {
 };
 let checked = 0;
 const catalogIds = new Set();
+const forearmDetailIds = new Set(['bicLong', 'bicShort', 'brachialis', 'brachioradialis', 'pronatorTeres', 'pronatorQuadratus', 'supinator']);
 const declaredRules = new Set();
 for (const c of CATALOG.filter((entry) => entry.lift)) {
   catalogIds.add(c.id);
@@ -166,12 +180,12 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   const overload = new Map();
   for (let i = 0; i <= N; i++) {
     const e = i / N;
-    for (const [id, mus] of Object.entries(analyze(c.lift, P, e).mus).filter(([id]) => MUSCLE_GROUP_IDS.includes(id))) {
+    for (const [id, mus] of Object.entries(analyze(c.lift, P, e).mus).filter(([id]) => MUSCLE_GROUP_IDS.includes(id) || forearmDetailIds.has(id))) {
       if (!Number.isFinite(mus.a) || mus.a > 1.000001) {
         const prior = overload.get(id);
         if (!prior || !Number.isFinite(mus.a) || mus.a > prior.a) overload.set(id, { a: mus.a, e });
       }
-      peaks.set(id, Math.max(peaks.get(id) || 0, mus.s));
+      if (MUSCLE_GROUP_IDS.includes(id)) peaks.set(id, Math.max(peaks.get(id) || 0, mus.s));
     }
   }
   const ranked = [...peaks].sort((a, b) => b[1] - a[1]);
