@@ -1,6 +1,6 @@
 // 力學核心：姿勢求解 → 關節力矩（準靜態）→ 肌肉分配（最小化活化平方和）
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
-import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
+import { shoulderFitVector } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { scapularArmTsm } from './scapular-arms.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
@@ -1118,16 +1118,12 @@ const pathHadd = (id, q) => {
   const t = q.shElev, p = q.shPlane;
   return dot(shoulderFitVector(id, q), [-Math.cos(t) * Math.sin(p), -Math.sin(t), -Math.cos(t) * Math.cos(p)]);
 };
-// 背闊肌、胸大肌（胸骨部與鎖骨部）的肩帶力臂：Seth TSM 肩胛胸廓模型、映射 B（肩胛貼胸廓的可行位移）的上臂方向二次擬合，
+// 肩胛胸廓肌（背闊肌、胸大肌胸骨部與鎖骨部、上／中／下斜方、菱形肌、前鋸肌，DAS3 組另含胸小肌、提肩胛肌）的肩帶力臂：Seth TSM 肩胛胸廓模型、映射 B（肩胛貼胸廓的可行位移）的上臂方向二次擬合，
 // 係數由 tools/scapular_arms_product.py 自 docs/research/results/scapular-arms-data.json 產生（TSM 工具固定提交 399e5bc；擬合誤差與限制見 src/scapular-arms.js 與 docs/research/scapular-arms.md）。
 // TSM 受試者較小，力臂未做體型縮放；背闊肌 scRet 的符號與 DAS3 路徑相反，此處以 TSM 為準（0／+50 mm 敏感度見研究文件）。
 const tsmScapArms = (id) => ({
   scElev: (q) => scapularArmTsm(id, 0, q),
   scRet: (q) => scapularArmTsm(id, 1, q),
-});
-const fittedScapArms = (id) => ({
-  scElev: (q) => shoulderFitScap(id, 0, q),
-  scRet: (q) => shoulderFitScap(id, 1, q),
 });
 // 髖路徑點直線近似：在 0／45／90° 取 ∂肌腱長／∂髖屈角，二次插值；超出路徑可靠區間則固定端點。
 const hipFit = (a, b, c) => (q) => {
@@ -1237,11 +1233,11 @@ export const MUSCLES = [
   { id: 'mdelt', name: '三角肌中束', F: 1650, Lf: 0.1078, Lmt: 0.2173, arms: { shFwd: shoulderArm(0.004, mdeltAbduction, -0.004, 'fwd'), shSide: shoulderArm(0.004, mdeltAbduction, -0.004, 'side') } },
   // 肩胛：力臂相對胸鎖關節；scRet = 後收、scElev = 上提（含上旋）
   // Seth 路徑的中斜方力臂已算出，但直接接入會破壞划船排名；此處保留既有等效值。
-  { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: { scRet: 0.070 } },
-  { id: 'uptrap', name: '斜方肌上束', F: 1500, Lf: 0.15, arms: { scElev: 0.07, scRet: 0.02 } },
-  { id: 'lowtrap', name: '斜方肌下束', F: 500, Lf: 0.15, arms: { scElev: -0.035, scRet: 0.05 } },
+  { id: 'midtrap', name: '斜方肌中束／菱形肌', F: 1000, Lf: 0.12, arms: tsmScapArms('midrhom') },
+  { id: 'uptrap', name: '斜方肌上束', F: 1500, Lf: 0.15, arms: tsmScapArms('uptrap') },
+  { id: 'lowtrap', name: '斜方肌下束', F: 500, Lf: 0.15, arms: tsmScapArms('lowtrap') },
   // 前鋸肌肩帶兩軸用 Seth 三束路徑 F 加權擬合；1000 N 仍是本模型的有效能力估計。
-  { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: fittedScapArms('serr') },
+  { id: 'serr', name: '前鋸肌', F: 1000, Lf: 0.15, arms: tsmScapArms('serr') },
 ];
 if (SHOULDER_PARAMETER_SET === 'das3') {
   const byId = Object.fromEntries(MUSCLES.map((m) => [m.id, m]));
@@ -1276,10 +1272,10 @@ if (SHOULDER_PARAMETER_SET === 'das3') {
       fromDAS3('latLower', oldLat, { group: 'lat', name: '背闊肌下部', arms: latArms(latLowerFlex, 1.2) }),
     ],
     midtrap: [
-      fromDAS3('midtrapPart', oldTrap, { group: 'midtrap', name: '斜方肌中束', arms: { scRet: 0.070 } }),
-      fromDAS3('rhomboid', oldTrap, { group: 'midtrap', name: '菱形肌', arms: { scRet: 0.037, scElev: -0.010 } }),
-      fromDAS3('levscap', oldTrap, { name: '提肩胛肌', arms: { scElev: 0.043, scRet: -0.005 } }),
-      fromDAS3('pmin', oldTrap, { name: '胸小肌', arms: { scElev: -0.075, scRet: -0.039 } }),
+      fromDAS3('midtrapPart', oldTrap, { group: 'midtrap', name: '斜方肌中束', arms: tsmScapArms('midtrap') }),
+      fromDAS3('rhomboid', oldTrap, { group: 'midtrap', name: '菱形肌', arms: tsmScapArms('rhom') }),
+      fromDAS3('levscap', oldTrap, { name: '提肩胛肌', arms: tsmScapArms('levscap') }),
+      fromDAS3('pmin', oldTrap, { name: '胸小肌', arms: tsmScapArms('pmin') }),
     ],
     serr: [
       fromDAS3('serrUpper', oldSerr, { group: 'serr', name: '前鋸肌上部', arms: serrArms(0.887, 0.972) }),

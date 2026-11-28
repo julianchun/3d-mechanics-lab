@@ -162,16 +162,56 @@ const KNOWN_ISSUES = [
     cause: '背闊肌退出划船後肘屈與肩部需求重新分配，肱橈肌由 <1 升到 1.04；前臂細分的 F 與力臂本身尚未驗證',
     fix: '取得同條件前臂肌肉能力與肌電後核對；暫不調 F',
   },
-  ...['dips', 'dips-upright'].flatMap((id) => ['midtrap', 'uptrap', 'corb'].map((muscle) => ({
+  ...['dips', 'dips-upright'].flatMap((id) => ['uptrap', 'corb'].map((muscle) => ({
     id, rule: `activation:${muscle}`, kind: '肩帶力臂改用 TSM', current: `${muscle} 的模型主動活化超過 1`,
-    cause: '撐體 e=0.95：背闊肌（a 1.6）與胸大肌（a 2.1）因肩內收／肩伸需求被推到超載，其 TSM 力臂同時產生遠超需求的肩胛下壓與前伸力矩（背闊肌 scElev／scRet 約 −293／−97 N·m、胸大肌約 −58／−125 N·m，需求 −99／−26），平衡需靠上斜方與中斜方共收縮（約 +239／+105 N·m）抵消；是 scElev／scRet 兩軸耦合的分配結果，不是 F 或力臂擬合誤差。喙肱肌同樣略超載',
+    cause: '撐體 e=0.95：背闊肌與胸大肌被肩內收／肩伸需求推到超載，其 TSM 力臂同時產生遠超需求的肩胛下壓與前伸力矩（需求 −99／−26 N·m），平衡需靠上斜方（TSM scElev 僅約 +30～+43 mm、scRet 約 +73 mm）共收縮抵消，喙肱肌亦略超載；上斜方與前鋸肌（scElev 正、scRet 負）形成上旋力偶是 TSM 幾何的結果，不是 F 或力臂擬合誤差',
     fix: '待斜方、前鋸肌換用有出處的力臂與大圓肌 F 校準後重新檢核；暫不調參',
   }))),
+  ...[
+    ['ohp', 'activation:serr', '站姿肩推前鋸肌主動活化 2.05，超過 1'],
+    ['ohp', 'rank:top2', '站姿肩推前兩名為前鋸肌與上斜方，前三角未進前二'],
+    ['db-press', 'activation:serr', '坐姿啞鈴肩推前鋸肌主動活化 1.45，超過 1'],
+    ['db-press', 'rank:top2', '坐姿啞鈴肩推前兩名為前鋸肌與上斜方，前三角未進前二'],
+    ['machine-press', 'activation:serr', '肩推機前鋸肌主動活化 1.08，超過 1'],
+    ['dips', 'activation:serr', '撐體前鋸肌主動活化 1.49，超過 1'],
+    ['dips-upright', 'activation:serr', '直立撐體前鋸肌主動活化 1.40，超過 1'],
+    ['lat-raise', 'rank:first', '側平舉第一名為前鋸肌，中三角與棘上肌在後'],
+    ['shrug', 'rank:first', '聳肩第一名為前鋸肌，上斜方在後'],
+  ].map(([id, rule, current]) => ({
+    id, rule, kind: '肩帶力臂全面改用 TSM', current,
+    cause: 'TSM 映射 B 的上斜方 scElev 只有約 +31～+43 mm、scRet 約 +73 mm（舊常數 +70／+20 mm）：上提需求（+53～+78 N·m）由上斜方承擔時同時產生約 2 倍的後收，必須由前鋸肌（scElev 約 +55 mm、scRet 約 −65 mm）以上旋力偶抵消，前鋸肌有效 F 只有 1000 N，於是成為瓶頸。肩推 e=0 時上斜方 scRet +107、前鋸肌 −89 N·m 互相抵消。斜方—前鋸肌同為上旋協同肌（Seth 2019），方向有出處，但量值依 TSM 受試者與映射 B；未做體型縮放',
+    fix: '待前鋸肌有效 F（Seth 來源 1325.8 N，產品 1000 N）與肩帶需求定義（肩胛姿勢 girdle 偏移）另行檢討；不為通過排名調整 F 或力臂',
+  })),
+  ...[
+    ['dips', 'activation:trilong', '撐體肱三頭長頭主動活化 1.14，超過 1'],
+    ['dips-upright', 'activation:trilong', '直立撐體肱三頭長頭主動活化 1.22，超過 1'],
+    ['row', 'activation:pdelt', '槓鈴划船後三角主動活化 1.20，超過 1'],
+    ['row-sup', 'activation:pdelt', '槓鈴反握划船後三角主動活化 1.20，超過 1'],
+    ['cable-row-wide', 'activation:pdelt', '寬握坐姿滑輪划船後三角主動活化 1.25，超過 1'],
+    ['row', 'activation:uptrap', '槓鈴划船終點上斜方主動活化 1.0002，略超過 1'],
+    ['row-sup', 'activation:uptrap', '槓鈴反握划船終點上斜方主動活化 1.0002，略超過 1'],
+    ['pullup-wide', 'activation:uptrap', '寬握引體起點上斜方主動活化 1.06，超過 1'],
+  ].map(([id, rule, current]) => ({
+    id, rule, kind: '肩帶力臂全面改用 TSM', current,
+    cause: '肩帶共收縮改變分配：划船終點肩胛上提／後收需求主要由上斜方承擔（TSM 上提力臂較小，需更高活化），再由前鋸肌抵消後收，肩胛上提與肩水平外展需求同時推高上斜方與後三角；撐體與引體則是背闊肌／胸大肌／上斜方的 scElev、scRet 耦合，使三頭長頭或上斜方在峰值幀超載。皆為分配結果，非單一力臂擬合誤差',
+    fix: '待後三角、前鋸肌 F 與肩帶需求定義檢討後重新核對；暫不調參',
+  })),
+  ...[
+    ['row', 'rank:midtrap:top4'], ['row-sup', 'rank:midtrap:top4'], ['cable-row-wide', 'rank:midtrap:top4'],
+  ].map(([id, rule]) => ({
+    id, rule, kind: '肩帶力臂全面改用 TSM', current: '中斜方／菱形肌未進前四（後三角、上斜方、豎脊肌、前鋸肌在前）',
+    cause: 'TSM 中斜方＋菱形 scRet 約 +72～+85 mm 與舊常數 70 mm 相近，但其 scElev 為負（−20～+6 mm）且上斜方 scRet 由 +20 增為 +73 mm，後收需求改由上斜方分攤，中斜方活化降低',
+    fix: '待前鋸、上斜方有效 F 與肩帶需求定義檢討後重新核對；暫不調參',
+  })),
   {
-    id: 'pushup-feet', rule: 'rank:top2', kind: '肩帶力臂改用 TSM',
-    current: '前兩名為三頭肌外側頭與長頭，胸大肌第三（0.29，原 0.45）',
-    cause: '胸大肌 scElev／scRet 力臂放大，肩帶需求由胸大肌承擔後不再需要太高的活化（0.45 → 0.29）；足墊高的伏地挺身胸大肌需求偏低，三頭肌長頭超前',
-    fix: '待斜方、前鋸肌換用有出處的力臂後重新檢核；暫不調參',
+    id: 'pullup', rule: 'rank:top2', kind: '肩帶力臂全面改用 TSM', current: '前兩名為肱肌群與上斜方，背闊肌第四（0.73）',
+    cause: '背闊肌 scElev 力臂放大使其只需約 0.7 即可承擔下壓，上斜方 scElev 力臂偏小（TSM），共收縮抵消背闊肌多餘的下壓力矩；與背闊肌 scRet 符號無關（見 lat-scret-sign.md）',
+    fix: '待前鋸、上斜方有效 F 與肩帶需求定義檢討後重新核對；暫不調參',
+  },
+  {
+    id: 'pullup-wide', rule: 'rank:top2', kind: '肩帶力臂全面改用 TSM', current: '前兩名為上斜方與胸大肌，背闊肌第四（0.76）',
+    cause: '同引體：背闊肌 scElev 放大後所需活化較低，上斜方共收縮居首',
+    fix: '待前鋸、上斜方有效 F 與肩帶需求定義檢討後重新核對；暫不調參',
   },
   {
     id: 'assist-chinup', rule: 'rank:top2', kind: '肩帶力臂改用 TSM',

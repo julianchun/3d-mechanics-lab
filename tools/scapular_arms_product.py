@@ -2,7 +2,7 @@
 
 執行：python3 tools/scapular_arms_product.py [--check]
 不需要 TSM／OpenSim 環境；係數本身的重現流程見 docs/research/scapular-arms.md「重現」。
-目前只輸出背闊肌 lat、胸大肌胸骨部 pecs、胸大肌鎖骨部 pecc（第一步）。
+第一步輸出 lat、pecs、pecc；第二步加入其餘肩胛胸廓肌（uptrap、midrhom＝產品 midtrap、lowtrap、serr、pmin、levscap；midtrap／rhom 供 DAS3 實驗組分束使用）。
 """
 
 import argparse
@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 DATA = ROOT / "docs" / "research" / "results" / "scapular-arms-data.json"
 OUTPUT = ROOT / "src" / "scapular-arms.js"
-IDS = ("lat", "pecs", "pecc")
+IDS = ("lat", "pecs", "pecc", "uptrap", "midrhom", "lowtrap", "serr", "pmin", "levscap", "midtrap", "rhom")
 
 
 def r6(v):
