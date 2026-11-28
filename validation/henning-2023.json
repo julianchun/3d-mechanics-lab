@@ -8,7 +8,7 @@
   },
   "sourceQuality": {
     "rating": "caution",
-    "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+    "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
     "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
   },
   "participants": {
@@ -133,10 +133,10 @@
             "mean": -301.6,
             "sd": 75.7,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算髖關節力矩；圖 10 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, hip-moment",
+          "location": "Table 2, LO, hip-moment; Figure 10, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
@@ -155,10 +155,10 @@
             "mean": -57.8,
             "sd": 30.5,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算膝關節力矩；圖 11 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, knee-moment",
+          "location": "Table 2, LO, knee-moment; Figure 11, p. 18",
           "tolerance": {
             "absolute": 65,
             "unit": "Nm"
@@ -176,10 +176,10 @@
             "mean": -107.6,
             "sd": 26.9,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算踝關節力矩；圖 12 縱軸 Nm、負號標蹠屈矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, ankle-moment",
+          "location": "Table 2, LO, ankle-moment; Figure 12, p. 19",
           "tolerance": {
             "absolute": 60,
             "unit": "Nm"
@@ -197,17 +197,18 @@
             "mean": -42.8,
             "sd": 57.3,
             "unit": "Nm",
-            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+            "definition": "Visual3D 以 6-DOF 逆運動學估 L5S1 關節位置，再用迭代逆動力學估力矩；圖 9 縱軸 Nm、負號標伸矩，表 2 誤標 N。未報參照節段、表達座標系、近端／遠端、內外矩或側別；僅時間軸正規化，未報以體重或身高正規化力矩。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, lumbar",
+          "location": "Table 2, LO, lumbar; Figure 9, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
           "referenceTransform": "negate",
-          "momentPoint": "L5S1"
+          "momentPoint": "L5S1",
+          "limitations": "原文未給完整 L5S1 力矩定義；模型沿單一剛體軀幹軸、在獨立推估的 L5/S1 點取矩，尚無法確認與原研究相同。"
         },
         {
           "id": "kneePassing-trunk",
@@ -302,10 +303,10 @@
             "mean": -267.2,
             "sd": 64.7,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算髖關節力矩；圖 10 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, hip-moment",
+          "location": "Table 2, KP, hip-moment; Figure 10, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
@@ -324,10 +325,10 @@
             "mean": 49.9,
             "sd": 30.8,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算膝關節力矩；圖 11 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, knee-moment",
+          "location": "Table 2, KP, knee-moment; Figure 11, p. 18",
           "tolerance": {
             "absolute": 65,
             "unit": "Nm"
@@ -345,10 +346,10 @@
             "mean": -66.3,
             "sd": 42.1,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算踝關節力矩；圖 12 縱軸 Nm、負號標蹠屈矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, ankle-moment",
+          "location": "Table 2, KP, ankle-moment; Figure 12, p. 19",
           "tolerance": {
             "absolute": 60,
             "unit": "Nm"
@@ -366,17 +367,18 @@
             "mean": -41.9,
             "sd": 49.7,
             "unit": "Nm",
-            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+            "definition": "Visual3D 以 6-DOF 逆運動學估 L5S1 關節位置，再用迭代逆動力學估力矩；圖 9 縱軸 Nm、負號標伸矩，表 2 誤標 N。未報參照節段、表達座標系、近端／遠端、內外矩或側別；僅時間軸正規化，未報以體重或身高正規化力矩。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, lumbar",
+          "location": "Table 2, KP, lumbar; Figure 9, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
           "referenceTransform": "negate",
-          "momentPoint": "L5S1"
+          "momentPoint": "L5S1",
+          "limitations": "原文未給完整 L5S1 力矩定義；模型沿單一剛體軀幹軸、在獨立推估的 L5/S1 點取矩，尚無法確認與原研究相同。"
         }
       ]
     },
@@ -485,10 +487,10 @@
             "mean": -258.8,
             "sd": 114.9,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算髖關節力矩；圖 10 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, hip-moment",
+          "location": "Table 2, LO, hip-moment; Figure 10, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
@@ -507,10 +509,10 @@
             "mean": -53.3,
             "sd": 47.2,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算膝關節力矩；圖 11 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, knee-moment",
+          "location": "Table 2, LO, knee-moment; Figure 11, p. 18",
           "tolerance": {
             "absolute": 65,
             "unit": "Nm"
@@ -528,10 +530,10 @@
             "mean": -81.0,
             "sd": 47.2,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算踝關節力矩；圖 12 縱軸 Nm、負號標蹠屈矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, ankle-moment",
+          "location": "Table 2, LO, ankle-moment; Figure 12, p. 19",
           "tolerance": {
             "absolute": 60,
             "unit": "Nm"
@@ -549,17 +551,18 @@
             "mean": -39.6,
             "sd": 51.3,
             "unit": "Nm",
-            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+            "definition": "Visual3D 以 6-DOF 逆運動學估 L5S1 關節位置，再用迭代逆動力學估力矩；圖 9 縱軸 Nm、負號標伸矩，表 2 誤標 N。未報參照節段、表達座標系、近端／遠端、內外矩或側別；僅時間軸正規化，未報以體重或身高正規化力矩。"
           },
           "evidence": "table",
-          "location": "Table 2, LO, lumbar",
+          "location": "Table 2, LO, lumbar; Figure 9, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
           "referenceTransform": "negate",
-          "momentPoint": "L5S1"
+          "momentPoint": "L5S1",
+          "limitations": "原文未給完整 L5S1 力矩定義；模型沿單一剛體軀幹軸、在獨立推估的 L5/S1 點取矩，尚無法確認與原研究相同。"
         },
         {
           "id": "kneePassing-trunk",
@@ -654,10 +657,10 @@
             "mean": -213.5,
             "sd": 88.4,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算髖關節力矩；圖 10 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, hip-moment",
+          "location": "Table 2, KP, hip-moment; Figure 10, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
@@ -676,10 +679,10 @@
             "mean": 28.0,
             "sd": 57.6,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算膝關節力矩；圖 11 縱軸 Nm、負號標伸矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, knee-moment",
+          "location": "Table 2, KP, knee-moment; Figure 11, p. 18",
           "tolerance": {
             "absolute": 65,
             "unit": "Nm"
@@ -697,10 +700,10 @@
             "mean": -66.3,
             "sd": 45.9,
             "unit": "Nm",
-            "definition": "Visual3D 矢狀面右側內部淨力矩"
+            "definition": "Visual3D 迭代逆動力學估算踝關節力矩；圖 12 縱軸 Nm、負號標蹠屈矩，表 2 誤標 N；側別、內外矩與表達座標系未報。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, ankle-moment",
+          "location": "Table 2, KP, ankle-moment; Figure 12, p. 19",
           "tolerance": {
             "absolute": 60,
             "unit": "Nm"
@@ -718,17 +721,18 @@
             "mean": -35.6,
             "sd": 46.0,
             "unit": "Nm",
-            "definition": "L5/S1 局部力矩，原表誤標 N 且節段參考點不明"
+            "definition": "Visual3D 以 6-DOF 逆運動學估 L5S1 關節位置，再用迭代逆動力學估力矩；圖 9 縱軸 Nm、負號標伸矩，表 2 誤標 N。未報參照節段、表達座標系、近端／遠端、內外矩或側別；僅時間軸正規化，未報以體重或身高正規化力矩。"
           },
           "evidence": "table",
-          "location": "Table 2, KP, lumbar",
+          "location": "Table 2, KP, lumbar; Figure 9, p. 18",
           "tolerance": {
             "absolute": 100,
             "unit": "Nm"
           },
           "comparisonRole": "definition-mismatch",
           "referenceTransform": "negate",
-          "momentPoint": "L5S1"
+          "momentPoint": "L5S1",
+          "limitations": "原文未給完整 L5S1 力矩定義；模型沿單一剛體軀幹軸、在獨立推估的 L5/S1 點取矩，尚無法確認與原研究相同。"
         }
       ]
     }
