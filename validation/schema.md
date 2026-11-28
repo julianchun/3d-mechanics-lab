@@ -31,7 +31,7 @@
 
 `escamilla-2000.json`、`henning-2023.json`、`lee-2018.json` 的研究數值、比較角色與絕對容許差須先獨立提交，再執行任何模型比對；不以模型輸出調整條件。硬舉 `catalogId` 可為 `deadlift`、`sumo`、`deficit-dl`、`block-pull`，RDL 為 `rdl`；清單的 `style`／`start` 必須一致。`loadRatio` 暫時覆寫對應的 `BAR_RATIO.deadlift` 或 `.rdl`，`null` 表示平均負重公斤數未知、只用產品預設作探索；不能聲稱負重對齊。`conditions[].participants` 可覆寫研究整體受試者分布，供 Escamilla 非配對兩組各自抽樣。
 
-`sample.type` 另可為 `liftOff`（硬舉 `e=1`）、`kneePassing`（沿上升路徑找槓心與右膝中心等高）、`fullRange`（頂點至離地槓心垂直位移）。`barVerticalTravelPctHeight` 為槓垂直位移／當前身高 ×100，不包含槓片壓縮或預張力。`referenceTransform: "negate"` 用於研究負號代表伸力矩的表列值，正值代表屈力矩時轉為模型的負伸需求。模型力矩為右側／單腳；Henning 的「average」視為左右平均，並保留側別不確定。L5/S1 研究點與模型單一剛體軀幹不等同，列 `definition-mismatch`。
+`sample.type` 另可為 `liftOff`（硬舉 `e=1`）、`kneePassing`（沿上升路徑找槓心與右膝中心等高）、`fullRange`（頂點至離地槓心垂直位移）。`barVerticalTravelPctHeight` 為槓垂直位移／當前身高 ×100，不包含槓片壓縮或預張力。`referenceTransform: "negate"` 用於研究負號代表伸力矩的表列值，正值代表屈力矩時轉為模型的負伸需求。模型力矩為右側／單腳；Henning 圖題的「average」不能證實是左右平均，研究側別仍未知。原文以 Visual3D 迭代逆動力學估 L5S1、髖、膝、踝關節力矩；表 2 均誤標 N，圖 9–12 均標 Nm。L5S1 的參照節段、表達座標系、內外矩和側別未報，無法對齊模型單一剛體軀幹，四筆維持 `definition-mismatch`；詳見[原文核對](../docs/research/lumbar-point.md#5-henning-原文定義核對)。
 
 Henning 的槓重來自方法頁 8，受試者 SD 用表 1 逐人值計算；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致，負重比例採本文明示的 89.9 kg。其站距、腳尖、鞋型與模型不能完整對齊，來源品質另註記學位論文及表 2 單位錯標。Lee 的平均 1RM 未報，只有最低點膝屈角列可比較；骨盆—大腿髖角及欠站立零位的踝角列定義不一致。Escamilla 的槓位移採原文表 3，來源掃描 OCR 有欄位交錯疑慮。
 

@@ -683,7 +683,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -718,7 +718,7 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -753,7 +753,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -788,7 +788,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -823,11 +823,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, hip-moment",
+      "location": "Table 2, LO, hip-moment; Figure 10, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -858,11 +858,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, knee-moment",
+      "location": "Table 2, LO, knee-moment; Figure 11, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -893,11 +893,11 @@
       "withinTolerance": false,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, ankle-moment",
+      "location": "Table 2, LO, ankle-moment; Figure 12, p. 19",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -930,11 +930,11 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, lumbar",
+      "location": "Table 2, LO, lumbar; Figure 9, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -965,7 +965,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1000,7 +1000,7 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1035,7 +1035,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1070,7 +1070,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1105,11 +1105,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, hip-moment",
+      "location": "Table 2, KP, hip-moment; Figure 10, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1140,11 +1140,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, knee-moment",
+      "location": "Table 2, KP, knee-moment; Figure 11, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1175,11 +1175,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, ankle-moment",
+      "location": "Table 2, KP, ankle-moment; Figure 12, p. 19",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1212,11 +1212,11 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, lumbar",
+      "location": "Table 2, KP, lumbar; Figure 9, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1247,7 +1247,7 @@
       "withinTolerance": false,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1282,7 +1282,7 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1317,7 +1317,7 @@
       "withinTolerance": false,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1352,7 +1352,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1387,11 +1387,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, hip-moment",
+      "location": "Table 2, LO, hip-moment; Figure 10, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1422,11 +1422,11 @@
       "withinTolerance": false,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, knee-moment",
+      "location": "Table 2, LO, knee-moment; Figure 11, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1457,11 +1457,11 @@
       "withinTolerance": false,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, ankle-moment",
+      "location": "Table 2, LO, ankle-moment; Figure 12, p. 19",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1494,11 +1494,11 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, LO, lumbar",
+      "location": "Table 2, LO, lumbar; Figure 9, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1529,7 +1529,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1564,7 +1564,7 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1599,7 +1599,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1634,7 +1634,7 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
@@ -1669,11 +1669,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, hip-moment",
+      "location": "Table 2, KP, hip-moment; Figure 10, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1704,11 +1704,11 @@
       "withinTolerance": true,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, knee-moment",
+      "location": "Table 2, KP, knee-moment; Figure 11, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1739,11 +1739,11 @@
       "withinTolerance": false,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, ankle-moment",
+      "location": "Table 2, KP, ankle-moment; Figure 12, p. 19",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
@@ -1776,11 +1776,11 @@
       "withinTolerance": null,
       "sourceQuality": {
         "rating": "caution",
-        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 將力矩單位誤標 N，本文稱體重均值 89.9 kg，但表 1 逐人計算為 88.9 kg；腰薦力矩的定義與大小亦不明。",
+        "reason": "大學榮譽學位論文，非同儕審查期刊。表 2 的 L5S1、髖、膝、踝力矩皆誤標 N，圖 9–12 縱軸標 Nm；本文體重均值 89.9 kg 與表 1 逐人均值 88.9 kg 不一致。原文未交代力矩的座標系、參照節段、內外矩或側別。",
         "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
       },
       "evidence": "table",
-      "location": "Table 2, KP, lumbar",
+      "location": "Table 2, KP, lumbar; Figure 9, p. 18",
       "source": "https://nyi.whdl.org/sites/default/files/resource/10261667/Henning%2C%20Maddy%20HP.pdf?language=en"
     },
     {
