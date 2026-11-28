@@ -38,10 +38,43 @@ const RANKS = {
   'leg-curl': { first: ['hams'] }, 'lying-leg-curl': { first: ['hams'] }, shrug: { first: ['uptrap'] },
   uprow: { notFirst: ['infra'] },
   rdl: { top3: ['hams'] }, 'good-morning': { top3: ['hams'] },
+  'skull-crusher': { first: ['trilat', 'trilong'] },
+  'db-overhead-ext': { first: ['trilat', 'trilong'] },
+  'cable-overhead-ext': { first: ['trilat', 'trilong'] },
+  'preacher-curl': { top3: ['bic', 'brach'] },
+  'incline-db-curl': { first: ['bic', 'brach'] },
+  'db-front-raise': { first: ['adelt'] },
+  'db-pullover': { top3: ['lat', 'pecs'] },
+  'chest-supported-row': { top3: ['lat', 'midtrap'] },
+  'cable-pull-through': { top3: ['gmax', 'hams'] },
 };
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  ...[
+    ['incline-db-curl', 'rank:first', '胸大肌高於肘屈肌', '後傾椅背與兩手自由承重使肩部穩定分配偏高；現有肌肉模型未經上斜彎舉三維力矩校準'],
+    ['cable-pull-through', 'rank:top3', '髖伸肌未進前三名', '握點隨肩移動後髖伸需求增加，但肩部承受約 172 N 繩索力且站姿軀幹重力較大；肌肉分配尚無同條件量測'],
+    ['db-overhead-ext', 'rank:first', '棘上肌高於三頭肌', '補入肩外展及肩帶自由度後，上舉近 169° 時現有肩肌的有效力臂與最大力不足；原先單一肩屈軸漏算較大的外展需求'],
+    ['cable-overhead-ext', 'rank:first', '後三角高於三頭肌', '修正頭後握點後，後方低滑輪對高舉上臂產生肩伸需求；現有後三角有效能力與出繩口幾何未經校準'],
+  ].map(([id, rule, current, cause]) => ({ id, rule, kind: '新增動作肌群分配', current, cause,
+    fix: '取得同動作的三維握點反力、關節力矩與器材位置後核對；暫不按排名調整肌肉常數' })),
+  ...Object.entries({
+    'db-overhead-ext': ['trilong', 'supsp', 'pdelt', 'mdelt', 'tmaj'],
+    'cable-overhead-ext': ['pdelt'],
+    'db-pullover': ['pdelt', 'supsp'],
+    'chest-supported-row': ['pdelt'],
+    'cable-pull-through': ['adelt'],
+  }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
+    id, rule: `activation:${muscle}`, kind: '新增動作超載',
+    current: `${muscle} 的模型主動活化超過 1`,
+    cause: id === 'cable-pull-through' ? '自然下垂的近直臂仍承受約 172 N 後下方繩索力；肩屈需求及前三角有效能力未經同條件驗證' :
+      id === 'chest-supported-row' ? '胸靠姿勢下肩伸展需求由後三角分擔，現有肩肌能力與胸墊接觸幾何未經同條件校準' :
+      id === 'db-overhead-ext' ? muscle === 'trilong' ? '底端三頭長頭力臂與最大力仍是模型估計，14 kg 共握啞鈴負重未與同條件實測校準' :
+        '補入肩外展的正交力矩後，上舉近極點時棘上肌與後三角等肩肌的有效力臂縮小，現有最大力不足以平衡完整三維需求' :
+      id === 'db-pullover' ? '頭後下放至高舉角時，新增肩外展分量要求棘上肌與後三角承擔更多力矩；有效力臂與同條件三維力矩未校準' :
+        '修正頭後握點後，繩索由後下方拉住高舉把手，後三角有效能力與滑輪站位幾何未以同條件校準',
+    fix: '以實機器材位置、握點反力與三維關節力矩核對；暫不為通過門檻調整 F、力臂或逐動作偏好',
+  }))),
   {
     id: 'hip-thrust', rule: 'trend:gmaxLower', kind: '區域性文獻趨勢',
     current: '臀推臀大肌中下部峰值 0.495，低於高槓深蹲 0.571；Contreras 2015 實測方向相反',

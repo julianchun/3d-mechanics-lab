@@ -4,7 +4,7 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.12.0';
+export const MODEL_VERSION = '0.13.0';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -909,6 +909,97 @@ export const LIFTS = {
       { key: 'prefRear', label: '後三角與背部偏好', left: '偏後三角', right: '偏肩胛後收肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pdelt'], ['midtrap']] },
     ],
     standardNote: '髖鉸鏈俯身約 45～70°、背部中立、膝微彎，雙手各持啞鈴垂於胸前下方，手肘維持微彎向兩側水平外展至與軀幹近平行。',
+  },
+  skullcrusher: {
+    forearmContact: 'sharedRigid', name: '仰臥三頭伸展', topLabel: '伸直', bottomLabel: '下放額後',
+    supine: true, dofs: ['shFwd', 'shSide', 'elbExt'], pose: skullCrusherPose, loads: handBarLoads,
+    moving: ['elbExt'],
+    params: [
+      { key: 'upperTilt', label: '上臂後傾', left: '垂直', right: '向頭後 20°', min: 0, max: 20, step: 1, def: 10, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'bottomFlex', label: '底點屈肘', left: '90°', right: '130°', min: 90, max: 130, step: 1, def: 110, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: 'EZ 槓總重', left: '10 kg', right: '35 kg', min: 10, max: 35, step: 1, def: 20, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefTri', label: '三頭偏好', left: '偏外／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
+    ], standardNote: '平凳仰臥、上臂近垂直並略向頭後；固定上臂，屈肘讓 EZ 槓下放到額後，再伸肘。',
+  },
+  dboverheadext: {
+    forearmContact: 'sharedRigid', name: '坐姿過頭啞鈴三頭伸展', topLabel: '伸直', bottomLabel: '下放頭後',
+    seated: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'], pose: dbOverheadExtPose, loads: sharedDumbbellLoads,
+    moving: ['elbExt'], params: [
+      { key: 'bottomFlex', label: '底點屈肘', left: '85°', right: '125°', min: 85, max: 125, step: 1, def: 105, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '單顆啞鈴重量', left: '6 kg', right: '30 kg', min: 6, max: 30, step: 1, def: 14, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefTri', label: '三頭偏好', left: '偏外／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
+    ], standardNote: '坐穩靠背、雙手托住同一顆啞鈴，上臂留在耳旁，肘部有控制地屈伸。',
+  },
+  cableoverheadext: {
+    forearmContact: 'sharedRigid', name: '滑輪過頭繩索三頭伸展', topLabel: '伸直', bottomLabel: '屈肘',
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'elbExt', 'scElev'],
+    pose: cableOverheadExtPose, loads: cableLoads, moving: ['elbExt'], params: [
+      { key: 'footStance', label: '站姿', type: 'select', options: [['staggered', '前後腳'], ['parallel', '雙腳併站']], def: 'staggered', joint: 'ankle', mech: 'A' },
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: '2:1', joint: 'equip', mech: 'A' },
+      { key: 'lean', label: '軀幹前傾', left: '5°', right: '25°', min: 5, max: 25, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
+      { key: 'bottomFlex', label: '底點屈肘', left: '85°', right: '125°', min: 85, max: 125, step: 1, def: 105, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '配重片重量', left: '10 kg', right: '45 kg', min: 10, max: 45, step: 1, def: 25, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
+    ], standardNote: '背對低滑輪，前後腳站穩；上臂近垂直、肘略朝前上方，握繩從頭後屈肘位置伸至頭前上方。',
+  },
+  preachercurl: {
+    forearmContact: 'sharedRigid', name: '牧師椅彎舉', topLabel: '彎舉頂點', bottomLabel: '手臂伸展',
+    seated: true, dofs: ['shFwd', 'shSide', 'elbExt'], pose: preacherCurlPose, loads: handBarLoads,
+    reactions: preacherReactions, moving: ['elbExt'], params: [
+      { key: 'padAngle', label: '上臂墊前傾', left: '40°', right: '65°', min: 40, max: 65, step: 1, def: 55, joint: 'equip', mech: 'A', unit: '°' },
+      { key: 'topFlex', label: '頂點屈肘', left: '100°', right: '130°', min: 100, max: 130, step: 1, def: 115, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: 'EZ 槓總重', left: '8 kg', right: '30 kg', min: 8, max: 30, step: 1, def: 16, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefBB', label: '屈肘肌偏好', left: '偏二頭', right: '偏肱肌／肱橈肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['bic'], ['brach']] },
+    ], standardNote: '坐穩讓上臂貼住斜墊，肘在墊上緣附近；由近伸直彎舉 EZ 槓，墊子承受上臂反力。',
+  },
+  inclinedbcurl: {
+    forearmContact: 'singleFree', name: '上斜啞鈴彎舉', topLabel: '彎舉頂點', bottomLabel: '手臂下垂',
+    seated: true, dofs: ['shFwd', 'shSide', 'elbExt'], pose: inclineDbCurlPose, loads: dumbbellLoads,
+    moving: ['elbExt'], params: [
+      { key: 'backAngle', label: '椅背相對地面角度', left: '45°', right: '60°', min: 45, max: 60, step: 1, def: 55, joint: 'equip', mech: 'A', unit: '°' },
+      { key: 'topFlex', label: '頂點屈肘', left: '105°', right: '135°', min: 105, max: 135, step: 1, def: 120, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '每顆啞鈴重量', left: '4 kg', right: '22 kg', min: 4, max: 22, step: 1, def: 10, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefBB', label: '屈肘肌偏好', left: '偏二頭', right: '偏肱肌／肱橈肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['bic'], ['brach']] },
+    ], standardNote: '坐於 45–60° 上斜凳，雙臂自然垂於軀幹後方；保持上臂位置由肘彎舉。',
+  },
+  dbfrontraise: {
+    forearmContact: 'singleFree', name: '啞鈴前平舉', topLabel: '舉到肩高', bottomLabel: '雙手垂下',
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'],
+    pose: dbFrontRaisePose, loads: dumbbellLoads, moving: ['shFwd', 'scElev'], params: [
+      { key: 'topHeight', label: '上舉高度', left: '70°', right: '100°', min: 70, max: 100, step: 1, def: 90, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'elbowBend', label: '手肘微彎', left: '10°', right: '35°', min: 10, max: 35, step: 1, def: 20, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '每顆啞鈴重量', left: '2 kg', right: '16 kg', min: 2, max: 16, step: 1, def: 6, joint: 'equip', mech: 'A', unit: ' kg' },
+    ], standardNote: '站穩後雙手各持啞鈴，手肘固定微彎，從大腿前平舉到肩高附近。',
+  },
+  dbpullover: {
+    forearmContact: 'sharedRigid', name: '啞鈴仰臥拉舉', topLabel: '胸前上方', bottomLabel: '下放頭後',
+    supine: true, dofs: ['shFwd', 'shSide', 'elbExt'], optDofs: ['scElev'], pose: dbPulloverPose, loads: sharedDumbbellLoads,
+    moving: ['shFwd'], params: [
+      { key: 'depth', label: '頭後下放角', left: '70°', right: '105°', min: 70, max: 105, step: 1, def: 80, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'elbowBend', label: '肘部微彎', left: '10°', right: '30°', min: 10, max: 30, step: 1, def: 18, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '單顆啞鈴重量', left: '6 kg', right: '30 kg', min: 6, max: 30, step: 1, def: 12, joint: 'equip', mech: 'A', unit: ' kg' },
+    ], standardNote: '平凳仰躺，雙手握同一顆啞鈴，肘固定微彎；從胸上方慢慢移到頭後可控制處。',
+  },
+  chestsupportedrow: {
+    forearmContact: 'singleFree', name: '胸靠上斜啞鈴划船', topLabel: '拉至肋側', bottomLabel: '雙臂下垂',
+    seated: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'trunkExt'],
+    pose: chestSupportedRowPose, loads: dumbbellLoads, reactions: chestRowReactions,
+    moving: ['shFwd', 'elbExt', 'scRet'], params: [
+      { key: 'benchAngle', label: '凳面角度', left: '30°', right: '45°', min: 30, max: 45, step: 1, def: 35, joint: 'equip', mech: 'A', unit: '°' },
+      { key: 'elbowOut', label: '手肘外開', left: '貼身', right: '外開 45°', min: 0, max: 45, step: 1, def: 20, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'load', label: '每顆啞鈴重量', left: '6 kg', right: '30 kg', min: 6, max: 30, step: 1, def: 16, joint: 'equip', mech: 'A', unit: ' kg' },
+    ], standardNote: '胸口貼 30–45° 上斜凳，雙手各持啞鈴從凳兩側下垂向肋側划；胸墊反力納入力學。',
+  },
+  cablepullthrough: {
+    forearmContact: 'sharedRigid', name: '滑輪後拉', topLabel: '伸髖站直', bottomLabel: '髖鉸鏈底點',
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'elbExt'],
+    pose: cablePullThroughPose, loads: cableLoads, moving: ['hipExt', 'trunkExt'], params: [
+      { key: 'footStance', label: '站姿', type: 'select', options: [['parallel', '雙腳平站'], ['staggered', '前後腳']], def: 'parallel', joint: 'ankle', mech: 'A' },
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: '2:1', joint: 'equip', mech: 'A' },
+      { key: 'depth', label: '髖鉸鏈深度', left: '40°', right: '70°', min: 40, max: 70, step: 1, def: 55, joint: 'hip', mech: 'A', unit: '°' },
+      { key: 'load', label: '配重片重量', left: '15 kg', right: '65 kg', min: 15, max: 65, step: 1, def: 35, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
+    ], standardNote: '背對低滑輪，雙腳穩站並讓繩索通過腿間；雙臂近直自然下垂，握點隨肩部前移，以髖鉸鏈下放再伸髖。',
   },
   goblet: {
     name: '高腳杯深蹲', topLabel: '頂點', bottomLabel: '最低點',
@@ -3541,6 +3632,228 @@ function dbReverseFlyPose(P, e) {
   return pose;
 }
 
+// 共用固定上臂路徑：上臂與前臂長度直接定義，避免反解肘位隨行程換支。
+function fixedArm(pose, E, H) {
+  pose.R.elbow = E; pose.R.hand = H; pose.R.grip = H;
+  pose.armPole = norm(cross(sub(E, pose.R.shoulder), sub(H, E)));
+  pose.armOk = true;
+  return pose;
+}
+
+// 平凳沿用啞鈴臥推的軀幹、雙腳及凳面；重新定義垂直上臂的肘屈路徑。
+function skullCrusherPose(P, e) {
+  const pose = dbBenchPose({ incline: '0', arch: 10, depth: 0.4, flare: 50, grip: 'pro', load: P.load }, 0);
+  pose.warn = []; pose.ok = true;
+  const S = pose.R.shoulder, a = rad(P.upperTilt), flex = rad(lerp(8, P.bottomFlex, e));
+  const E = add(S, mul(norm([0.26, Math.cos(a), -Math.sin(a) - 0.06]), BODY.Lu));
+  const H = add(E, [0, BODY.Lf * Math.cos(flex), -BODY.Lf * Math.sin(flex)]);
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barW = P.load / BODY.mass;
+  pose.barStyle = { len: 0.56 }; pose.barAxial = true; pose.dumbbells = [];
+  pose.armJoints = ['shoulder', 'elbow'];
+  return pose;
+}
+
+function dbOverheadExtPose(P, e) {
+  const pose = dbPressPose({ grip: 'neutral', elbowFwd: 30, depth: 0.5, load: P.load }, 0);
+  pose.warn = []; pose.ok = true;
+  const S = pose.R.shoulder, flex = rad(lerp(8, P.bottomFlex, e));
+  const E = add(S, mul(norm([-0.18, 0.968, -0.20]), BODY.Lu));
+  const H = add(E, mul(norm([-0.15, Math.cos(flex), -Math.sin(flex)]), BODY.Lf));
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barW = P.load / BODY.mass;
+  pose.barStyle = 'none'; pose.barAxial = true;
+  pose.dbLoadPt = [0, H[1], H[2]];
+  pose.dumbbells = [{ c: [0, H[1], H[2]], axis: [0, 1, 0], kg: P.load }];
+  pose.armJoints = ['shoulder', 'elbow'];
+  return pose;
+}
+
+function cableOverheadExtPose(P, e) {
+  const pulley = [0, 0.48, -0.85], ratio = pulleyDivisor(P.pulleyRatio);
+  const barW = P.load / (ratio * BODY.mass);
+  const flex = rad(lerp(8, P.bottomFlex, e));
+  const pose = standingHands(P, {
+    kap: rad(8), lean: rad(P.lean), girdle: { ret: rad(0), elev: rad(8) }, barW: 0,
+    ext: (r) => mul(norm(sub(pulley, r.bar)), barW),
+    pole: (tf, r) => [0, 0, 1],
+    barAt: (tf, S) => {
+      // 上臂近垂直，略朝前上方（約 10°）；角度是教練示範幾何，未有同條件量測。
+      const E = add(S, mul(norm([-0.10, 0.98, 0.18]), BODY.Lu));
+      const H = add(E, mul(norm([-0.12, Math.cos(flex), -Math.sin(flex)]), BODY.Lf));
+      return { bar: H, elbow: E };
+    },
+  });
+  fixedArm(pose, pose.r.elbow, pose.r.bar);
+  pose.barW = barW; pose.barStyle = { len: 0.34 }; pose.barAxial = false;
+  pose.bar = [0, pose.R.hand[1], pose.R.hand[2]]; pose.pulley = pulley;
+  pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
+  pose.cables = [[pose.bar, pulley]];
+  pose.boxes = [box([0, 1.08, -1.02], [0.12, 2.16, 0.12], 0, 'frame'),
+    box([0, 0.025, -1.02], [0.42, 0.05, 0.35], 0, 'frame')];
+  return pose;
+}
+
+function preacherCurlPose(P, e) {
+  const pose = seatedBase(-rad(8), 0.54, 0.55);
+  pose.girdle = { ret: rad(8), elev: rad(-4) };
+  const S = toWorld(pose, shoulderLocal(pose.girdle));
+  pose.R.shoulder = S;
+  const a = rad(P.padAngle), ud = norm([0.10, -Math.cos(a), Math.sin(a)]);
+  const n = norm([0, Math.sin(a), Math.cos(a)]);
+  const E = add(S, mul(ud, BODY.Lu));
+  const ef = rad(lerp(12, P.topFlex, 1 - e));
+  const H = add(E, mul(add(mul(ud, Math.cos(ef)), mul(n, Math.sin(ef))), BODY.Lf));
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barW = P.load / BODY.mass;
+  pose.barStyle = { len: 0.5 }; pose.barAxial = true;
+  pose.padContact = add(S, mul(ud, BODY.Lu * 0.63));
+  pose.padNormal = n;
+  pose.armJoints = ['shoulder', 'elbow'];
+  pose.boxes = [
+    box([0, 0.46, 0], [0.42, 0.08, 0.42]),
+    boxAlong(add(pose.padContact, [0, -0.06, -0.025]), ud, [0.42, BODY.Lu * 0.95, 0.07]),
+    box([0, 0.24, 0], [0.1, 0.45, 0.1], 0, 'frame'),
+  ];
+  return pose;
+}
+
+function preacherReactions(pose, P, W, out) {
+  const S = pose.R.shoulder, C = pose.padContact, n = pose.padNormal;
+  let moment = 0;
+  for (const f of out) if (f.region === 'upper' || f.region === 'fore')
+    moment += cross(sub(f.p, S), f.F)[0];
+  const arm = cross(sub(C, S), n)[0];
+  const N = Math.max(0, -moment / arm);
+  if (N === 0 && moment < -0.01) pose.warn.push('上臂離開牧師椅墊，接觸反力無法平衡');
+  const F = mul(n, N);
+  out.push({ p: C, F, region: 'upper' });
+  const seat = [0, 1, 2].map((axis) => -out.reduce((sum, f) => sum + f.F[axis], 0));
+  out.push({ p: pose.R.hip, F: seat, region: 'pelvis' });
+  pose.support = { pad: F, seat };
+}
+
+function inclineDbCurlPose(P, e) {
+  const recl = rad(90 - P.backAngle);
+  const pose = seatedBase(-recl, 0.52, 0.52);
+  pose.girdle = { ret: rad(8), elev: rad(-4) };
+  const S = toWorld(pose, shoulderLocal(pose.girdle));
+  pose.R.shoulder = S;
+  const ud = norm([0.24, -0.97, 0]);
+  const n = [0, 0, 1];
+  const E = add(S, mul(ud, BODY.Lu));
+  const ef = rad(lerp(15, P.topFlex, 1 - e));
+  const H = add(E, mul(add(mul(ud, Math.cos(ef)), mul(n, Math.sin(ef))), BODY.Lf));
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barStyle = 'none'; pose.barAxial = true;
+  pose.barW = 2 * P.load / BODY.mass; pose.gripAxis = [1, 0, 0];
+  pose.dumbbells = pairDumbbells(H, pose.gripAxis, P.load);
+  pose.armJoints = ['shoulder', 'elbow'];
+  pose.boxes = [box([0, 0.45, 0.02], [0.43, 0.08, 0.43]),
+    boxAlong(add(add(pose.Pc, mul(pose.u, 0.34)), mul(pose.f, -0.13)), pose.u, [0.38, 0.74, 0.08]),
+    box([0, 0.23, 0], [0.11, 0.44, 0.12], 0, 'frame')];
+  return pose;
+}
+
+function dbFrontRaisePose(P, e) {
+  const t = 1 - e, a = rad(lerp(8, P.topHeight, t)), ef = rad(P.elbowBend);
+  const pose = standingHands(P, {
+    kap: rad(5), lean: rad(3), girdle: { ret: rad(lerp(0, 5, t)), elev: rad(lerp(-4, 10, t)) },
+    barW: 2 * P.load / BODY.mass, barAxial: false,
+    pole: (tf, r) => [0, 1, 0],
+    barAt: (tf, S) => {
+      const ud = norm(add(add(mul(tf.u, -Math.cos(a)), mul(tf.f, Math.sin(a))), mul(tf.lat, 0.08)));
+      const bend = add(mul(tf.u, Math.sin(a)), mul(tf.f, Math.cos(a)));
+      const E = add(S, mul(ud, BODY.Lu));
+      return { elbow: E, bar: add(E, mul(add(mul(ud, Math.cos(ef)), mul(bend, Math.sin(ef))), BODY.Lf)) };
+    },
+  });
+  fixedArm(pose, pose.r.elbow, pose.r.bar);
+  pose.barStyle = 'none'; pose.barAxial = false;
+  pose.gripAxis = [1, 0, 0]; pose.dumbbells = pairDumbbells(pose.R.hand, pose.gripAxis, P.load);
+  pose.armJoints = ['shoulder', 'elbow'];
+  return pose;
+}
+
+function dbPulloverPose(P, e) {
+  const pose = dbBenchPose({ incline: '0', arch: 10, depth: 0.4, flare: 50, grip: 'neutral', load: P.load }, 0);
+  pose.warn = []; pose.ok = true;
+  const S = pose.R.shoulder, a = rad(lerp(10, P.depth, e)), bend = rad(P.elbowBend);
+  const ud = norm([-0.25, Math.cos(a), -Math.sin(a)]);
+  const fd = norm([-0.10, Math.cos(a - bend), -Math.sin(a - bend)]);
+  const E = add(S, mul(ud, BODY.Lu));
+  const H = add(E, mul(fd, BODY.Lf));
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barStyle = 'none'; pose.barAxial = true;
+  pose.barW = P.load / BODY.mass; pose.dbLoadPt = [0, H[1], H[2]];
+  pose.dumbbells = [{ c: pose.dbLoadPt, axis: [0, 1, 0], kg: P.load }];
+  pose.armJoints = ['shoulder', 'elbow'];
+  return pose;
+}
+
+function chestSupportedRowPose(P, e) {
+  const lean = rad(90 - P.benchAngle);
+  const pose = seatedBase(lean, 0.58, 0.52);
+  pose.girdle = { ret: rad(lerp(14, -6, e)), elev: rad(-4) };
+  const S = toWorld(pose, shoulderLocal(pose.girdle));
+  const x = S[0] + 0.09 + 0.06 * Math.sin(rad(P.elbowOut));
+  const bot = [x, S[1] - 0.48, S[2] + 0.14];
+  const top = [x + 0.04, S[1] - 0.13, S[2] - 0.12];
+  const H = lerpV(top, bot, e);
+  const pole = norm([0.45 + Math.sin(rad(P.elbowOut)), 0.1, -0.5]);
+  if (!armChain(pose, S, H, pole)) { pose.ok = false; pose.conflict = '手臂無法達到此划船握點'; }
+  pose.R.grip = pose.R.hand;
+  pose.bar = [0, H[1], H[2]]; pose.barStyle = 'none'; pose.barAxial = false;
+  pose.barW = 2 * P.load / BODY.mass;
+  pose.gripAxis = [0, 0, 1]; pose.dumbbells = pairDumbbells(H, pose.gripAxis, P.load);
+  pose.chestContact = add(add(pose.Pc, mul(pose.u, BODY.Ltr * 0.66)), mul(pose.f, 0.12));
+  pose.chestNormal = neg(pose.f);
+  pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
+  pose.boxes = [
+    boxAlong(add(pose.chestContact, mul(pose.f, 0.035)), pose.u, [0.42, BODY.Ltr * 0.8, 0.08]),
+    box([0, 0.48, -0.11], [0.36, 0.08, 0.36]),
+    box([0, 0.25, 0], [0.11, 0.5, 0.11], 0, 'frame'),
+  ];
+  return pose;
+}
+
+function chestRowReactions(pose, P, W, out) {
+  const hip = pose.R.hip, C = pose.chestContact, n = pose.chestNormal;
+  let moment = 0;
+  for (const f of out) moment += cross(sub(f.p, hip), f.F)[0];
+  const arm = cross(sub(C, hip), n)[0];
+  const N = Math.max(0, -moment / arm);
+  if (N === 0 && moment > 0.01) pose.warn.push('胸口離開靠墊，胸墊反力無法平衡');
+  const F = mul(n, N);
+  out.push({ p: C, F, region: 'trunk' });
+  const seat = [0, 1, 2].map((axis) => -out.reduce((sum, f) => sum + f.F[axis], 0));
+  out.push({ p: hip, F: seat, region: 'pelvis' });
+  pose.support = { chest: F, seat };
+}
+
+function cablePullThroughPose(P, e) {
+  const pulley = [0, 0.28, -1.0], ratio = pulleyDivisor(P.pulleyRatio);
+  const barW = P.load / (ratio * BODY.mass);
+  const pose = standingHands(P, {
+    kap: rad(18), lean: rad(lerp(4, P.depth, e)), girdle: { ret: rad(0), elev: rad(-4) },
+    barW: 0, ext: (r) => mul(norm(sub(pulley, r.bar)), barW),
+    pole: (tf, r) => [0, 0, 1],
+    barAt: (tf, S) => {
+      // 雙臂自然下垂、肘微彎；握點隨肩部鉸鏈軌跡移動，避免繩索力線被鎖在髖旁。
+      const E = add(S, mul(norm([-0.16, -1, 0.04]), BODY.Lu));
+      const H = add(E, mul(norm([-0.14, -1, 0.20]), BODY.Lf));
+      return { bar: H, elbow: E };
+    },
+  });
+  if (!pose.armOk) { pose.ok = false; pose.conflict = '雙手無法握住腿間繩索'; }
+  pose.barW = barW; pose.barStyle = { len: 0.22 }; pose.barAxial = false;
+  pose.pulley = pulley; pose.cables = [[pose.bar, pulley]];
+  pose.boxes = [box([0, 1.05, -1.17], [0.12, 2.1, 0.12], 0, 'frame'),
+    box([0, 0.025, -1.17], [0.4, 0.05, 0.35], 0, 'frame')];
+  pose.armJoints = ['hip', 'shoulder', 'elbow', 'lumbar'];
+  return pose;
+}
+
 // ---------- 高腳杯深蹲 ----------
 // 下肢小腿曲線與 squatPose 共用；前側負重策略偏移 -0.08，與前蹲一致。
 // 單顆啞鈴垂直捧於胸骨前方（距軀幹軸 21 cm），雙手於上端片下方承托、手肘自然垂於胸側。
@@ -3908,6 +4221,11 @@ function dumbbellLoads(pose, P, W, out) {
   const region = pose.dbRegion || 'fore';
   out.push({ p, F: [0, -(pose.barW * W) / 2, 0], region });
   if (pose.dbForceLine !== false) pose.forceLine = { p, d: [0, -1, 0], is3d: true };
+}
+// 雙手共握同一顆啞鈴可沿握把互推／互拉，與獨立雙啞鈴的接觸不同。
+function sharedDumbbellLoads(pose, P, W, out) {
+  handBarLoads(pose, P, W, out);
+  pose.forceLine = { p: pose.dbLoadPt || pose.R.hand, d: [0, -1, 0], is3d: true };
 }
 
 function coronalFootForce(hip, cop, verticalForce) {

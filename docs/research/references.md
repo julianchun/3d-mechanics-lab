@@ -39,6 +39,7 @@
 - [Titanium Strength GS-45LP 官方規格](https://www.titaniumstrength.co.uk/productpdf/download/file/id/1402/name/45-Degree_Leg_Press.pdf/)：45° 軌道、空滑台實體質量 50 kg；[Hammer Strength HSLLP 官方規格](https://www.lifefitness.com/en-us/catalog/strength-training/plate-loaded/plate-loaded-linear-leg-press)：45°、標稱起始阻力 53 kg，未明列實體滑台質量。
 - [Hammer Strength HSSMV 官方規格](https://www.lifefitness.com/de-de/produkte/strength-training/stationen-mit-gewichtsscheiben/plate-loaded-vertical-smith-machine)：垂直軌道、13.6 kg 起始阻力；[HSSM 官方規格](https://www.lifefitness.com/en-gb/catalog/strength-training/benches/smith-machine)：7°、13.6 kg；[HDU-DPR 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/hd-elite-dual-pulldown-row)：244 cm 總高、配重 1:1。
 - [Life Fitness LCM-CC 官方規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)：2:1、滑車 17.8–193.0 cm、總高 239 cm；[PWR Play 官方頁](https://www.lifefitness.com/en-us/catalog/strength-training/cable-machines-functional-trainers/pwr-play)：專用下拉／划船／三頭下壓的 1:1、可調滑輪 2:1、輔助引體折疊踏台。
+- [REP Fitness AB-3100 官方規格](https://hu.repfitness.com/products/ab-3100-adjustable-weight-bench)：可調凳靠背檔位 0°、30°、45°、60°、75°、90°；本模型的 35°、55° 為示範插值角，不是該產品刻度。
 - [Life Fitness Axiom OP-CP 官方頁](https://www.lifefitness.com/en-us/catalog/strength-training/selectorized/axiom-series-chest-press)、[Precor VSL015BP 官方頁](https://www.precor.com/en-US/products/VSL015BP)：證實座椅與握把／機械臂可調，未提供本模型座標下的半徑、轉軸及座高刻度；[REP Fitness Hex KG 官方規格](https://repfitness.com/products/hex-dumbbells-kg)：7.5–22.5 kg 段握把長 5.2"、直徑 34 mm。其他未查證的示範尺寸見[器械資料](machine-data.md)。
 
 ## 活動度常模
@@ -75,6 +76,9 @@
 ## 各動作生物力學與 EMG
 
 以下沿動作模式列研究來源及文獻結果。肌電、肌肥大、淨關節力矩分屬不同量，不能互作相同數值的驗證。
+
+- [Maeo 等（2023）](https://pubmed.ncbi.nlm.nih.gov/35819335/)：比較過頭與中立肩位肘伸訓練的肱三頭肌肥大；提供肩位選擇的方向依據，沒有本模型的三維關節力矩。
+- [Kobayashi 等（2026）](https://pubmed.ncbi.nlm.nih.gov/42829982/)：比較上斜與牧師椅啞鈴彎舉的肘屈肌適應；牧師椅 EZ 槓與模型角度未在該研究中測試。
 
 ### 蹲（Squat）
 
