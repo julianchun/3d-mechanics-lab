@@ -53,3 +53,5 @@ Henning 的槓重來自方法頁 8，受試者 SD 用表 1 逐人值計算；本
 - `shoulderHorizontalAdductionPeak`／`shoulderHorizontalAdductionRom`／`forearmAngleMean`／`archAngleMean`：研究定義（Figure 2 的零位與參考平面不可由文字核對；胸骨拱形）模型沒有對應量，一律 `definition-mismatch`，不輸出模型值，預記容許差供未來使用。
 
 **取樣型別**：`bottom`（e = 1）、`peak`（401 點最大）、`range`（401 點最大減最小；位移指標取頂點與最低點差）、`barHeightAboveBottom`。`consistency-check` 用於條件已設定同一量（BPNO 底部肩外展）。模型為準靜態、僅垂直槓力、不含橫向力。群體比對的準則不變（|模型群體平均 − 研究平均| ≤ 研究個體 SD）；Larsen 未報身高，只做固定身體。
+
+**T37 定義核對。**Mausehund 的 AB-angle 是頂點伸直手臂與槓的內夾角，用來設定握距；BPNO 另指示底點肩外展約 45°。研究底點肩外展是肱骨長軸相對胸廓矢狀面角，與本工具 `asin(肱骨單位向量 · 胸廓左右軸)` 的文字定義相符；`flare` 只是 IK 肘彎曲方向偏好，不能把 AB-angle 當 `flare`。所以既有 `derivedParams`、`comparisonRole` 和容許差均保留。0.11.0 新增 `arch=0`、`flareMode=manual` 為產品與驗證預設；`arch` 是等效胸骨抬高控制角，並非研究的胸骨線對水平面量測角。三篇研究的已核對正文方法未指定可直接輸入的拱背量，不以研究量測結果反設拱背條件。幾何模式只在[敏感度表](../docs/research/results/bench.md)展示。

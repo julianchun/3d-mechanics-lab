@@ -2011,7 +2011,7 @@ function benchArch(P) {
 
 function benchPose(P, e) {
   const pose = { R: {}, warn: [], ok: true, supine: true };
-  // 地板臥推：背貼地、不拱背、不能上斜；下放到上臂碰地為止
+  // 地板臥推：肩胛支點貼近地面、不能上斜；胸骨可抬起，下放到上臂碰地為止
   const floor = P.surface === 'floor';
   // 上斜：身體繞左右軸轉，頭端抬高；平板時 inc = 0，所有數值與原本相同
   const inc = floor ? 0 : rad(P.incline || 0), ci = Math.cos(inc), si = Math.sin(inc);
@@ -2041,6 +2041,7 @@ function benchPose(P, e) {
   const [, dyT, zBase] = rot([0, h, lerp(0.03, lerp(0.17, 0.09, Math.min(1, inc / rad(45))), P.touch)]);
   const zt = zBase - arch.chestBack;
   const yBot = Sy + dyT + arch.chestLift;
+  if (arch.a) pose.chestArch = { touch: [0, yBot, zt], lift: arch.chestLift };
   // 鎖死點：手臂在肩膀正上方（重力方向），主導決定往觸胸點方向偏多少
   const zLock = lerp(0.0, zt, P.dom);
   const R = 0.985 * (BODY.Lu + BODY.Lf);
@@ -3264,6 +3265,7 @@ function dbBenchPose(P, e) {
   const [, dyT, zBase] = rot([0, hBot, lerp(0.12, 0.08, clamp(inc / rad(30), 0, 1))]);
   const zt = zBase - arch.chestBack;
   const yBot = Sy + dyT + arch.chestLift;
+  if (arch.a) pose.chestArch = { touch: [0, yBot, zt], lift: arch.chestLift };
   const zLock = lerp(0.02, zt, 0.45);
   const R = 0.978 * (BODY.Lu + BODY.Lf);
   const yTop = Sy + Math.sqrt(Math.max(0.05, R * R - (xTop - S[0]) ** 2 - zLock ** 2));
