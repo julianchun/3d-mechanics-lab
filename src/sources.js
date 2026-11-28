@@ -132,6 +132,9 @@ export const SOURCES = {
   'preacher-curl': { assumptions: ['EZ 槓總重 16 kg、斜墊 55° 與接觸點位於上臂長度 63% 處，均為示範假設，未查得對應原廠尺寸。', '墊面向上反力由肩部矢狀面力矩平衡求得，座位承受剩餘合力；不含墊子摩擦或真實壓力分布。2026 年訓練研究使用啞鈴，並非本動作的 EZ 槓。'], refs: ['kobayashi2026curl'] },
   'incline-db-curl': { assumptions: ['上斜凳 55°、每顆啞鈴 10 kg 為教練示範值；原廠可調凳提供 45° 與 60° 檔位，模型用連續角。', '雙臂自然垂於後傾軀幹後方；肘屈與肌肉長度為模型代理。'], refs: ['kobayashi2026curl', 'rep_ab3100'] },
   'db-front-raise': { assumptions: ['兩手各持 6 kg 啞鈴，固定微彎肘 20°，於身前舉至 90°；負重與角度是教練示範值。', '每幀站姿求系統壓力中心於足中段；肌肉活化為模型估計。'], refs: [], noStudy: true },
+  'db-pullover': { assumptions: ['平凳仰躺，兩手握一顆 12 kg 啞鈴，肘微彎 18°，手移到頭後約 80°；均為教練選定的可控制示範值。', '只有右側肩肘與上肢重量納入力矩；胸椎、肋骨與雙手握持力偶未分段。'], refs: [], noStudy: true },
+  'chest-supported-row': { assumptions: ['胸口貼上斜凳，單手各持 16 kg 啞鈴；35° 凳角與接觸點是示範值。原廠可調凳提供 30°／45° 檔位。', '胸墊反力沿墊面法線，由髖部矢狀面平衡求得，座位承受剩餘合力；未計摩擦或真實壓力分布。'], refs: ['rep_ab3100'] },
+  'cable-pull-through': { assumptions: ['背對低滑輪，出繩口高 28 cm、距足中段約 1 m、35 kg 配重均為未查證示範值。', '繩索通過腿間，髖鉸鏈下放約 55°；雙手透過同一繩把承重，前後腳與摩擦未個別分解。'], refs: ['lifefitness_crossover'] },
   pushup: {
     assumptions: [
       '掌根與腳尖為兩個支撐點，依身體各節段重量與可選負重背心求垂直反力；假設沒有水平外力，兩處水平反力為零，因此不需摩擦。左右各自承擔一半，不允許手掌透過剛體槓互推。',
@@ -625,6 +628,7 @@ const LIFT_FALLBACK_ID = {
   dbreversefly: 'db-reverse-fly',
   skullcrusher: 'skull-crusher', dboverheadext: 'db-overhead-ext', cableoverheadext: 'cable-overhead-ext',
   preachercurl: 'preacher-curl', inclinedbcurl: 'incline-db-curl', dbfrontraise: 'db-front-raise',
+  dbpullover: 'db-pullover', chestsupportedrow: 'chest-supported-row', cablepullthrough: 'cable-pull-through',
   goblet: 'goblet-squat',
 };
 

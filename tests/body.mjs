@@ -36,7 +36,7 @@ assert.equal(afterDefault.pose.ok, reference.pose.ok, '硬舉鏈結狀態一致'
 assert.equal(afterDefault.pose.ok, true, '小身材硬舉可解');
 
 // 全清單以各變化式的預設參數掃描，器械可調後兩種身材均須可解。
-assert.equal(CATALOG.length, 63);
+assert.equal(CATALOG.length, 72);
 for (const [label, body] of [['160 cm 女性', small], ['190 cm 男性', tall]]) {
   const failures = [];
   withBody(body, () => {
@@ -51,7 +51,7 @@ for (const [label, body] of [['160 cm 女性', small], ['190 cm 男性', tall]])
     }
   });
   assert.deepEqual(failures.map((entry) => entry.split('（')[0]), [], `${label}的器材姿勢應可成立`);
-  console.log(`${label}：${failures.length} / 63 項有姿勢失敗${failures.length ? `\n${failures.join('\n')}` : ''}`);
+  console.log(`${label}：${failures.length} / ${CATALOG.length} 項有姿勢失敗${failures.length ? `\n${failures.join('\n')}` : ''}`);
 }
 console.log('身體參數 API PASS');
 

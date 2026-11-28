@@ -38,10 +38,40 @@ const RANKS = {
   'leg-curl': { first: ['hams'] }, 'lying-leg-curl': { first: ['hams'] }, shrug: { first: ['uptrap'] },
   uprow: { notFirst: ['infra'] },
   rdl: { top3: ['hams'] }, 'good-morning': { top3: ['hams'] },
+  'skull-crusher': { first: ['trilat', 'trilong'] },
+  'db-overhead-ext': { first: ['trilat', 'trilong'] },
+  'cable-overhead-ext': { first: ['trilat', 'trilong'] },
+  'preacher-curl': { top3: ['bic', 'brach'] },
+  'incline-db-curl': { first: ['bic', 'brach'] },
+  'db-front-raise': { first: ['adelt'] },
+  'db-pullover': { top3: ['lat', 'pecs'] },
+  'chest-supported-row': { top3: ['lat', 'midtrap'] },
+  'cable-pull-through': { top3: ['gmax', 'hams'] },
 };
 
 // 規則照常執行；每項已知失敗都要保留目前結果、原因和預計修正方向。
 const KNOWN_ISSUES = [
+  ...[
+    ['incline-db-curl', 'rank:first', '胸大肌高於肘屈肌', '後傾椅背與兩手自由承重使肩部穩定分配偏高；現有肌肉模型未經上斜彎舉三維力矩校準'],
+    ['cable-pull-through', 'rank:top3', '髖伸肌未進前三名', '繩索水平拉力令肩肘需求主導一般視圖；髖與肩的支撐及受力尚無同條件量測'],
+  ].map(([id, rule, current, cause]) => ({ id, rule, kind: '新增動作肌群分配', current, cause,
+    fix: '取得同動作的三維握點反力、關節力矩與器材位置後核對；暫不按排名調整肌肉常數' })),
+  ...Object.entries({
+    'db-overhead-ext': ['trilong'],
+    'cable-overhead-ext': ['supsp', 'pecs', 'trilong'],
+    'db-pullover': ['pdelt'],
+    'chest-supported-row': ['pdelt'],
+    'cable-pull-through': ['pdelt', 'bicShort', 'tmaj', 'bic', 'bicLong', 'corb'],
+  }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
+    id, rule: `activation:${muscle}`, kind: '新增動作超載',
+    current: `${muscle} 的模型主動活化超過 1`,
+    cause: id === 'cable-pull-through' ? '低滑輪的水平拉力對肩肘形成較大力臂，負重與出繩口位置為未查證示範值' :
+      id === 'chest-supported-row' ? '胸靠姿勢下肩伸展需求由後三角分擔，現有肩肌能力與胸墊接觸幾何未經同條件校準' :
+      id === 'db-overhead-ext' ? '底端三頭長頭力臂與最大力仍是模型估計，14 kg 共握啞鈴負重未與同條件實測校準' :
+      id === 'db-pullover' ? '頭後下放時肩伸力矩與後三角肌能力仍是模型估計，未有同條件三維力矩量測' :
+        '繩索由後方拉住過頭把手，肩部與肘部需求及滑輪站位幾何尚未以同條件校準',
+    fix: '以實機器材位置、握點反力與三維關節力矩核對；暫不為通過門檻調整 F、力臂或逐動作偏好',
+  }))),
   {
     id: 'hip-thrust', rule: 'trend:gmaxLower', kind: '區域性文獻趨勢',
     current: '臀推臀大肌中下部峰值 0.495，低於高槓深蹲 0.571；Contreras 2015 實測方向相反',

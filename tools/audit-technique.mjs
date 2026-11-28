@@ -6,7 +6,8 @@ import { CATALOG } from '../src/catalog.js';
 const data = JSON.parse(fs.readFileSync(new URL('./technique-targets.json', import.meta.url)));
 const output = new URL('../docs/research/results/technique-audit.md', import.meta.url);
 const freeFootLifts = new Set(['squat', 'goblet', 'deadlift', 'rdl', 'goodmorning', 'row', 'dbreversefly',
-  'cablefly', 'ohp', 'uprow', 'pushdown', 'curl', 'latraise', 'dbcurl', 'shrug']);
+  'cablefly', 'ohp', 'uprow', 'pushdown', 'curl', 'latraise', 'dbcurl', 'shrug',
+  'cableoverheadext', 'dbfrontraise', 'cablepullthrough']);
 const deadliftIds = new Set(['deadlift', 'deficit-dl', 'block-pull', 'sumo']);
 // 依 limitations.md 中已列的肌肉分配偏差；未在此列者僅標成姿勢／模型待判讀。
 const knownModel = new Set(['cg-bench', 'db-bench-incline', 'reverse-deck', 'machine-press', 'db-press',
@@ -19,9 +20,9 @@ const fmt = (x, n = 1) => Number(x).toFixed(n);
 const esc = (s) => String(s).replaceAll('|', '／').replaceAll('\n', ' ');
 const active = CATALOG.filter((c) => !c.planned);
 const targetIds = Object.keys(data.entries);
-if (active.length !== 63 || targetIds.length !== active.length ||
+if (active.length !== 72 || targetIds.length !== active.length ||
     active.some((c) => !data.patterns[data.entries[c.id]]) ||
-    targetIds.some((id) => !active.some((c) => c.id === id))) throw new Error('目標肌群資料須逐項覆蓋 63 個清單項目');
+    targetIds.some((id) => !active.some((c) => c.id === id))) throw new Error(`目標肌群資料須逐項覆蓋 ${active.length} 個清單項目`);
 for (const pattern of Object.values(data.patterns)) {
   const groups = [...pattern.targets, ...pattern.synergists, ...pattern.stabilizers];
   const ids = groups.flatMap((g) => g.ids);
@@ -150,7 +151,7 @@ for (const id of ['deadlift', 'deficit-dl', 'block-pull', 'sumo']) {
 }
 const lines = [
   '# 預設動作技術原則稽核', '',
-  `使用預設身體（1.75 m、75 kg）與 63 個清單項目的預設參數，每項取全行程 21 點。結果：符合 ${counts['符合']}、需複查 ${counts['需複查']}、不符合 ${counts['不符合']}。`, '',
+  `使用預設身體（1.75 m、75 kg）與 ${active.length} 個清單項目的預設參數，每項取全行程 21 點。結果：符合 ${counts['符合']}、需複查 ${counts['需複查']}、不符合 ${counts['不符合']}。`, '',
   `目前狀態：可用完整骨架／外力調整的自由站姿模型，預設全行程壓力中心離足底幾何中點均小於 1 cm；滑輪三頭下壓與滑輪夾胸預設前後腳，以兩腳等效支撐中點計算。四種硬舉採槓在足中段、小腿貼槓及右肩胛骨頂點中心在槓上方的 G1 閉鏈幾何；壓力中心隨負重自然偏腳跟。預設 1.2×BW 起槓時，傳統／赤字／墊高／相撲分別偏 ${deadliftDefaultCops.join('／')}。深蹲姿勢維持現有設定；前蹲相對幾何中點偏前 2.7 cm，名義座標仍是足中段解。這些是模型結果，不是實測足底壓力。`, '',
   '「符合」只表示本工具可量化的檢查沒有提示，不代表個人安全、動作正確或增肌效果。姿勢／壓力中心越界列「不符合」；一般雙腳併站動作的壓力中心偏離幾何中段超過 ±5 cm、模型 ROM 與姿勢提示、目標肌群未進前三列「需複查」。硬舉以起槓槓位及右肩胛骨頂點中心相對腳掌中段檢查 G1，偏腳跟本身不標記。前後腳站姿只以壓力中心是否落在兩腳支撐範圍判斷，仍報相對兩腳中點的偏移。±5 cm 是教練指定的一般複查值，不是文獻安全線。', '',
   '硬舉起槓壓力中心（相對腳掌中段，負值偏腳跟）：', '',

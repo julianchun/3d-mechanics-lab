@@ -36,7 +36,7 @@ for (const body of bodies) withBody(body, () => {
       }
     }
   }
-  assert.equal(healthy + warned, 63 * 21);
+  assert.equal(healthy + warned, CATALOG.length * 21);
   stats.push(`${body.heightM} m：正常 ${healthy}，有警告 ${warned}；${[...warnings].join('、') || '無'}`);
 });
 
@@ -54,4 +54,4 @@ for (const lean of [0, 15]) {
   }
   assert.ok(Math.abs(previous - 50) < 0.1, `雙槓 ${lean}° 最低點應約 50° 肩後伸`);
 }
-console.log(`三種身材 × 63 項 × 21 點 PASS；${stats.join('；')}`);
+console.log(`三種身材 × ${CATALOG.length} 項 × 21 點 PASS；${stats.join('；')}`);
