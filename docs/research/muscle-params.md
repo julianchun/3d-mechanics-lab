@@ -55,7 +55,7 @@
 | supsp | SUPSP | 499.2 | 0.0682 | 0.1077 | U，棘上肌；盂肱力臂採路徑擬合 |
 | subsc | SUBSC | 1306.9 | 0.0873 | 0.1203 | U，肩胛下肌 |
 | mdelt | DELT2 原始 F=1103.5 | 1650 | 0.1078 | 0.2173 | **調整**：肩外展功能群有效能力；Lf、Lmt 仍取 U |
-| midtrap | 斜方肌中束／菱形肌 | 1000 | 0.12 | 未使用 | **估計**：未取得 S 對應模型與分束 F、Lf；沿用原值 |
+| midtrap | 斜方肌中束／菱形肌 | 1000 | 0.12 | 未使用 | **估計**：未取得 S 對應模型與分束 F、Lf；沿用原值；肩帶 scElev／scRet 自 0.14.0 起為 TSM 映射 B 擬合（midrhom 群，見下） |
 | uptrap | 斜方肌上束／同側上提功能群 | 1500 | 0.15 | 未使用 | **調整／估計**：以雙側最大上提力與肩帶長度估算單側力矩；肌束 F 未查證 |
 | lowtrap | 斜方肌下束 | 500 | 0.15 | 未使用 | **估計**：同上 |
 | serr | 前鋸肌；S 三束原始 F=1325.8 | 1000 | 0.15 | 未使用 | **調整／估計**：保留既有有效 F，肩帶力臂改用 S 路徑擬合；Lf 未取 S |
@@ -176,7 +176,7 @@ DAS3 對照按固定版 [`tools/data/das3.osim`](../../tools/data/das3.osim) 的
 | trilong | f=`-0.020`；a=`-0.010`；h=`0`；elbExt=`S(+0.020,elbFlex,+0.008)` | 肩與肘的簡化路徑皆**估計** |
 | bicLong | BIClong | 525.1 | 0.1157 | 0.3880 | U；肩屈弦力臂 16.0 mm |
 | bicShort | BICshort | 316.8 | 0.1321 | 0.3244 | U；肩屈弦力臂 21.6 mm |
-| midtrap | scRet=`+0.070` | 70 mm 仍是肩胛等效後收軸**估計**，不是實測 |
+| midtrap | scElev／scRet=`tsmScapArms('midrhom')`（0.14.0 起；原 scRet=`+0.070`） | TSM 映射 B 擬合（中斜方＋菱形 F 加權），約 scElev −20～+6、scRet +72～+85 mm |
 
 其餘下肢、軀幹與未列在此表的肩胛等效力臂見下表。`S(b,k,d)` 是 `b+d×clamp(q[k]/90°,-0.5,1.7)`；`C(x,a,b)` 是截斷；`d(shElev)=1-0.65 C((shElev-90°)/80°,0,1)`（`0.65` 衰減幅度與 `90°→170°` 區間皆為無直接出處的估計）；`rad(n)` 為角度轉弧度。胸鎖等效力臂仍以假定力線和肩帶距離近似，未由 MoBL-ARMS 肌肉包覆路徑重算。
 
@@ -198,12 +198,14 @@ DAS3 對照按固定版 [`tools/data/das3.osim`](../../tools/data/das3.osim) 的
 |---|---:|---|
 | 背闊肌（0.14.0 起） | 2.4／4.7（訓練） | 映射 B 擬合已接入 `scElev`／`scRet`，見下節 |
 | 胸大肌胸骨部、鎖骨部（0.14.0 起） | 2.5／1.5、1.1／1.3 | 同上 |
-| 中斜方＋菱形 | 0.34／0.34 | 路徑擬合已算出；直接替換使划船中斜方掉出前四，保留原等效力臂 |
-| 上斜方（肩胛＋鎖骨束） | 0.09／0.57 | 直接替換使肩推／划船出現新失敗；保留依上提量測校準的既有能力 |
-| 下斜方 | 1.72／1.67 | 直接替換使坐姿划船出現新排名失敗；保留原等效力臂 |
-| 前鋸肌 | 8.96／7.37 | 兩軸擬合已採用；來源 F=1325.8 N，本模型仍用有效 F=1000 N |
+| 中斜方＋菱形（0.14.0 起） | 1.2／1.1（訓練） | 映射 B 擬合已接入 |
+| 上斜方（0.14.0 起） | 0.9／0.3 | 映射 B 擬合已接入；舊敘述「直接替換使肩推／划船出現新失敗」仍成立，見下 |
+| 下斜方（0.14.0 起） | 2.0／1.8 | 映射 B 擬合已接入 |
+| 前鋸肌（0.14.0 起） | 2.7／0.9 | 改用映射 B 擬合（原為 MoBL 節律剛體擬合，scRet 約 −110 mm）；來源 F=1325.8 N，本模型仍用有效 F=1000 N |
 
-**背闊肌與胸大肌的肩帶力臂（0.14.0，T45 第一步）：** `lat`、`pecs`、`pecc` 的 `scElev`／`scRet` 不再用常數（lat −30 mm、pecs −25 mm、pecc 無），改用 `src/scapular-arms.js`。來源：[Seth 等 2016](https://pubmed.ncbi.nlm.nih.gov/26734761/) 的 TSM 肩胛胸廓模型（`TSM_subject_noWeight.osim`，工具固定提交 `399e5bc`、模型 SHA-256 `c357e61e…c7a9ff`），映射 B（肩胛貼胸廓的可行位移，約束反力不作功；[van der Helm 1994](https://pubmed.ncbi.nlm.nih.gov/8027089/) 支持滑動面反力不可忽略）；以 78 個上臂方向格點求力臂，對 `h=[外側,上,前]` 二次擬合，產品姿勢樣本外 RMS ≤ 4.4 mm（背闊肌 scRet 最大差 19 mm）。典型值：背闊肌 `scElev` −120～−145 mm、胸大肌 −24～−41 mm，與研究文件 [scapular-arms.md](scapular-arms.md) 的 TSM-B 表一致；DAS3 獨立路徑給出同量級（背闊肌 −87～−154 mm）。重生：`python3 tools/scapular_arms_product.py`（係數取自 `results/scapular-arms-data.json`，不需 TSM 環境），`tools/check-generated.sh` 核對。限制：TSM 受試者較小（上臂 0.247 m 對產品 0.287 m），**未縮放體型**（±10%）；產品姿勢多在肩胛節律夾界範圍；沒有任何針對這兩個軸的實測。**背闊肌 `scRet` 的符號 TSM（−19～−41 mm）與 DAS3（+29～+62 mm）相反**，本模型以 TSM（映射 B）為準；研究文件的 0／+50 mm 敏感度顯示引體、下拉結論不受影響，但划船、下拉的肩胛前後向分配會依此改變，若有肌電證據需回頭驗證。鎖骨部胸大肌 `pecc` 與胸骨部同批：同一條肌肉、同一來源與擬合品質（樣本外 RMS 2.6／2.9 mm），其 `scRet` 約 −15～−34 mm、`scElev` 約 −3～+9 mm，分開處理沒有依據。斜方、前鋸、胸小肌、提肩胛肌留待下一步；需求定義、F 不變。DAS3 實驗組的 `lat`／`pecSternal`／`pecAbdominal` 沿用同一擬合（沒有分束係數）。
+**背闊肌與胸大肌的肩帶力臂（0.14.0，T45 第一步）：** `lat`、`pecs`、`pecc` 的 `scElev`／`scRet` 不再用常數（lat −30 mm、pecs −25 mm、pecc 無），改用 `src/scapular-arms.js`。來源：[Seth 等 2016](https://pubmed.ncbi.nlm.nih.gov/26734761/) 的 TSM 肩胛胸廓模型（`TSM_subject_noWeight.osim`，工具固定提交 `399e5bc`、模型 SHA-256 `c357e61e…c7a9ff`），映射 B（肩胛貼胸廓的可行位移，約束反力不作功；[van der Helm 1994](https://pubmed.ncbi.nlm.nih.gov/8027089/) 支持滑動面反力不可忽略）；以 78 個上臂方向格點求力臂，對 `h=[外側,上,前]` 二次擬合，產品姿勢樣本外 RMS ≤ 4.4 mm（背闊肌 scRet 最大差 19 mm）。典型值：背闊肌 `scElev` −120～−145 mm、胸大肌 −24～−41 mm，與研究文件 [scapular-arms.md](scapular-arms.md) 的 TSM-B 表一致；DAS3 獨立路徑給出同量級（背闊肌 −87～−154 mm）。重生：`python3 tools/scapular_arms_product.py`（係數取自 `results/scapular-arms-data.json`，不需 TSM 環境），`tools/check-generated.sh` 核對。限制：TSM 受試者較小（上臂 0.247 m 對產品 0.287 m），**未縮放體型**（±10%）；產品姿勢多在肩胛節律夾界範圍；沒有任何針對這兩個軸的實測。**背闊肌 `scRet` 的符號 TSM（−19～−41 mm）與 DAS3（+29～+62 mm）相反**，本模型以 TSM（映射 B）為準；研究文件的 0／+50 mm 敏感度顯示引體、下拉結論不受影響，但划船、下拉的肩胛前後向分配會依此改變，若有肌電證據需回頭驗證。鎖骨部胸大肌 `pecc` 與胸骨部同批：同一條肌肉、同一來源與擬合品質（樣本外 RMS 2.6／2.9 mm），其 `scRet` 約 −15～−34 mm、`scElev` 約 −3～+9 mm，分開處理沒有依據。需求定義、F 不變。DAS3 實驗組的 `lat`／`pecSternal`／`pecAbdominal` 沿用同一擬合（沒有分束係數）。
+
+**其餘肩胛胸廓肌（0.14.0，T45 第二步）：** 同一來源與映射，`uptrap`、`midtrap`（TSM 的 `midrhom` 群）、`lowtrap`、`serr` 也換成擬合；DAS3 實驗組另用 `midtrap`、`rhom`、`pmin`（胸小肌）、`levscap`（提肩胛肌）各自的擬合，前鋸上／下部沿用 `serr` 乘原比例。預設（legacy）組沒有胸小肌與提肩胛肌。所有係數取自同一資料檔，沒有選擇性採用或調整。TSM 的上斜方 scRet（約 +73 mm）遠大於舊常數（+20 mm），其後收須由前鋸肌（scRet 約 −65 mm）抵消，這一對斜方—前鋸力偶使前鋸肌在肩推、聳肩、側平舉等上提需求大的動作成為瓶頸（見 `tests/plausibility.mjs` 的已知問題）。
 
 在水平位（`shElev=90°`、`shPlane=90°`），背闊肌擬合水平外展力臂約 13.5 mm，目前模型採用這個投影值；大圓肌約 15.8 mm。目前後三角曲線的 40 mm 與路徑擬合約 41.5 mm 同量級，因此保留其幾何曲線。固定版 U 的 `DELT3` 最大等長力**確為 201.6 N**，但與本模型合併功能群不等價。將後三角有效 F 設為 675 N，於該姿勢計算背闊、大圓、後三角的水平外展理論上限約 `1500×0.0135 + 144×0.0158 + 675×0.040 = 49.5 N·m`。對照 [Duaibes 2010 原始研究](https://journals.najah.edu/media/journals/full_texts/isokinetic-dynamometry-measuring-bilateral-shoulder-peak-torque-comparison-and-prediction.pdf) 的 23 名年輕男性**等速**肩水平外展平均峰值 49.38 N·m；量測方式與模型準靜態上限不同，故此 F 是功能群校準。垂臂肩伸的約 111 N·m 亦在 [Danneskiold-Samsøe 2009](https://onlinelibrary.wiley.com/doi/10.1111/j.1748-1716.2009.02022.x) 男性單側等長肩伸 91.9±19.7 N·m 的約一個標準差上緣。這兩項是量級交叉檢查，不是個體肌力預測。
 
@@ -241,9 +243,9 @@ DAS3 對照按固定版 [`tools/data/das3.osim`](../../tools/data/das3.osim) 的
 | trilat | elbExt=`S(+0.022,elbFlex,+0.006)` | **估計**：肘包覆未解析 |
 | brachialis | BRA | 1177.4 | 0.0858 | 0.1393 | U；肱肌 |
 | brachioradialis | BRD | 276.0 | 0.1726 | 0.3056 | U；肱橈肌 |
-| uptrap | scElev=`+0.070`；scRet=`+0.020` | **估計**：胸鎖等效上提／後收軸 |
-| lowtrap | scElev=`-0.035`；scRet=`+0.050` | **估計**：下束只作下壓肌；未表示其上旋功能 |
-| serr | `shoulderFitScap(serr,scRet/scElev,q)` | Seth TSM 前鋸肌三束路徑 F 加權擬合；本模型有效 F 仍為估計 |
+| uptrap | scElev／scRet=`tsmScapArms('uptrap')`（0.14.0 起；原 +0.070／+0.020） | TSM 映射 B 擬合，約 scElev +29～+43、scRet +72～+74 mm；與舊常數差大（上提力臂約減半、後收力臂約 3.6 倍） |
+| lowtrap | scElev／scRet=`tsmScapArms('lowtrap')`（0.14.0 起；原 −0.035／+0.050） | TSM 映射 B 擬合，約 scElev −24～−65、scRet +41～+67 mm，隨上舉角變化 |
+| serr | `tsmScapArms('serr')`（0.14.0 起；原為 MoBL 節律姿勢的剛體虛功擬合） | TSM 映射 B 擬合，約 scElev +6～+65、scRet −44～−69 mm；本模型有效 F 仍為估計 |
 
 胸鎖等效力臂的計算規則應為 `r_axis=(p_attachment-p_SC)×u_muscle · axis`。現有 `GIRDLE` 只提供胸鎖與肩中心，沒有可供數值重建的肩胛肌束端點與胸廓包覆面。**現值未經該公式逐條重算，仍是估計**；視覺用 `rig.js/ATTACH` 也不能當成解剖端點。
 
