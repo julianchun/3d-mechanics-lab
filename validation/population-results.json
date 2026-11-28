@@ -1992,6 +1992,62 @@
       "withinFigureTolerance": true
     }
   ],
+  "demersRawLandmark": [
+    {
+      "condition": "medium",
+      "thighDeg": 20,
+      "modelMean": 6.9103,
+      "modelSd": 1.4136,
+      "referenceApprox": 8,
+      "figureTolerance": 2,
+      "withinFigureTolerance": true
+    },
+    {
+      "condition": "medium",
+      "thighDeg": 40,
+      "modelMean": 11.8897,
+      "modelSd": 2.7196,
+      "referenceApprox": 16.5,
+      "figureTolerance": 2,
+      "withinFigureTolerance": false
+    },
+    {
+      "condition": "medium",
+      "thighDeg": 60,
+      "modelMean": 16.4121,
+      "modelSd": 3.5096,
+      "referenceApprox": 21,
+      "figureTolerance": 2,
+      "withinFigureTolerance": false
+    },
+    {
+      "condition": "wide",
+      "thighDeg": 20,
+      "modelMean": 6.1087,
+      "modelSd": 1.3974,
+      "referenceApprox": 7.2,
+      "figureTolerance": 2,
+      "withinFigureTolerance": true
+    },
+    {
+      "condition": "wide",
+      "thighDeg": 40,
+      "modelMean": 10.4667,
+      "modelSd": 2.7035,
+      "referenceApprox": 15.2,
+      "figureTolerance": 2,
+      "withinFigureTolerance": false
+    },
+    {
+      "condition": "wide",
+      "thighDeg": 60,
+      "modelMean": 14.4714,
+      "modelSd": 3.5555,
+      "referenceApprox": 19.5,
+      "figureTolerance": 2,
+      "withinFigureTolerance": false
+    }
+  ],
   "benchSkippedNoHeight": [
     "larsen-bench-2021"
   ]

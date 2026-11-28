@@ -79,3 +79,32 @@ for (const id of lifts) {
 }
 console.log(out.join('\n'));
 console.log('\nANSUR II 男性 CV（SD/平均）：' + anthro.keys.map((k) => `${k} ${f(cv[k] * 100, 2)}%`).join('、'));
+
+// ---- Demers 平均身體對換算方式的敏感度（只用平均長度，無個體變異；一致性檢查，不是獨立驗證）----
+// 表 1 的長度是外觀標記；換成模型關節中心長度的係數（bodyFromRow：預設骨架長度／ANSUR 男性平均標記長度）
+// 是假設的每節段固定比例，不是量測的幾何換算。
+{
+  const { solvePose } = await import('../src/biomech.js');
+  const demers = JSON.parse(fs.readFileSync(new URL('../validation/calibration/demers-2018.json', import.meta.url)));
+  const mk = (Lt, Ls, Ltr) => { const r = Object.fromEntries(anthro.keys.map((k) => [k, DEFAULT_BODY[k] / 1.75])); r.Lt = Lt / 1.75; r.Ls = Ls / 1.75; r.Ltr = Ltr / 1.75; return createBody({ heightM: 1.75, massKg: 75, ratios: r }); };
+  const male = (k) => mean(anthro.male.map((r) => r[idx[k]])) * 1.75;
+  const ansur = mk(DEFAULT_BODY.Lt * 0.40 / male('Lt'), DEFAULT_BODY.Ls * 0.40 / male('Ls'), DEFAULT_BODY.Ltr * 0.54 / male('Ltr'));
+  const raw = mk(0.40, 0.40, 0.54);
+  const half = mk((ansur.Lt + raw.Lt) / 2, (ansur.Ls + raw.Ls) / 2, (ansur.Ltr + raw.Ltr) / 2);
+  const set = [['預設身體', createBody()], ['ANSUR 映射', ansur], ['半途映射', half], ['外觀標記長度直接用', raw]];
+  const thigh = (p) => { const v = sub(p.R.knee, p.R.hip); return deg(Math.atan2(Math.abs(v[2]), -v[1])); };
+  const df = (p) => { const s = sub(p.R.knee, p.R.ankle); return deg(Math.atan2(dot(s, p.toeDir), p.footUp ? dot(s, p.footUp) : s[1])); };
+  const six = demers.conditions.flatMap((c) => c.measurements.map((m) => ({ c, m })));
+  console.log('\n### Demers 平均身體敏感度（Lt／Ls／Ltr，m；六點誤差 = 模型 − 圖讀，°）\n');
+  console.log('| 身體 | Lt／Ls／Ltr | ' + six.map(({ c, m }) => `${c.id} ${m.sample.targetDeg}°`).join(' | ') + ' | ±2° 內 |');
+  console.log('|---|---|' + six.map(() => '---:').join('|') + '|---:|');
+  for (const [name, body] of set) {
+    const errs = six.map(({ c, m }) => withBody(body, () => {
+      const P = { ...defaultParams('squat'), ...c.params };
+      let lo = 0, hi = 1;
+      for (let i = 0; i < 30; i++) { const mid = (lo + hi) / 2; if (thigh(solvePose('squat', P, mid)) < m.sample.targetDeg) lo = mid; else hi = mid; }
+      return df(solvePose('squat', P, (lo + hi) / 2)) - df(solvePose('squat', P, 0)) - m.reference.mean;
+    }));
+    console.log(`| ${name} | ${f(body.Lt, 3)}／${f(body.Ls, 3)}／${f(body.Ltr, 3)} | ${errs.map((x) => f(x, 1)).join(' | ')} | ${errs.filter((x) => Math.abs(x) <= 2).length}/6 |`);
+  }
+}
