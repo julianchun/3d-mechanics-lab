@@ -73,6 +73,8 @@ export function resolveBenchParams(base, derived = {}) {
   };
   if (derived.grip) solveGrip();
   if (derived.flare) {
+    // 研究條件明訂底部外展角時，反解的是手動 flare；幾何模式不讀取此旋鈕。
+    params = { ...params, flareMode: 'manual' };
     const rule = derived.flare;
     const abd = (flare) => armAngles(pose({ ...params, flare }, 1)).abduction;
     const r = solveRange(rule.deg, rule.range[0], rule.range[1], abd, 'flare');

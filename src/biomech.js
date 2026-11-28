@@ -4,7 +4,7 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.11.0';
+export const MODEL_VERSION = '0.11.1';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -469,8 +469,8 @@ export const LIFTS = {
       { key: 'incline', label: '椅背角度', left: '平板 0°', right: '上斜 45°', min: 0, max: 45, step: 1, def: 0, joint: 'equip', mech: 'A', unit: '°' },
       { key: 'grip', label: '握距（× 肩峰寬）', left: '0.8（窄握）', right: '2.0', min: 0.8, max: 2, step: 0.01, def: 1.6, joint: 'hand', mech: 'A' },
       { key: 'flare', label: '手肘外開角度', left: '30°', right: '90°', min: 30, max: 90, step: 1, def: 52, joint: 'elbow', mech: 'A', unit: '°' },
-      { key: 'flareMode', label: '手肘位置模式', type: 'select', options: [['manual', '手動角度'], ['vertical', '觸胸時前臂近垂直']], def: 'manual', joint: 'elbow', mech: 'A' },
-      { key: 'arch', label: '胸椎拱起／胸骨抬高', left: '0°（原姿勢）', right: '30°', min: 0, max: 30, step: 1, def: 0, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'flareMode', label: '手肘位置模式', type: 'select', options: [['manual', '手動角度'], ['vertical', '觸胸時前臂近垂直']], def: 'vertical', joint: 'elbow', mech: 'A' },
+      { key: 'arch', label: '胸椎拱起／胸骨抬高', left: '0°（原姿勢）', right: '30°', min: 0, max: 30, step: 1, def: 10, joint: 'shoulder', mech: 'A', unit: '°' },
       { key: 'scap', label: '肩胛後收', left: '前伸', right: '完全後收', min: 0, max: 1, step: 0.01, def: 0.8, joint: 'shoulder', mech: 'A' },
       { key: 'touch', label: '觸胸點', left: '上胸', right: '下胸', min: 0, max: 1, step: 0.01, def: 0.6, joint: 'bar', mech: 'A' },
       { key: 'bend', label: '把槓折彎', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'B' },
@@ -692,7 +692,7 @@ export const LIFTS = {
       { key: 'path', label: '握把軌跡', type: 'select', options: [['linear', '直線軌跡'], ['converging', '內聚弧線（頂點收攏）']], def: MACHINES.chestpress.pathDefault, joint: 'equip', mech: 'A' },
       { key: 'grip', label: '握把寬度（× 肩峰寬）', left: '0.8', right: '2.0', min: 0.8, max: 2, step: 0.01, def: 1.5, joint: 'hand', mech: 'A' },
       { key: 'flare', label: '手肘外開角度', left: '30°', right: '90°', min: 30, max: 90, step: 1, def: 55, joint: 'elbow', mech: 'A', unit: '°' },
-      { key: 'flareMode', label: '手肘位置模式', type: 'select', options: [['manual', '手動角度'], ['vertical', '觸胸時前臂近垂直']], def: 'manual', joint: 'elbow', mech: 'A' },
+      { key: 'flareMode', label: '手肘位置模式', type: 'select', options: [['manual', '手動角度'], ['vertical', '觸胸時前臂近垂直']], def: 'vertical', joint: 'elbow', mech: 'A' },
       { key: 'touch', label: '握把高度', left: '上胸', right: '下胸', min: 0, max: 1, step: 0.01, def: 0.5, joint: 'bar', mech: 'A' },
       { key: 'scap', label: '肩胛後收', left: '前伸', right: '完全後收', min: 0, max: 1, step: 0.01, def: 0.7, joint: 'shoulder', mech: 'A' },
       { key: 'prefPD', label: '肩水平內收偏好', left: '偏胸', right: '偏前三角', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pecs', 'pecc'], ['adelt']] },
@@ -836,7 +836,7 @@ export const LIFTS = {
     params: [
       { key: 'incline', label: '凳面角度', type: 'select', options: [['0', '平板 0°'], ['30', '上斜 30°']], def: '0', joint: 'equip', mech: 'A' },
       { key: 'depth', label: '下放深度', left: '平胸（較淺）', right: '深拉伸', min: 0, max: 1, step: 0.01, def: 0.6, joint: 'shoulder', mech: 'A' },
-      { key: 'arch', label: '胸椎拱起／胸骨抬高', left: '0°（原姿勢）', right: '30°', min: 0, max: 30, step: 1, def: 0, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'arch', label: '胸椎拱起／胸骨抬高', left: '0°（原姿勢）', right: '30°', min: 0, max: 30, step: 1, def: 10, joint: 'shoulder', mech: 'A', unit: '°' },
       { key: 'flare', label: '手肘外展角', left: '30°（較夾）', right: '80°（較開）', min: 30, max: 80, step: 1, def: 50, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'grip', label: '握法', type: 'select', options: [['pro', '正握'], ['neutral', '對握（掌心相對）']], def: 'pro', joint: 'hand', mech: 'A' },
       { key: 'load', label: '每顆重量', left: '8 kg', right: '40 kg', min: 8, max: 40, step: 2, def: MACHINES.dumbbell.benchKg, joint: 'equip', mech: 'A', unit: ' kg' },
