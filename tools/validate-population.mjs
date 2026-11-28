@@ -192,22 +192,36 @@ const sensitivity = sensitivityIds.map((id) => {
     longThigh: round(run(1)) };
 });
 
-// Demers 圖讀六點只診斷：原文未報身高、體重；直接用表 1 的節段長度平均 ±SD。
+// Demers 圖讀六點只診斷：原文未報身高、體重；用表 1 的節段長度平均 ±SD。
+// 0.12.0 起定義對齊：表 1 的長度是外觀標記（大轉子—股骨外髁、外髁—外踝），與 ANSUR 節段同定義，
+// 因此與其他研究相同，先除以 ANSUR 男性平均標記長度（身高 1.75 m）得到比例，再乘預設骨架比例換成模型關節中心長度
+// （上方 bodyFromRow 的映射，自 1b21e4c 起用於所有研究）。0.11.1 以前直接把標記長度當模型長度（大腿 0.40 m 對預設 0.44 m），
+// 在小腿角固定的舊策略下無影響（踝角 SD 0），但與依骨長分配小腿角的模型不相容。校準值本身（圖讀六點、dom、站距係數）未改。
 const demers = JSON.parse(fs.readFileSync(new URL('calibration/demers-2018.json', path)));
-const demersBodies = Array.from({ length: N }, (_, i) => {
+// 同一次抽樣同時產生 ANSUR 映射身體（主診斷）與外觀標記長度直接當模型長度的身體（0.11.1 以前的做法，
+// 另存於 demersRawLandmark 供對照；不多抽亂數，其後的臥推研究抽樣不變）。
+const demersDraws = Array.from({ length: N }, (_, i) => {
   const sex = i < 125 ? 'male' : 'female'; // 20/32 與 12/32
   const row = anthro[sex][Math.floor(random() * anthro[sex].length)];
   const proxy = bodyFromRow(sex, row, 1.75, 75);
   const means = { Ltr: 0.54, Lt: 0.40, Ls: 0.40 };
-  const ratios = Object.fromEntries(anthro.keys.map((key) => [key, key in means ?
-    Math.max(0.3, means[key] + 0.03 * (row[anthro.keys.indexOf(key)] - mean(anthro[sex].map((r) => r[anthro.keys.indexOf(key)]))) /
-      proxySd[sex][anthro.keys.indexOf(key)]) / 1.75 : proxy[key] / 1.75]));
-  return createBody({ heightM: 1.75, massKg: 75, sex, ratios });
+  const landmark = (key) => {
+    const j = anthro.keys.indexOf(key);
+    const z = (row[j] - mean(anthro[sex].map((r) => r[j]))) / proxySd[sex][j];
+    return Math.max(0.3, means[key] + 0.03 * z);
+  };
+  const make = (convert) => createBody({ heightM: 1.75, massKg: 75, sex, ratios: Object.fromEntries(anthro.keys.map((key) =>
+    [key, key in means ? convert(key, landmark(key)) : proxy[key] / 1.75])) });
+  return {
+    ansur: make((key, m) => DEFAULT_BODY[key] / DEFAULT_BODY.heightM * (m / 1.75) / maleMean[anthro.keys.indexOf(key)]),
+    raw: make((key, m) => m / 1.75),
+  };
 });
-const calibration = demers.conditions.flatMap((condition) => {
+const demersBodies = demersDraws.map((d) => d.ansur);
+const demersCalibration = (bodies) => demers.conditions.flatMap((condition) => {
   const params = { ...defaultParams('squat'), ...condition.params };
   return condition.measurements.map((m) => {
-    const xs = demersBodies.map((body) => withBody(body, () => withLoad('squat', 0, () => {
+    const xs = bodies.map((body) => withBody(body, () => withLoad('squat', 0, () => {
       const e = bisectSample(m.sample.targetDeg, (t) => thighAngle(solvePose('squat', params, t)));
       return angles(solvePose('squat', params, e)).ankleDorsiflexion - angles(solvePose('squat', params, 0)).ankleDorsiflexion;
     })));
@@ -216,6 +230,9 @@ const calibration = demers.conditions.flatMap((condition) => {
       withinFigureTolerance: Math.abs(mean(xs) - m.reference.mean) <= m.tolerance.absolute };
   });
 });
+const calibration = demersCalibration(demersBodies);
+const demersRawLandmark = demersCalibration(demersDraws.map((d) => d.raw));
+
 // 臥推：同一研究的各條件使用同一批虛擬受試者（受試者內設計）；未報身高的研究不抽樣。
 const benchSkipped = [];
 for (const name of benchNames) {
@@ -255,7 +272,7 @@ const comparable = comparisons.filter((c) => c.category === 'comparable');
 const result = { modelVersion: MODEL_VERSION, seed: SEED, virtualN: N,
   source: 'ANSUR II 2012', criterion: '|模型群體平均−研究平均| ≤ 研究個體標準差',
   summary: { pass: comparable.filter((c) => c.pass).length, comparable: comparable.length, byStudy: summaries },
-  comparisons, sensitivity, calibration, ...(benchSkipped.length ? { benchSkippedNoHeight: benchSkipped } : {}) };
+  comparisons, sensitivity, calibration, demersRawLandmark, ...(benchSkipped.length ? { benchSkippedNoHeight: benchSkipped } : {}) };
 const serialized = JSON.stringify(result, null, 2) + '\n';
 if (mode === '--check') {
   if (fs.readFileSync(output, 'utf8') !== serialized) throw new Error('群體結果與固定種子重算不一致');

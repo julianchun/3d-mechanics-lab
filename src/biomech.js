@@ -4,7 +4,7 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.11.1';
+export const MODEL_VERSION = '0.12.0';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -381,6 +381,7 @@ export const LIFTS = {
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.3, joint: 'ankle', mech: 'A' },
       { key: 'kneePath', label: '膝蓋方向', type: 'select', options: [['forward', '正前方'], ['toes', '跟著腳尖']], def: 'forward', joint: 'knee', mech: 'A' },
       { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
+      { key: 'ankleDfCap', label: '個人踝背屈上限', type: 'select', options: [['off', '不限制（預設）'], ['25', '25°'], ['30', '30°'], ['35', '35°'], ['40', '40°']], def: 'off', joint: 'ankle', mech: 'A' },
       { key: 'barPos', label: '槓位', type: 'select', options: [['high', '高槓'], ['low', '低槓'], ['front', '前槓（前蹲）']], def: 'high', joint: 'bar', mech: 'A' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
@@ -920,6 +921,7 @@ export const LIFTS = {
       { key: 'stance', label: '站距', left: '窄', right: '寬', min: 0, max: 1, step: 0.01, def: 0.35, joint: 'ankle', mech: 'A' },
       { key: 'kneePath', label: '膝蓋方向', type: 'select', options: [['forward', '正前方'], ['toes', '跟著腳尖']], def: 'forward', joint: 'knee', mech: 'A' },
       { key: 'heelHeight', label: '鞋跟墊高', left: '0 cm（平底）', right: '4 cm（墊片）', min: 0, max: 4, step: 1, def: 0, joint: 'ankle', mech: 'A', unit: ' cm' },
+      { key: 'ankleDfCap', label: '個人踝背屈上限', type: 'select', options: [['off', '不限制（預設）'], ['25', '25°'], ['30', '30°'], ['35', '35°'], ['40', '40°']], def: 'off', joint: 'ankle', mech: 'A' },
       { key: 'load', label: '啞鈴重量', left: '8 kg', right: '40 kg', min: 8, max: 40, step: 2, def: MACHINES.dumbbell.gobletKg, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'kneesOut', label: '膝蓋往外推', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0, joint: 'knee', mech: 'B' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
@@ -1378,7 +1380,7 @@ function recordSquatKneePath(pose) {
       (thighBent && Math.abs(deg(thighMismatch)) > 25))
     pose.warn.push('腳尖、小腿與大腿的水平面方向差較大，請檢查站距與腳尖角');
 }
-function squatPose(P, e) {
+function squatPoseAt(P, e) {
   const low = P.barPos === 'low', front = P.barPos === 'front';
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
@@ -1389,7 +1391,8 @@ function squatPose(P, e) {
   const { flat: flatShank } = freeSquatShankAngle(P, e, low ? 0.08 : front ? -0.08 : 0);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
   // 示範假設：鞋跟足板角按具名比例分給小腿前傾，其餘降低相對腳掌的踝背屈需求。
-  let thS = flatShank + (foot?.a || 0) * heelShankShare * e;
+  // P._dTh：依骨長比例的小腿角偏移（見 anatomyWrapped）；缺省 0 即原策略。
+  let thS = flatShank + (foot?.a || 0) * heelShankShare * e + (P._dTh || 0);
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
   const legAt = (angle) => {
@@ -1469,13 +1472,77 @@ function squatPose(P, e) {
   pose.armPole = arm.armPole;
   if (front) pose.supinated = true;
   pose.bar = bar;
-  if (deg(phi) > 62) pose.warn.push('軀幹前傾很大');
+  if (deg(phi) > 62) pose.warn.push('軀幹前傾 ' + Math.round(deg(phi)) + '°（偏大）：股骨相對長或軀幹短的身材較容易如此；可加寬站距、墊高鞋跟、降低深度或改前槓，並確認踝背屈活動度');
   else if (front && deg(phi) > 45) pose.warn.push('前蹲軀幹前傾 ' + Math.round(deg(phi)) + '°，槓容易從肩上滑落');
+  pose.heelTiltRad = foot?.a || 0;
   pose.cop = [w, 0, 0];
   pose.barW = BAR_RATIO.squat;
   pose.barOnBack = true;
   return pose;
 }
+
+// ---------- 依骨長比例分配小腿與軀幹（深蹲、高腳杯）----------
+// 現行策略（freeSquatShankAngle）是預設身體（1.75 m 男）的小腿前傾；其他身材若小腿角固定，
+// 股骨相對長時只有軀幹吸收。這裡在「大腿角（深度事件）與系統重心＝原平衡目標」都不變的前提下，
+// 對小腿角加偏移 Δθ，最小化
+//   J(Δθ) = λ²·Δθ² + (φ(Δθ) − φ_ref)²
+// φ(Δθ) 是該身體在此小腿角下由平衡解出的軀幹角，φ_ref 是預設身體在原策略下的軀幹角。
+// 預設身體 J = 0、Δθ = 0（以數值逐值相等短路，不靠最佳化殘差）；λ→∞ 即回到舊行為。
+// λ：教學示範選擇，無文獻來源（教練確認 2026-11-28）。文獻只能判斷方向，無法識別 λ；
+// 不得依任何驗證結果或角度分散度調整。見 docs/research/anatomy-posture-plan.md。
+export const SQUAT_ANATOMY_LAMBDA = 1;
+let anatomyLambda = SQUAT_ANATOMY_LAMBDA;
+// 僅供同步驗證／敏感度掃描；finally 還原，產品路徑維持上方常數。
+export function withAnatomyLambdaForValidation(lambda, run) {
+  if (!Number.isFinite(lambda) || lambda < 0) throw new Error('λ 須為非負數');
+  const original = anatomyLambda;
+  try { anatomyLambda = lambda; return run(); } finally { anatomyLambda = original; }
+}
+const SQUAT_OFFSET_MAX = rad(25), SQUAT_OFFSET_MIN = rad(-10);
+function isDefaultBodyByValue() {
+  return BODY.sex === DEFAULT_BODY.sex && BODY_LENGTHS.every((k) => Math.abs(BODY[k] - DEFAULT_BODY[k]) < 1e-12);
+}
+// 個人踝背屈上限（度）：'off' 或未設為不限制。沒有找到成人負重蹲的度數常模，故只是使用者輸入。
+function ankleDfCapRad(P) {
+  if (P.ankleDfCap === undefined || P.ankleDfCap === 'off') return null;
+  const v = Number(P.ankleDfCap);
+  return Number.isFinite(v) && v > 0 ? rad(v) : null;
+}
+function anatomyWrapped(base) {
+  return (P, e) => {
+    if (P._dTh !== undefined) return base(P, e);
+    const cap = ankleDfCapRad(P);
+    if (e <= 0 || (cap === null && isDefaultBodyByValue())) return base(P, e);
+    const shankOf = (p) => Math.atan2(p.R.knee[2] - p.R.ankle[2], p.R.knee[1] - p.R.ankle[1]);
+    const phiRef = withBody(DEFAULT_BODY, () => base({ ...P, _dTh: 0 }, e)).phi;
+    const at = (d) => base({ ...P, _dTh: d }, e);
+    const p0 = at(0);
+    const dfBase = shankOf(p0) - p0.heelTiltRad; // 相對足板的踝背屈
+    const hi = Math.min(SQUAT_OFFSET_MAX, cap === null ? Infinity : cap - dfBase);
+    const lo = Math.min(SQUAT_OFFSET_MIN, hi);
+    const l2 = anatomyLambda * anatomyLambda;
+    // 割線法：φ(Δθ) 近似線性，minimize l2·x² + (φd + s(x−d) − φref)²
+    let d = 0, fd = p0.phi, s = (at(rad(0.5)).phi - fd) / rad(0.5);
+    for (let i = 0; i < 4; i++) {
+      const x = Math.min(hi, Math.max(lo, s * (s * d - fd + phiRef) / (l2 + s * s)));
+      if (Math.abs(x - d) < rad(0.02)) break;
+      const fx = at(x).phi;
+      s = (fx - fd) / (x - d); d = x; fd = fx;
+    }
+    if (d > hi) d = hi;
+    const pose = d === 0 ? p0 : at(d);
+    pose.anatomyShiftDeg = deg(d);
+    if (cap !== null && shankOf(pose) - pose.heelTiltRad >= cap - rad(0.05)) {
+      pose.ankleCapBinding = true;
+      pose.warn.push(`踝背屈已到你設定的上限 ${Math.round(deg(cap))}°，其餘由軀幹前傾吸收`);
+      if (!pose.ok && pose.conflict) pose.conflict += '（已受個人踝背屈上限限制，可放寬上限、加寬站距或墊高鞋跟）';
+    }
+    return pose;
+  };
+}
+const squatWrapped = anatomyWrapped(squatPoseAt), gobletWrapped = anatomyWrapped(gobletPoseAt);
+function squatPose(P, e) { return squatWrapped(P, e); }
+function gobletPose(P, e) { return gobletWrapped(P, e); }
 
 // 腿前緣（含軟組織）在高度 y 的 z 座標
 function legFrontZ(A, hip, knee, y) {
@@ -3477,12 +3544,12 @@ function dbReverseFlyPose(P, e) {
 // ---------- 高腳杯深蹲 ----------
 // 下肢小腿曲線與 squatPose 共用；前側負重策略偏移 -0.08，與前蹲一致。
 // 單顆啞鈴垂直捧於胸骨前方（距軀幹軸 21 cm），雙手於上端片下方承托、手肘自然垂於胸側。
-function gobletPose(P, e) {
+function gobletPoseAt(P, e) {
   const w = lerp(0.13, 0.34, P.stance), tau = rad(lerp(8, 38, P.stance));
   const toe = [Math.sin(tau), 0, Math.cos(tau)];
   const { flat: flatShank } = freeSquatShankAngle(P, e, -0.08);
   const flatA = [w, BODY.ankleH, -0.07], foot = squatHeelFoot(P, flatA, toe);
-  const thS = flatShank + (foot?.a || 0) * heelShankShare * e;
+  const thS = flatShank + (foot?.a || 0) * heelShankShare * e + (P._dTh || 0);
   const gam = rad(lerp(70, 118, P.depth)) * e;
   const A = foot?.ankle || flatA;
   let Ls = BODY.Ls, Lt = BODY.Lt, K, Hy, Hz;
@@ -3548,8 +3615,9 @@ function gobletPose(P, e) {
   pose.dbRegion = 'fore';
   pose.dbForceLine = false; // 下肢深蹲力線沿用站姿垂直線（從胸前啞鈴至地面）
   pose.dumbbells = [{ c: dbC, axis: [0, 1, 0], kg: P.load }];
+  pose.heelTiltRad = foot?.a || 0;
   pose.cop = [w, 0, 0];
-  if (deg(phi) > 55) pose.warn.push('軀幹前傾較大（' + Math.round(deg(phi)) + '°）');
+  if (deg(phi) > 55) pose.warn.push('軀幹前傾較大（' + Math.round(deg(phi)) + '°）：股骨相對長的身材較容易如此；可加寬站距、墊高鞋跟或降低深度');
   return pose;
 }
 
