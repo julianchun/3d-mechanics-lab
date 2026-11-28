@@ -9,6 +9,7 @@
 - **主要限制：**模型是準靜態、左右對稱；姿勢策略和器材尺寸不會完整隨個人調整。部分肌肉與器械數值仍是估計，研究的量測定義與模擬條件也未完全相同。見[限制與已知問題](limitations.md)。
 - **肩帶已知問題診斷：**30 項與肩帶相關的合理性已知問題的主因分類、單因素敏感度與建議修正順序見[肩帶問題總診斷](shoulder-issues-diagnosis.md)（重現：`node tools/diagnose-shoulder-issues.mjs`）。
 - **肩帶兩軸力臂：**背闊肌、胸大肌、斜方、前鋸等對 `scElev`／`scRet` 的力臂（TSM／DAS3 路徑計算、OpenSim 核對、不確定度、接入方案與預估影響）見[肩胛下壓／後收力臂](scapular-arms.md)（研究，產品未採用）。
+- **單側動作設計：**左右對稱假設盤點、三種方案比較與分階段實作計畫見[單側動作支援](unilateral-plan.md)（設計文件，產品未實作；原型 `tools/research/unilateral-prototype.mjs`）。
 - **技術原則：**[健美式技術原則（教練已審閱）](technique-principles.md)。
 - **預設動作稽核：**依可量化原則掃描 63 項、各 21 點；逐項狀態及人工複查原因見[技術稽核結果](results/technique-audit.md)。
 
