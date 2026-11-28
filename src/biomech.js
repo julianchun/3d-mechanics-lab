@@ -923,7 +923,7 @@ export const LIFTS = {
   },
   dboverheadext: {
     forearmContact: 'sharedRigid', name: '坐姿過頭啞鈴三頭伸展', topLabel: '伸直', bottomLabel: '下放頭後',
-    seated: true, dofs: ['shFwd', 'elbExt'], optDofs: ['shSide', 'scElev'], pose: dbOverheadExtPose, loads: sharedDumbbellLoads,
+    seated: true, dofs: ['shFwd', 'shSide', 'elbExt', 'scRet', 'scElev'], pose: dbOverheadExtPose, loads: sharedDumbbellLoads,
     moving: ['elbExt'], params: [
       { key: 'bottomFlex', label: '底點屈肘', left: '85°', right: '125°', min: 85, max: 125, step: 1, def: 105, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'load', label: '單顆啞鈴重量', left: '6 kg', right: '30 kg', min: 6, max: 30, step: 1, def: 14, joint: 'equip', mech: 'A', unit: ' kg' },
@@ -940,7 +940,7 @@ export const LIFTS = {
       { key: 'bottomFlex', label: '底點屈肘', left: '85°', right: '125°', min: 85, max: 125, step: 1, def: 105, joint: 'elbow', mech: 'A', unit: '°' },
       { key: 'load', label: '配重片重量', left: '10 kg', right: '45 kg', min: 10, max: 45, step: 1, def: 25, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
-    ], standardNote: '背對低滑輪，前後腳站穩；上臂靠近頭側，握繩由屈肘伸至頭前上方。',
+    ], standardNote: '背對低滑輪，前後腳站穩；上臂近垂直、肘略朝前上方，握繩從頭後屈肘位置伸至頭前上方。',
   },
   preachercurl: {
     forearmContact: 'sharedRigid', name: '牧師椅彎舉', topLabel: '彎舉頂點', bottomLabel: '手臂伸展',
@@ -973,7 +973,7 @@ export const LIFTS = {
   },
   dbpullover: {
     forearmContact: 'sharedRigid', name: '啞鈴仰臥拉舉', topLabel: '胸前上方', bottomLabel: '下放頭後',
-    supine: true, dofs: ['shFwd', 'elbExt'], optDofs: ['shSide', 'scElev'], pose: dbPulloverPose, loads: sharedDumbbellLoads,
+    supine: true, dofs: ['shFwd', 'shSide', 'elbExt'], optDofs: ['scElev'], pose: dbPulloverPose, loads: sharedDumbbellLoads,
     moving: ['shFwd'], params: [
       { key: 'depth', label: '頭後下放角', left: '70°', right: '105°', min: 70, max: 105, step: 1, def: 80, joint: 'shoulder', mech: 'A', unit: '°' },
       { key: 'elbowBend', label: '肘部微彎', left: '10°', right: '30°', min: 10, max: 30, step: 1, def: 18, joint: 'elbow', mech: 'A', unit: '°' },
@@ -999,7 +999,7 @@ export const LIFTS = {
       { key: 'depth', label: '髖鉸鏈深度', left: '40°', right: '70°', min: 40, max: 70, step: 1, def: 55, joint: 'hip', mech: 'A', unit: '°' },
       { key: 'load', label: '配重片重量', left: '15 kg', right: '65 kg', min: 15, max: 65, step: 1, def: 35, joint: 'equip', mech: 'A', unit: ' kg' },
       { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
-    ], standardNote: '背對低滑輪，雙腳穩站並讓繩索通過腿間；保持背部姿勢，以髖鉸鏈下放再伸髖。',
+    ], standardNote: '背對低滑輪，雙腳穩站並讓繩索通過腿間；雙臂近直自然下垂，握點隨肩部前移，以髖鉸鏈下放再伸髖。',
   },
   goblet: {
     name: '高腳杯深蹲', topLabel: '頂點', bottomLabel: '最低點',
@@ -3678,8 +3678,9 @@ function cableOverheadExtPose(P, e) {
     ext: (r) => mul(norm(sub(pulley, r.bar)), barW),
     pole: (tf, r) => [0, 0, 1],
     barAt: (tf, S) => {
-      const E = add(S, mul(norm([-0.10, 0.92, 0.35]), BODY.Lu));
-      const H = add(E, mul(norm([-0.12, Math.cos(flex), Math.sin(flex)]), BODY.Lf));
+      // 上臂近垂直，略朝前上方（約 10°）；角度是教練示範幾何，未有同條件量測。
+      const E = add(S, mul(norm([-0.10, 0.98, 0.18]), BODY.Lu));
+      const H = add(E, mul(norm([-0.12, Math.cos(flex), -Math.sin(flex)]), BODY.Lf));
       return { bar: H, elbow: E };
     },
   });
@@ -3707,6 +3708,7 @@ function preacherCurlPose(P, e) {
   pose.bar = [0, H[1], H[2]]; pose.barW = P.load / BODY.mass;
   pose.barStyle = { len: 0.5 }; pose.barAxial = true;
   pose.padContact = add(S, mul(ud, BODY.Lu * 0.63));
+  pose.padNormal = n;
   pose.armJoints = ['shoulder', 'elbow'];
   pose.boxes = [
     box([0, 0.46, 0], [0.42, 0.08, 0.42]),
@@ -3717,17 +3719,18 @@ function preacherCurlPose(P, e) {
 }
 
 function preacherReactions(pose, P, W, out) {
-  const S = pose.R.shoulder, C = pose.padContact;
+  const S = pose.R.shoulder, C = pose.padContact, n = pose.padNormal;
   let moment = 0;
   for (const f of out) if (f.region === 'upper' || f.region === 'fore')
     moment += cross(sub(f.p, S), f.F)[0];
-  const arm = cross(sub(C, S), [0, 1, 0])[0];
+  const arm = cross(sub(C, S), n)[0];
   const N = Math.max(0, -moment / arm);
-  if (N === 0 && moment > 0.01) pose.warn.push('上臂離開牧師椅墊，接觸反力無法平衡');
-  out.push({ p: C, F: [0, N, 0], region: 'upper' });
+  if (N === 0 && moment < -0.01) pose.warn.push('上臂離開牧師椅墊，接觸反力無法平衡');
+  const F = mul(n, N);
+  out.push({ p: C, F, region: 'upper' });
   const seat = [0, 1, 2].map((axis) => -out.reduce((sum, f) => sum + f.F[axis], 0));
   out.push({ p: pose.R.hip, F: seat, region: 'pelvis' });
-  pose.support = { pad: [0, N, 0], seat };
+  pose.support = { pad: F, seat };
 }
 
 function inclineDbCurlPose(P, e) {
@@ -3834,10 +3837,12 @@ function cablePullThroughPose(P, e) {
   const pose = standingHands(P, {
     kap: rad(18), lean: rad(lerp(4, P.depth, e)), girdle: { ret: rad(0), elev: rad(-4) },
     barW: 0, ext: (r) => mul(norm(sub(pulley, r.bar)), barW),
-    pole: (tf, r) => [0, 0, -1],
-    barAt: (tf, S, hip) => {
-      const H = [0.075, hip[1] + lerp(0.02, -0.03, e), hip[2] + lerp(-0.08, 0.02, e)];
-      return { bar: H };
+    pole: (tf, r) => [0, 0, 1],
+    barAt: (tf, S) => {
+      // 雙臂自然下垂、肘微彎；握點隨肩部鉸鏈軌跡移動，避免繩索力線被鎖在髖旁。
+      const E = add(S, mul(norm([-0.16, -1, 0.04]), BODY.Lu));
+      const H = add(E, mul(norm([-0.14, -1, 0.20]), BODY.Lf));
+      return { bar: H, elbow: E };
     },
   });
   if (!pose.armOk) { pose.ok = false; pose.conflict = '雙手無法握住腿間繩索'; }

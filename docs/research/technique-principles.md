@@ -208,14 +208,14 @@
 | 俯臥腿彎舉（`lying-leg-curl`） | `cam=human`、`depth=0.5`、`padPos=0.8`、`posture=lying`；符合可量化幾何條件 | M3、G5 | 教練原則／凸輪與器材尺寸未有出處 | 部分：關節角；器材曲線為估計 |
 | 滑輪三頭下壓（`pushdown`） | `topFlex=100`、`elbFwd=5`、`lean=10`；符合可量化幾何條件 | U1、G5 | 教練原則／未有出處 | 部分：肘角與上臂路徑 |
 | 仰臥三頭伸展（`skull-crusher`） | `upperTilt=10`、`bottomFlex=110`、`load=20 kg`；EZ 槓、平凳 | U1、U3、G5 | 教練原則／未有同條件出處 | 部分：肩肘角；無凳面局部反力 |
-| 坐姿過頭啞鈴三頭伸展（`db-overhead-ext`） | `bottomFlex=105`、單顆 `load=14 kg` | U1、U3、G5 | [Maeo 等 2023](https://pubmed.ncbi.nlm.nih.gov/35819335/) 支持過頭肩位訓練三頭長頭的方向；角度與重量為教練原則／未有出處 | 部分：肩肘角與長度代理 |
-| 滑輪過頭繩索三頭伸展（`cable-overhead-ext`） | `footStance=staggered`、`pulleyRatio=2:1`、`lean=15`、`bottomFlex=105`、配重 `25 kg` | G1、U1、G5 | [Maeo 等 2023](https://pubmed.ncbi.nlm.nih.gov/35819335/) 比較過頭與中立肩位；滑輪比見[原廠規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)；站距與角度為教練原則／未有出處 | 部分：鋼索方向與關節角；雙腳反力為對稱近似 |
-| 牧師椅彎舉（`preacher-curl`） | `padAngle=55`、`topFlex=115`、EZ 槓 `load=16 kg` | U1、M3、G5 | [Kobayashi 等 2026](https://pubmed.ncbi.nlm.nih.gov/42829982/) 比較啞鈴牧師椅與上斜彎舉的長期適應；本項 EZ 槓與角度為教練原則／未有出處 | 部分：上臂墊反力與肘角；無墊子壓力分布 |
+| 坐姿過頭啞鈴三頭伸展（`db-overhead-ext`） | `bottomFlex=105`、單顆 `load=14 kg` | U1、U3、G5 | [Maeo 等 2023](https://pubmed.ncbi.nlm.nih.gov/35819335/) 支持過頭肩位訓練三頭長頭的方向；角度與重量為教練原則／未有出處 | 部分：肩屈、肩外展與肩帶力矩、肘角及長度代理；高舉角能力未校準 |
+| 滑輪過頭繩索三頭伸展（`cable-overhead-ext`） | `footStance=staggered`、`pulleyRatio=2:1`、`lean=15`、`bottomFlex=105`、配重 `25 kg`；上臂約前傾 10°，底點握點在頭後 | G1、U1、G5 | [Maeo 等 2023](https://pubmed.ncbi.nlm.nih.gov/35819335/) 比較過頭與中立肩位；滑輪比見[原廠規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover)；上臂近垂直、肘朝前上為教練原則，10° 與站距為示範值／未有同條件出處 | 部分：鋼索方向與關節角；雙腳反力為對稱近似 |
+| 牧師椅彎舉（`preacher-curl`） | `padAngle=55`、`topFlex=115`、EZ 槓 `load=16 kg` | U1、M3、G5 | [Kobayashi 等 2026](https://pubmed.ncbi.nlm.nih.gov/42829982/) 比較啞鈴牧師椅與上斜彎舉的長期適應；本項 EZ 槓與角度為教練原則／未有出處 | 部分：上臂墊沿法向的單點只受壓反力與肘角；無墊子壓力分布 |
 | 上斜啞鈴彎舉（`incline-db-curl`） | `backAngle=55`、`topFlex=120`、每顆 `load=10 kg` | U1、M3、G5 | [Kobayashi 等 2026](https://pubmed.ncbi.nlm.nih.gov/42829982/) 支持上斜與牧師椅的肌群適應差異；55° 與重量為教練原則／未有出處 | 部分：肩肘角與長度代理 |
 | 啞鈴前平舉（`db-front-raise`） | `topHeight=90`、`elbowBend=20`、每顆 `load=6 kg` | U2、G1、G5 | 教練原則／未有同條件出處 | 部分：肩角、重心與力矩 |
-| 啞鈴仰臥拉舉（`db-pullover`） | `depth=80`、`elbowBend=18`、單顆 `load=12 kg` | U2、P3、G5 | 教練原則／未有同條件出處；選較可控制的頭後下放角 | 部分：肩肘角；無胸椎分段 |
+| 啞鈴仰臥拉舉（`db-pullover`） | `depth=80`、`elbowBend=18`、單顆 `load=12 kg` | U2、P3、G5 | 教練原則／未有同條件出處；選較可控制的頭後下放角 | 部分：肩屈與肩外展力矩及肘角；無胸椎分段 |
 | 胸靠上斜啞鈴划船（`chest-supported-row`） | `benchAngle=35`、`elbowOut=20`、每顆 `load=16 kg` | L2、M3、G5 | 教練原則／未有同條件出處；[REP 可調凳](https://hu.repfitness.com/products/ab-3100-adjustable-weight-bench) 有 30°／45° 檔位，模型 35° 為插值假設 | 部分：胸墊反力與肩肘角；無墊面壓力分布 |
-| 滑輪後拉（`cable-pull-through`） | `footStance=parallel`、`pulleyRatio=2:1`、`depth=55`、配重 `35 kg` | G1、H1、G5 | 教練原則／未有同條件出處；滑輪比見[原廠規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover) | 部分：髖鉸鏈與鋼索力；無左右腳分力 |
+| 滑輪後拉（`cable-pull-through`） | `footStance=parallel`、`pulleyRatio=2:1`、`depth=55`、配重 `35 kg`；雙臂近直自然下垂、手在腿間隨肩移動 | G1、H1、G5 | 手臂及髖鉸鏈路徑為教練原則／未有同條件出處；滑輪比見[原廠規格](https://www.lifefitness.com/en-eu/catalog/strength-training/cable-machines-functional-trainers/adjustable-cable-crossover) | 部分：臂長可達、髖鉸鏈與鋼索力；無左右腳分力 |
 | 槓鈴彎舉（`curl`） | `supin=sup`、`grip=1.1`、`topFlex=135`、`elbFwd=10`、`swing=0`；符合可量化幾何條件 | U1、G5 | 有方向依據：[R51] 啞鈴彎舉肩位改變二頭肌肌電時序；槓鈴的 10° 上臂前移與頂點 135° 仍是教練原則 | 部分：肘角與上臂路徑 |
 | 反手彎舉（`reverse-curl`） | `supin=pro`、`grip=1.1`、`topFlex=135`、`elbFwd=10`、`swing=0`；符合可量化幾何條件 | U1、G5 | [R51] 未研究正握；上臂前移與頂點角仍是教練原則 | 部分：肘角與上臂路徑 |
 | 啞鈴側平舉（`lat-raise`） | `plane=scap`、`elbowBend=20`、`topHeight=90`；符合可量化幾何條件 | U2、G5 | 有方向依據：[R28] 比較肩胛平面上舉時肌電；90° 與屈肘 20° 仍是教練原則。[R43] 僅舉臂常模 | 部分：舉臂角與平面；無肱骨內外旋 |
