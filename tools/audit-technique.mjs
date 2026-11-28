@@ -19,8 +19,10 @@ const deg = (x) => x * 180 / Math.PI;
 const fmt = (x, n = 1) => Number(x).toFixed(n);
 const esc = (s) => String(s).replaceAll('|', '／').replaceAll('\n', ' ');
 const active = CATALOG.filter((c) => !c.planned);
-const targetIds = Object.keys(data.entries);
-if (active.length !== 72 || targetIds.length !== active.length ||
+// 規劃中（planned）的項目可預先保留目標肌群資料，但不列入稽核。
+const plannedIds = new Set(CATALOG.filter((c) => c.planned).map((c) => c.id));
+const targetIds = Object.keys(data.entries).filter((id) => !plannedIds.has(id));
+if (targetIds.length !== active.length ||
     active.some((c) => !data.patterns[data.entries[c.id]]) ||
     targetIds.some((id) => !active.some((c) => c.id === id))) throw new Error(`目標肌群資料須逐項覆蓋 ${active.length} 個清單項目`);
 for (const pattern of Object.values(data.patterns)) {
