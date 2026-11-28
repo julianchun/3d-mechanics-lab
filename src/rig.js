@@ -180,6 +180,9 @@ export class Rig {
     }
     const torsoMat = ghost ? boneMat : new THREE.MeshStandardMaterial({ color: 0x8c8270, transparent: true, opacity: 0.12, roughness: 0.7, depthWrite: false });
     this.rib = new THREE.Mesh(SPH, torsoMat); this.group.add(this.rib);
+    // 拱背時以胸廓隆起代理顯示觸胸高度；真實骨架仍無逐節胸椎形變。
+    this.archChest = new THREE.Mesh(SPH, new THREE.MeshStandardMaterial({ color: 0xe6dcc6, roughness: 0.75, transparent: true, opacity: 0.78, depthWrite: false }));
+    this.group.add(this.archChest);
     this.pelvis = new THREE.Mesh(SPH, torsoMat); this.group.add(this.pelvis);
     this.head = new THREE.Mesh(SPH, ghost ? boneMat : new THREE.MeshStandardMaterial({ color: 0xc4b89f, roughness: 0.6 }));
     this.group.add(this.head);
@@ -377,6 +380,13 @@ export class Rig {
     this.head.position.copy(T(add(pose.SC, mul(pose.u, 0.23 * heightScale))));
     this.head.scale.set(0.085 * heightScale, 0.11 * heightScale, 0.1 * heightScale);
     this.rib.visible = showSkel; this.pelvis.visible = false;
+    if (pose.chestArch && showSkel) {
+      const { touch, lift } = pose.chestArch;
+      const ry = 0.04 * heightScale + 0.7 * lift;
+      this.archChest.position.set(0, touch[1] - ry, touch[2]);
+      this.archChest.scale.set(0.17 * body.shHalf / DEFAULT_BODY.shHalf, ry, 0.15 * heightScale);
+      this.archChest.visible = true;
+    } else this.archChest.visible = false;
     this.bar.position.copy(T(pose.bar));
     // 器械：barStyle = 'none'（沒有槓）或 { len }（短握把、沒有槓片）
     const bs = pose.barStyle;

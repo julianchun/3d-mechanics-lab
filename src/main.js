@@ -429,6 +429,9 @@ const CAM_HINTS = {
 };
 
 function paramHint(p, v) {
+  if (p.key === 'arch') return '對應教練原則 P4 的胸廓擴張提示：這裡只模擬胸骨抬高與槓行程，不量呼吸或真實胸廓擴張；0° 保留原姿勢。';
+  if (p.key === 'flareMode') return '前臂近垂直模式按握距與觸點求底部肘位；手動模式保留原有手肘角度。';
+  if (p.key === 'flare' && P().flareMode === 'vertical') return '目前由握距與觸點求肘位；切回手動模式才使用此角度。';
   if (p.key === 'pulleyRatio') {
     const M = MACHINES[state.lift];
     if (!M?.stackKg) return null;
