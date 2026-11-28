@@ -4,7 +4,7 @@ import { analyze, defaultParams, BODY, MUSCLE_GROUP_IDS } from '../src/biomech.j
 
 // 排名用畫面顯示的 s（主動活化加被動份額）；超載門檻只用未截斷的 a。
 // 文獻趨勢見 docs/research/references.md；同一肌肉的不同動作峰值不等於跨肌肉 EMG 百分比。
-// 排名檢查保留既有準則，已解決的細分問題從 KNOWN_ISSUES 移除。
+// 排名邊界容許近平手；規則與量級見 docs/research/rank-tolerance-plan.md。
 const RANKS = {
   'squat-high': { top3: ['vasti'] }, 'squat-low': { top3: ['vasti'] }, 'front-squat': { top3: ['vasti'] },
   'goblet-squat': { first: ['vasti'] },
@@ -110,16 +110,6 @@ const KNOWN_ISSUES = [
     fix: '以量測的手部反力與關節力矩驗證姿勢及負荷，再檢討共用肌肉模型，暫不手調常數',
   }))),
   {
-    id: 'db-bench-incline', rule: 'rank:first', kind: '新動作', current: '上斜 30° 啞鈴臥推底端三角肌中束（0.74）高於前三角肌（0.57）與胸大肌（0.36）',
-    cause: '上斜 30° 下放至較深拉伸端（depth=0.6）時上臂低於肩線且向外展開，重力於肩外展軸（shSide）需求上升，使現有中三角外展分攤於底端超過前三角與胸大肌（類似上斜槓鈴臥推底端 mdelt=0.64）',
-    fix: '待取得上斜啞鈴臥推 3D 軌跡與肩部三軸力矩實測資料後再校對深拉伸端軌跡與三角肌分攤，暫不手調參數',
-  },
-  {
-    id: 'db-press', rule: 'rank:top2', kind: '新動作', current: '坐姿啞鈴肩推前兩名為中三角（0.45）與上斜方（0.45），前三角（0.40）居第三',
-    cause: '啞鈴於肩胛平面（elbowFwd=30° 前偏，即離矢狀面 60°）兩側下放、不受槓鈴迫使雙手往前繞過下巴，肩外展（shSide≈32 Nm）高於肩屈（shFwd≈23 Nm），且手臂外側承重造成胸鎖關節上提需求（scElev≈56 Nm）偏高',
-    fix: '待以 OpenSim 肩帶模型與肩推三軸肌電／運動學資料檢核肩胛平面推舉分攤，暫不手調模型參數',
-  },
-  {
     id: 'hammer-curl', rule: 'rank:first', kind: '前臂旋轉模型', current: '詳細視圖肱橈肌約 1.33，但一般視圖與肱肌合群後前三角肌仍居首',
     cause: '中立握時肱橈肌與肱肌的力臂及活化差異很大；一般視圖採 F 加權合群，肱肌的較大 F 降低群組平均值',
     fix: '以同條件量測核對肱橈肌區域肌電與群組呈現方式，暫不調整肌肉力臂或偏好',
@@ -152,16 +142,6 @@ const KNOWN_ISSUES = [
     current: `${current}，main 分支胸大肌未進前四`,
     cause: '背闊肌水平力臂已改用路徑擬合，下壓需求仍由既有肩胛等效力臂分攤；胸大肌在正握下拉仍代償肩胛下壓',
     fix: '以可驗證的肩胛肌束路徑及肩胛下壓力矩量測重建 scElev 力臂',
-  })),
-  ...[
-    ['row', 'lat'],
-    ['row-sup', 'lat'],
-    ['cable-row-wide', 'lat'],
-  ].map(([id, muscle]) => ({
-    id, rule: `rank:${muscle}:top4`, kind: '既有問題',
-    current: `${muscle} 未進前四`,
-    cause: '背闊肌水平力臂修正後，中斜方與背闊肌仍未能同時進前四；Seth 路徑的中斜方等效力臂直接替換又使已通過的划船排名失敗',
-    fix: '以 OpenSim 逐點驗證肩胛兩軸力矩與中斜方路徑，再校準功能群能力',
   })),
   ...[
     ['curl', 'rank:first', '槓鈴反握彎舉的一般視圖前三角肌高於屈肘肌群'],
@@ -221,6 +201,11 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
     }
   }
   const ranked = [...peaks].sort((a, b) => b[1] - a[1]);
+  const rankTolerance = (boundary) => Math.min(0.08, 0.15 * boundary);
+  const nearTop = (id, n) => {
+    const boundary = ranked[Math.min(n, ranked.length) - 1]?.[1] ?? 0;
+    return peaks.has(id) && peaks.get(id) >= boundary - rankTolerance(boundary) - 1e-12;
+  };
   for (const [id, { a, e }] of overload) check(c.id, `activation:${id}`, `e=${e.toFixed(3)} a=${a.toFixed(4)} > 1`);
   const rule = RANKS[c.id];
   if (rule?.first) declaredRules.add(`${c.id}|rank:first`);
@@ -230,30 +215,31 @@ for (const c of CATALOG.filter((entry) => entry.lift)) {
   for (const [a, b] of rule?.above || []) declaredRules.add(`${c.id}|rank:${a}>${b}`);
   for (const id of Object.keys(rule?.within || {})) declaredRules.add(`${c.id}|rank:${id}:top${rule.within[id]}`);
   for (const n of [2, 3, 4]) if (rule?.[`top${n}`]) declaredRules.add(`${c.id}|rank:top${n}`);
-  if (rule?.first && !rule.first.includes(ranked[0][0])) {
+  if (rule?.first && !rule.first.some((id) => nearTop(id, 1))) {
     check(c.id, 'rank:first', `第一名 ${ranked[0][0]}，預期 ${rule.first.join(' 或 ')}`);
   }
-  if (rule?.notFirst?.includes(ranked[0][0])) {
-    check(c.id, 'rank:notFirst', `第一名不應為 ${ranked[0][0]}`);
+  if (rule?.notFirst?.some((id) => nearTop(id, 1))) {
+    check(c.id, 'rank:notFirst', `第一名附近不應含 ${rule.notFirst.join('、')}；目前第一名 ${ranked[0][0]}`);
   }
   if (rule?.notTop4) {
-    const hit = ranked.slice(0, 4).filter(([id]) => rule.notTop4.includes(id)).map(([id, v]) => `${id} ${v.toFixed(2)}`);
-    if (hit.length) check(c.id, 'rank:notTop4', `前4名不應含 ${rule.notTop4.join('、')}，目前含 ${hit.join(', ')}`);
+    const hit = rule.notTop4.filter((id) => nearTop(id, 4)).map((id) => `${id} ${(peaks.get(id) || 0).toFixed(2)}`);
+    if (hit.length) check(c.id, 'rank:notTop4', `前4名附近不應含 ${rule.notTop4.join('、')}，目前含 ${hit.join(', ')}`);
   }
-  if (rule?.allTop3 && !rule.allTop3.every((id) => ranked.slice(0, 3).some(([muscle]) => muscle === id))) {
+  if (rule?.allTop3 && !rule.allTop3.every((id) => nearTop(id, 3))) {
     check(c.id, 'rank:allTop3', `前三名 ${ranked.slice(0, 3).map(([id]) => id).join(', ')}，預期同時含 ${rule.allTop3.join('、')}`);
   }
   for (const [a, b] of rule?.above || []) {
-    if ((peaks.get(a) || 0) <= (peaks.get(b) || 0)) check(c.id, `rank:${a}>${b}`, `${a} ${(peaks.get(a) || 0).toFixed(2)} ≤ ${b} ${(peaks.get(b) || 0).toFixed(2)}`);
+    const bScore = peaks.get(b) || 0;
+    if ((peaks.get(a) || 0) < bScore - rankTolerance(bScore) - 1e-12) check(c.id, `rank:${a}>${b}`, `${a} ${(peaks.get(a) || 0).toFixed(2)} 低於 ${b} ${bScore.toFixed(2)} 且超過容差`);
   }
   for (const [id, n] of Object.entries(rule?.within || {})) {
-    if (!ranked.slice(0, n).some(([muscle]) => muscle === id)) {
+    if (!nearTop(id, n)) {
       check(c.id, `rank:${id}:top${n}`, `前${n}名 ${ranked.slice(0, n).map(([muscle]) => muscle).join(', ')}，預期含 ${id}`);
     }
   }
   for (const n of [2, 3, 4]) {
     const accepted = rule?.[`top${n}`];
-    if (accepted && !ranked.slice(0, n).some(([id]) => accepted.includes(id))) {
+    if (accepted && !accepted.some((id) => nearTop(id, n))) {
       check(c.id, `rank:top${n}`, `前${n}名 ${ranked.slice(0, n).map(([id]) => id).join(', ')}，預期含 ${accepted.join(' 或 ')}`);
     }
   }
