@@ -2,9 +2,10 @@
 // 座標：X = 身體右側、Y = 上、Z = 前方（臥推時 Z = 腳的方向）。只算右側，左側鏡像。
 import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
+import { scapularArmTsm } from './scapular-arms.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.13.1';
+export const MODEL_VERSION = '0.14.0';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -1117,6 +1118,13 @@ const pathHadd = (id, q) => {
   const t = q.shElev, p = q.shPlane;
   return dot(shoulderFitVector(id, q), [-Math.cos(t) * Math.sin(p), -Math.sin(t), -Math.cos(t) * Math.cos(p)]);
 };
+// 背闊肌、胸大肌（胸骨部與鎖骨部）的肩帶力臂：Seth TSM 肩胛胸廓模型、映射 B（肩胛貼胸廓的可行位移）的上臂方向二次擬合，
+// 係數由 tools/scapular_arms_product.py 自 docs/research/results/scapular-arms-data.json 產生（TSM 工具固定提交 399e5bc；擬合誤差與限制見 src/scapular-arms.js 與 docs/research/scapular-arms.md）。
+// TSM 受試者較小，力臂未做體型縮放；背闊肌 scRet 的符號與 DAS3 路徑相反，此處以 TSM 為準（0／+50 mm 敏感度見研究文件）。
+const tsmScapArms = (id) => ({
+  scElev: (q) => scapularArmTsm(id, 0, q),
+  scRet: (q) => scapularArmTsm(id, 1, q),
+});
 const fittedScapArms = (id) => ({
   scElev: (q) => shoulderFitScap(id, 0, q),
   scRet: (q) => shoulderFitScap(id, 1, q),
@@ -1202,13 +1210,13 @@ export const MUSCLES = [
   // 軀幹單條代表同側所有伸／屈肌的功能群；依最大等長軀幹力矩校正總能力，非單一肌束的 OpenSim F。
   { id: 'erec', name: '腰背伸肌群', F: 5000, Lf: 0.0808, Lmt: 0.1947, arms: { trunkExt: 0.0465 } },
   { id: 'ra', name: '腹部屈肌群', F: 1250, Lf: 0.2986, Lmt: 0.3796, arms: { trunkExt: -0.0635 } },
-  { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shFwd: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'fwd'), shSide: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'side'), shRot: 0.020, scElev: -0.025 } },
-  { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shFwd: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'fwd'), shSide: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'side'), shRot: 0.009 } },
+  { id: 'pecs', name: '胸大肌（中下胸）', F: 1156.4, Lf: 0.1385, Lmt: 0.2460, arms: { shFwd: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'fwd'), shSide: shoulderArm(pecSternalFlex, (q) => -0.024 * Math.max(0, Math.cos(q.shElev)), 0.055, 'side'), shRot: 0.020, ...tsmScapArms('pecs') } },
+  { id: 'pecc', name: '胸大肌（上胸）', F: 444.3, Lf: 0.1442, Lmt: 0.1470, arms: { shFwd: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'fwd'), shSide: shoulderArm(pecClavicularFlex, (q) => -0.008 * Math.max(0, Math.cos(q.shElev)) + 0.008 * Math.sin(q.shElev), 0.040, 'side'), shRot: 0.009, ...tsmScapArms('pecc') } },
   { id: 'adelt', name: '三角肌前束', F: 1350, Lf: 0.0976, Lmt: 0.1906, arms: { shFwd: shoulderArm(adeltFlex, adeltAbduction, 0.015, 'fwd'), shSide: shoulderArm(adeltFlex, adeltAbduction, 0.015, 'side'), shRot: 0.005 } },
   // 後束 675 N 是以肩水平外展群總力矩校準的有效能力，非 MoBL DELT3 的原始 201.6 N。
   { id: 'pdelt', name: '三角肌後束', F: 675, Lf: 0.1367, Lmt: 0.1747, arms: { shFwd: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'fwd'), shSide: shoulderArm(angleSlope(-0.025, 'shElev', -0.004), pdeltAbduction, -0.040, 'side'), shRot: -0.006 } },
   // 背闊肌跨過肩胛與肱骨，是肩伸、內收與內旋肌；肩帶下壓另由 scElev 表示。
-  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'), shRot: 0.020, scElev: -0.030 } },
+  { id: 'lat', name: '背闊肌', F: 1500, Lf: 0.2513, Lmt: 0.3986, arms: { shFwd: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'), shSide: shoulderArm((q) => -0.05 * clamp((rad(170) - q.shElev) / rad(80), 0.15, 1), (q) => -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'), shRot: 0.020, ...tsmScapArms('lat') } },
   { id: 'trilong', name: '肱三頭肌長頭', F: 771.8, Lf: 0.1340, Lmt: 0.2770, arms: { elbExt: angleSlope(0.02, 'elbFlex', 0.008), shFwd: shoulderArm(-0.020, -0.010, 0, 'fwd'), shSide: shoulderArm(-0.020, -0.010, 0, 'side') } },
   { id: 'trilat', name: '肱三頭肌外側／內側頭', F: 1700, Lf: 0.1138, Lmt: 0.2082, arms: { elbExt: angleSlope(0.022, 'elbFlex', 0.006) } },
   // 二頭肌兩頭的肩屈基值分別取 MOBL_ARMS_41.osim 0° 路徑弦長 16.0／21.6 mm；
@@ -1244,7 +1252,7 @@ if (SHOULDER_PARAMETER_SET === 'das3') {
   const latArms = (flex, abdScale) => ({
     shFwd: shoulderArm(flex, (q) => abdScale * -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'fwd'),
     shSide: shoulderArm(flex, (q) => abdScale * -0.035 * Math.sin(q.shElev) ** 2, (q) => pathHadd('lat', q), 'side'),
-    shRot: 0.020, scElev: -0.030,
+    shRot: 0.020, ...tsmScapArms('lat'),
   });
   const serrArms = (retScale, elevScale) => ({
     scRet: (q) => oldSerr.arms.scRet(q) * retScale,

@@ -101,11 +101,13 @@ const KNOWN_ISSUES = [
   },
   ...Object.entries({
     dips: ['pecs', 'lat', 'tmaj'], 'dips-upright': ['pecs', 'lat', 'tmaj'],
-    pullup: ['lat'], 'pullup-wide': ['pecs', 'lat'], chinup: ['adelt', 'lat', 'brach', 'mdelt'],
+    chinup: ['brach'],
   }).flatMap(([id, muscles]) => muscles.map((muscle) => ({
     id, rule: `activation:${muscle}`, kind: '新動作', current: `${muscle} 的模型主動活化超過 1`,
-    cause: muscle === 'lat' && ['dips', 'dips-upright', 'pullup', 'pullup-wide'].includes(id)
-      ? `每手承受約 368 N；肩胛下壓需求約 ${id === 'dips' ? 99 : id === 'dips-upright' ? 102 : id === 'pullup' ? 91 : 97} Nm，但現有模型肩胛下壓主要只有背闊肌（30 mm 力臂）與下斜方肌（35 mm 力臂）；屬共用肩胛能力限制`
+    cause: muscle === 'lat' && ['dips', 'dips-upright'].includes(id)
+      ? `每手承受約 368 N；肩胛下壓需求約 ${id === 'dips' ? 99 : 102} Nm（上舉近 45–58°、肩在手上方）；背闊肌 scElev 力臂改為 TSM 擬合（約 −120～−140 mm）後活化由 2.3 降到 1.6，但下壓能力仍由背闊肌、胸大肌、下斜方共同逼近全肌上限`
+      : muscle === 'tmaj' && ['dips', 'dips-upright'].includes(id)
+      ? '背闊肌、胸大肌 scElev 力臂放大後，肩內收與肩伸需求的分攤改變；大圓肌有效 F 只有 144 N，成為瓶頸（由 2.0 升到約 3.6）；與總診斷的大圓肌 F 問題同源，尚未處理'
       : '手部承受全身重量，對應肩肘需求超過目前未以自體重量動作校準的肌肉力臂與最大力估計',
     fix: '以量測的手部反力與關節力矩驗證姿勢及負荷，再檢討共用肌肉模型，暫不手調常數',
   }))),
@@ -136,13 +138,47 @@ const KNOWN_ISSUES = [
     fix: '取得握把軸向力矩量測並拆分肩袖肌束，再校準外旋分攤',
   },
   ...[
-    ['pulldown', '胸大肌仍進前四'],
-  ].map(([id, current]) => ({
-    id, rule: 'rank:notTop4', kind: '本分支退步',
-    current: `${current}，main 分支胸大肌未進前四`,
-    cause: '背闊肌水平力臂已改用路徑擬合，下壓需求仍由既有肩胛等效力臂分攤；胸大肌在正握下拉仍代償肩胛下壓',
-    fix: '以可驗證的肩胛肌束路徑及肩胛下壓力矩量測重建 scElev 力臂',
+    ['pulldown', 'rank:first', '正握下拉第一名為肩胛下肌'],
+    ['pulldown-sup', 'rank:first', '反握下拉第一名為肩胛下肌'],
+  ].map(([id, rule, current]) => ({
+    id, rule, kind: '肩帶力臂改用 TSM', current,
+    cause: '背闊肌 scElev 力臂改為 TSM 擬合（約 −130 mm）後，背闊肌只需約 0.6 即可承擔肩胛下壓；肩內旋需求 48 N·m 在最小 Σa² 分配下由肩胛下肌分擔較多（0.79）。是分配結果，不是力臂擬合誤差；肩內旋與旋轉肌袖分工尚無同條件資料校準',
+    fix: '待肱骨旋轉自由度與旋轉肌袖力臂有出處後檢核，暫不為通過排名調參',
   })),
+  ...[
+    ['row', 'rank:lat:top4', '背闊肌未進前四（上斜方、後三角、中斜方／菱形、豎脊肌在前）'],
+    ['row-sup', 'rank:lat:top4', '背闊肌未進前四'],
+    ['cable-row', 'rank:lat:top4', '背闊肌未進前四'],
+    ['cable-row', 'rank:midtrap:top4', '中斜方／菱形肌未進前四（上斜方、肱肌、豎脊肌、中三角在前）'],
+    ['cable-row-wide', 'rank:lat:top4', '背闊肌未進前四'],
+  ].map(([id, rule, current]) => ({
+    id, rule, kind: '肩帶力臂改用 TSM', current,
+    cause: '划船終點需求為肩胛上提 scElev 約 +36 N·m，而背闊肌 scElev 力臂為負（TSM 約 −130 mm）：背闊肌在這一軸是拮抗肌，最小 Σa² 分配壓低它；與 T13d 七座標結果（背闊肌在三種划船皆 0）一致，是 TSM 與 DAS3 兩模型共同的幾何，不是擬合造成。上斜方等肩帶肌的力臂尚為估計常數，下一步更換後排名會再變',
+    fix: '待斜方、前鋸、提肩胛肌換用有出處的力臂後重新檢核；暫不為通過排名改回常數，也不調整 F',
+  })),
+  {
+    id: 'cable-row', rule: 'activation:brachioradialis', kind: '肩帶力臂改用 TSM',
+    current: '肱橈肌獨立主動活化 1.04，超過 1',
+    cause: '背闊肌退出划船後肘屈與肩部需求重新分配，肱橈肌由 <1 升到 1.04；前臂細分的 F 與力臂本身尚未驗證',
+    fix: '取得同條件前臂肌肉能力與肌電後核對；暫不調 F',
+  },
+  ...['dips', 'dips-upright'].flatMap((id) => ['midtrap', 'uptrap', 'corb'].map((muscle) => ({
+    id, rule: `activation:${muscle}`, kind: '肩帶力臂改用 TSM', current: `${muscle} 的模型主動活化超過 1`,
+    cause: '撐體 e=0.95：背闊肌（a 1.6）與胸大肌（a 2.1）因肩內收／肩伸需求被推到超載，其 TSM 力臂同時產生遠超需求的肩胛下壓與前伸力矩（背闊肌 scElev／scRet 約 −293／−97 N·m、胸大肌約 −58／−125 N·m，需求 −99／−26），平衡需靠上斜方與中斜方共收縮（約 +239／+105 N·m）抵消；是 scElev／scRet 兩軸耦合的分配結果，不是 F 或力臂擬合誤差。喙肱肌同樣略超載',
+    fix: '待斜方、前鋸肌換用有出處的力臂與大圓肌 F 校準後重新檢核；暫不調參',
+  }))),
+  {
+    id: 'pushup-feet', rule: 'rank:top2', kind: '肩帶力臂改用 TSM',
+    current: '前兩名為三頭肌外側頭與長頭，胸大肌第三（0.29，原 0.45）',
+    cause: '胸大肌 scElev／scRet 力臂放大，肩帶需求由胸大肌承擔後不再需要太高的活化（0.45 → 0.29）；足墊高的伏地挺身胸大肌需求偏低，三頭肌長頭超前',
+    fix: '待斜方、前鋸肌換用有出處的力臂後重新檢核；暫不調參',
+  },
+  {
+    id: 'assist-chinup', rule: 'rank:top2', kind: '肩帶力臂改用 TSM',
+    current: '前兩名為肱肌群與大圓肌，背闊肌 0.38（原 0.70）',
+    cause: '背闊肌 scElev 力臂放大後，肩胛下壓只需較低活化；輔助重量使需求小，大圓肌分到肩內收而超前背闊肌',
+    fix: '大圓肌 F（有效 144 N）校準後重新檢核；暫不調參',
+  },
   ...[
     ['curl', 'rank:first', '槓鈴反握彎舉的一般視圖前三角肌高於屈肘肌群'],
     ['reverse-curl', 'rank:first', '槓鈴正握彎舉的一般視圖前三角肌高於屈肘肌群'],
