@@ -565,154 +565,154 @@
   "trunkExt": 0.4186
  },
  "bench@0": {
-  "shFwd": 33.5166,
-  "shSide": -27.8954,
-  "elbExt": -9.5724
+  "shFwd": 32.6474,
+  "shSide": -28.8245,
+  "elbExt": -10.1891
  },
  "bench@0.25": {
-  "shFwd": 50.2778,
-  "shSide": -14.9657,
-  "elbExt": 15.7419
+  "shFwd": 48.2934,
+  "shSide": -16.629,
+  "elbExt": 13.4778
  },
  "bench@0.5": {
-  "shFwd": 56.4188,
-  "shSide": -3.4756,
-  "elbExt": 24.7333
+  "shFwd": 54.1724,
+  "shSide": -6.6054,
+  "elbExt": 23.2558
  },
  "bench@0.75": {
-  "shFwd": 58.3935,
-  "shSide": 7.7854,
-  "elbExt": 22.8302
+  "shFwd": 56.5462,
+  "shSide": 2.6008,
+  "elbExt": 24.1605
  },
  "bench@1": {
-  "shFwd": 56.4547,
-  "shSide": 19.3469,
-  "elbExt": 7.2583
+  "shFwd": 56.1597,
+  "shSide": 11.3485,
+  "elbExt": 15.1276
  },
  "incline-bench@0": {
-  "shFwd": 44.2314,
-  "shSide": -5.2412,
-  "elbExt": -11.6803
+  "shFwd": 43.2158,
+  "shSide": -8.9654,
+  "elbExt": -10.9187
  },
  "incline-bench@0.25": {
-  "shFwd": 55.6737,
-  "shSide": 16.1171,
-  "elbExt": 13.9008
+  "shFwd": 57.2799,
+  "shSide": 8.1412,
+  "elbExt": 12.9721
  },
  "incline-bench@0.5": {
-  "shFwd": 56.7958,
-  "shSide": 26.8733,
-  "elbExt": 20.4222
+  "shFwd": 60.9206,
+  "shSide": 19.2871,
+  "elbExt": 20.2344
  },
  "incline-bench@0.75": {
-  "shFwd": 55.5941,
-  "shSide": 33.3593,
-  "elbExt": 11.8433
+  "shFwd": 61.3997,
+  "shSide": 28.2026,
+  "elbExt": 15.2132
  },
  "incline-bench@1": {
-  "shFwd": 52.8545,
-  "shSide": 35.6941,
-  "elbExt": -15.6227
+  "shFwd": 59.6049,
+  "shSide": 35.4022,
+  "elbExt": -4.9503
  },
  "cg-bench@0": {
-  "shFwd": 24.0841,
-  "shSide": -9.4934,
-  "elbExt": 1.3951
+  "shFwd": 23.3822,
+  "shSide": -10.3566,
+  "elbExt": 2.0638
  },
  "cg-bench@0.25": {
-  "shFwd": 35.4653,
-  "shSide": -4.5244,
-  "elbExt": 34.0156
+  "shFwd": 34.6548,
+  "shSide": -6.5,
+  "elbExt": 32.6298
  },
  "cg-bench@0.5": {
-  "shFwd": 40.9178,
-  "shSide": -1.0533,
-  "elbExt": 45.1841
+  "shFwd": 40.5114,
+  "shSide": -3.099,
+  "elbExt": 43.9924
  },
  "cg-bench@0.75": {
-  "shFwd": 44.4872,
-  "shSide": 1.4426,
-  "elbExt": 45.2458
+  "shFwd": 44.6413,
+  "shSide": -0.0157,
+  "elbExt": 46.3175
  },
  "cg-bench@1": {
-  "shFwd": 46.2873,
-  "shSide": 2.8742,
-  "elbExt": 28.1527
+  "shFwd": 47.3349,
+  "shSide": 2.9055,
+  "elbExt": 36.9562
  },
  "floor-press@0": {
-  "shFwd": 32.886,
-  "shSide": -30.0387,
-  "elbExt": -8.5695
+  "shFwd": 33.0808,
+  "shSide": -28.9517,
+  "elbExt": -10.211
  },
  "floor-press@0.25": {
-  "shFwd": 47.3795,
-  "shSide": -21.1883,
-  "elbExt": 12.619
+  "shFwd": 46.8671,
+  "shSide": -18.9258,
+  "elbExt": 10.4341
  },
  "floor-press@0.5": {
-  "shFwd": 54.0904,
-  "shSide": -12.4684,
-  "elbExt": 22.7032
+  "shFwd": 52.753,
+  "shSide": -10.5424,
+  "elbExt": 20.7635
  },
  "floor-press@0.75": {
-  "shFwd": 57.8775,
-  "shSide": -3.5713,
-  "elbExt": 26.3432
+  "shFwd": 55.8615,
+  "shSide": -2.7472,
+  "elbExt": 24.7495
  },
  "floor-press@1": {
-  "shFwd": 59.3693,
-  "shSide": 5.7014,
-  "elbExt": 23.9842
+  "shFwd": 57.0163,
+  "shSide": 4.7411,
+  "elbExt": 22.9124
  },
  "db-bench@0": {
-  "shFwd": 19.1251,
-  "shSide": -8.7738,
-  "elbExt": 1.8046
+  "shFwd": 18.6733,
+  "shSide": -9.3182,
+  "elbExt": 1.9358
  },
  "db-bench@0.25": {
-  "shFwd": 35.5634,
-  "shSide": -9.5009,
-  "elbExt": 15.1989
+  "shFwd": 34.5839,
+  "shSide": -11.3824,
+  "elbExt": 14.0589
  },
  "db-bench@0.5": {
-  "shFwd": 43.7444,
-  "shSide": -1.8751,
-  "elbExt": 18.5143
+  "shFwd": 42.9992,
+  "shSide": -4.9037,
+  "elbExt": 18.0109
  },
  "db-bench@0.75": {
-  "shFwd": 47.4323,
-  "shSide": 8.8247,
-  "elbExt": 12.045
+  "shFwd": 47.6389,
+  "shSide": 4.4769,
+  "elbExt": 14.0734
  },
  "db-bench@1": {
-  "shFwd": 45.338,
-  "shSide": 22.109,
-  "elbExt": -6.6056
+  "shFwd": 47.784,
+  "shSide": 16.3702,
+  "elbExt": 0.6907
  },
  "db-bench-incline@0": {
-  "shFwd": 21.7657,
-  "shSide": -1.2444,
-  "elbExt": 1.4912
+  "shFwd": 21.3255,
+  "shSide": -1.9684,
+  "elbExt": 1.5989
  },
  "db-bench-incline@0.25": {
-  "shFwd": 37.258,
-  "shSide": 9.5402,
-  "elbExt": 15.608
+  "shFwd": 36.9253,
+  "shSide": 7.2599,
+  "elbExt": 14.6007
  },
  "db-bench-incline@0.5": {
-  "shFwd": 41.6788,
-  "shSide": 19.5908,
-  "elbExt": 17.2846
+  "shFwd": 41.9558,
+  "shSide": 16.8198,
+  "elbExt": 17.2305
  },
  "db-bench-incline@0.75": {
-  "shFwd": 41.8877,
-  "shSide": 28.5313,
-  "elbExt": 5.7848
+  "shFwd": 43.0467,
+  "shSide": 25.6454,
+  "elbExt": 9.1923
  },
  "db-bench-incline@1": {
-  "shFwd": 38.5615,
-  "shSide": 35.6818,
-  "elbExt": -21.7903
+  "shFwd": 40.7597,
+  "shSide": 33.3513,
+  "elbExt": -12.2252
  },
  "pushup@0": {
   "shFwd": 12.3717,
@@ -820,29 +820,29 @@
   "scElev": -14.1288
  },
  "chest-press@0": {
-  "shFwd": 27.7642,
-  "shSide": -26.167,
-  "elbExt": -6.0304
+  "shFwd": 27.8151,
+  "shSide": -25.992,
+  "elbExt": -6.2896
  },
  "chest-press@0.25": {
-  "shFwd": 41.0249,
-  "shSide": -14.8645,
-  "elbExt": 22.3692
+  "shFwd": 40.9955,
+  "shSide": -14.4335,
+  "elbExt": 22.0731
  },
  "chest-press@0.5": {
-  "shFwd": 45.9868,
-  "shSide": -5.207,
-  "elbExt": 34.5266
+  "shFwd": 45.804,
+  "shSide": -4.8033,
+  "elbExt": 34.2874
  },
  "chest-press@0.75": {
-  "shFwd": 47.8613,
-  "shSide": 3.647,
-  "elbExt": 38.3783
+  "shFwd": 47.5358,
+  "shSide": 3.8685,
+  "elbExt": 38.1972
  },
  "chest-press@1": {
-  "shFwd": 47.4554,
-  "shSide": 11.9592,
-  "elbExt": 33.4996
+  "shFwd": 47.0477,
+  "shSide": 11.8439,
+  "elbExt": 33.3895
  },
  "pec-deck@0": {
   "shFwd": 20.0981,

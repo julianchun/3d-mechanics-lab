@@ -6,9 +6,10 @@ const benchIds = ['bench', 'incline-bench', 'cg-bench', 'floor-press', 'db-bench
 const point = (p) => [p.R.shoulder, p.R.elbow, p.R.hand, p.bar];
 for (const id of benchIds) {
   const c = CATALOG.find((x) => x.id === id), base = { ...defaultParams(c.lift), ...c.set };
-  const omitted = { ...base }; delete omitted.arch; delete omitted.flareMode;
+  const legacy = { ...base, arch: 0, flareMode: 'manual' };
+  const omitted = { ...legacy }; delete omitted.arch; delete omitted.flareMode;
   for (const e of [0, 0.5, 1]) {
-    assert.deepEqual(point(solvePose(c.lift, omitted, e)), point(solvePose(c.lift, base, e)), `${id} 新參數預設須維持原幾何`);
+    assert.deepEqual(point(solvePose(c.lift, omitted, e)), point(solvePose(c.lift, legacy, e)), `${id} 明訂舊參數須重現原幾何`);
   }
   const top = solvePose(c.lift, { ...base, arch: 30 }, 0), bottom = solvePose(c.lift, { ...base, arch: 30 }, 1);
   assert(top.ok && bottom.ok, `${id} 拱背端點可及`);

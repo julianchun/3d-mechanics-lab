@@ -1,5 +1,5 @@
 {
-  "modelVersion": "0.11.0",
+  "modelVersion": "0.11.1",
   "summary": {
     "total": 58,
     "pass": 50,
@@ -648,7 +648,7 @@
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，上胸於 30° 達最高); Lauver 2016 (PMID 25799093，整段向心期無顯著差異，僅 26–50% 段 30°／45° 高於平板)",
-        "model": "上斜 30° = 0.293 a vs 平板 0° = 0.270 a"
+        "model": "上斜 30° = 0.302 a vs 平板 0° = 0.268 a"
       },
       {
         "index": 31,
@@ -660,7 +660,7 @@
         "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "上斜 30° = 0.770 a vs 平板 0° = 0.581 a"
+        "model": "上斜 30° = 0.853 a vs 平板 0° = 0.452 a"
       },
       {
         "index": 32,
@@ -672,7 +672,7 @@
         "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
         "expected": "平板 0° > 上斜 30°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "平板 0° = 0.772 a vs 上斜 30° = 0.643 a"
+        "model": "平板 0° = 0.825 a vs 上斜 30° = 0.648 a"
       }
     ],
     "bench": [
@@ -686,7 +686,7 @@
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，上胸於 30° 達最高); Lauver 2016 (PMID 25799093，整段向心期無顯著差異，僅 26–50% 段 30°／45° 高於平板)",
-        "model": "上斜 30° = 0.293 a vs 平板 0° = 0.270 a"
+        "model": "上斜 30° = 0.302 a vs 平板 0° = 0.268 a"
       },
       {
         "index": 31,
@@ -698,7 +698,7 @@
         "compare": "上斜 30° vs 平板 0° — 前三角肌 (adelt) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "上斜 30° = 0.770 a vs 平板 0° = 0.581 a"
+        "model": "上斜 30° = 0.853 a vs 平板 0° = 0.452 a"
       },
       {
         "index": 32,
@@ -710,7 +710,7 @@
         "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
         "expected": "平板 0° > 上斜 30°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339)",
-        "model": "平板 0° = 0.772 a vs 上斜 30° = 0.643 a"
+        "model": "平板 0° = 0.825 a vs 上斜 30° = 0.648 a"
       },
       {
         "index": 33,
@@ -722,7 +722,7 @@
         "compare": "窄握 (grip=0.9, flare=35) vs 標準 (grip=1.6, flare=52) — 三頭肌活化",
         "expected": "窄握 > 標準握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "窄握 = 0.950 a vs 標準握 = 0.471 a"
+        "model": "窄握 = 0.958 a vs 標準握 = 0.449 a"
       },
       {
         "index": 34,
@@ -734,7 +734,7 @@
         "compare": "標準 (grip=1.6, flare=52) vs 窄握 (grip=0.9, flare=35) — 中下胸活化",
         "expected": "標準握 > 窄握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "標準握 = 0.772 a vs 窄握 = 0.561 a"
+        "model": "標準握 = 0.825 a vs 窄握 = 0.500 a"
       },
       {
         "index": 48,
@@ -746,7 +746,7 @@
         "compare": "平板臥推 vs 蝴蝶機 — 肱三頭肌活化",
         "expected": "平板臥推 > 蝴蝶機",
         "ref": "Rocha Júnior, Gentil et al. 2007 (DOI 10.1590/S1517-86922007000100012，實測臥推三頭肌 EMG 顯著高於蝴蝶機)",
-        "model": "平板臥推 = 0.471 a vs 蝴蝶機 = 0.000 a"
+        "model": "平板臥推 = 0.449 a vs 蝴蝶機 = 0.000 a"
       },
       {
         "index": 55,
@@ -758,7 +758,7 @@
         "compare": "啞鈴側平舉 vs 平板臥推 — 三角肌中束活化",
         "expected": "側平舉 > 平板臥推",
         "ref": "Campos et al. 2020 (PMID 33312291，側平舉三角肌中束 sEMG 顯著高於臥推)",
-        "model": "側平舉 = 0.643 a vs 平板臥推 = 0.266 a"
+        "model": "側平舉 = 0.643 a vs 平板臥推 = 0.102 a"
       }
     ],
     "cg-bench": [
@@ -772,7 +772,7 @@
         "compare": "窄握 (grip=0.9, flare=35) vs 標準 (grip=1.6, flare=52) — 三頭肌活化",
         "expected": "窄握 > 標準握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "窄握 = 0.950 a vs 標準握 = 0.471 a"
+        "model": "窄握 = 0.958 a vs 標準握 = 0.449 a"
       },
       {
         "index": 34,
@@ -784,7 +784,7 @@
         "compare": "標準 (grip=1.6, flare=52) vs 窄握 (grip=0.9, flare=35) — 中下胸活化",
         "expected": "標準握 > 窄握",
         "ref": "Lehman 2005 (PMID 16095407)",
-        "model": "標準握 = 0.772 a vs 窄握 = 0.561 a"
+        "model": "標準握 = 0.825 a vs 窄握 = 0.500 a"
       }
     ],
     "pulldown": [
@@ -1060,7 +1060,7 @@
         "compare": "平板臥推 vs 蝴蝶機 — 肱三頭肌活化",
         "expected": "平板臥推 > 蝴蝶機",
         "ref": "Rocha Júnior, Gentil et al. 2007 (DOI 10.1590/S1517-86922007000100012，實測臥推三頭肌 EMG 顯著高於蝴蝶機)",
-        "model": "平板臥推 = 0.471 a vs 蝴蝶機 = 0.000 a"
+        "model": "平板臥推 = 0.449 a vs 蝴蝶機 = 0.000 a"
       },
       {
         "index": 49,
@@ -1244,7 +1244,7 @@
         "compare": "啞鈴側平舉 vs 平板臥推 — 三角肌中束活化",
         "expected": "側平舉 > 平板臥推",
         "ref": "Campos et al. 2020 (PMID 33312291，側平舉三角肌中束 sEMG 顯著高於臥推)",
-        "model": "側平舉 = 0.643 a vs 平板臥推 = 0.266 a"
+        "model": "側平舉 = 0.643 a vs 平板臥推 = 0.102 a"
       }
     ],
     "db-bench": [
@@ -1258,7 +1258,7 @@
         "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
         "expected": "平板 0° > 上斜 30°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)",
-        "model": "平板 0° = 0.545 a vs 上斜 30° = 0.370 a"
+        "model": "平板 0° = 0.598 a vs 上斜 30° = 0.395 a"
       },
       {
         "index": 57,
@@ -1270,7 +1270,7 @@
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上胸於 30° 達最高，間接支持啞鈴上斜趨勢); Lauver 2016 (PMID 25799093，槓鈴臥推上胸整段向心期無顯著差異，僅 26–50% 向心段 30°／45° 高於平板)",
-        "model": "上斜 30° = 0.206 a vs 平板 0° = 0.192 a"
+        "model": "上斜 30° = 0.209 a vs 平板 0° = 0.193 a"
       }
     ],
     "db-bench-incline": [
@@ -1284,7 +1284,7 @@
         "compare": "平板 0° vs 上斜 30° — 中下胸 (pecs) 活化",
         "expected": "平板 0° > 上斜 30°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推平板中下胸高於上斜 30°，間接支持啞鈴平板趨勢)",
-        "model": "平板 0° = 0.545 a vs 上斜 30° = 0.370 a"
+        "model": "平板 0° = 0.598 a vs 上斜 30° = 0.395 a"
       },
       {
         "index": 57,
@@ -1296,7 +1296,7 @@
         "compare": "上斜 30° vs 平板 0° — 上胸 (pecc) 活化",
         "expected": "上斜 30° > 平板 0°",
         "ref": "Rodríguez-Ridao 2020 (DOI 10.3390/ijerph17197339，槓鈴臥推上胸於 30° 達最高，間接支持啞鈴上斜趨勢); Lauver 2016 (PMID 25799093，槓鈴臥推上胸整段向心期無顯著差異，僅 26–50% 向心段 30°／45° 高於平板)",
-        "model": "上斜 30° = 0.206 a vs 平板 0° = 0.192 a"
+        "model": "上斜 30° = 0.209 a vs 平板 0° = 0.193 a"
       }
     ],
     "goblet-squat": [
