@@ -119,10 +119,16 @@ const REFS = {
   schoenfeld2013: { authors: 'Schoenfeld B et al.', year: 2013, title: 'Effect of hand position on EMG activity of the posterior shoulder musculature during a horizontal abduction exercise', venue: 'J Strength Cond Res, 27(10):2644–2649', url: 'https://pubmed.ncbi.nlm.nih.gov/23302754/', tag: 'PubMed 23302754' },
   franke2015: { authors: 'Franke RA et al.', year: 2015, title: 'Analysis of anterior, middle and posterior deltoid activation during single and multijoint exercises', venue: 'J Sports Med Phys Fitness, 55(7–8):714–721', url: 'https://pubmed.ncbi.nlm.nih.gov/24947920/', tag: 'PubMed 24947920' },
   collins2021: { authors: 'Collins KS et al.', year: 2021, title: 'Differences in muscle activity and kinetics between the goblet squat and landmine squat in men and women', venue: 'J Strength Cond Res, 35(10):2661–2668', url: 'https://pubmed.ncbi.nlm.nih.gov/34341315/', tag: 'PubMed 34341315' },
+  maeo2023triceps: { authors: 'Maeo S et al.', year: 2023, title: 'Triceps brachii hypertrophy is substantially greater after elbow extension training performed in the overhead versus neutral arm position', venue: 'Eur J Sport Sci, 23(7):1240–1250', url: 'https://pubmed.ncbi.nlm.nih.gov/35819335/', tag: 'PubMed 35819335' },
+  kobayashi2026curl: { authors: 'Kobayashi Y et al.', year: 2026, title: 'Exercise-specific preferential hypertrophy of individual elbow flexor muscles after incline versus preacher dumbbell curl training', venue: 'J Sports Sci, 44(23):3288–3301', url: 'https://pubmed.ncbi.nlm.nih.gov/42829982/', tag: 'PubMed 42829982' },
+  rep_ab3100: { authors: 'REP Fitness', year: null, title: 'AB-3100 Adjustable Weight Bench', venue: '原廠產品規格頁', url: 'https://hu.repfitness.com/products/ab-3100-adjustable-weight-bench', tag: '原廠規格' },
 };
 
 // 以清單 ID 為鍵的動作假設與參考文獻
 export const SOURCES = {
+  'skull-crusher': { assumptions: ['平凳仰臥，EZ 槓由雙手共握；上臂後傾 10°、底點屈肘 110°、總重 20 kg 為教練示範假設。', '凳面支撐軀幹，不求手部與凳面的接觸力偶；三頭肌分配為模型估計。'], refs: [], noStudy: true },
+  'db-overhead-ext': { assumptions: ['雙手握同一顆 14 kg 啞鈴，各側承擔一半；坐姿椅背、上臂位置與肩胛角為示範假設。', 'Maeo 等比較過頭與中立肩位的訓練適應，沒有提供本模型的三維力矩或動作軌跡。'], refs: ['maeo2023triceps', 'rep_ab3100'] },
+  'cable-overhead-ext': { assumptions: ['背對低滑輪，前後腳以左右對稱等效支撐面近似；出繩口高 48 cm、距身體 85 cm 與配重 25 kg 為未查證示範值。', '2:1 滑輪比有同類可調滑輪柱原廠規格支持；繩索方向按握點與出繩口即時計算。'], refs: ['maeo2023triceps', 'lifefitness_crossover'] },
   pushup: {
     assumptions: [
       '掌根與腳尖為兩個支撐點，依身體各節段重量與可選負重背心求垂直反力；假設沒有水平外力，兩處水平反力為零，因此不需摩擦。左右各自承擔一半，不允許手掌透過剛體槓互推。',
@@ -614,6 +620,7 @@ const LIFT_FALLBACK_ID = {
   latraise: 'lat-raise',
   dbcurl: 'db-curl',
   dbreversefly: 'db-reverse-fly',
+  skullcrusher: 'skull-crusher', dboverheadext: 'db-overhead-ext', cableoverheadext: 'cable-overhead-ext',
   goblet: 'goblet-squat',
 };
 

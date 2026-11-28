@@ -4,7 +4,7 @@ import { shoulderFitVector, shoulderFitScap } from './shoulder-arms.js';
 import { DAS3_SHOULDER } from './das3-shoulder.js';
 import { forearmArm, FOREARM_MUSCLE_SOURCE } from './forearm.js';
 
-export const MODEL_VERSION = '0.12.0';
+export const MODEL_VERSION = '0.13.0';
 // DAS3 實驗組若增加超載或既有問題，預設維持原組；建置時可設 VITE_SHOULDER_PARAMETER_SET=das3。
 export const SHOULDER_PARAMETER_SET = (typeof process !== 'undefined' && process.env.SHOULDER_PARAMETER_SET === 'das3') ||
   import.meta.env?.VITE_SHOULDER_PARAMETER_SET === 'das3' ? 'das3' : 'legacy';
@@ -909,6 +909,38 @@ export const LIFTS = {
       { key: 'prefRear', label: '後三角與背部偏好', left: '偏後三角', right: '偏肩胛後收肌', min: -1, max: 1, step: 0.01, def: 0, joint: 'shoulder', mech: 'C', pref: [['pdelt'], ['midtrap']] },
     ],
     standardNote: '髖鉸鏈俯身約 45～70°、背部中立、膝微彎，雙手各持啞鈴垂於胸前下方，手肘維持微彎向兩側水平外展至與軀幹近平行。',
+  },
+  skullcrusher: {
+    forearmContact: 'sharedRigid', name: '仰臥三頭伸展', topLabel: '伸直', bottomLabel: '下放額後',
+    supine: true, dofs: ['shFwd', 'shSide', 'elbExt'], pose: skullCrusherPose, loads: handBarLoads,
+    moving: ['elbExt'],
+    params: [
+      { key: 'upperTilt', label: '上臂後傾', left: '垂直', right: '向頭後 20°', min: 0, max: 20, step: 1, def: 10, joint: 'shoulder', mech: 'A', unit: '°' },
+      { key: 'bottomFlex', label: '底點屈肘', left: '90°', right: '130°', min: 90, max: 130, step: 1, def: 110, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: 'EZ 槓總重', left: '10 kg', right: '35 kg', min: 10, max: 35, step: 1, def: 20, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefTri', label: '三頭偏好', left: '偏外／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
+    ], standardNote: '平凳仰臥、上臂近垂直並略向頭後；固定上臂，屈肘讓 EZ 槓下放到額後，再伸肘。',
+  },
+  dboverheadext: {
+    forearmContact: 'sharedRigid', name: '坐姿過頭啞鈴三頭伸展', topLabel: '伸直', bottomLabel: '下放頭後',
+    seated: true, dofs: ['shFwd', 'elbExt'], optDofs: ['shSide', 'scElev'], pose: dbOverheadExtPose, loads: sharedDumbbellLoads,
+    moving: ['elbExt'], params: [
+      { key: 'bottomFlex', label: '底點屈肘', left: '85°', right: '125°', min: 85, max: 125, step: 1, def: 105, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '單顆啞鈴重量', left: '6 kg', right: '30 kg', min: 6, max: 30, step: 1, def: 14, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'prefTri', label: '三頭偏好', left: '偏外／內側頭', right: '偏長頭', min: -1, max: 1, step: 0.01, def: 0, joint: 'elbow', mech: 'C', pref: [['trilat'], ['trilong']] },
+    ], standardNote: '坐穩靠背、雙手托住同一顆啞鈴，上臂留在耳旁，肘部有控制地屈伸。',
+  },
+  cableoverheadext: {
+    forearmContact: 'sharedRigid', name: '滑輪過頭繩索三頭伸展', topLabel: '伸直', bottomLabel: '屈肘',
+    ground: true, dofs: ['hipExt', 'hipAbd', 'kneeExt', 'ankPF', 'trunkExt', 'shFwd', 'shSide', 'elbExt', 'scElev'],
+    pose: cableOverheadExtPose, loads: cableLoads, moving: ['elbExt'], params: [
+      { key: 'footStance', label: '站姿', type: 'select', options: [['staggered', '前後腳'], ['parallel', '雙腳併站']], def: 'staggered', joint: 'ankle', mech: 'A' },
+      { key: 'pulleyRatio', label: '滑輪比（配重：實感）', type: 'select', options: PULLEY_RATIOS, def: '2:1', joint: 'equip', mech: 'A' },
+      { key: 'lean', label: '軀幹前傾', left: '5°', right: '25°', min: 5, max: 25, step: 1, def: 15, joint: 'lumbar', mech: 'A', unit: '°' },
+      { key: 'bottomFlex', label: '底點屈肘', left: '85°', right: '125°', min: 85, max: 125, step: 1, def: 105, joint: 'elbow', mech: 'A', unit: '°' },
+      { key: 'load', label: '配重片重量', left: '10 kg', right: '45 kg', min: 10, max: 45, step: 1, def: 25, joint: 'equip', mech: 'A', unit: ' kg' },
+      { key: 'brace', label: '核心收緊', left: '0%', right: '100%', min: 0, max: 1, step: 0.01, def: 0.2, joint: 'lumbar', mech: 'B' },
+    ], standardNote: '背對低滑輪，前後腳站穩；上臂靠近頭側，握繩由屈肘伸至頭前上方。',
   },
   goblet: {
     name: '高腳杯深蹲', topLabel: '頂點', bottomLabel: '最低點',
@@ -3541,6 +3573,67 @@ function dbReverseFlyPose(P, e) {
   return pose;
 }
 
+// 共用固定上臂路徑：上臂與前臂長度直接定義，避免反解肘位隨行程換支。
+function fixedArm(pose, E, H) {
+  pose.R.elbow = E; pose.R.hand = H; pose.R.grip = H;
+  pose.armPole = norm(cross(sub(E, pose.R.shoulder), sub(H, E)));
+  pose.armOk = true;
+  return pose;
+}
+
+// 平凳沿用啞鈴臥推的軀幹、雙腳及凳面；重新定義垂直上臂的肘屈路徑。
+function skullCrusherPose(P, e) {
+  const pose = dbBenchPose({ incline: '0', arch: 10, depth: 0.4, flare: 50, grip: 'pro', load: P.load }, 0);
+  pose.warn = []; pose.ok = true;
+  const S = pose.R.shoulder, a = rad(P.upperTilt), flex = rad(lerp(8, P.bottomFlex, e));
+  const E = add(S, mul(norm([0.26, Math.cos(a), -Math.sin(a) - 0.06]), BODY.Lu));
+  const H = add(E, [0, BODY.Lf * Math.cos(flex), -BODY.Lf * Math.sin(flex)]);
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barW = P.load / BODY.mass;
+  pose.barStyle = { len: 0.56 }; pose.barAxial = true; pose.dumbbells = [];
+  pose.armJoints = ['shoulder', 'elbow'];
+  return pose;
+}
+
+function dbOverheadExtPose(P, e) {
+  const pose = dbPressPose({ grip: 'neutral', elbowFwd: 30, depth: 0.5, load: P.load }, 0);
+  pose.warn = []; pose.ok = true;
+  const S = pose.R.shoulder, flex = rad(lerp(8, P.bottomFlex, e));
+  const E = add(S, mul(norm([-0.18, 0.968, -0.20]), BODY.Lu));
+  const H = add(E, mul(norm([-0.15, Math.cos(flex), -Math.sin(flex)]), BODY.Lf));
+  fixedArm(pose, E, H);
+  pose.bar = [0, H[1], H[2]]; pose.barW = P.load / BODY.mass;
+  pose.barStyle = 'none'; pose.barAxial = true;
+  pose.dbLoadPt = [0, H[1], H[2]];
+  pose.dumbbells = [{ c: [0, H[1], H[2]], axis: [0, 1, 0], kg: P.load }];
+  pose.armJoints = ['shoulder', 'elbow'];
+  return pose;
+}
+
+function cableOverheadExtPose(P, e) {
+  const pulley = [0, 0.48, -0.85], ratio = pulleyDivisor(P.pulleyRatio);
+  const barW = P.load / (ratio * BODY.mass);
+  const flex = rad(lerp(8, P.bottomFlex, e));
+  const pose = standingHands(P, {
+    kap: rad(8), lean: rad(P.lean), girdle: { ret: rad(0), elev: rad(8) }, barW: 0,
+    ext: (r) => mul(norm(sub(pulley, r.bar)), barW),
+    pole: (tf, r) => [0, 0, 1],
+    barAt: (tf, S) => {
+      const E = add(S, mul(norm([-0.10, 0.92, 0.35]), BODY.Lu));
+      const H = add(E, mul(norm([-0.12, Math.cos(flex), Math.sin(flex)]), BODY.Lf));
+      return { bar: H, elbow: E };
+    },
+  });
+  fixedArm(pose, pose.r.elbow, pose.r.bar);
+  pose.barW = barW; pose.barStyle = { len: 0.34 }; pose.barAxial = false;
+  pose.bar = [0, pose.R.hand[1], pose.R.hand[2]]; pose.pulley = pulley;
+  pose.armJoints = ['shoulder', 'elbow', 'lumbar'];
+  pose.cables = [[pose.bar, pulley]];
+  pose.boxes = [box([0, 1.08, -1.02], [0.12, 2.16, 0.12], 0, 'frame'),
+    box([0, 0.025, -1.02], [0.42, 0.05, 0.35], 0, 'frame')];
+  return pose;
+}
+
 // ---------- 高腳杯深蹲 ----------
 // 下肢小腿曲線與 squatPose 共用；前側負重策略偏移 -0.08，與前蹲一致。
 // 單顆啞鈴垂直捧於胸骨前方（距軀幹軸 21 cm），雙手於上端片下方承托、手肘自然垂於胸側。
@@ -3908,6 +4001,11 @@ function dumbbellLoads(pose, P, W, out) {
   const region = pose.dbRegion || 'fore';
   out.push({ p, F: [0, -(pose.barW * W) / 2, 0], region });
   if (pose.dbForceLine !== false) pose.forceLine = { p, d: [0, -1, 0], is3d: true };
+}
+// 雙手共握同一顆啞鈴可沿握把互推／互拉，與獨立雙啞鈴的接觸不同。
+function sharedDumbbellLoads(pose, P, W, out) {
+  handBarLoads(pose, P, W, out);
+  pose.forceLine = { p: pose.dbLoadPt || pose.R.hand, d: [0, -1, 0], is3d: true };
 }
 
 function coronalFootForce(hip, cop, verticalForce) {
