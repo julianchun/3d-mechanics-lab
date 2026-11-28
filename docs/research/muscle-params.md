@@ -162,12 +162,12 @@ DAS3 對照按固定版 [`tools/data/das3.osim`](../../tools/data/das3.osim) 的
 
 | id | f／a／h；r；肩帶力臂（m） | 來源與狀態 |
 |---|---|---|
-| pecs | f=`pecSternalFlex(shFlex)`；a=`-0.024 max(0,cos(shElev))`；h=`+0.055`；r=`+0.020`；scElev=`-0.025` | f 依 Ackland 2008 胸骨束弱屈曲、下束可伸的方向與本模型插值；h 貼近 Kuechle 1997 水平內收量級；a、h、r、scElev **估計**；垂臂保留內收、上舉至臥推高度隨 `cos(shElev)` 收斂 |
-| pecc | f=`pecClavicularFlex(shFlex)`；a=`-0.008 max(0,cos(shElev))+0.008 sin(shElev)`；h=`+0.040`；r=`+0.009` | f 以 Ackland 2008 鎖骨束 2.5° 約 9.6 mm、71° 約 53.7 mm 為節點，負屈曲角線性連續延伸；a 反映鎖骨起點隨上舉由弱內收轉弱外展；其餘皆**估計** |
+| pecs | f=`pecSternalFlex(shFlex)`；a=`-0.024 max(0,cos(shElev))`；h=`+0.055`；r=`+0.020`；scElev／scRet=`tsmScapArms('pecs')` | f 依 Ackland 2008 胸骨束弱屈曲、下束可伸的方向與本模型插值；h 貼近 Kuechle 1997 水平內收量級；a、h、r **估計**；scElev／scRet 見下「背闊肌與胸大肌的肩帶力臂」；垂臂保留內收、上舉至臥推高度隨 `cos(shElev)` 收斂 |
+| pecc | f=`pecClavicularFlex(shFlex)`；a=`-0.008 max(0,cos(shElev))+0.008 sin(shElev)`；h=`+0.040`；r=`+0.009`；scElev／scRet=`tsmScapArms('pecc')` | f 以 Ackland 2008 鎖骨束 2.5° 約 9.6 mm、71° 約 53.7 mm 為節點，負屈曲角線性連續延伸；a 反映鎖骨起點隨上舉由弱內收轉弱外展；其餘皆**估計**（肩帶兩軸見下） |
 | adelt | f=`0.035+0.008 C(shElev/90°,0,1)`；a=`[0.006+0.020 C(shElev/75°,0,1)] d(shElev)`；h=`+0.015`；r=`+0.005` | 屈曲與外展隨上舉上升（峰值約 26 mm）符合 Ackland 2008 方向與量級；高上舉共用衰減 d（0.65 與 90°→170° 區間）為**無直接出處的估計**，曲線與軸旋亦為**估計** |
 | mdelt | f=`+0.004`；a=`[0.019+0.012 C(shElev/60°,0,1)] d(shElev)`；h=`-0.004`；r=`0` | 外展中段峰約 31 mm，接近 Hik & Ackland 2019 回顧平均 26.8±1.7 mm 與 Ackland 2008 範圍；高上舉共用衰減 d（0.65 與 90°→170° 區間）為**無直接出處的估計**，曲線與次要方向亦為**估計** |
 | pdelt | f=`S(-0.025,shElev,-0.004)`；a=`[0.004+0.008 C(shElev/75°,0,1)] d(shElev)`；h=`-0.040`；r=`-0.006` | 伸展與水平外展符合 Ackland 2008、Kuechle 1997 方向；高上舉共用衰減 d（0.65 與 90°→170° 區間）為**無直接出處的估計**，數值與軸旋亦為**估計** |
-| lat | f=`-0.050 C((170°-shElev)/80°,0.15,1)`；a=`-0.035 sin²(shElev)`；h=`pathHadd(lat,q)`；r=`+0.020`；scElev=`-0.030` | 水平分量由目前路徑擬合三維向量投影到水平內收軸，並經原有 `shoulderVec()` 的 `sin(shElev)` 端點映射；其餘仍為估計 |
+| lat | f=`-0.050 C((170°-shElev)/80°,0.15,1)`；a=`-0.035 sin²(shElev)`；h=`pathHadd(lat,q)`；r=`+0.020`；scElev／scRet=`tsmScapArms('lat')` | 水平分量由目前路徑擬合三維向量投影到水平內收軸，並經原有 `shoulderVec()` 的 `sin(shElev)` 端點映射；其餘仍為估計 |
 | tmaj | `shoulderFitVector(tmaj,q)` 投影到 `shFwd`／`shSide`／`shRot` | 固定版 U 路徑重建與多項式擬合；誤差與限制見下節 |
 | corb | f=`+0.015`；a=`-0.020 max(0,cos(shElev))`；h=`+0.012`；r=`0` | 喙肱肌屈曲、內收方向；所有數值**估計** |
 | infra | f/a/h=`0`；r=`-0.025` | U 的棘下肌＋小圓肌合群；25 mm 落在 Ackland 2011 兩肌外旋峰值附近，合群常數仍**估計** |
@@ -196,10 +196,14 @@ DAS3 對照按固定版 [`tools/data/das3.osim`](../../tools/data/das3.osim) 的
 
 | Seth 肩胛群 | 擬合 RMS scElev／scRet（mm） | 採用情況 |
 |---|---:|---|
+| 背闊肌（0.14.0 起） | 2.4／4.7（訓練） | 映射 B 擬合已接入 `scElev`／`scRet`，見下節 |
+| 胸大肌胸骨部、鎖骨部（0.14.0 起） | 2.5／1.5、1.1／1.3 | 同上 |
 | 中斜方＋菱形 | 0.34／0.34 | 路徑擬合已算出；直接替換使划船中斜方掉出前四，保留原等效力臂 |
 | 上斜方（肩胛＋鎖骨束） | 0.09／0.57 | 直接替換使肩推／划船出現新失敗；保留依上提量測校準的既有能力 |
 | 下斜方 | 1.72／1.67 | 直接替換使坐姿划船出現新排名失敗；保留原等效力臂 |
 | 前鋸肌 | 8.96／7.37 | 兩軸擬合已採用；來源 F=1325.8 N，本模型仍用有效 F=1000 N |
+
+**背闊肌與胸大肌的肩帶力臂（0.14.0，T45 第一步）：** `lat`、`pecs`、`pecc` 的 `scElev`／`scRet` 不再用常數（lat −30 mm、pecs −25 mm、pecc 無），改用 `src/scapular-arms.js`。來源：[Seth 等 2016](https://pubmed.ncbi.nlm.nih.gov/26734761/) 的 TSM 肩胛胸廓模型（`TSM_subject_noWeight.osim`，工具固定提交 `399e5bc`、模型 SHA-256 `c357e61e…c7a9ff`），映射 B（肩胛貼胸廓的可行位移，約束反力不作功；[van der Helm 1994](https://pubmed.ncbi.nlm.nih.gov/8027089/) 支持滑動面反力不可忽略）；以 78 個上臂方向格點求力臂，對 `h=[外側,上,前]` 二次擬合，產品姿勢樣本外 RMS ≤ 4.4 mm（背闊肌 scRet 最大差 19 mm）。典型值：背闊肌 `scElev` −120～−145 mm、胸大肌 −24～−41 mm，與研究文件 [scapular-arms.md](scapular-arms.md) 的 TSM-B 表一致；DAS3 獨立路徑給出同量級（背闊肌 −87～−154 mm）。重生：`python3 tools/scapular_arms_product.py`（係數取自 `results/scapular-arms-data.json`，不需 TSM 環境），`tools/check-generated.sh` 核對。限制：TSM 受試者較小（上臂 0.247 m 對產品 0.287 m），**未縮放體型**（±10%）；產品姿勢多在肩胛節律夾界範圍；沒有任何針對這兩個軸的實測。**背闊肌 `scRet` 的符號 TSM（−19～−41 mm）與 DAS3（+29～+62 mm）相反**，本模型以 TSM（映射 B）為準；研究文件的 0／+50 mm 敏感度顯示引體、下拉結論不受影響，但划船、下拉的肩胛前後向分配會依此改變，若有肌電證據需回頭驗證。鎖骨部胸大肌 `pecc` 與胸骨部同批：同一條肌肉、同一來源與擬合品質（樣本外 RMS 2.6／2.9 mm），其 `scRet` 約 −15～−34 mm、`scElev` 約 −3～+9 mm，分開處理沒有依據。斜方、前鋸、胸小肌、提肩胛肌留待下一步；需求定義、F 不變。DAS3 實驗組的 `lat`／`pecSternal`／`pecAbdominal` 沿用同一擬合（沒有分束係數）。
 
 在水平位（`shElev=90°`、`shPlane=90°`），背闊肌擬合水平外展力臂約 13.5 mm，目前模型採用這個投影值；大圓肌約 15.8 mm。目前後三角曲線的 40 mm 與路徑擬合約 41.5 mm 同量級，因此保留其幾何曲線。固定版 U 的 `DELT3` 最大等長力**確為 201.6 N**，但與本模型合併功能群不等價。將後三角有效 F 設為 675 N，於該姿勢計算背闊、大圓、後三角的水平外展理論上限約 `1500×0.0135 + 144×0.0158 + 675×0.040 = 49.5 N·m`。對照 [Duaibes 2010 原始研究](https://journals.najah.edu/media/journals/full_texts/isokinetic-dynamometry-measuring-bilateral-shoulder-peak-torque-comparison-and-prediction.pdf) 的 23 名年輕男性**等速**肩水平外展平均峰值 49.38 N·m；量測方式與模型準靜態上限不同，故此 F 是功能群校準。垂臂肩伸的約 111 N·m 亦在 [Danneskiold-Samsøe 2009](https://onlinelibrary.wiley.com/doi/10.1111/j.1748-1716.2009.02022.x) 男性單側等長肩伸 91.9±19.7 N·m 的約一個標準差上緣。這兩項是量級交叉檢查，不是個體肌力預測。
 

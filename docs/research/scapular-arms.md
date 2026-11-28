@@ -1,5 +1,7 @@
 # 肩胛下壓／後收（scElev／scRet）力臂的有出處估計
 
+**後續（0.14.0）：** 建議的第一步（背闊肌＋胸大肌）已實作並接入產品，見 [muscle-params.md](muscle-params.md)；下文「只研究」指研究當時。
+
 只研究、不改產品：`src/` 與 `tests/snapshots/` 未變動，`node tests/regress.mjs` 維持 IDENTICAL。本文回答：產品 `scElev`／`scRet` 兩個肩帶軸上，背闊肌、胸大肌、胸小肌、斜方肌（上／中／下）、菱形肌、前鋸肌與提肩胛肌的力臂，用 Seth TSM 模型（三項肩胛座標＋胸廓橢球接觸）與 DAS3 路徑算出來是多少、和產品現值差多少、不確定度多大，以及該怎麼接進產品。
 
 ## 結論
