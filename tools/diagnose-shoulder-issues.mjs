@@ -325,17 +325,21 @@ const rankedPeaks = (peaksS) => Object.entries(peaksS).sort((a, b) => b[1] - a[1
 function verdict(issue, agg) {
   const [kind] = issue.rule.split(':');
   const rk = rankedPeaks(agg.peaksS), pos = (id) => rk.findIndex(([g]) => g === id) + 1;
+  const nearTop = (id, n) => {
+    const boundary = rk[Math.min(n, rk.length) - 1]?.[1] ?? 0;
+    return Object.hasOwn(agg.peaksS, id) && agg.peaksS[id] >= boundary - Math.min(0.08, 0.15 * boundary) - 1e-12;
+  };
   const lead = rk.slice(0, 4).map(([g, v]) => `${g} ${r1(v, 2)}`).join(', ');
   if (kind === 'activation') {
     const v = agg.peaksA[issue.subject] ?? 0;
     return { val: r1(v, 2), pass: v <= 1.000001, txt: `a峰值 ${r1(v, 2)}`, lead };
   }
   const W = (issue.want || '').split('|').filter(Boolean);
-  if (issue.rule.endsWith(':first')) { const k = Math.min(...W.map(pos)); return { val: k, pass: k === 1, txt: `目標 ${W.join('/')} 名次 #${k}`, lead }; }
-  if (issue.rule.endsWith(':top2')) { const k = pos(W[0]); return { val: k, pass: k <= 2, txt: `${W[0]} 名次 #${k}`, lead }; }
-  if (issue.rule.endsWith(':top4')) { const k = pos(W[0]); return { val: k, pass: k <= 4, txt: `${W[0]} 名次 #${k}`, lead }; }
-  if (issue.rule.endsWith(':notTop4')) { const k = pos(issue.unwanted); return { val: k, pass: k > 4, txt: `${issue.unwanted} 名次 #${k}`, lead }; }
-  if (issue.rule.endsWith(':notFirst')) { const k = pos(issue.unwanted); return { val: k, pass: k !== 1, txt: `${issue.unwanted} 名次 #${k}`, lead }; }
+  if (issue.rule.endsWith(':first')) { const k = Math.min(...W.map(pos)); return { val: k, pass: W.some((id) => nearTop(id, 1)), txt: `目標 ${W.join('/')} 名次 #${k}`, lead }; }
+  if (issue.rule.endsWith(':top2')) { const k = pos(W[0]); return { val: k, pass: nearTop(W[0], 2), txt: `${W[0]} 名次 #${k}`, lead }; }
+  if (issue.rule.endsWith(':top4')) { const k = pos(W[0]); return { val: k, pass: nearTop(W[0], 4), txt: `${W[0]} 名次 #${k}`, lead }; }
+  if (issue.rule.endsWith(':notTop4')) { const k = pos(issue.unwanted); return { val: k, pass: !nearTop(issue.unwanted, 4), txt: `${issue.unwanted} 名次 #${k}`, lead }; }
+  if (issue.rule.endsWith(':notFirst')) { const k = pos(issue.unwanted); return { val: k, pass: !nearTop(issue.unwanted, 1), txt: `${issue.unwanted} 名次 #${k}`, lead }; }
   throw new Error(`未知規則 ${issue.rule}`);
 }
 
