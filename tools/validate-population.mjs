@@ -192,16 +192,24 @@ const sensitivity = sensitivityIds.map((id) => {
     longThigh: round(run(1)) };
 });
 
-// Demers 圖讀六點只診斷：原文未報身高、體重；直接用表 1 的節段長度平均 ±SD。
+// Demers 圖讀六點只診斷：原文未報身高、體重；用表 1 的節段長度平均 ±SD。
+// 0.12.0 起定義對齊：表 1 的長度是外觀標記（大轉子—股骨外髁、外髁—外踝），與 ANSUR 節段同定義，
+// 因此與其他研究相同，先除以 ANSUR 男性平均標記長度（身高 1.75 m）得到比例，再乘預設骨架比例換成模型關節中心長度
+// （上方 bodyFromRow 的映射，自 1b21e4c 起用於所有研究）。0.11.1 以前直接把標記長度當模型長度（大腿 0.40 m 對預設 0.44 m），
+// 在小腿角固定的舊策略下無影響（踝角 SD 0），但與依骨長分配小腿角的模型不相容。校準值本身（圖讀六點、dom、站距係數）未改。
 const demers = JSON.parse(fs.readFileSync(new URL('calibration/demers-2018.json', path)));
 const demersBodies = Array.from({ length: N }, (_, i) => {
   const sex = i < 125 ? 'male' : 'female'; // 20/32 與 12/32
   const row = anthro[sex][Math.floor(random() * anthro[sex].length)];
   const proxy = bodyFromRow(sex, row, 1.75, 75);
   const means = { Ltr: 0.54, Lt: 0.40, Ls: 0.40 };
-  const ratios = Object.fromEntries(anthro.keys.map((key) => [key, key in means ?
-    Math.max(0.3, means[key] + 0.03 * (row[anthro.keys.indexOf(key)] - mean(anthro[sex].map((r) => r[anthro.keys.indexOf(key)]))) /
-      proxySd[sex][anthro.keys.indexOf(key)]) / 1.75 : proxy[key] / 1.75]));
+  const ratios = Object.fromEntries(anthro.keys.map((key) => {
+    if (!(key in means)) return [key, proxy[key] / 1.75];
+    const j = anthro.keys.indexOf(key);
+    const z = (row[j] - mean(anthro[sex].map((r) => r[j]))) / proxySd[sex][j];
+    const landmarkM = Math.max(0.3, means[key] + 0.03 * z);
+    return [key, DEFAULT_BODY[key] / DEFAULT_BODY.heightM * (landmarkM / 1.75) / maleMean[j]];
+  }));
   return createBody({ heightM: 1.75, massKg: 75, sex, ratios });
 });
 const calibration = demers.conditions.flatMap((condition) => {

@@ -1,5 +1,7 @@
 # 姿勢隨骨長改變：診斷、文獻與設計方案（T40 階段 1）
 
+> 狀態：教練 2026-11-28 決定採方案 A（λ = 1）加選用的個人踝背屈上限，已於 0.12.0 實作；本頁保留為診斷與選案紀錄，以下現況描述（「現行」）指 0.11.1。
+
 本頁只做診斷與方案評估，**沒有修改 `src/biomech.js`**；`node tests/regress.mjs` 維持 IDENTICAL。診斷由 [`tools/diagnose-anatomy-posture.mjs`](../../tools/diagnose-anatomy-posture.mjs) 重現，方案原型由 [`tools/prototype-anatomy-posture.mjs`](../../tools/prototype-anatomy-posture.mjs) 重現（後者把 `src/` 複製到暫存目錄再加補丁，不碰產品檔）。測試組研究的數值**沒有**用來設定或挑選任何方案參數；測試組只出現在「預期影響」一節，且僅為事後報告。
 
 ## 1. 摘要
